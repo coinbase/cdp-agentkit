@@ -20,7 +20,7 @@ class TestArgsSchema(BaseModel):
 @pytest.fixture
 def mock_cdp_agentkit_wrapper():
     """Fixture for mocked CDP Agentkit wrapper."""
-    with patch("langchain_cdp.tools.cdp_action.CdpAgentkitWrapper") as mock:
+    with patch("cdp_langchain.tools.cdp_action.CdpAgentkitWrapper") as mock:
         cdp_agentkit_wrapper = Mock(spec=CdpAgentkitWrapper)
         mock.return_value = cdp_agentkit_wrapper
         yield cdp_agentkit_wrapper

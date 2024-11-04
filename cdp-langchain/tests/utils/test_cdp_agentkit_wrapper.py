@@ -131,8 +131,14 @@ def test_missing_environment_variables(monkeypatch: pytest.MonkeyPatch):
 def test_cdp_sdk_import_error():
     """Test handling of missing CDP SDK."""
     with patch.dict("sys.modules", {"cdp": None}):
+        test_values = {
+            "cdp_api_key_name": "test-cdp-api-key-name",
+            "cdp_api_key_private_key": "test-cdp-api-key-private-key",
+            "network_id": "base-sepolia",
+        }
+
         with pytest.raises(ImportError) as exc_info:
-            CdpAgentkitWrapper()
+            CdpAgentkitWrapper(**test_values)
 
         assert "CDP SDK is not installed" in str(exc_info.value)
 
@@ -143,19 +149,19 @@ def test_cdp_sdk_import_error():
         (
             "get_wallet_details",
             {},
-            "langchain_cdp.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.get_wallet_details_wrapper",
+            "cdp_langchain.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.get_wallet_details_wrapper",
             "Got wallet details successfully",
         ),
         (
             "get_balance",
             {"asset_id": "usdc"},
-            "langchain_cdp.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.get_balance_wrapper",
+            "cdp_langchain.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.get_balance_wrapper",
             "Got balance successfully",
         ),
         (
             "request_faucet_funds",
             {},
-            "langchain_cdp.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.request_faucet_funds_wrapper",
+            "cdp_langchain.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.request_faucet_funds_wrapper",
             "Requested assets from faucet successfully",
         ),
         (
@@ -166,7 +172,7 @@ def test_cdp_sdk_import_error():
                 "destination": "example.base.eth",
                 "gasless": True,
             },
-            "langchain_cdp.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.transfer_wrapper",
+            "cdp_langchain.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.transfer_wrapper",
             "Transferred successfully",
         ),
         (
@@ -176,7 +182,7 @@ def test_cdp_sdk_import_error():
                 "from_asset_id": "usdc",
                 "to_asset_id": "weth",
             },
-            "langchain_cdp.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.trade_wrapper",
+            "cdp_langchain.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.trade_wrapper",
             "Traded successfully",
         ),
         (
@@ -186,7 +192,7 @@ def test_cdp_sdk_import_error():
                 "symbol": "TOKEN",
                 "total_supply": "1000000",
             },
-            "langchain_cdp.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.deploy_token_wrapper",
+            "cdp_langchain.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.deploy_token_wrapper",
             "Deployed token successfully",
         ),
         (
@@ -195,7 +201,7 @@ def test_cdp_sdk_import_error():
                 "contract_address": "0xvalidContractAddress",
                 "destination": "0xvalidAddress",
             },
-            "langchain_cdp.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.mint_nft_wrapper",
+            "cdp_langchain.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.mint_nft_wrapper",
             "Minted NFT successfully",
         ),
         (
@@ -205,7 +211,7 @@ def test_cdp_sdk_import_error():
                 "symbol": "TEST",
                 "base_uri": "https://www.test.xyz/metadata/",
             },
-            "langchain_cdp.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.deploy_nft_wrapper",
+            "cdp_langchain.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.deploy_nft_wrapper",
             "Minted NFT successfully",
         ),
         (
@@ -213,7 +219,7 @@ def test_cdp_sdk_import_error():
             {
                 "basename": "test-basename",
             },
-            "langchain_cdp.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.register_basename_wrapper",
+            "cdp_langchain.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.register_basename_wrapper",
             "Registered basename successfully",
         ),
     ],

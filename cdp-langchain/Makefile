@@ -9,3 +9,7 @@ lint:
 .PHONY: lint-fix
 lint-fix:
 	ruff check . --fix
+
+.PHONY: test
+test:
+	pytest
