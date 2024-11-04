@@ -1,5 +1,5 @@
-CDP Agentkit - Core documentation
-==========================
+CDP Agentkit - Core Documentation
+=================================
 
 .. include:: README.md
    :parser: myst_parser.sphinx_
