@@ -2,7 +2,7 @@
 
 ## Developing
 - cdp-sdk has a dependency on cargo, please install rust and add cargo to your path
-  - [Rust Installation Instructions] https://doc.rust-lang.org/cargo/getting-started/installation.html
+  - [Rust Installation Instructions](https://doc.rust-lang.org/cargo/getting-started/installation.html)
   - export PATH="$HOME/.cargo/bin:$PATH"
 - Agentkit uses `poetry` for package management and tooling
   - [Poetry Installation Instructions](https://python-poetry.org/docs/#installation)
