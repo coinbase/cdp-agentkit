@@ -2,6 +2,9 @@
 Core primitives and framework agnostic tools that are meant to be composable and used via Agentkit framework extensions.
 
 ## Developing
+- cdp-sdk has a dependency on cargo, please install rust and add cargo to your path
+  - [Rust Installation Instructions] https://doc.rust-lang.org/cargo/getting-started/installation.html
+  - export PATH="$HOME/.cargo/bin:$PATH"
 - Agentkit uses `poetry` for package management and tooling
   - [Poetry Installation Instructions](https://python-poetry.org/docs/#installation)
   - Run `poetry install` to install `cdp-agentkit-core` dependencies
