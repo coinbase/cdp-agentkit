@@ -10,6 +10,10 @@ lint:
 lint-fix:
 	ruff check . --fix
 
+.PHONY: docs
+docs:
+	sphinx-apidoc -f -o ./docs ./cdp_langchain
+
 .PHONY: test
 test:
 	pytest
