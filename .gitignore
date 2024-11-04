@@ -1,0 +1,44 @@
+**/.DS_Store
+
+**/.python-version
+
+# IDE
+.idea/*
+
+## Emacs
+*~
+\#*\#
+.\#*
+**/.projectile
+
+# Python cache files
+**/__pycache__/
+
+# Wallet data
+**/wallet_data.txt
+
+# Tools
+**/.pytest_cache
+
+**/.ruff_cache
+
+**/.mypy_cache
+
+**/.coverage
+
+# Build
+**/_build/
+
+**/build/
+
+**/dist/
+
+# Virtual Environments
+**/venv/
+**/.venv/
+
+# Environment Configurations
+**/env/
+**/.env/
+**/.env.local/
+**/.env.test/
