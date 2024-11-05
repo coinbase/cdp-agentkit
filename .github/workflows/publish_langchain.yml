@@ -40,10 +40,10 @@ jobs:
 
     - name: Install dependencies
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-      run: poetry install --with dev
+      run: poetry install
 
     - name: Build package
-      run: python -m build
+      run: poetry build
 
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@release/v1
