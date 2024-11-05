@@ -1972,13 +1972,13 @@ langchain-core = ">=0.3.15,<0.4.0"
 
 [[package]]
 name = "langgraph"
-version = "0.2.44"
+version = "0.2.45"
 description = "Building stateful, multi-actor applications with LLMs"
 optional = false
 python-versions = "<4.0,>=3.9.0"
 files = [
-    {file = "langgraph-0.2.44-py3-none-any.whl", hash = "sha256:ac03af8950efcb2ebb898bce0800c8c9bad9180f7490a73d2eaecacab7a7920a"},
-    {file = "langgraph-0.2.44.tar.gz", hash = "sha256:8ae179c3a77666b0a78b273d89d8f32a012282ad49298234426a4443d559aa62"},
+    {file = "langgraph-0.2.45-py3-none-any.whl", hash = "sha256:adfa9545c6c27180e995b654cb5817212c134a98407c7f34253a5fae58893f28"},
+    {file = "langgraph-0.2.45.tar.gz", hash = "sha256:939035e830506c5b662c9e61d95dbd1a5ef9d1fd35310dba68cebb33de2e7cdb"},
 ]
 
 [package.dependencies]
@@ -2491,13 +2491,13 @@ files = [
 
 [[package]]
 name = "openai"
-version = "1.53.0"
+version = "1.54.1"
 description = "The official Python library for the openai API"
 optional = false
-python-versions = ">=3.7.1"
+python-versions = ">=3.8"
 files = [
-    {file = "openai-1.53.0-py3-none-any.whl", hash = "sha256:20f408c32fc5cb66e60c6882c994cdca580a5648e10045cd840734194f033418"},
-    {file = "openai-1.53.0.tar.gz", hash = "sha256:be2c4e77721b166cce8130e544178b7d579f751b4b074ffbaade3854b6f85ec5"},
+    {file = "openai-1.54.1-py3-none-any.whl", hash = "sha256:3cb49ccb6bfdc724ad01cc397d323ef8314fc7d45e19e9de2afdd6484a533324"},
+    {file = "openai-1.54.1.tar.gz", hash = "sha256:5b832bf82002ba8c4f6e5e25c1c0f5d468c22f043711544c716eaffdb30dd6f1"},
 ]
 
 [package.dependencies]
@@ -4302,4 +4302,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "ce0fb7a8051acf2eb6262b5ca42260f073cbc70446078c200c56d621c91c88e9"
+content-hash = "5c9c92fbea77b2cb14cf1017ffc8616b449425ead8beab4d1065bd01aca88e35"
