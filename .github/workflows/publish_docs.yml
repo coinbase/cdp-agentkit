@@ -12,7 +12,7 @@ jobs:
         working-directory: ./cdp-agentkit-core
 
     steps:
-      - name: Set up Python ${{ matrix.python }}
+      - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
@@ -29,7 +29,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ./cdp-agentkit-core/.venv
-          key: venv-agentkit-${{ runner.os }}-${{ matrix.python }}-${{ hashFiles('cdp-agentkit-core/poetry.lock') }}
+          key: venv-agentkit-${{ runner.os }}-3.10-${{ hashFiles('cdp-agentkit-core/poetry.lock') }}
 
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
@@ -56,7 +56,7 @@ jobs:
         working-directory: ./cdp-langchain
 
     steps:
-      - name: Set up Python ${{ matrix.python }}
+      - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
@@ -73,7 +73,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ./cdp-langchain/.venv
-          key: venv-langchain-${{ runner.os }}-${{ matrix.python }}-${{ hashFiles('cdp-langchain/poetry.lock') }}
+          key: venv-langchain-${{ runner.os }}-3.10-${{ hashFiles('cdp-langchain/poetry.lock') }}
 
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
