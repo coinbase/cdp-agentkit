@@ -1,7 +1,7 @@
 # CDP Agentkit
 
-[![Release Notes](https://img.shields.io/github/release/coinbase/?style=flat-square)](https://github.com/coinbase/cdp-agentkit/releases)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/cdp-agentkitcore?style=flat-square)](https://pypistats.org/packages/cdp-agentkit-core)
+[![Release Notes](https://img.shields.io/github/release/coinbase/cdp-agentkit?style=flat-square)](https://github.com/coinbase/cdp-agentkit/releases)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/cdp-agentkit-core?style=flat-square)](https://pypistats.org/packages/cdp-agentkit-core)
 [![GitHub star chart](https://img.shields.io/github/stars/coinbase/cdp-agentkit?style=flat-square)](https://star-history.com/#coinbase/cdp-agentkit)
 [![Open Issues](https://img.shields.io/github/issues-raw/coinbase/cdp-agentkit?style=flat-square)](https://github.com/coinbase/cdp-agentkit/issues)
 
