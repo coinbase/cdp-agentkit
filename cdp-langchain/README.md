@@ -9,7 +9,7 @@
   - Run `poetry install` to install `cdp-langchain` dependencies
   - Run `poetry shell` to activate the virtual environment
 
-## Developer Documentation
+## Documentation
 - [Agentkit-Core](https://coinbase.github.io/cdp-agentkit-core)
 - [Agentkit-Langchain](https://coinbase.github.io/cdp-langchain)
 
