@@ -10,15 +10,12 @@ jobs:
     defaults:
       run:
         working-directory: ./cdp-agentkit-core
-    strategy:
-      matrix:
-        python: ['3.10']
 
     steps:
       - name: Set up Python ${{ matrix.python }}
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python }}
+          python-version: '3.10'
 
       - name: Install Poetry
         uses: snok/install-poetry@v1
@@ -57,15 +54,12 @@ jobs:
     defaults:
       run:
         working-directory: ./cdp-langchain
-    strategy:
-      matrix:
-        python: ['3.10']
 
     steps:
       - name: Set up Python ${{ matrix.python }}
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python }}
+          python-version: '3.10'
 
       - name: Install Poetry
         uses: snok/install-poetry@v1
