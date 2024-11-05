@@ -12,7 +12,6 @@ Core primitives and framework agnostic tools that are meant to be composable and
 
 ## Developer Documentation
 - [Agentkit-Core](https://coinbase.github.io/cdp-agentkit-core)
-- [Agentkit-Langchain](https://coinbase.github.io/cdp-langchain)
   
 ### Formatting
 `make format`
