@@ -13,6 +13,7 @@ from cdp_agentkit_core.actions import (
     REQUEST_FAUCET_FUNDS_PROMPT,
     TRADE_PROMPT,
     TRANSFER_PROMPT,
+    UNISWAP_V3_CREATE_POOL_PROMPT,
     DeployNftInput,
     DeployTokenInput,
     GetBalanceInput,
@@ -22,6 +23,7 @@ from cdp_agentkit_core.actions import (
     RequestFaucetFundsInput,
     TradeInput,
     TransferInput,
+    UniswapV3CreatePoolInput,
 )
 from cdp_langchain.tools import CdpAction
 from cdp_langchain.utils import CdpAgentkitWrapper
@@ -79,6 +81,7 @@ class CdpToolkit(BaseToolkit):
             mint_nft
             deploy_nft
             register_basename
+            uniswap_v3_create_pool
 
     Use within an agent:
         .. code-block:: python
@@ -141,6 +144,12 @@ class CdpToolkit(BaseToolkit):
 
         """
         actions: list[dict] = [
+            {
+                "mode": "uniswap_v3_create_pool",
+                "name": "uniswap_v3_create_pool",
+                "description": UNISWAP_V3_CREATE_POOL_PROMPT,
+                "args_schema": UniswapV3CreatePoolInput,
+            },
             {
                 "mode": "get_wallet_details",
                 "name": "get_wallet_details",

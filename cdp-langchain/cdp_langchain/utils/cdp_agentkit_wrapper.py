@@ -16,6 +16,7 @@ from cdp_agentkit_core.actions import (
     request_faucet_funds,
     trade,
     transfer,
+    uniswap_v3_create_pool,
 )
 
 
@@ -69,6 +70,20 @@ class CdpAgentkitWrapper(BaseModel):
         """
         wallet_data_dict = self.wallet.export_data().to_dict()
         return json.dumps(wallet_data_dict)
+
+    def uniswap_v3_create_pool_wrapper(self, token_a: str, token_b: str, fee: str) -> str:
+        """Create a Uniswap v3 pool for the wallet by wrapping call to CDP Agentkit Core.
+
+        Args:
+            token_a (str): The contract address of the first token in the pool.
+            token_b (str): The contract address of the second token in the pool.
+            fee (str): The fee for the pool.
+
+        Returns:
+            str: A message containing the pool details.
+
+        """
+        return uniswap_v3_create_pool(wallet=self.wallet, token_a=token_a, token_b=token_b, fee=fee)
 
     def get_wallet_details_wrapper(self) -> str:
         """Get details about the MPC Wallet by wrapping call to CDP Agentkit Core."""
@@ -212,6 +227,8 @@ class CdpAgentkitWrapper(BaseModel):
             return self.transfer_wrapper(**kwargs)
         elif mode == "trade":
             return self.trade_wrapper(**kwargs)
+        elif mode == "uniswap_v3_create_pool":
+            return self.uniswap_v3_create_pool_wrapper(**kwargs)
         elif mode == "deploy_token":
             return self.deploy_token_wrapper(**kwargs)
         elif mode == "mint_nft":
@@ -221,4 +238,4 @@ class CdpAgentkitWrapper(BaseModel):
         elif mode == "register_basename":
             return self.register_basename_wrapper(**kwargs)
         else:
-            raise ValueError("Invalid mode" + mode)
+            raise ValueError("Invalid mode: " + mode)

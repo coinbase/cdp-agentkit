@@ -40,5 +40,6 @@
 # Environment Configurations
 **/env/
 **/.env/
+**/.env
 **/.env.local/
 **/.env.test/
