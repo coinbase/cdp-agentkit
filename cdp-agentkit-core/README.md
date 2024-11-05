@@ -9,6 +9,10 @@ Core primitives and framework agnostic tools that are meant to be composable and
   - [Poetry Installation Instructions](https://python-poetry.org/docs/#installation)
   - Run `poetry install` to install `cdp-agentkit-core` dependencies
   - Run `poetry shell` to activate the virtual environment
+
+## Developer Documentation
+- [Agentkit-Core](https://coinbase.github.io/cdp-agentkit-core)
+- [Agentkit-Langchain](https://coinbase.github.io/cdp-langchain)
   
 ### Formatting
 `make format`
