@@ -19,6 +19,11 @@ ruff = "^0.7.1"
 mypy = "^1.13.0"
 pytest = "^8.3.3"
 pytest-cov = "^6.0.0"
+sphinx = "^8.0.2"
+sphinx-autobuild = "^2024.9.19"
+sphinxcontrib-napoleon = "^0.7"
+sphinx-autodoc-typehints = "^2.4.4"
+myst-parser = "^4.0.0"
 
 [build-system]
 requires = ["poetry-core"]
