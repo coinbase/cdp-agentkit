@@ -1,9 +1,4 @@
-"""Tool allows agents to interact with the Twitter API.
-
-To use this tool, you must first set as environment variables:
-    # TODO: List ENV VARs required.
-
-"""
+"""Tool allows agents to interact with the Twitter API."""
 
 from typing import Any
 

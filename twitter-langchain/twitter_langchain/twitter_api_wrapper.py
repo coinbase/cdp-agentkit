@@ -1,16 +1,15 @@
 """Util that calls Twitter API."""
 
-import tweepy
 
 from typing import Any
 
+from langchain_core.utils import get_from_dict_or_env
 from pydantic import BaseModel, model_validator
 
-from langchain_core.utils import get_from_dict_or_env
+from cdp_agentkit_core.actions.social.twitter import (
+    post_text,
+)
 
-#  from cdp_agentkit_core.actions import (
-#      twitter_post_text,
-#  )
 
 class TwitterApiWrapper(BaseModel):
     """Wrapper for Twitter API."""
@@ -22,8 +21,10 @@ class TwitterApiWrapper(BaseModel):
     @classmethod
     def validate_environment(cls, values: dict) -> Any:
         """Validate that Twitter access token, token secret, and tweepy exists in the environment."""
-
-        bearer_token = get_from_dict_or_env(values, "twitter_bearer_token", "TWITTER_BEARER_TOKEN")
+        api_key = get_from_dict_or_env(values, "twitter_api_key", "TWITTER_API_KEY")
+        api_secret = get_from_dict_or_env(values, "twitter_api_secret", "TWITTER_API_SECRET")
+        access_token = get_from_dict_or_env(values, "twitter_access_token", "TWITTER_ACCESS_TOKEN")
+        access_token_secret = get_from_dict_or_env(values, "twitter_access_token_secret", "TWITTER_ACCESS_TOKEN_SECRET")
 
         try:
             import tweepy
@@ -32,8 +33,18 @@ class TwitterApiWrapper(BaseModel):
                 "Tweepy Twitter SDK is not installed. " "Please install it with `pip install tweepy`"
             ) from None
 
-        values["bearer_token"] = bearer_token
-        client = tweepy.Client(bearer_token)
+        client = tweepy.Client(
+            consumer_key=api_key,
+            consumer_secret=api_secret,
+            access_token=access_token,
+            access_token_secret=access_token_secret,
+        )
+
+        values["client"] = client
+        values["api_key"] = api_key
+        values["api_secret"] = api_secret
+        values["access_token"] = access_token
+        values["access_token_secret"] = access_token_secret
 
         return values
 
@@ -47,12 +58,12 @@ class TwitterApiWrapper(BaseModel):
             str: A text containing the result of the post text to twitter response.
 
         """
-        #  return twitter_post_text(client=self.client, text=text)
-        return ""
+        return post_text(client=self.client, text=text)
 
     def run(self, mode: str, **kwargs) -> str:
         """Run the action via the Twitter API."""
         if mode == "post_text":
-            return self.post_text_wrapper()
+            return self.post_text_wrapper(**kwargs)
         else:
-            raise ValueError("Invalid mode" + mode)
+            raise ValueError("Invalid mode: " + mode)
+

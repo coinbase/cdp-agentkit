@@ -1942,18 +1942,18 @@ typing-extensions = ">=4.7"
 
 [[package]]
 name = "langchain-openai"
-version = "0.2.5"
+version = "0.2.6"
 description = "An integration package connecting OpenAI and LangChain"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "langchain_openai-0.2.5-py3-none-any.whl", hash = "sha256:745fd9d51a5a3a9cb8839d41f3786ab38dfc539e47c713a806cbca32f3d0875c"},
-    {file = "langchain_openai-0.2.5.tar.gz", hash = "sha256:55b98711a880474ec363267bf6cd0e2727dc00e8433731318d063a2184582c28"},
+    {file = "langchain_openai-0.2.6-py3-none-any.whl", hash = "sha256:d56e4d9183bdd1a5fb5f3ed9d287f15108e01d631ded170dd330a566f2927b95"},
+    {file = "langchain_openai-0.2.6.tar.gz", hash = "sha256:7054e5f64498ad8e59d77cdc210103f5ea4f67258997edc48ae237298adeb316"},
 ]
 
 [package.dependencies]
 langchain-core = ">=0.3.15,<0.4.0"
-openai = ">=1.52.0,<2.0.0"
+openai = ">=1.54.0,<2.0.0"
 tiktoken = ">=0.7,<1"
 
 [[package]]
@@ -2019,13 +2019,13 @@ orjson = ">=3.10.1"
 
 [[package]]
 name = "langsmith"
-version = "0.1.139"
+version = "0.1.140"
 description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform."
 optional = false
 python-versions = "<4.0,>=3.8.1"
 files = [
-    {file = "langsmith-0.1.139-py3-none-any.whl", hash = "sha256:2a4a541bfbd0a9727255df28a60048c85bc8c4c6a276975923785c3fd82dc879"},
-    {file = "langsmith-0.1.139.tar.gz", hash = "sha256:2f9e4d32fef3ad7ef42c8506448cce3a31ad6b78bb4f3310db04ddaa1e9d744d"},
+    {file = "langsmith-0.1.140-py3-none-any.whl", hash = "sha256:3de70183ae19a4ada4d77a8a9f336ff95ca0ead98215771033ee889a2889fe19"},
+    {file = "langsmith-0.1.140.tar.gz", hash = "sha256:cb0a717d7b9e6d3145285d7ca0ab216e064cbe7a1ca4139fc04af57fb2315e70"},
 ]
 
 [package.dependencies]

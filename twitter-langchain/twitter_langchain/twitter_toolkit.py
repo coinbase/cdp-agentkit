@@ -3,13 +3,12 @@
 from langchain_core.tools import BaseTool
 from langchain_core.tools.base import BaseToolkit
 
-from cdp_agentkit_core.actions import (
-    TWITTER_POST_TEXT_PROMPT,
-    TwitterPostTextInput,
-    twitter_post_text,
+from cdp_agentkit_core.actions.social.twitter import (
+    POST_TEXT_PROMPT,
+    PostTextInput,
 )
-from twitter_langchain.twitter_api_wrapper import TwitterApiWrapper
 from twitter_langchain.twitter_action import TwitterAction
+from twitter_langchain.twitter_api_wrapper import TwitterApiWrapper
 
 
 class TwitterToolkit(BaseToolkit):
@@ -32,7 +31,10 @@ class TwitterToolkit(BaseToolkit):
 
         .. code-block:: bash
 
-            # TODO: Add relevant ENV VARs
+        TWITTER_ACCESS_TOKEN
+        TWITTER_ACCESS_TOKEN_SECRET
+        TWITTER_API_KEY
+        TWITTER_API_SECRET
 
     Instantiate:
         .. code-block:: python
@@ -52,7 +54,7 @@ class TwitterToolkit(BaseToolkit):
 
         .. code-block:: none
 
-            # TODO: Add list of available tools.
+            twitter_post_text
 
     Use within an agent:
         .. code-block:: python
@@ -83,7 +85,7 @@ class TwitterToolkit(BaseToolkit):
             Post a hello tweet to the world
             ==================================[1m Ai Message [0m==================================
             Tool Calls:
-            post_tweet (call_iSYJVaM7uchfNHOMJoVPQsOi)
+            twitter_post_tweet (call_iSYJVaM7uchfNHOMJoVPQsOi)
             Call ID: call_iSYJVaM7uchfNHOMJoVPQsOi
             Args:
                 no_input: "hello world"
@@ -118,8 +120,8 @@ class TwitterToolkit(BaseToolkit):
             {
                 "mode": "post_text",
                 "name": "post_text",
-                "description": TWITTER_POST_TEXT_PROMPT,
-                "args_schema": TwitterPostTextInput,
+                "description": POST_TEXT_PROMPT,
+                "args_schema": PostTextInput,
             },
         ]
 

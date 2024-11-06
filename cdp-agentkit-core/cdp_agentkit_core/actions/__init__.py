@@ -49,12 +49,6 @@ from cdp_agentkit_core.actions.uniswap_v3.create_pool import (
     uniswap_v3_create_pool,
 )
 
-from cdp_agentkit_core.actions.social.twitter.post_text import (
-   TWITTER_POST_TEXT_PROMPT,
-   TwitterPostTextInput,
-   twitter_post_text,
-)
-
 __all__ = [
     "UNISWAP_V3_CREATE_POOL_PROMPT",
     "UniswapV3CreatePoolInput",
@@ -86,7 +80,4 @@ __all__ = [
     "TRANSFER_PROMPT",
     "TransferInput",
     "transfer",
-    "TWITTER_POST_TEXT_PROMPT",
-    "TwitterPostTextInput",
-    "twitter_post_text"
 ]
