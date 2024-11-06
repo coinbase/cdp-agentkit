@@ -1,65 +1,110 @@
 # Twitter (X) Langchain Toolkit
+CDP integration with Langchain to enable agentic workflows using the core primitives defined in `cdp-agentkit-core`.
 
-## Developing
-- `cdp-sdk` has a dependency on `cargo`, please install rust and add `cargo` to your path
-  - [Rust Installation Instructions](https://doc.rust-lang.org/cargo/getting-started/installation.html)
-  - `export PATH="$HOME/.cargo/bin:$PATH"`
-- Agentkit uses `poetry` for package management and tooling
-  - [Poetry Installation Instructions](https://python-poetry.org/docs/#installation)
-  - Run `poetry install` to install `cdp-langchain` dependencies
-  - Run `poetry shell` to activate the virtual environment
+This toolkit contains tools that enable an LLM agent to interact with the [Coinbase Developer Platform](https://docs.cdp.coinbase.com/). The toolkit provides a wrapper around the CDP SDK and Twitter (X), allowing agents to perform social operations like posting text.
+
+## Setup
+
+### Prerequisites
+- Python 3.10 or higher 
+- [Twitter (X) App Developer Keys](https://developer.x.com/en/portal/dashboard)
+
+### Installation
+
+```bash
+pip install twitter-langchain
+```
+
+### Environment Setup
+
+Set the following environment variables:
+
+```bash
+OPENAI_API_KEY=<your-openai-api-key>
+TWITTER_API_KEY=<your-api-key>
+TWITTER_API_SECRET=<your-api-secret>
+TWITTER_ACCESS_TOKEN=<your-access-token>
+TWITTER_ACCESS_TOKEN_SECRET=<your-access-token-secret>
+```
+
+## Usage
+
+### Basic Setup
+
+```python
+from twitter_langchain import (
+    TwitterApiWrapper,
+    TwitterToolkit
+)
+
+# Initialize TwitterApiwrapper
+twitter_api_wrapper = TwitterApiWrapper()
+
+# Create TwitterToolkit from the api wrapper
+twitter_toolkit = TwitterToolkit.from_twitter_api_wrapper(twitter_api_wrapper)
+```
+
+View available tools:
+```python
+tools = twitter_toolkit.get_tools()
+for tool in tools:
+    print(tool.name)
+```
+
+The toolkit provides the following tools:
+
+1. **post_text** - Post text to Twitter
+
+### Using with an Agent
+
+```python
+import uuid
+
+from langchain_openai import ChatOpenAI
+from langchain_core.messages import HumanMessage
+from langgraph.prebuilt import create_react_agent
+
+llm = ChatOpenAI(model="gpt-4o-mini")
+
+# Create agent
+agent_executor = create_react_agent(llm, tools)
+
+# Example - post text
+events = agent_executor.stream(
+    {
+        "messages": [
+            HumanMessage(content=f"Please post 'hello, world! {uuid.uuid4().hex}' to twitter"),
+        ],
+    },
+    stream_mode="values",
+)
+
+for event in events:
+    event["messages"][-1].pretty_print()
+```
+
+Expected output:
+```
+================================ Human Message =================================
+Please post 'hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa' to twitter
+================================== Ai Message ==================================
+Tool Calls:
+    post_text (call_xVx4BMCSlCmCcbEQG1yyebbq)
+    Call ID: call_xVx4BMCSlCmCcbEQG1yyebbq
+    Args:
+        text: hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa
+================================= Tool Message =================================
+Name: post_text
+Successfully posted!
+================================== Ai Message ==================================
+The message "hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa" has been successfully posted to Twitter!
+```
+
+## Contributing
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for detailed setup instructions and contribution guidelines.
 
 ## Documentation
+For detailed documentation, please visit:
 - [Agentkit-Core](https://coinbase.github.io/cdp-agentkit-core)
 - [Agentkit-Langchain](https://coinbase.github.io/cdp-langchain)
 - [Agentkit-Twitter-Langchain](https://coinbase.github.io/twitter-langchain)
-
-### Formatting
-`make format`
-
-### Linting
-- Check linter
-`make lint`
-
-- Fix linter errors
-`make lint-fix`
-
-## Adding an Agentic Action to the Langchain Toolkit
-1. Ensure the action is implemented in `cdp-agentkit-core`.
-2. Add a wrapper method to `TwitterApiWrapper` in `./twitter_langchain/twitter_api_wrapper.py`
-   - E.g.
-```python
-    def post_text_wrapper(self, text: str) -> str:
-        """Post text to Twitter.
-
-        Args:
-            text (str): The text to post.
-
-        Returns:
-            str: A text containing the result of the post text to twitter response.
-
-        """
-        return post_text(client=self.client, text=text)
-```
-3. Add call to the wrapper in `TwitterApiWrapper.run` in `./twitter_langchain/twitter_api_wrapper.py`
-   - E.g.
-```python
-        if mode == "post_text":
-            return self.post_text_wrapper(**kwargs)
-
-```
-4. Add the action to the list of available tools in the `TwitterToolkit` in `./twitter_langchain/twitter_toolkit.py`
-   - E.g.
-```python
-        actions: List[Dict] = [
-            {
-                "mode": "post_text",
-                "name": "post_text",
-                "description": POST_TEXT_PROMPT,
-                "args_schema": PostTextInput,
-            },
-        ]
-```
-5. Update `TwitterToolkit` documentation
-    - Add the action to the list of tools
-    - Add any additional ENV requirements
