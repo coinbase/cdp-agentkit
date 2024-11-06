@@ -12,7 +12,6 @@ pydantic = "^2.9.2"
 langchain = "^0.3.7"
 tweepy = "^4.14.0"
 cdp-agentkit-core = "^0.0.1"
-standard-imghdr = "^3.13.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.7.2"
