@@ -7,6 +7,7 @@ This toolkit contains tools that enable an LLM agent to interact with the [Coinb
 
 ### Prerequisites
 - Python 3.10 or higher 
+- [OpenAI API Key](https://platform.openai.com/api-keys)
 - [Twitter (X) App Developer Keys](https://developer.x.com/en/portal/dashboard)
 
 ### Installation
@@ -53,7 +54,7 @@ for tool in tools:
 
 The toolkit provides the following tools:
 
-1. **post_text** - Post text to Twitter
+1. **post_tweet** - Post text to Twitter
 
 ### Using with an Agent
 
@@ -89,12 +90,12 @@ Expected output:
 Please post 'hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa' to twitter
 ================================== Ai Message ==================================
 Tool Calls:
-    post_text (call_xVx4BMCSlCmCcbEQG1yyebbq)
+    post_tweet (call_xVx4BMCSlCmCcbEQG1yyebbq)
     Call ID: call_xVx4BMCSlCmCcbEQG1yyebbq
     Args:
         text: hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa
 ================================= Tool Message =================================
-Name: post_text
+Name: post_tweet
 Successfully posted!
 ================================== Ai Message ==================================
 The message "hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa" has been successfully posted to Twitter!

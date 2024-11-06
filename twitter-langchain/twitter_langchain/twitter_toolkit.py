@@ -4,8 +4,8 @@ from langchain_core.tools import BaseTool
 from langchain_core.tools.base import BaseToolkit
 
 from cdp_agentkit_core.actions.social.twitter import (
-    POST_TEXT_PROMPT,
-    PostTextInput,
+    POST_TWEET_PROMPT,
+    PostTweetInput,
 )
 from twitter_langchain.twitter_action import TwitterAction
 from twitter_langchain.twitter_api_wrapper import TwitterApiWrapper
@@ -55,7 +55,7 @@ class TwitterToolkit(BaseToolkit):
 
         .. code-block:: none
 
-            twitter_post_text
+            post_tweet
 
     Use within an agent:
         .. code-block:: python
@@ -81,17 +81,19 @@ class TwitterToolkit(BaseToolkit):
 
         .. code-block:: none
 
-             ================================[1m Human Message [0m=================================
-
-            Post a hello tweet to the world
-            ==================================[1m Ai Message [0m==================================
+            ================================ Human Message =================================
+            Please post 'hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa' to twitter
+            ================================== Ai Message ==================================
             Tool Calls:
-            twitter_post_tweet (call_iSYJVaM7uchfNHOMJoVPQsOi)
-            Call ID: call_iSYJVaM7uchfNHOMJoVPQsOi
-            Args:
-                no_input: "hello world"
-            =================================[1m Tool Message [0m=================================
+                post_tweet (call_xVx4BMCSlCmCcbEQG1yyebbq)
+                Call ID: call_xVx4BMCSlCmCcbEQG1yyebbq
+                Args:
+                    text: hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa
+            ================================= Tool Message =================================
             Name: post_tweet
+            Successfully posted!
+            ================================== Ai Message ==================================
+            The message "hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa" has been successfully posted to Twitter!
 
             ...
             ==================================[1m Ai Message [0m==================================
@@ -119,10 +121,10 @@ class TwitterToolkit(BaseToolkit):
         """
         actions: list[dict] = [
             {
-                "mode": "post_text",
-                "name": "post_text",
-                "description": POST_TEXT_PROMPT,
-                "args_schema": PostTextInput,
+                "mode": "post_tweet",
+                "name": "post_tweet",
+                "description": POST_TWEET_PROMPT,
+                "args_schema": PostTweetInput,
             },
         ]
 

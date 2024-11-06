@@ -12,7 +12,7 @@ lint-fix:
 
 .PHONY: docs
 docs:
-	sphinx-apidoc -f -o ./docs ./cdp_langchain
+	sphinx-apidoc -f -o ./docs ./twitter_langchain
 
 .PHONY: local-docs
 local-docs: docs

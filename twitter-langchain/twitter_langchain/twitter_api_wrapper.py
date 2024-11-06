@@ -7,7 +7,7 @@ from langchain_core.utils import get_from_dict_or_env
 from pydantic import BaseModel, model_validator
 
 from cdp_agentkit_core.actions.social.twitter import (
-    post_text,
+    post_tweet,
 )
 
 
@@ -48,7 +48,7 @@ class TwitterApiWrapper(BaseModel):
 
         return values
 
-    def post_text_wrapper(self, text: str) -> str:
+    def post_tweet_wrapper(self, text: str) -> str:
         """Post text to Twitter.
 
         Args:
@@ -58,12 +58,12 @@ class TwitterApiWrapper(BaseModel):
             str: A text containing the result of the post text to twitter response.
 
         """
-        return post_text(client=self.client, text=text)
+        return post_tweet(client=self.client, text=text)
 
     def run(self, mode: str, **kwargs) -> str:
         """Run the action via the Twitter API."""
-        if mode == "post_text":
-            return self.post_text_wrapper(**kwargs)
+        if mode == "post_tweet":
+            return self.post_tweet_wrapper(**kwargs)
         else:
             raise ValueError("Invalid mode: " + mode)
 

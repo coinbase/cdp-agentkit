@@ -26,7 +26,7 @@ llm = ChatOpenAI(model="gpt-4o-mini")
 # Create agent
 agent_executor = create_react_agent(llm, tools)
 
-# Example - post text
+# Example - post tweet
 events = agent_executor.stream(
     {
         "messages": [
@@ -44,12 +44,12 @@ for event in events:
 #  Please post 'hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa' to twitter
 #  ================================== Ai Message ==================================
 #  Tool Calls:
-#      post_text (call_xVx4BMCSlCmCcbEQG1yyebbq)
+#      post_tweet (call_xVx4BMCSlCmCcbEQG1yyebbq)
 #      Call ID: call_xVx4BMCSlCmCcbEQG1yyebbq
 #      Args:
 #          text: hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa
 #  ================================= Tool Message =================================
-#  Name: post_text
+#  Name: post_tweet
 #  Successfully posted!
 #  ================================== Ai Message ==================================
 #  The message "hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa" has been successfully posted to Twitter!

@@ -1,10 +1,10 @@
 import tweepy
 from pydantic import BaseModel, Field
 
-POST_TEXT_PROMPT = """
+POST_TWEET_PROMPT = """
 This tool will post text on Twitter."""
 
-class PostTextInput(BaseModel):
+class PostTweetInput(BaseModel):
     """Input argument schema for twitter post text actions."""
 
     text: str = Field(
@@ -12,7 +12,7 @@ class PostTextInput(BaseModel):
         description="The text to post to twitter",
     )
 
-def post_text(client: tweepy.Client, text: str) -> str:
+def post_tweet(client: tweepy.Client, text: str) -> str:
     """Post text to Twitter.
 
     Args:
