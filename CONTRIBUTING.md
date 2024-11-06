@@ -116,6 +116,48 @@ def mint_nft(wallet: Wallet, contract_address: str, destination: str) -> str:
 ```
 5. Add the action to the list of tools in the `CdpToolkit` class documentation.
 
+## Adding an Agentic Action to the Twitter Toolkit
+1. Ensure the action is implemented in `cdp-agentkit-core/actions/social/twitter`.
+2. Add a wrapper method to `TwitterApiWrapper` in `./twitter_langchain/twitter_api_wrapper.py`
+   - E.g.
+```python
+    def post_tweet_wrapper(self, tweet: str) -> str:
+        """Post tweet to Twitter.
+
+        Args:
+            client (tweepy.Client): The tweepy client to use.
+            tweet (str): The text of the tweet to post to twitter. Tweets can be maximum 280 characters.
+
+        Returns:
+            str: A message containing the result of the post action and the tweet.
+
+        """
+
+        return post_tweet(client=self.client, tweet=tweet)
+```
+3. Add call to the wrapper in `TwitterApiWrapper.run` in `./twitter_langchain/twitter_api_wrapper.py`
+   - E.g.
+```python
+        if mode == "post_tweet":
+            return self.post_tweet_wrapper(**kwargs)
+
+```
+4. Add the action to the list of available tools in the `TwitterToolkit` in `./twitter_langchain/twitter_toolkit.py`
+   - E.g.
+```python
+        actions: List[Dict] = [
+            {
+                "mode": "post_tweet",
+                "name": "post_tweet",
+                "description": POST_TWEET_PROMPT,
+                "args_schema": PostTweetInput,
+            },
+        ]
+```
+5. Update `TwitterToolkit` documentation
+    - Add the action to the list of tools
+    - Add any additional ENV requirements
+
 ## Development Tools
 ### Formatting
 `make format`

@@ -1,1 +1,111 @@
 # Twitter (X) Langchain Toolkit
+Twitter integration with Langchain to enable agentic workflows using the core primitives defined in `cdp-agentkit-core`.
+
+This toolkit contains tools that enable an LLM agent to interact with [Twitter](https://developer.x.com/en/docs/x-api). The toolkit provides a wrapper around the Twitter (X) API, allowing agents to perform social operations like posting text.
+
+## Setup
+
+### Prerequisites
+- Python 3.10 or higher 
+- [OpenAI API Key](https://platform.openai.com/api-keys)
+- [Twitter (X) App Developer Keys](https://developer.x.com/en/portal/dashboard)
+
+### Installation
+
+```bash
+pip install twitter-langchain
+```
+
+### Environment Setup
+
+Set the following environment variables:
+
+```bash
+OPENAI_API_KEY=<your-openai-api-key>
+TWITTER_API_KEY=<your-api-key>
+TWITTER_API_SECRET=<your-api-secret>
+TWITTER_ACCESS_TOKEN=<your-access-token>
+TWITTER_ACCESS_TOKEN_SECRET=<your-access-token-secret>
+```
+
+## Usage
+
+### Basic Setup
+
+```python
+from twitter_langchain import (
+    TwitterApiWrapper,
+    TwitterToolkit
+)
+
+# Initialize TwitterApiwrapper
+twitter_api_wrapper = TwitterApiWrapper()
+
+# Create TwitterToolkit from the api wrapper
+twitter_toolkit = TwitterToolkit.from_twitter_api_wrapper(twitter_api_wrapper)
+```
+
+View available tools:
+```python
+tools = twitter_toolkit.get_tools()
+for tool in tools:
+    print(tool.name)
+```
+
+The toolkit provides the following tools:
+
+1. **post_tweet** - Post tweet to Twitter
+
+### Using with an Agent
+
+```python
+import uuid
+
+from langchain_openai import ChatOpenAI
+from langchain_core.messages import HumanMessage
+from langgraph.prebuilt import create_react_agent
+
+llm = ChatOpenAI(model="gpt-4o-mini")
+
+# Create agent
+agent_executor = create_react_agent(llm, tools)
+
+# Example - post tweet
+events = agent_executor.stream(
+    {
+        "messages": [
+            HumanMessage(content=f"Please post 'hello, world! {uuid.uuid4().hex}' to twitter"),
+        ],
+    },
+    stream_mode="values",
+)
+
+for event in events:
+    event["messages"][-1].pretty_print()
+```
+
+Expected output:
+```
+================================ Human Message =================================
+Please post 'hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa' to twitter
+================================== Ai Message ==================================
+Tool Calls:
+    post_tweet (call_xVx4BMCSlCmCcbEQG1yyebbq)
+    Call ID: call_xVx4BMCSlCmCcbEQG1yyebbq
+    Args:
+        tweet: hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa
+================================= Tool Message =================================
+Name: post_tweet
+Successfully posted!
+================================== Ai Message ==================================
+The message "hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa" has been successfully posted to Twitter!
+```
+
+## Contributing
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for detailed setup instructions and contribution guidelines.
+
+## Documentation
+For detailed documentation, please visit:
+- [Agentkit-Core](https://coinbase.github.io/cdp-agentkit-core)
+- [Agentkit-Langchain](https://coinbase.github.io/cdp-langchain)
+- [Agentkit-Twitter-Langchain](https://coinbase.github.io/twitter-langchain)

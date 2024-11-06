@@ -1,9 +1,4 @@
-"""Tool allows agents to interact with the Twitter API.
-
-To use this tool, you must first set as environment variables:
-    # TODO: List ENV VARs required.
-
-"""
+"""Tool allows agents to interact with the Twitter API."""
 
 from typing import Any
 
@@ -17,7 +12,7 @@ from twitter_langchain.twitter_api_wrapper import TwitterApiWrapper
 class TwitterAction(BaseTool):  # type: ignore[override]
     """Tool for interacting with the Twitter API."""
 
-    twitter_apiwrapper: TwitterApiWrapper
+    twitter_api_wrapper: TwitterApiWrapper
     mode: str
     name: str = ""
     description: str = ""
