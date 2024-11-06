@@ -6,10 +6,6 @@ from langchain_core.messages import HumanMessage
 from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
-from twitter_langchain import (
-    TwitterApiWrapper,
-    TwitterToolkit,
-)
 
 # Import CDP Agentkit Langchain Extension.
 from cdp_langchain.agent_toolkits import CdpToolkit
@@ -47,14 +43,6 @@ def initialize_agent():
     cdp_toolkit = CdpToolkit.from_cdp_agentkit_wrapper(agentkit)
     tools = cdp_toolkit.get_tools()
 
-    # Initialize CDP Agentkit Twitter Langchain
-    twitter_api_values = {}
-    twitter_api = TwitterApiWrapper(**twitter_api_values)
-    twitter_toolkit = TwitterToolkit.from_twitter_api_wrapper(twitter_api)
-    twitter_tools = twitter_toolkit.get_tools()
-
-    tools.extend(twitter_tools)
-
     # Store buffered conversation history in memory.
     memory = MemorySaver()
     config = {"configurable": {"thread_id": "CDP Agentkit Chatbot Example!"}}
@@ -62,7 +50,6 @@ def initialize_agent():
     # Create ReAct Agent using the LLM and CDP Agentkit tools.
     return create_react_agent(
         llm,
-        #  tools=tools,
         tools=tools,
         checkpointer=memory,
         state_modifier="You are a helpful agent that can interact onchain on the Base Layer 2 using the Coinbase Developer Platform Agentkit. You are empowered to interact onchain using your tools. If you ever need funds, you can request them from the faucet. You can also deploy your own ERC-20 tokens, NFTs, and interact with them. If someone asks you to do something you can't do, you can say so, and encourage them to implement it themselves using the CDP SDK + Agentkit, recommend they go to docs.cdp.coinbase.com for more informaton.",
