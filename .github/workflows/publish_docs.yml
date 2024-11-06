@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  docs-agentkit:
+  docs-cdp-agentkit-core:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -42,15 +42,10 @@ jobs:
           cd docs
           poetry run make html
 
-      - name: Deploy to Github Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          destination_dir: cdp-agentkit-core
-          publish_dir: ./docs/_build/html
-          keep_files: false
+      - name: Save Documentation Output
+        run: mkdir -p ../docs_output/cdp-agentkit-core && cp -r ./docs/_build/html/* ../docs_output/cdp-agentkit-core
 
-  docs-langchain:
+  docs-cdp-langchain:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -88,10 +83,24 @@ jobs:
           cd docs
           poetry run make html
 
+      - name: Save Documentation Output
+        run: mkdir -p ../docs_output/cdp-langchain && cp -r ./docs/_build/html/* ../docs_output/cdp-langchain
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [docs-cdp-agentkit-core, docs-cdp-langchain]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Copy Documentation to Deployment Directory
+        run: |
+          mkdir -p docs
+          cp -r docs_output/cdp-agentkit-core docs/cdp-agentkit-core
+          cp -r docs_output/cdp-langchain docs/cdp-langchain
+
       - name: Deploy to Github Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          destination_dir: cdp-langchain
-          publish_dir: ./docs/_build/html
+          publish_dir: ./docs
           keep_files: false
