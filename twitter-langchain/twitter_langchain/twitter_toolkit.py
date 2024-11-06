@@ -2,9 +2,14 @@
 
 from langchain_core.tools import BaseTool
 from langchain_core.tools.base import BaseToolkit
-from twitterlangchain import TwitterApiWrapper
 
-from twitter_langchain import TwitterAction
+from cdp_agentkit_core.actions import (
+    TWITTER_POST_TEXT_PROMPT,
+    TwitterPostTextInput,
+    twitter_post_text,
+)
+from twitter_langchain.twitter_api_wrapper import TwitterApiWrapper
+from twitter_langchain.twitter_action import TwitterAction
 
 
 class TwitterToolkit(BaseToolkit):
@@ -109,7 +114,14 @@ class TwitterToolkit(BaseToolkit):
             TwitterToolkit. The Twitter toolkit.
 
         """
-        actions: list[dict] = []
+        actions: list[dict] = [
+            {
+                "mode": "post_text",
+                "name": "post_text",
+                "description": TWITTER_POST_TEXT_PROMPT,
+                "args_schema": TwitterPostTextInput,
+            },
+        ]
 
         tools = [
             TwitterAction(

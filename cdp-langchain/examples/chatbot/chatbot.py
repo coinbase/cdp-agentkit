@@ -10,6 +10,10 @@ from langgraph.prebuilt import create_react_agent
 # Import CDP Agentkit Langchain Extension.
 from cdp_langchain.agent_toolkits import CdpToolkit
 from cdp_langchain.utils import CdpAgentkitWrapper
+from twitter_langchain import (
+    TwitterApiWrapper,
+    TwitterToolkit,
+)
 
 # Configure a file to persist the agent's CDP MPC Wallet Data.
 wallet_data_file = "wallet_data.txt"
@@ -42,6 +46,13 @@ def initialize_agent():
     # Initialize CDP Agentkit Toolkit and get tools.
     cdp_toolkit = CdpToolkit.from_cdp_agentkit_wrapper(agentkit)
     tools = cdp_toolkit.get_tools()
+
+    # Initialize
+    twitter_api = TwitterApiWrapper(**values)
+    twitter_toolkit = TwitterToolkit.from_twitter_api_wrapper(twitter_api)
+    twitter_tools = cdp_toolkit.get_tools()
+
+    tools.extend(twitter_tools)
 
     # Store buffered conversation history in memory.
     memory = MemorySaver()
