@@ -38,9 +38,9 @@ jobs:
 
       - name: Build Sphinx Documentation
         run: |
-          make docs
+          poetry run make docs
           cd docs
-          make html
+          poetry run make html
 
       - name: Deploy to Github Pages
         uses: peaceiris/actions-gh-pages@v4
@@ -84,9 +84,9 @@ jobs:
 
       - name: Build Sphinx Documentation
         run: |
-          make docs
+          poetry run make docs
           cd docs
-          make html
+          poetry run make html
 
       - name: Deploy to Github Pages
         uses: peaceiris/actions-gh-pages@v4
