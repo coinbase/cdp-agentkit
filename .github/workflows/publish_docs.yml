@@ -4,12 +4,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  docs-cdp-agentkit-core:
+  build-and-deploy-docs:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./cdp-agentkit-core
-
     steps:
       - uses: actions/checkout@v3
 
@@ -25,78 +21,53 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-      - name: Load cached venv
-        id: cached-poetry-dependencies
+      - name: Load cached venv for cdp-agentkit-core
+        id: cached-poetry-dependencies-core
         uses: actions/cache@v3
         with:
           path: ./cdp-agentkit-core/.venv
           key: venv-agentkit-${{ runner.os }}-3.10-${{ hashFiles('cdp-agentkit-core/poetry.lock') }}
 
-      - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --with dev
-
-      - name: Build Sphinx Documentation
+      - name: Install dependencies for cdp-agentkit-core
+        if: steps.cached-poetry-dependencies-core.outputs.cache-hit != 'true'
         run: |
+          cd cdp-agentkit-core
+          poetry install --with dev
+          cd ..
+
+      - name: Build Sphinx Documentation for cdp-agentkit-core
+        run: |
+          cd cdp-agentkit-core
           poetry run make docs
           cd docs
           poetry run make html
+          cd ../..
+          mkdir -p docs/cdp-agentkit-core
+          cp -r cdp-agentkit-core/docs/_build/html/* docs/cdp-agentkit-core
 
-      - name: Save Documentation Output
-        run: mkdir -p ../docs_output/cdp-agentkit-core && cp -r ./docs/_build/html/* ../docs_output/cdp-agentkit-core
-
-  docs-cdp-langchain:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./cdp-langchain
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: latest
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-
-      - name: Load cached venv
-        id: cached-poetry-dependencies
+      - name: Load cached venv for cdp-langchain
+        id: cached-poetry-dependencies-langchain
         uses: actions/cache@v3
         with:
           path: ./cdp-langchain/.venv
           key: venv-langchain-${{ runner.os }}-3.10-${{ hashFiles('cdp-langchain/poetry.lock') }}
 
-      - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --with dev
-
-      - name: Build Sphinx Documentation
+      - name: Install dependencies for cdp-langchain
+        if: steps.cached-poetry-dependencies-langchain.outputs.cache-hit != 'true'
         run: |
+          cd cdp-langchain
+          poetry install --with dev
+          cd ..
+
+      - name: Build Sphinx Documentation for cdp-langchain
+        run: |
+          cd cdp-langchain
           poetry run make docs
           cd docs
           poetry run make html
-
-      - name: Save Documentation Output
-        run: mkdir -p ../docs_output/cdp-langchain && cp -r ./docs/_build/html/* ../docs_output/cdp-langchain
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: [docs-cdp-agentkit-core, docs-cdp-langchain]
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Copy Documentation to Deployment Directory
-        run: |
-          mkdir -p docs
-          cp -r docs_output/cdp-agentkit-core docs/cdp-agentkit-core
-          cp -r docs_output/cdp-langchain docs/cdp-langchain
+          cd ../..
+          mkdir -p docs/cdp-langchain
+          cp -r cdp-langchain/docs/_build/html/* docs/cdp-langchain
 
       - name: Deploy to Github Pages
         uses: peaceiris/actions-gh-pages@v4
