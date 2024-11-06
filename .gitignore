@@ -33,9 +33,6 @@
 
 **/dist/
 
-# Environments
-**/.env
-
 # Virtual Environments
 **/venv/
 **/.venv/
