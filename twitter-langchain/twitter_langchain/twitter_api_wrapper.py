@@ -48,17 +48,19 @@ class TwitterApiWrapper(BaseModel):
 
         return values
 
-    def post_tweet_wrapper(self, text: str) -> str:
-        """Post text to Twitter.
+    def post_tweet_wrapper(self, tweet: str) -> str:
+        """Post tweet to Twitter.
 
         Args:
-            text (str): The text to post.
+            client (tweepy.Client): The tweepy client to use.
+            tweet (str): The text of the tweet to post to twitter. Tweets can be maximum 280 characters.
 
         Returns:
-            str: A text containing the result of the post text to twitter response.
+            str: A message containing the result of the post action and the tweet.
 
         """
-        return post_tweet(client=self.client, text=text)
+
+        return post_tweet(client=self.client, tweet=tweet)
 
     def run(self, mode: str, **kwargs) -> str:
         """Run the action via the Twitter API."""

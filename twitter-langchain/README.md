@@ -1,7 +1,7 @@
 # Twitter (X) Langchain Toolkit
-CDP integration with Langchain to enable agentic workflows using the core primitives defined in `cdp-agentkit-core`.
+Twitter integration with Langchain to enable agentic workflows using the core primitives defined in `cdp-agentkit-core`.
 
-This toolkit contains tools that enable an LLM agent to interact with the [Coinbase Developer Platform](https://docs.cdp.coinbase.com/). The toolkit provides a wrapper around the CDP SDK and Twitter (X), allowing agents to perform social operations like posting text.
+This toolkit contains tools that enable an LLM agent to interact with [Twitter](https://developer.x.com/en/docs/x-api). The toolkit provides a wrapper around the Twitter (X) API, allowing agents to perform social operations like posting text.
 
 ## Setup
 
@@ -54,7 +54,7 @@ for tool in tools:
 
 The toolkit provides the following tools:
 
-1. **post_tweet** - Post text to Twitter
+1. **post_tweet** - Post tweet to Twitter
 
 ### Using with an Agent
 
@@ -70,7 +70,7 @@ llm = ChatOpenAI(model="gpt-4o-mini")
 # Create agent
 agent_executor = create_react_agent(llm, tools)
 
-# Example - post text
+# Example - post tweet
 events = agent_executor.stream(
     {
         "messages": [
@@ -93,7 +93,7 @@ Tool Calls:
     post_tweet (call_xVx4BMCSlCmCcbEQG1yyebbq)
     Call ID: call_xVx4BMCSlCmCcbEQG1yyebbq
     Args:
-        text: hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa
+        tweet: hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa
 ================================= Tool Message =================================
 Name: post_tweet
 Successfully posted!

@@ -88,7 +88,7 @@ class TwitterToolkit(BaseToolkit):
                 post_tweet (call_xVx4BMCSlCmCcbEQG1yyebbq)
                 Call ID: call_xVx4BMCSlCmCcbEQG1yyebbq
                 Args:
-                    text: hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa
+                    tweet: hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa
             ================================= Tool Message =================================
             Name: post_tweet
             Successfully posted!
