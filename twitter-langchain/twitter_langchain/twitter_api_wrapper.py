@@ -47,7 +47,7 @@ class TwitterApiWrapper(BaseModel):
         return values
 
     def account_details_wrapper(self) -> str:
-        """.
+        """Get the authenticated Twitter (X) user account details.
 
         Returns:
             str: A message containing account details for the authenticated user context in JSON format.

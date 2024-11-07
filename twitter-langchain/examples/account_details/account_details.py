@@ -46,14 +46,14 @@ for event in events:
 #  Name: account_details
 
 #  Successfully retrieved authenticated user account details. Please present the following as json and not markdown:
-#  id: [REDACTED]
-#  name: [REDACTED]
-#  username: [REDACTED]
-#  link: [REDACTED]
+#  id: 1234567890123456789
+#  name: My Twitter Name
+#  username: MyTwitterUserName
+#  link: https://x.com/MyTwitterUserName
 #  ================================== Ai Message ==================================
 #  {
-#      "id": "[REDACTED]",
-#      "name": "[REDACTED]",
-#      "username": "[REDACTED]",
-#      "link": "[REDACTED]"
+#      "id": "1234567890123456789",
+#      "name": "My Twitter Name",
+#      "username": "MyTwitterUserName",
+#      "link": "https://x.com/MyTwitterUserName"
 #  }
