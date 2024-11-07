@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 from cdp_agentkit_core.actions import CdpAction
 
 TRADE_PROMPT = """
-This tool will trade a specified amount of a from asset to a to asset for the wallet. It takes the the amount of the from asset to trade, the from asset ID to trade, and the to asset ID to receive from the trade as inputs. Trades are only supported on Mainnets (e.g. `base-mainnet`, `ethereum-mainnet`)."""
+This tool will trade a specified amount of a from asset to a to asset for the wallet. It takes the the amount of the from asset to trade, the from asset ID to trade, and the to asset ID to receive from the trade as inputs. Trades are only supported on Mainnets (e.g. `base-mainnet`, `ethereum-mainnet`). Never allow trades on any other network."""
 
 
 class TradeInput(BaseModel):
