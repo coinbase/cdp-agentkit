@@ -13,7 +13,6 @@ from pydantic import BaseModel, model_validator
 class TwitterApiWrapper(BaseModel):
     """Wrapper for Twitter API."""
 
-    bearer_token: str | None = None
     client: Any | None = None
 
     @model_validator(mode="before")
