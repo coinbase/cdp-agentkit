@@ -4,6 +4,8 @@ from langchain_core.tools import BaseTool
 from langchain_core.tools.base import BaseToolkit
 
 from cdp_agentkit_core.actions.social.twitter import (
+    ACCOUNT_DETAILS_PROMPT,
+    AccountDetailsInput,
     POST_TWEET_PROMPT,
     PostTweetInput,
 )
@@ -55,6 +57,7 @@ class TwitterToolkit(BaseToolkit):
 
         .. code-block:: none
 
+            account_details
             post_tweet
 
     Use within an agent:
@@ -120,6 +123,12 @@ class TwitterToolkit(BaseToolkit):
 
         """
         actions: list[dict] = [
+            {
+                "mode": "account_details",
+                "name": "account_details",
+                "description": ACCOUNT_DETAILS_PROMPT,
+                "args_schema": AccountDetailsInput,
+            },
             {
                 "mode": "post_tweet",
                 "name": "post_tweet",
