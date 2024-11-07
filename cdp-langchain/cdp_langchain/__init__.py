@@ -1,3 +1,3 @@
-from cdp_langchain import __version__
+from cdp_langchain.__version__ import __version__
 
 __all__ = ["__version__"]
