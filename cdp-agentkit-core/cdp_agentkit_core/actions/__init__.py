@@ -8,6 +8,7 @@ from cdp_agentkit_core.actions.register_basename import RegisterBasenameAction
 from cdp_agentkit_core.actions.request_faucet_funds import RequestFaucetFundsAction
 from cdp_agentkit_core.actions.trade import TradeAction
 from cdp_agentkit_core.actions.transfer import TransferAction
+from cdp_agentkit_core.actions.wow.create_token import WowCreateTokenAction
 
 
 # WARNING: All new CdpAction subclasses must be imported above, otherwise they will not be discovered
@@ -33,5 +34,6 @@ __all__ = [
     "RequestFaucetFundsAction",
     "TradeAction",
     "TransferAction",
+    "WowCreateTokenAction",
     "CDP_ACTIONS",
 ]

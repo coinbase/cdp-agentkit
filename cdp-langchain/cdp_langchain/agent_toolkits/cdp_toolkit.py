@@ -60,6 +60,7 @@ class CdpToolkit(BaseToolkit):
             mint_nft
             deploy_nft
             register_basename
+            wow_create_token
     Use within an agent:
         .. code-block:: python
 
