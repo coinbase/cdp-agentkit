@@ -69,6 +69,9 @@ class CdpAgentkitWrapper(BaseModel):
 
         """
         wallet_data_dict = self.wallet.export_data().to_dict()
+
+        wallet_data_dict["default_address_id"] = self.wallet.default_address.address_id
+
         return json.dumps(wallet_data_dict)
 
     def uniswap_v3_create_pool_wrapper(self, token_a: str, token_b: str, fee: str) -> str:
