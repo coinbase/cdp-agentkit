@@ -8,8 +8,8 @@ from pydantic import ValidationError
 
 from cdp import Cdp, Wallet, WalletData
 from cdp_langchain import __version__
-from cdp_langchain.utils import CdpAgentkitWrapper
 from cdp_langchain.constants import CDP_LANGCHAIN_DEFAULT_SOURCE
+from cdp_langchain.utils import CdpAgentkitWrapper
 
 
 @pytest.fixture
