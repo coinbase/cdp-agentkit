@@ -1,20 +1,18 @@
 """Util that calls Twitter API."""
 
-
 from typing import Any
 
-from langchain_core.utils import get_from_dict_or_env
-from pydantic import BaseModel, model_validator
-
 from cdp_agentkit_core.actions.social.twitter import (
+    account_details,
     post_tweet,
 )
+from langchain_core.utils import get_from_dict_or_env
+from pydantic import BaseModel, model_validator
 
 
 class TwitterApiWrapper(BaseModel):
     """Wrapper for Twitter API."""
 
-    bearer_token: str | None = None
     client: Any | None = None
 
     @model_validator(mode="before")
@@ -48,6 +46,15 @@ class TwitterApiWrapper(BaseModel):
 
         return values
 
+    def account_details_wrapper(self) -> str:
+        """Get the authenticated Twitter (X) user account details.
+
+        Returns:
+            str: A message containing account details for the authenticated user context in JSON format.
+
+        """
+        return account_details(client=self.client)
+
     def post_tweet_wrapper(self, tweet: str) -> str:
         """Post tweet to Twitter.
 
@@ -59,12 +66,13 @@ class TwitterApiWrapper(BaseModel):
             str: A message containing the result of the post action and the tweet.
 
         """
-
         return post_tweet(client=self.client, tweet=tweet)
 
     def run(self, mode: str, **kwargs) -> str:
         """Run the action via the Twitter API."""
-        if mode == "post_tweet":
+        if mode == "account_details":
+            return self.account_details_wrapper()
+        elif mode == "post_tweet":
             return self.post_tweet_wrapper(**kwargs)
         else:
             raise ValueError("Invalid mode: " + mode)

@@ -14,7 +14,7 @@ The Coinbase Developer Platform (CDP) Agentkit simplifies bringing your AI Agent
   - Getting wallet details and balances
   - Transferring and trading tokens
   - Registering Basenames
-  - Deploying ERC20 tokens and creating uniswap_v3 pools for trading
+  - Deploying ERC20 tokens
   - Deploying ERC721 tokens and minting NFTs
 
 ## Examples

@@ -1,4 +1,3 @@
-import uuid
 
 from langchain_core.messages import HumanMessage
 from langchain_openai import ChatOpenAI
@@ -23,11 +22,11 @@ llm = ChatOpenAI(model="gpt-4o-mini")
 # Create agent
 agent_executor = create_react_agent(llm, tools)
 
-# Example - post tweet
+# Example - get account details
 events = agent_executor.stream(
     {
         "messages": [
-            HumanMessage(content=f"Please post 'hello, world! {uuid.uuid4().hex}' to twitter"),
+            HumanMessage(content="Please obtain my twitter account information"),
         ],
     },
     stream_mode="values",
@@ -36,17 +35,25 @@ events = agent_executor.stream(
 for event in events:
     event["messages"][-1].pretty_print()
 
-# Successful Output
 #  ================================ Human Message =================================
-#  Please post 'hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa' to twitter
+#  Please obtain my twitter account information
 #  ================================== Ai Message ==================================
 #  Tool Calls:
-#      post_tweet (call_xVx4BMCSlCmCcbEQG1yyebbq)
-#      Call ID: call_xVx4BMCSlCmCcbEQG1yyebbq
-#      Args:
-#          text: hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa
+#      account_details (call_pYME8H1tHfdMakFZ1FTS0VBX)
+#      Call ID: call_pYME8H1tHfdMakFZ1FTS0VBX
+#          Args:
 #  ================================= Tool Message =================================
-#  Name: post_tweet
-#  Successfully posted!
+#  Name: account_details
+
+#  Successfully retrieved authenticated user account details. Please present the following as json and not markdown:
+#  id: 1234567890123456789
+#  name: My Twitter Name
+#  username: MyTwitterUserName
+#  link: https://x.com/MyTwitterUserName
 #  ================================== Ai Message ==================================
-#  The message "hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa" has been successfully posted to Twitter!
+#  {
+#      "id": "1234567890123456789",
+#      "name": "My Twitter Name",
+#      "username": "MyTwitterUserName",
+#      "link": "https://x.com/MyTwitterUserName"
+#  }
