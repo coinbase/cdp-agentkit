@@ -39,7 +39,10 @@ def deploy_nft(wallet: Wallet, name: str, symbol: str, base_uri: str) -> str:
         str: A message containing the NFT token deployment details.
 
     """
-    nft_contract = wallet.deploy_nft(name=name, symbol=symbol, base_uri=base_uri).wait()
+    try:
+        nft_contract = wallet.deploy_nft(name=name, symbol=symbol, base_uri=base_uri).wait()
+    except Exception as e:
+        return f"Error deploying NFT {e!s}"
 
     return f"Deployed NFT Collection {name} to address {nft_contract.contract_address} on network {wallet.network_id}.\nTransaction hash for the deployment: {nft_contract.transaction.transaction_hash}\nTransaction link for the deployment: {nft_contract.transaction.transaction_link}"
 

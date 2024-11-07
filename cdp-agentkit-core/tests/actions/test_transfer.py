@@ -65,9 +65,13 @@ def test_transfer_api_error(wallet_factory):
     mock_wallet = wallet_factory()
 
     with patch.object(mock_wallet, "transfer", side_effect=Exception("API error")) as mock_transfer:
-        with pytest.raises(Exception, match="API error"):
-            transfer(mock_wallet, MOCK_AMOUNT, MOCK_ASSET_ID, MOCK_DESTINATION, MOCK_GASLESS)
+        action_response = transfer(
+            mock_wallet, MOCK_AMOUNT, MOCK_ASSET_ID, MOCK_DESTINATION, MOCK_GASLESS
+        )
 
+        expected_response = "Error transferring the asset API error"
+
+        assert action_response == expected_response
         mock_transfer.assert_called_once_with(
             amount=MOCK_AMOUNT,
             asset_id=MOCK_ASSET_ID,

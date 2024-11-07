@@ -45,9 +45,12 @@ def transfer(
         str: A message containing the transfer details.
 
     """
-    transfer_result = wallet.transfer(
-        amount=amount, asset_id=asset_id, destination=destination, gasless=gasless
-    ).wait()
+    try:
+        transfer_result = wallet.transfer(
+            amount=amount, asset_id=asset_id, destination=destination, gasless=gasless
+        ).wait()
+    except Exception as e:
+        return f"Error transferring the asset {e!s}"
 
     return f"Transferred {amount} of {asset_id} to {destination}.\nTransaction hash for the transfer: {transfer_result.transaction_hash}\nTransaction link for the transfer: {transfer_result.transaction_link}"
 

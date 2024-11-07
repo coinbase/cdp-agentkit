@@ -59,9 +59,10 @@ def test_deploy_nft_api_error(wallet_factory):
     mock_wallet = wallet_factory()
 
     with patch.object(mock_wallet, "deploy_nft", side_effect=Exception("API error")) as mock_deploy:
-        with pytest.raises(Exception, match="API error"):
-            deploy_nft(mock_wallet, MOCK_NAME, MOCK_SYMBOL, MOCK_BASE_URI)
+        action_response = deploy_nft(mock_wallet, MOCK_NAME, MOCK_SYMBOL, MOCK_BASE_URI)
 
+        expected_response = "Error deploying NFT API error"
+        assert action_response == expected_response
         mock_deploy.assert_called_once_with(
             name=MOCK_NAME,
             symbol=MOCK_SYMBOL,
