@@ -29,11 +29,14 @@ def request_faucet_funds(wallet: Wallet, asset_id: str | None = None) -> str:
         str: Confirmation message with transaction details
 
     """
-    # Request funds from the faucet.
-    faucet_tx = wallet.faucet(asset_id=asset_id if asset_id else None)
+    try:
+        # Request funds from the faucet.
+        faucet_tx = wallet.faucet(asset_id=asset_id if asset_id else None)
 
-    # Wait for the faucet transaction to be confirmed.
-    faucet_tx.wait()
+        # Wait for the faucet transaction to be confirmed.
+        faucet_tx.wait()
+    except Exception as e:
+        return f"Error requesting faucet funds {e!s}"
 
     return f"Received {asset_id} from the faucet. Transaction: {faucet_tx.transaction_link}"
 

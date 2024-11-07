@@ -63,9 +63,11 @@ def test_deploy_token_api_error(wallet_factory):
     with patch.object(
         mock_wallet, "deploy_token", side_effect=Exception("API error")
     ) as mock_deploy:
-        with pytest.raises(Exception, match="API error"):
-            deploy_token(mock_wallet, MOCK_NAME, MOCK_SYMBOL, MOCK_TOTAL_SUPPLY)
+        action_response = deploy_token(mock_wallet, MOCK_NAME, MOCK_SYMBOL, MOCK_TOTAL_SUPPLY)
 
+        expected_response = "Error deploying token API error"
+
+        assert action_response == expected_response
         mock_deploy.assert_called_once_with(
             name=MOCK_NAME,
             symbol=MOCK_SYMBOL,

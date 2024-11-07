@@ -33,9 +33,12 @@ def deploy_token(wallet: Wallet, name: str, symbol: str, total_supply: str) -> s
         str: A message containing the deployed token contract address and details
 
     """
-    token_contract = wallet.deploy_token(name=name, symbol=symbol, total_supply=total_supply)
+    try:
+        token_contract = wallet.deploy_token(name=name, symbol=symbol, total_supply=total_supply)
 
-    token_contract.wait()
+        token_contract.wait()
+    except Exception as e:
+        return f"Error deploying token {e!s}"
 
     return f"Deployed ERC20 token contract {name} ({symbol}) with total supply of {total_supply} tokens at address {token_contract.contract_address}. Transaction link: {token_contract.transaction.transaction_link}"
 

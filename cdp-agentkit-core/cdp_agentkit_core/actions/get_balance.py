@@ -31,9 +31,13 @@ def get_balance(wallet: Wallet, asset_id: str) -> str:
     """
     # for each address in the wallet, get the balance for the asset
     balances = {}
-    for address in wallet.addresses:
-        balance = address.balance(asset_id)
-        balances[address.address_id] = balance
+
+    try:
+        for address in wallet.addresses:
+            balance = address.balance(asset_id)
+            balances[address.address_id] = balance
+    except Exception as e:
+        return f"Error getting balance for all addresses in the wallet {e!s}"
 
     # Format each balance entry on a new line
     balance_lines = [f"  {addr}: {balance}" for addr, balance in balances.items()]

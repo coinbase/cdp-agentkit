@@ -60,9 +60,11 @@ def test_trade_api_error(wallet_factory):
     with patch.object(
         mock_wallet, "invoke_contract", side_effect=Exception("API error")
     ) as mock_invoke_contract:
-        with pytest.raises(Exception, match="API error"):
-            mint_nft(mock_wallet, MOCK_CONTRACT_ADDRESS, MOCK_DESTINATION)
+        action_response = mint_nft(mock_wallet, MOCK_CONTRACT_ADDRESS, MOCK_DESTINATION)
 
+        expected_response = "Error minting NFT API error"
+
+        assert action_response == expected_response
         mock_invoke_contract.assert_called_once_with(
             contract_address=MOCK_CONTRACT_ADDRESS,
             method="mint",

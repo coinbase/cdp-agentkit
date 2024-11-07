@@ -38,9 +38,12 @@ def trade(wallet: Wallet, amount: str, from_asset_id: str, to_asset_id: str) -> 
         str: A message containing the trade details.
 
     """
-    trade_result = wallet.trade(
-        amount=amount, from_asset_id=from_asset_id, to_asset_id=to_asset_id
-    ).wait()
+    try:
+        trade_result = wallet.trade(
+            amount=amount, from_asset_id=from_asset_id, to_asset_id=to_asset_id
+        ).wait()
+    except Exception as e:
+        return f"Error trading assets {e!s}"
 
     return f"Traded {amount} of {from_asset_id} for {trade_result.to_amount} of {to_asset_id}.\nTransaction hash for the trade: {trade_result.transaction.transaction_hash}\nTransaction link for the trade: {trade_result.transaction.transaction_link}"
 

@@ -36,9 +36,12 @@ def mint_nft(wallet: Wallet, contract_address: str, destination: str) -> str:
     """
     mint_args = {"to": destination, "quantity": "1"}
 
-    mint_invocation = wallet.invoke_contract(
-        contract_address=contract_address, method="mint", args=mint_args
-    ).wait()
+    try:
+        mint_invocation = wallet.invoke_contract(
+            contract_address=contract_address, method="mint", args=mint_args
+        ).wait()
+    except Exception as e:
+        return f"Error minting NFT {e!s}"
 
     return f"Minted NFT from contract {contract_address} to address {destination} on network {wallet.network_id}.\nTransaction hash for the mint: {mint_invocation.transaction.transaction_hash}\nTransaction link for the mint: {mint_invocation.transaction.transaction_link}"
 

@@ -61,9 +61,11 @@ def test_trade_api_error(wallet_factory):
     mock_wallet = wallet_factory(network_id=MOCK_NETWORK_ID)
 
     with patch.object(mock_wallet, "trade", side_effect=Exception("API error")) as mock_trade:
-        with pytest.raises(Exception, match="API error"):
-            trade(mock_wallet, MOCK_AMOUNT, MOCK_FROM_ASSET_ID, MOCK_TO_ASSET_ID)
+        action_response = trade(mock_wallet, MOCK_AMOUNT, MOCK_FROM_ASSET_ID, MOCK_TO_ASSET_ID)
 
+        expected_response = "Error trading assets API error"
+
+        assert action_response == expected_response
         mock_trade.assert_called_once_with(
             amount=MOCK_AMOUNT,
             from_asset_id=MOCK_FROM_ASSET_ID,
