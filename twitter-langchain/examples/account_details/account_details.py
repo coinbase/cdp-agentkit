@@ -36,7 +36,7 @@ for event in events:
     event["messages"][-1].pretty_print()
 
 #  ================================ Human Message =================================
-#  What is my twitter account profile link?
+#  Please obtain my twitter account information
 #  ================================== Ai Message ==================================
 #  Tool Calls:
 #      account_details (call_pYME8H1tHfdMakFZ1FTS0VBX)
@@ -46,10 +46,10 @@ for event in events:
 #  Name: account_details
 
 #  Successfully retrieved authenticated user account details. Please present the following as json and not markdown:
-#  id: 1853889445319331840
-#  name: CDP AgentKit
-#  username: CDPAgentKit
-#  link: https://x.com/CDPAgentKit
+#  id: [REDACTED]
+#  name: [REDACTED]
+#  username: [REDACTED]
+#  link: [REDACTED]
 #  ================================== Ai Message ==================================
 #  {
 #      "id": "[REDACTED]",
