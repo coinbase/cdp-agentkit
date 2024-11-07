@@ -1,5 +1,9 @@
+from collections.abc import Callable
+
 from cdp import Wallet
 from pydantic import BaseModel, Field
+
+from cdp_agentkit_core.actions import CdpAction
 
 TRANSFER_PROMPT = """
 This tool will transfer an asset from the wallet to another onchain address. It takes the amount, the asset ID to transfer, the destination to send the funds (either an onchain address, an ENS `example.eth`, or Basename `example.base.eth`), and whether to do a gasless transfer (gasless is available on Base Sepolia and Mainnet for USDC) as inputs. Always use the gasless option if it is available."""
@@ -46,3 +50,12 @@ def transfer(
     ).wait()
 
     return f"Transferred {amount} of {asset_id} to {destination}.\nTransaction hash for the transfer: {transfer_result.transaction_hash}\nTransaction link for the transfer: {transfer_result.transaction_link}"
+
+
+class TransferAction(CdpAction):
+    """Transfer action."""
+
+    name: str = "transfer"
+    description: str = TRANSFER_PROMPT
+    args_schema: type[BaseModel] | None = TransferInput
+    func: Callable[..., str] = transfer

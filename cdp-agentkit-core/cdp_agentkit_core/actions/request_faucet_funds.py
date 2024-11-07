@@ -1,5 +1,9 @@
+from collections.abc import Callable
+
 from cdp import Wallet
 from pydantic import BaseModel, Field
+
+from cdp_agentkit_core.actions import CdpAction
 
 REQUEST_FAUCET_FUNDS_PROMPT = """
 This tool will request test tokens from the faucet for the default address in the wallet. It takes the wallet and asset ID as input."""
@@ -32,3 +36,12 @@ def request_faucet_funds(wallet: Wallet, asset_id: str | None = None) -> str:
     faucet_tx.wait()
 
     return f"Received {asset_id} from the faucet. Transaction: {faucet_tx.transaction_link}"
+
+
+class RequestFaucetFundsAction(CdpAction):
+    """Request faucet funds action."""
+
+    name: str = "request_faucet_funds"
+    description: str = REQUEST_FAUCET_FUNDS_PROMPT
+    args_schema: type[BaseModel] | None = RequestFaucetFundsInput
+    func: Callable[..., str] = request_faucet_funds

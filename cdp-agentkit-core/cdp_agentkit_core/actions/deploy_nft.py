@@ -1,5 +1,9 @@
+from collections.abc import Callable
+
 from cdp import Wallet
 from pydantic import BaseModel, Field
+
+from cdp_agentkit_core.actions import CdpAction
 
 DEPLOY_NFT_PROMPT = """
 This tool will deploy an NFT (ERC-721) contract onchain from the wallet. It takes the name of the NFT collection, the symbol of the NFT collection, and the base URI for the token metadata as inputs."""
@@ -38,3 +42,12 @@ def deploy_nft(wallet: Wallet, name: str, symbol: str, base_uri: str) -> str:
     nft_contract = wallet.deploy_nft(name=name, symbol=symbol, base_uri=base_uri).wait()
 
     return f"Deployed NFT Collection {name} to address {nft_contract.contract_address} on network {wallet.network_id}.\nTransaction hash for the deployment: {nft_contract.transaction.transaction_hash}\nTransaction link for the deployment: {nft_contract.transaction.transaction_link}"
+
+
+class DeployNftAction(CdpAction):
+    """Deploy NFT action."""
+
+    name: str = "deploy_nft"
+    description: str = DEPLOY_NFT_PROMPT
+    args_schema: type[BaseModel] | None = DeployNftInput
+    func: Callable[..., str] = deploy_nft

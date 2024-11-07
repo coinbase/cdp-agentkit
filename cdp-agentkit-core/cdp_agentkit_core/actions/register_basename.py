@@ -1,7 +1,11 @@
+from collections.abc import Callable
+
 from cdp import Wallet
 from pydantic import BaseModel, Field
 from web3 import Web3
 from web3.exceptions import ContractLogicError
+
+from cdp_agentkit_core.actions import CdpAction
 
 # Constants
 REGISTER_BASENAME_PROMPT = """
@@ -30,13 +34,13 @@ class RegisterBasenameInput(BaseModel):
     )
 
 
-def register_basename(wallet: Wallet, basename: str, amount: float | None = 0.002) -> str:
+def register_basename(wallet: Wallet, basename: str, amount: str = "0.002") -> str:
     """Register a Basename for the agent.
 
     Args:
         wallet (Wallet): The wallet to register the Basename with.
         basename (str): The Basename to assign to the agent.
-        amount (float): The amount of ETH to pay for the registration. The default is set to 0.002.
+        amount (str): The amount of ETH to pay for the registration. The default is set to 0.002.
 
     Returns:
         str: Confirmation message with the basename.
@@ -158,3 +162,12 @@ registrar_abi = [
         "type": "function",
     }
 ]
+
+
+class RegisterBasenameAction(CdpAction):
+    """Register Basename action."""
+
+    name: str = "register_basename"
+    description: str = REGISTER_BASENAME_PROMPT
+    args_schema: type[BaseModel] | None = RegisterBasenameInput
+    func: Callable[..., str] = register_basename

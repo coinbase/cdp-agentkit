@@ -4,6 +4,7 @@ from pydantic import BaseModel, Field
 POST_TWEET_PROMPT = """
 This tool will post a tweet on Twitter. The tool takes the text of the tweet as input. Tweets can be maximum 280 characters."""
 
+
 class PostTweetInput(BaseModel):
     """Input argument schema for twitter post tweet action."""
 
@@ -11,6 +12,7 @@ class PostTweetInput(BaseModel):
         ...,
         description="The text of the tweet to post to twitter. Tweets can be maximum 280 characters.",
     )
+
 
 def post_tweet(client: tweepy.Client, tweet: str) -> str:
     """Post tweet to Twitter.

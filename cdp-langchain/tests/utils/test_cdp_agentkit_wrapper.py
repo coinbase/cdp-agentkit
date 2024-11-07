@@ -1,7 +1,6 @@
 """Tests for the CDP Agentkit Wrapper."""
 
 import json
-from typing import Any
 from unittest.mock import Mock, patch
 
 import pytest
@@ -143,114 +142,19 @@ def test_cdp_sdk_import_error():
         assert "CDP SDK is not installed" in str(exc_info.value)
 
 
-@pytest.mark.parametrize(
-    "mode,kwargs,mock_path,expected_result",
-    [
-        (
-            "get_wallet_details",
-            {},
-            "cdp_langchain.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.get_wallet_details_wrapper",
-            "Got wallet details successfully",
-        ),
-        (
-            "get_balance",
-            {"asset_id": "usdc"},
-            "cdp_langchain.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.get_balance_wrapper",
-            "Got balance successfully",
-        ),
-        (
-            "request_faucet_funds",
-            {},
-            "cdp_langchain.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.request_faucet_funds_wrapper",
-            "Requested assets from faucet successfully",
-        ),
-        (
-            "transfer",
-            {
-                "amount": "0.01",
-                "asset_id": "usdc",
-                "destination": "example.base.eth",
-                "gasless": True,
-            },
-            "cdp_langchain.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.transfer_wrapper",
-            "Transferred successfully",
-        ),
-        (
-            "trade",
-            {
-                "amount": "0.01",
-                "from_asset_id": "usdc",
-                "to_asset_id": "weth",
-            },
-            "cdp_langchain.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.trade_wrapper",
-            "Traded successfully",
-        ),
-        (
-            "deploy_token",
-            {
-                "name": "Test Token",
-                "symbol": "TOKEN",
-                "total_supply": "1000000",
-            },
-            "cdp_langchain.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.deploy_token_wrapper",
-            "Deployed token successfully",
-        ),
-        (
-            "mint_nft",
-            {
-                "contract_address": "0xvalidContractAddress",
-                "destination": "0xvalidAddress",
-            },
-            "cdp_langchain.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.mint_nft_wrapper",
-            "Minted NFT successfully",
-        ),
-        (
-            "deploy_nft",
-            {
-                "name": "test-nft-name",
-                "symbol": "TEST",
-                "base_uri": "https://www.test.xyz/metadata/",
-            },
-            "cdp_langchain.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.deploy_nft_wrapper",
-            "Minted NFT successfully",
-        ),
-        (
-            "register_basename",
-            {
-                "basename": "test-basename",
-            },
-            "cdp_langchain.utils.cdp_agentkit_wrapper.CdpAgentkitWrapper.register_basename_wrapper",
-            "Registered basename successfully",
-        ),
-    ],
-)
-def test_run_valid_modes(
+def test_run_action_valid_modes(
     env_vars: dict[str, str],
     mock_cdp_configure: Mock,
     mock_wallet_create: Mock,
-    mode: str,
-    kwargs: dict[str, Any],
-    mock_path: str,
-    expected_result: str,
 ):
-    """Test run method with valid modes."""
-    with patch(mock_path, return_value=expected_result) as mock_action:
-        wrapper = CdpAgentkitWrapper()
-        result = wrapper.run(mode, **kwargs)
-        assert result == expected_result
-        mock_action.assert_called_once_with(**kwargs)
+    """Test run method with valid callable."""
 
+    def is_wallet_valid(wallet: Wallet):
+        return wallet is not None
 
-def test_run_invalid_mode(
-    env_vars: dict[str, str], mock_cdp_configure: Mock, mock_wallet_create: Mock
-):
-    """Test run method with invalid mode."""
     wrapper = CdpAgentkitWrapper()
-
-    with pytest.raises(ValueError) as exc_info:
-        wrapper.run("invalid_mode")
-
-    assert "Invalid mode" in str(exc_info.value)
+    result = wrapper.run_action(is_wallet_valid)
+    assert result is True
 
 
 def test_cdp_configuration_error(

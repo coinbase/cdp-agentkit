@@ -1,5 +1,9 @@
+from collections.abc import Callable
+
 from cdp import Wallet
 from pydantic import BaseModel, Field
+
+from cdp_agentkit_core.actions import CdpAction
 
 MINT_NFT_PROMPT = """
 This tool will mint an NFT (ERC-721) to a specified destination address onchain via a contract invocation. It takes the contract address of the NFT onchain and the destination address onchain that will receive the NFT as inputs."""
@@ -37,3 +41,12 @@ def mint_nft(wallet: Wallet, contract_address: str, destination: str) -> str:
     ).wait()
 
     return f"Minted NFT from contract {contract_address} to address {destination} on network {wallet.network_id}.\nTransaction hash for the mint: {mint_invocation.transaction.transaction_hash}\nTransaction link for the mint: {mint_invocation.transaction.transaction_link}"
+
+
+class MintNftAction(CdpAction):
+    """Mint NFT action."""
+
+    name: str = "mint_nft"
+    description: str = MINT_NFT_PROMPT
+    args_schema: type[BaseModel] | None = MintNftInput
+    func: Callable[..., str] = mint_nft

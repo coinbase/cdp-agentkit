@@ -3,29 +3,8 @@
 from langchain_core.tools import BaseTool
 from langchain_core.tools.base import BaseToolkit
 
-from cdp_agentkit_core.actions import (
-    DEPLOY_NFT_PROMPT,
-    DEPLOY_TOKEN_PROMPT,
-    GET_BALANCE_PROMPT,
-    GET_WALLET_DETAILS_PROMPT,
-    MINT_NFT_PROMPT,
-    REGISTER_BASENAME_PROMPT,
-    REQUEST_FAUCET_FUNDS_PROMPT,
-    TRADE_PROMPT,
-    TRANSFER_PROMPT,
-    UNISWAP_V3_CREATE_POOL_PROMPT,
-    DeployNftInput,
-    DeployTokenInput,
-    GetBalanceInput,
-    GetWalletDetailsInput,
-    MintNftInput,
-    RegisterBasenameInput,
-    RequestFaucetFundsInput,
-    TradeInput,
-    TransferInput,
-    UniswapV3CreatePoolInput,
-)
-from cdp_langchain.tools import CdpAction
+from cdp_agentkit_core.actions import CDP_ACTIONS
+from cdp_langchain.tools import CdpTool
 from cdp_langchain.utils import CdpAgentkitWrapper
 
 
@@ -143,76 +122,15 @@ class CdpToolkit(BaseToolkit):
             CdpToolkit. The CDP toolkit.
 
         """
-        actions: list[dict] = [
-            {
-                "mode": "uniswap_v3_create_pool",
-                "name": "uniswap_v3_create_pool",
-                "description": UNISWAP_V3_CREATE_POOL_PROMPT,
-                "args_schema": UniswapV3CreatePoolInput,
-            },
-            {
-                "mode": "get_wallet_details",
-                "name": "get_wallet_details",
-                "description": GET_WALLET_DETAILS_PROMPT,
-                "args_schema": GetWalletDetailsInput,
-            },
-            {
-                "mode": "get_balance",
-                "name": "get_balance",
-                "description": GET_BALANCE_PROMPT,
-                "args_schema": GetBalanceInput,
-            },
-            {
-                "mode": "request_faucet_funds",
-                "name": "request_faucet_funds",
-                "description": REQUEST_FAUCET_FUNDS_PROMPT,
-                "args_schema": RequestFaucetFundsInput,
-            },
-            {
-                "mode": "transfer",
-                "name": "transfer",
-                "description": TRANSFER_PROMPT,
-                "args_schema": TransferInput,
-            },
-            {
-                "mode": "trade",
-                "name": "trade",
-                "description": TRADE_PROMPT,
-                "args_schema": TradeInput,
-            },
-            {
-                "mode": "deploy_token",
-                "name": "deploy_token",
-                "description": DEPLOY_TOKEN_PROMPT,
-                "args_schema": DeployTokenInput,
-            },
-            {
-                "mode": "mint_nft",
-                "name": "mint_nft",
-                "description": MINT_NFT_PROMPT,
-                "args_schema": MintNftInput,
-            },
-            {
-                "mode": "deploy_nft",
-                "name": "deploy_nft",
-                "description": DEPLOY_NFT_PROMPT,
-                "args_schema": DeployNftInput,
-            },
-            {
-                "mode": "register_basename",
-                "name": "register_basename",
-                "description": REGISTER_BASENAME_PROMPT,
-                "args_schema": RegisterBasenameInput,
-            },
-        ]
+        actions = CDP_ACTIONS
 
         tools = [
-            CdpAction(
-                name=action["name"],
-                description=action["description"],
-                mode=action["mode"],
+            CdpTool(
+                name=action.name,
+                description=action.description,
                 cdp_agentkit_wrapper=cdp_agentkit_wrapper,
-                args_schema=action.get("args_schema", None),
+                args_schema=action.args_schema,
+                func=action.func,
             )
             for action in actions
         ]

@@ -488,7 +488,7 @@ files = []
 develop = true
 
 [package.dependencies]
-cdp-sdk = "^0.10.1"
+cdp-sdk = "^0.10.3"
 pydantic = "^2.0"
 web3 = "7.2.0"
 
@@ -498,13 +498,13 @@ url = "../cdp-agentkit-core"
 
 [[package]]
 name = "cdp-sdk"
-version = "0.10.1"
+version = "0.10.3"
 description = "CDP Python SDK"
 optional = false
 python-versions = ">=3.10"
 files = [
-    {file = "cdp_sdk-0.10.1-py3-none-any.whl", hash = "sha256:201306c8513592057dc0573d06edc6dfe010bdb4c8a76c185258993d66681afe"},
-    {file = "cdp_sdk-0.10.1.tar.gz", hash = "sha256:60a5967c0971e1c4e24d8716c33e4191db45cb601e2c148b36e32f19c8d3611f"},
+    {file = "cdp_sdk-0.10.3-py3-none-any.whl", hash = "sha256:b66fc2db340ab8e841cc49016b92b716d7da01f3e5b11cc160dabeb2f6cd501b"},
+    {file = "cdp_sdk-0.10.3.tar.gz", hash = "sha256:d637aa8ed4f6bee7f12b74b7afe5580247bc86c577738e9842f11add414daf7b"},
 ]
 
 [package.dependencies]
@@ -2491,13 +2491,13 @@ files = [
 
 [[package]]
 name = "openai"
-version = "1.54.1"
+version = "1.54.3"
 description = "The official Python library for the openai API"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "openai-1.54.1-py3-none-any.whl", hash = "sha256:3cb49ccb6bfdc724ad01cc397d323ef8314fc7d45e19e9de2afdd6484a533324"},
-    {file = "openai-1.54.1.tar.gz", hash = "sha256:5b832bf82002ba8c4f6e5e25c1c0f5d468c22f043711544c716eaffdb30dd6f1"},
+    {file = "openai-1.54.3-py3-none-any.whl", hash = "sha256:f18dbaf09c50d70c4185b892a2a553f80681d1d866323a2da7f7be2f688615d5"},
+    {file = "openai-1.54.3.tar.gz", hash = "sha256:7511b74eeb894ac0b0253dc71f087a15d2e4d71d22d0088767205143d880cca6"},
 ]
 
 [package.dependencies]
@@ -3806,13 +3806,13 @@ files = [
 
 [[package]]
 name = "tqdm"
-version = "4.66.6"
+version = "4.67.0"
 description = "Fast, Extensible Progress Meter"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "tqdm-4.66.6-py3-none-any.whl", hash = "sha256:223e8b5359c2efc4b30555531f09e9f2f3589bcd7fdd389271191031b49b7a63"},
-    {file = "tqdm-4.66.6.tar.gz", hash = "sha256:4bdd694238bef1485ce839d67967ab50af8f9272aab687c0d7702a01da0be090"},
+    {file = "tqdm-4.67.0-py3-none-any.whl", hash = "sha256:0cd8af9d56911acab92182e88d763100d4788bdf421d251616040cc4d44863be"},
+    {file = "tqdm-4.67.0.tar.gz", hash = "sha256:fe5a6f95e6fe0b9755e9469b77b9c3cf850048224ecaa8293d7d2d31f97d869a"},
 ]
 
 [package.dependencies]
@@ -3820,6 +3820,7 @@ colorama = {version = "*", markers = "platform_system == \"Windows\""}
 
 [package.extras]
 dev = ["pytest (>=6)", "pytest-cov", "pytest-timeout", "pytest-xdist"]
+discord = ["requests"]
 notebook = ["ipywidgets (>=6)"]
 slack = ["slack-sdk"]
 telegram = ["requests"]
@@ -4302,4 +4303,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "5c9c92fbea77b2cb14cf1017ffc8616b449425ead8beab4d1065bd01aca88e35"
+content-hash = "8eb6f9fef68b8d7d81949f2da054f236334a592e4875a9aa23ac87d5b0154aee"

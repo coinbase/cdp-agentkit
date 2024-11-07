@@ -480,13 +480,13 @@ test = ["coverage (>=7)", "hypothesis", "pytest"]
 
 [[package]]
 name = "cdp-sdk"
-version = "0.10.1"
+version = "0.10.3"
 description = "CDP Python SDK"
 optional = false
 python-versions = ">=3.10"
 files = [
-    {file = "cdp_sdk-0.10.1-py3-none-any.whl", hash = "sha256:201306c8513592057dc0573d06edc6dfe010bdb4c8a76c185258993d66681afe"},
-    {file = "cdp_sdk-0.10.1.tar.gz", hash = "sha256:60a5967c0971e1c4e24d8716c33e4191db45cb601e2c148b36e32f19c8d3611f"},
+    {file = "cdp_sdk-0.10.3-py3-none-any.whl", hash = "sha256:b66fc2db340ab8e841cc49016b92b716d7da01f3e5b11cc160dabeb2f6cd501b"},
+    {file = "cdp_sdk-0.10.3.tar.gz", hash = "sha256:d637aa8ed4f6bee7f12b74b7afe5580247bc86c577738e9842f11add414daf7b"},
 ]
 
 [package.dependencies]
@@ -3475,4 +3475,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "f9204d54e4429c6364d8b4a3338f39b023a20d59610889aee5a7c4db4d9f1150"
+content-hash = "9a37c977e6cecd9934911eaec0d9f004acd563323f1e448d4ba810f60fba5812"

@@ -1,5 +1,5 @@
 """CDP Tool."""
 
-from cdp_langchain.tools.cdp_action import CdpAction
+from cdp_langchain.tools.cdp_tool import CdpTool
 
-__all__ = ["CdpAction"]
+__all__ = ["CdpTool"]

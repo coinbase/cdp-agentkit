@@ -1,6 +1,9 @@
+from collections.abc import Callable
+
 from cdp import Wallet
 from pydantic import BaseModel, Field
 
+from cdp_agentkit_core.actions import CdpAction
 from cdp_agentkit_core.actions.uniswap_v3.constants import (
     UNISWAP_V3_FACTORY_ABI,
     get_contract_address,
@@ -53,3 +56,12 @@ def uniswap_v3_create_pool(wallet: Wallet, token_a: str, token_b: str, fee: str)
         },
     ).wait()
     return f"Created pool for {token_a} and {token_b} with fee {fee} on network {wallet.network_id}.\nTransaction hash for the pool creation: {pool.transaction.transaction_hash}\nTransaction link for the pool creation: {pool.transaction.transaction_link}"
+
+
+class UniswapV3CreatePoolAction(CdpAction):
+    """Uniswap V3 create pool action."""
+
+    name: str = "uniswap_v3_create_pool"
+    description: str = UNISWAP_V3_CREATE_POOL_PROMPT
+    args_schema: type[BaseModel] | None = UniswapV3CreatePoolInput
+    func: Callable[..., str] = uniswap_v3_create_pool

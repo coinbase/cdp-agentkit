@@ -1,23 +1,14 @@
 """Util that calls CDP."""
 
+import inspect
 import json
+from collections.abc import Callable
 from typing import Any
 
 from langchain_core.utils import get_from_dict_or_env
 from pydantic import BaseModel, model_validator
 
-from cdp_agentkit_core.actions import (
-    deploy_nft,
-    deploy_token,
-    get_balance,
-    get_wallet_details,
-    mint_nft,
-    register_basename,
-    request_faucet_funds,
-    trade,
-    transfer,
-    uniswap_v3_create_pool,
-)
+from cdp import Wallet
 
 
 class CdpAgentkitWrapper(BaseModel):
@@ -74,171 +65,13 @@ class CdpAgentkitWrapper(BaseModel):
 
         return json.dumps(wallet_data_dict)
 
-    def uniswap_v3_create_pool_wrapper(self, token_a: str, token_b: str, fee: str) -> str:
-        """Create a Uniswap v3 pool for the wallet by wrapping call to CDP Agentkit Core.
+    def run_action(self, func: Callable[..., str], **kwargs) -> str:
+        """Run a CDP Action."""
+        func_signature = inspect.signature(func)
 
-        Args:
-            token_a (str): The contract address of the first token in the pool.
-            token_b (str): The contract address of the second token in the pool.
-            fee (str): The fee for the pool.
+        first_kwarg = next(iter(func_signature.parameters.values()), None)
 
-        Returns:
-            str: A message containing the pool details.
-
-        """
-        return uniswap_v3_create_pool(wallet=self.wallet, token_a=token_a, token_b=token_b, fee=fee)
-
-    def get_wallet_details_wrapper(self) -> str:
-        """Get details about the MPC Wallet by wrapping call to CDP Agentkit Core."""
-        return get_wallet_details(self.wallet)
-
-    def get_balance_wrapper(self, asset_id: str) -> str:
-        """Get balance for the wallet by wrapping call to CDP Agentkit Core.
-
-        Args:
-            asset_id (str): The asset ID of the asset
-
-        """
-        return get_balance(wallet=self.wallet, asset_id=asset_id)
-
-    def request_faucet_funds_wrapper(self, asset_id: str | None = None) -> str:
-        """Request test tokens from the faucet for the default address in the wallet.
-
-        Args:
-            asset_id (str | None): The optional asset ID to request from the faucet. Accepts "eth" or "usdc". When omitted, defaults to the network's native asset.
-
-        """
-        return request_faucet_funds(wallet=self.wallet, asset_id=asset_id if asset_id else None)
-
-    def transfer_wrapper(
-        self, amount: str, asset_id: str, destination: str, gasless: bool = False
-    ) -> str:
-        """Transfer an amount of an asset from the wallet by wrapping call to CDP Agentkit Core.
-
-        Args:
-            amount (str): The amount of the asset to transfer, e.g. `15`, `0.000001`.
-            wallet (Wallet): The wallet to transfer the asset from.
-            asset_id (str): The asset ID to transfer (e.g., "eth", "usdc", or a valid contract address like "0x036CbD53842c5426634e7929541eC2318f3dCF7e").
-            destination (str): The destination to transfer the funds (e.g. `0x58dBecc0894Ab4C24F98a0e684c989eD07e4e027`, `example.eth`, `example.base.eth`).
-            gasless (bool): Whether to send a gasless transfer (Defaults to False.).
-
-        """
-        return transfer(
-            wallet=self.wallet,
-            amount=amount,
-            asset_id=asset_id,
-            destination=destination,
-            gasless=gasless,
-        )
-
-    def trade_wrapper(self, amount: str, from_asset_id: str, to_asset_id: str) -> str:
-        """Trade a specified amount of a from asset to a to asset for the wallet. Trades are only supported on Mainnets.
-
-        Args:
-            amount (str): The amount of the from asset to trade, e.g. `15`, `0.000001`.
-            from_asset_id (str): The from asset ID to trade (e.g., "eth", "usdc", or a valid contract address like "0x036CbD53842c5426634e7929541eC2318f3dCF7e").
-            to_asset_id (str): The from asset ID to trade (e.g., "eth", "usdc", or a valid contract address like "0x036CbD53842c5426634e7929541eC2318f3dCF7e").
-
-        Returns:
-            str: A message containing the trade details.
-
-        """
-        return trade(
-            wallet=self.wallet,
-            amount=amount,
-            from_asset_id=from_asset_id,
-            to_asset_id=to_asset_id,
-        )
-
-    def deploy_token_wrapper(self, name: str, symbol: str, total_supply: str) -> str:
-        """Deploy an ERC20 token smart contract.
-
-        Args:
-            name (str): The name of the token (e.g., "My Token").
-            symbol (str): The token symbol (e.g., "USDC", "MEME", "SYM").
-            total_supply (str): The total supply of tokens to mint (e.g., "1000000").
-
-        Returns:
-            str: A message containing the deployed token contract address and details
-
-        """
-        return deploy_token(
-            wallet=self.wallet,
-            name=name,
-            symbol=symbol,
-            total_supply=total_supply,
-        )
-
-    def mint_nft_wrapper(self, contract_address: str, destination: str) -> str:
-        """Mint an NFT (ERC-721) to a specified destination address onchain via a contract invocation.
-
-        Args:
-            contract_address (str): The contract address of the NFT (ERC-721) to mint, e.g. `0x036CbD53842c5426634e7929541eC2318f3dCF7e`.
-            destination (str): The destination address that will receieve the NFT onchain, e.g. `0x036CbD53842c5426634e7929541eC2318f3dCF7e`.
-
-        Returns:
-            str: A message containing the NFT mint details.
-
-        """
-        return mint_nft(
-            wallet=self.wallet,
-            contract_address=contract_address,
-            destination=destination,
-        )
-
-    def deploy_nft_wrapper(self, name: str, symbol: str, base_uri: str) -> str:
-        """Deploy an NFT (ERC-721) token collection onchain from the wallet.
-
-        Args:
-            name (str): The name of the NFT (ERC-721) token collection to deploy, e.g. `Helpful Hippos`.
-            symbol (str): The symbol of the NFT (ERC-721) token collection to deploy, e.g. `HIPPO`.
-            base_uri (str): The base URI for the NFT (ERC-721) token collection's metadata, e.g. `https://www.helpfulhippos.xyz/metadata/`.
-
-        Returns:
-            str: A message containing the NFT token deployment details.
-
-        """
-        return deploy_nft(
-            wallet=self.wallet,
-            name=name,
-            symbol=symbol,
-            base_uri=base_uri,
-        )
-
-    def register_basename_wrapper(self, basename: str, amount: float | None = 0.02) -> str:
-        """Register a basename for the wallet by wrapping call to CDP Agentkit Core.
-
-        Args:
-            basename (str): The basename to register for the wallet's default address. e.g. `exampleName.base.eth` for `base-mainnet` or `exampleName.basetest.eth` for `base-sepolia` testnet.
-            amount (float | None): The amount of ETH to pay for the registration. The default is set to 0.002.
-
-        Returns:
-            str: A confirmation message with the registered basename.
-
-        """
-        return register_basename(wallet=self.wallet, basename=basename)
-
-    def run(self, mode: str, **kwargs) -> str:
-        """Run the action via the CDP Agentkit."""
-        if mode == "get_wallet_details":
-            return self.get_wallet_details_wrapper()
-        elif mode == "get_balance":
-            return self.get_balance_wrapper(**kwargs)
-        elif mode == "request_faucet_funds":
-            return self.request_faucet_funds_wrapper(**kwargs)
-        elif mode == "transfer":
-            return self.transfer_wrapper(**kwargs)
-        elif mode == "trade":
-            return self.trade_wrapper(**kwargs)
-        elif mode == "uniswap_v3_create_pool":
-            return self.uniswap_v3_create_pool_wrapper(**kwargs)
-        elif mode == "deploy_token":
-            return self.deploy_token_wrapper(**kwargs)
-        elif mode == "mint_nft":
-            return self.mint_nft_wrapper(**kwargs)
-        elif mode == "deploy_nft":
-            return self.deploy_nft_wrapper(**kwargs)
-        elif mode == "register_basename":
-            return self.register_basename_wrapper(**kwargs)
+        if first_kwarg and first_kwarg.annotation is Wallet:
+            return func(self.wallet, **kwargs)
         else:
-            raise ValueError("Invalid mode: " + mode)
+            return func(**kwargs)

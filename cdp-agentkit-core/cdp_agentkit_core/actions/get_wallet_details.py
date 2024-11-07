@@ -1,17 +1,13 @@
-from cdp import Wallet
-from pydantic import BaseModel, Field
+from collections.abc import Callable
 
-GET_WALLET_DETAILS_PROMPT = """
-This tool will get details about the MPC Wallet."""
+from cdp import Wallet
+from pydantic import BaseModel
+
+from cdp_agentkit_core.actions import CdpAction
 
 
 class GetWalletDetailsInput(BaseModel):
     """Input argument schema for get wallet details action."""
-
-    no_input: str = Field(
-        "",
-        description="No input required, e.g. `` (empty string).",
-    )
 
 
 def get_wallet_details(wallet: Wallet) -> str:
@@ -25,3 +21,12 @@ def get_wallet_details(wallet: Wallet) -> str:
 
     """
     return f"Wallet: {wallet.id} on network: {wallet.network_id} with default address: {wallet.default_address.address_id}"
+
+
+class GetWalletDetailsAction(CdpAction):
+    """Get wallet details action."""
+
+    name: str = "get_wallet_details"
+    description: str = "This tool will get details about the MPC Wallet."
+    args_schema: type[BaseModel] | None = GetWalletDetailsInput
+    func: Callable[..., str] = get_wallet_details

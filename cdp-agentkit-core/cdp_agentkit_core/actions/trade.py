@@ -1,5 +1,9 @@
+from collections.abc import Callable
+
 from cdp import Wallet
 from pydantic import BaseModel, Field
+
+from cdp_agentkit_core.actions import CdpAction
 
 TRADE_PROMPT = """
 This tool will trade a specified amount of a from asset to a to asset for the wallet. It takes the the amount of the from asset to trade, the from asset ID to trade, and the to asset ID to receive from the trade as inputs. Trades are only supported on Mainnets (e.g. `base-mainnet`, `ethereum-mainnet`)."""
@@ -39,3 +43,12 @@ def trade(wallet: Wallet, amount: str, from_asset_id: str, to_asset_id: str) -> 
     ).wait()
 
     return f"Traded {amount} of {from_asset_id} for {trade_result.to_amount} of {to_asset_id}.\nTransaction hash for the trade: {trade_result.transaction.transaction_hash}\nTransaction link for the trade: {trade_result.transaction.transaction_link}"
+
+
+class TradeAction(CdpAction):
+    """Trade action."""
+
+    name: str = "trade"
+    description: str = TRADE_PROMPT
+    args_schema: type[BaseModel] | None = TradeInput
+    func: Callable[..., str] = trade

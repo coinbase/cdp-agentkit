@@ -1,5 +1,9 @@
+from collections.abc import Callable
+
 from cdp import Wallet
 from pydantic import BaseModel, Field
+
+from cdp_agentkit_core.actions import CdpAction
 
 GET_BALANCE_PROMPT = """
 This tool will get the balance of all the addresses in the wallet for a given asset. It takes the asset ID as input."""
@@ -35,3 +39,12 @@ def get_balance(wallet: Wallet, asset_id: str) -> str:
     balance_lines = [f"  {addr}: {balance}" for addr, balance in balances.items()]
     formatted_balances = "\n".join(balance_lines)
     return f"Balances for wallet {wallet.id}:\n{formatted_balances}"
+
+
+class GetBalanceAction(CdpAction):
+    """Get wallet balance action."""
+
+    name: str = "get_balance"
+    description: str = GET_BALANCE_PROMPT
+    args_schema: type[BaseModel] | None = GetBalanceInput
+    func: Callable[..., str] = get_balance

@@ -1,5 +1,9 @@
+from collections.abc import Callable
+
 from cdp import Wallet
 from pydantic import BaseModel, Field
+
+from cdp_agentkit_core.actions import CdpAction
 
 DEPLOY_TOKEN_PROMPT = """
 This tool will deploy an ERC20 token smart contract. It takes the token name, symbol, and total supply as input. The token will be deployed using the wallet's default address as the owner and initial token holder.
@@ -34,3 +38,12 @@ def deploy_token(wallet: Wallet, name: str, symbol: str, total_supply: str) -> s
     token_contract.wait()
 
     return f"Deployed ERC20 token contract {name} ({symbol}) with total supply of {total_supply} tokens at address {token_contract.contract_address}. Transaction link: {token_contract.transaction.transaction_link}"
+
+
+class DeployTokenAction(CdpAction):
+    """Deploy token action."""
+
+    name: str = "deploy_token"
+    description: str = DEPLOY_TOKEN_PROMPT
+    args_schema: type[BaseModel] | None = DeployTokenInput
+    func: Callable[..., str] = deploy_token
