@@ -16,6 +16,7 @@ from cdp_agentkit_core.actions import (
     request_faucet_funds,
     trade,
     transfer,
+    uniswap_v3_collect,
     uniswap_v3_create_pool,
     uniswap_v3_get_pool,
     uniswap_v3_get_pool_liquidity,
@@ -91,6 +92,26 @@ class CdpAgentkitWrapper(BaseModel):
 
         """
         return uniswap_v3_create_pool(wallet=self.wallet, token_a=token_a, token_b=token_b, fee=fee)
+
+    def uniswap_v3_collect_wrapper(
+        self,
+        pool_address: str,
+        recipient_address: str,
+        tick_lower: str,
+        tick_upper: str,
+        amount0_requested: str,
+        amount1_requested: str,
+    ) -> str:
+        """Collect tokens from a Uniswap v3 pool by wrapping call to CDP Agentkit Core."""
+        return uniswap_v3_collect(
+            wallet=self.wallet,
+            pool_address=pool_address,
+            recipient_address=recipient_address,
+            tick_lower=tick_lower,
+            tick_upper=tick_upper,
+            amount0_requested=amount0_requested,
+            amount1_requested=amount1_requested,
+        )
 
     def uniswap_v3_get_pool_wrapper(
         self, network_id: str, token_a: str, token_b: str, fee: str
@@ -313,6 +334,8 @@ class CdpAgentkitWrapper(BaseModel):
             return self.uniswap_v3_get_pool_observe_wrapper(**kwargs)
         elif mode == "uniswap_v3_get_pool_slot0":
             return self.uniswap_v3_get_pool_slot0_wrapper(**kwargs)
+        elif mode == "uniswap_v3_collect":
+            return self.uniswap_v3_collect_wrapper(**kwargs)
         elif mode == "deploy_token":
             return self.deploy_token_wrapper(**kwargs)
         elif mode == "mint_nft":

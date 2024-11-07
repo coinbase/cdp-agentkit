@@ -13,6 +13,7 @@ from cdp_agentkit_core.actions import (
     REQUEST_FAUCET_FUNDS_PROMPT,
     TRADE_PROMPT,
     TRANSFER_PROMPT,
+    UNISWAP_V3_COLLECT_PROMPT,
     UNISWAP_V3_CREATE_POOL_PROMPT,
     UNISWAP_V3_GET_POOL_LIQUIDITY_PROMPT,
     UNISWAP_V3_GET_POOL_OBSERVE_PROMPT,
@@ -27,6 +28,7 @@ from cdp_agentkit_core.actions import (
     RequestFaucetFundsInput,
     TradeInput,
     TransferInput,
+    UniswapV3CollectInput,
     UniswapV3CreatePoolInput,
     UniswapV3GetPoolInput,
     UniswapV3GetPoolLiquidityInput,
@@ -94,6 +96,7 @@ class CdpToolkit(BaseToolkit):
             uniswap_v3_get_pool_observe
             uniswap_v3_get_pool_slot0
             uniswap_v3_get_pool_liquidity
+            uniswap_v3_collect
     Use within an agent:
         .. code-block:: python
 
@@ -184,6 +187,12 @@ class CdpToolkit(BaseToolkit):
                 "name": "uniswap_v3_get_pool_liquidity",
                 "description": UNISWAP_V3_GET_POOL_LIQUIDITY_PROMPT,
                 "args_schema": UniswapV3GetPoolLiquidityInput,
+            },
+            {
+                "mode": "uniswap_v3_collect",
+                "name": "uniswap_v3_collect",
+                "description": UNISWAP_V3_COLLECT_PROMPT,
+                "args_schema": UniswapV3CollectInput,
             },
             {
                 "mode": "get_wallet_details",
