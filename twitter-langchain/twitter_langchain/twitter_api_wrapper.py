@@ -14,7 +14,6 @@ from cdp_agentkit_core.actions.social.twitter import (
 class TwitterApiWrapper(BaseModel):
     """Wrapper for Twitter API."""
 
-    bearer_token: str | None = None
     client: Any | None = None
 
     @model_validator(mode="before")
