@@ -9,6 +9,8 @@ from langchain_core.utils import get_from_dict_or_env
 from pydantic import BaseModel, model_validator
 
 from cdp import Wallet
+from cdp_langchain import __version__
+from cdp_langchain.constants import CDP_LANGCHAIN_DEFAULT_SOURCE
 
 
 class CdpAgentkitWrapper(BaseModel):
@@ -37,7 +39,12 @@ class CdpAgentkitWrapper(BaseModel):
                 "CDP SDK is not installed. " "Please install it with `pip install cdp-sdk`"
             ) from None
 
-        Cdp.configure(cdp_api_key_name, cdp_api_key_private_key)
+        Cdp.configure(
+            api_key_name=cdp_api_key_name,
+            private_key=cdp_api_key_private_key,
+            source=CDP_LANGCHAIN_DEFAULT_SOURCE,
+            source_version=__version__,
+        )
 
         if wallet_data_json:
             wallet_data = WalletData.from_dict(json.loads(wallet_data_json))
