@@ -6,7 +6,7 @@ ACCOUNT_DETAILS_PROMPT = """
 This tool will return account details for the authenticated user context."""
 
 class AccountDetailsInput(BaseModel):
-    """Input argument schema for twitter account details action."""
+    """Input argument schema for Twitter account details action."""
 
 def account_details(client: tweepy.Client) -> str:
     """.
