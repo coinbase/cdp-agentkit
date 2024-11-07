@@ -14,6 +14,7 @@ from cdp_langchain.utils import CdpAgentkitWrapper
 # Configure a file to persist the agent's CDP MPC Wallet Data.
 wallet_data_file = "wallet_data.txt"
 
+
 def initialize_agent():
     """Initialize the agent with CDP Agentkit."""
     # Initialize LLM.

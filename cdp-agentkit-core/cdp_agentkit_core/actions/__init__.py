@@ -9,8 +9,14 @@ from cdp_agentkit_core.actions.request_faucet_funds import RequestFaucetFundsAct
 from cdp_agentkit_core.actions.trade import TradeAction
 from cdp_agentkit_core.actions.transfer import TransferAction
 from cdp_agentkit_core.actions.uniswap_v3.create_pool import UniswapV3CreatePoolAction
+from cdp_agentkit_core.actions.uniswap_v3.get_pool import UniswapV3GetPoolAction
+from cdp_agentkit_core.actions.uniswap_v3.get_pool_liquidity import UniswapV3GetPoolLiquidityAction
+from cdp_agentkit_core.actions.uniswap_v3.get_pool_observe import UniswapV3GetPoolObserveAction
+from cdp_agentkit_core.actions.uniswap_v3.get_pool_slot0 import UniswapV3GetPoolSlot0Action
 
 
+# WARNING: All new CdpAction subclasses must be imported above, otherwise they will not be discovered
+# by get_all_cdp_actions(). The import ensures the class is registered as a subclass of CdpAction.
 def get_all_cdp_actions() -> list[type[CdpAction]]:
     """Retrieve all subclasses of CdpAction defined in the package."""
     actions = []
@@ -33,5 +39,9 @@ __all__ = [
     "TradeAction",
     "TransferAction",
     "UniswapV3CreatePoolAction",
+    "UniswapV3GetPoolAction",
+    "UniswapV3GetPoolSlot0Action",
+    "UniswapV3GetPoolObserveAction",
+    "UniswapV3GetPoolLiquidityAction",
     "CDP_ACTIONS",
 ]
