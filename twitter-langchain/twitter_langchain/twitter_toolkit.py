@@ -1,14 +1,14 @@
 """TwitterToolkit."""
 
+from cdp_agentkit_core.actions.social.twitter import (
+    ACCOUNT_DETAILS_PROMPT,
+    POST_TWEET_PROMPT,
+    AccountDetailsInput,
+    PostTweetInput,
+)
 from langchain_core.tools import BaseTool
 from langchain_core.tools.base import BaseToolkit
 
-from cdp_agentkit_core.actions.social.twitter import (
-    ACCOUNT_DETAILS_PROMPT,
-    AccountDetailsInput,
-    POST_TWEET_PROMPT,
-    PostTweetInput,
-)
 from twitter_langchain.twitter_action import TwitterAction
 from twitter_langchain.twitter_api_wrapper import TwitterApiWrapper
 

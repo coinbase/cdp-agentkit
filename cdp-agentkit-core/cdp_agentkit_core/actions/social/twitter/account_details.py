@@ -1,7 +1,6 @@
-from operator import itemgetter
 
 import tweepy
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 ACCOUNT_DETAILS_PROMPT = """
 This tool will return account details for the authenticated user context."""
@@ -11,8 +10,6 @@ class AccountDetailsInput(BaseModel):
 
 def account_details(client: tweepy.Client) -> str:
     """.
-
-    Args:
 
     Returns:
         str: A message containing account details for the authenticated user context.
