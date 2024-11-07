@@ -20,7 +20,6 @@ def account_details(client: tweepy.Client) -> str:
     try:
         response = client.get_me()
         user = response.data
-        #  user_id, user_name, username  = itemgetter('id', 'name', 'username')
 
         message = f"""Successfully retrieved authenticated user account details. Please present the following as json and not markdown:
             id: {user.id}
