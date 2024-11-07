@@ -7,6 +7,8 @@ import pytest
 from pydantic import ValidationError
 
 from cdp import Cdp, Wallet, WalletData
+from cdp_langchain import __version__
+from cdp_langchain.constants import CDP_LANGCHAIN_DEFAULT_SOURCE
 from cdp_langchain.utils import CdpAgentkitWrapper
 
 
@@ -62,7 +64,10 @@ def test_initialization_with_env_vars(
     assert wrapper.wallet is not None
 
     mock_cdp_configure.assert_called_once_with(
-        env_vars["CDP_API_KEY_NAME"], env_vars["CDP_API_KEY_PRIVATE_KEY"]
+        api_key_name=env_vars["CDP_API_KEY_NAME"],
+        private_key=env_vars["CDP_API_KEY_PRIVATE_KEY"],
+        source=CDP_LANGCHAIN_DEFAULT_SOURCE,
+        source_version=__version__,
     )
 
     mock_wallet_create.assert_called_once_with(network_id=env_vars["NETWORK_ID"])
@@ -83,7 +88,10 @@ def test_initialization_with_direct_values(mock_cdp_configure: Mock, mock_wallet
     assert wrapper.network_id == test_values["network_id"]
 
     mock_cdp_configure.assert_called_once_with(
-        test_values["cdp_api_key_name"], test_values["cdp_api_key_private_key"]
+        api_key_name=test_values["cdp_api_key_name"],
+        private_key=test_values["cdp_api_key_private_key"],
+        source=CDP_LANGCHAIN_DEFAULT_SOURCE,
+        source_version=__version__,
     )
 
     mock_wallet_create.assert_called_once_with(network_id=test_values["network_id"])
@@ -110,7 +118,10 @@ def test_initialization_with_direct_values_and_persisted_wallet(
     assert wrapper.network_id == test_values["network_id"]
 
     mock_cdp_configure.assert_called_once_with(
-        test_values["cdp_api_key_name"], test_values["cdp_api_key_private_key"]
+        api_key_name=test_values["cdp_api_key_name"],
+        private_key=test_values["cdp_api_key_private_key"],
+        source=CDP_LANGCHAIN_DEFAULT_SOURCE,
+        source_version=__version__,
     )
 
     mock_wallet_import_data.assert_called_once()
