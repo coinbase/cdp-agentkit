@@ -2,9 +2,12 @@
 
 ## Unreleased
 
+## [0.0.2] - 2024-11-07
+
 ### Added
 
 - Added `wow_create_token` action to the cdp toolkit.
+- Refactor most action/tool implementation to `cdp-agentkit-core`.
 
 ## [0.0.1] - 2024-11-04
 

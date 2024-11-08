@@ -480,7 +480,7 @@ test = ["coverage (>=7)", "hypothesis", "pytest"]
 
 [[package]]
 name = "cdp-agentkit-core"
-version = "0.0.1"
+version = "0.0.2"
 description = "CDP Agentkit core primitives"
 optional = false
 python-versions = "^3.10"
@@ -4303,4 +4303,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "8eb6f9fef68b8d7d81949f2da054f236334a592e4875a9aa23ac87d5b0154aee"
+content-hash = "88f219e745897ed493035d9040d262a7761cd044cb6881447a27affeb2525302"
