@@ -16,6 +16,7 @@ The Coinbase Developer Platform (CDP) Agentkit simplifies bringing your AI Agent
   - Registering Basenames
   - Deploying ERC20 tokens
   - Deploying ERC721 tokens and minting NFTs
+  - Deploying tokens on Zora's Wow Launcher (Bonding Curve)
 
 ## Examples
 Check out `cdp-langchain/examples` for inspiration and help getting started!
@@ -40,3 +41,7 @@ See [Twitter Langchain](./twitter-langchain/README.md) to get started!
 CDP Agentkit welcomes community contributions.
 See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 
+## Documentation
+- [CDP Agentkit Documentation](https://docs.cdp.coinbase.com/agentkit/docs/welcome)
+- [CDP Agentkit Core API Reference](https://coinbase.github.io/cdp-agentkit/cdp-agentkit-core/index.html)
+- [CDP Agentkit Langchain Extension API Reference](https://coinbase.github.io/cdp-agentkit/cdp-langchain/index.html)

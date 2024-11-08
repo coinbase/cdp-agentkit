@@ -59,6 +59,7 @@ The toolkit provides the following tools:
 7. **mint_nft** - Mint NFTs from existing contracts
 8. **deploy_nft** - Deploy new NFT contracts
 9. **register_basename** - Register a basename for the wallet
+10. **wow_create_token** - Deploy a token using Zora's Wow Launcher (Bonding Curve)
 
 ### Using with an Agent
 
@@ -113,8 +114,3 @@ The following operations support gasless transactions on Base Mainnet:
 
 ## Contributing
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for detailed setup instructions and contribution guidelines.
-
-## Documentation
-For detailed documentation of all CDP features and configurations, visit:
-- [CDP Documentation](https://docs.cdp.coinbase.com/mpc-wallet/docs/welcome)
-- [API Reference](https://api.python.langchain.com/en/latest/agent_toolkits/cdp_langchain.agent_toolkits.cdp_toolkit.CDPToolkit.html)
