@@ -40,8 +40,3 @@ See [Twitter Langchain](./twitter-langchain/README.md) to get started!
 CDP Agentkit welcomes community contributions.
 See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 
-## Contributors
-<a href="https://github.com/coinbase/cdp-agentkit/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=coinbase/cdp-agentkit" />
-</a>
-

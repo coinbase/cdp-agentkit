@@ -106,6 +106,4 @@ See [CONTRIBUTING.md](../CONTRIBUTING.md) for detailed setup instructions and co
 
 ## Documentation
 For detailed documentation, please visit:
-- [Agentkit-Core](https://coinbase.github.io/cdp-agentkit-core)
-- [Agentkit-Langchain](https://coinbase.github.io/cdp-langchain)
-- [Agentkit-Twitter-Langchain](https://coinbase.github.io/twitter-langchain)
+- [Agentkit-Core](https://coinbase.github.io/cdp-agentkit/cdp-agentkit-core/)
