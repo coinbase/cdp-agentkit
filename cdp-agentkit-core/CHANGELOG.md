@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [0.0.3] - 2024-11-09
+
+### Added
+
+- Enhanced `wow_create_token` action error handling.
+
 ## [0.0.2] - 2024-11-07
 
 ### Added

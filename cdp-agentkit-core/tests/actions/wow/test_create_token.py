@@ -83,13 +83,15 @@ def test_create_token_api_error(wallet_factory):
     with patch.object(
         mock_wallet, "invoke_contract", side_effect=Exception("API error")
     ) as mock_invoke:
-        with pytest.raises(Exception, match="API error"):
-            wow_create_token(
-                mock_wallet,
-                MOCK_NAME,
-                MOCK_SYMBOL,
-            )
+        action_response = wow_create_token(
+            mock_wallet,
+            MOCK_NAME,
+            MOCK_SYMBOL,
+        )
 
+        expected_response = "Error creating Zora Wow ERC20 memecoin API error"
+
+        assert action_response == expected_response
         mock_invoke.assert_called_once_with(
             contract_address=get_factory_address(MOCK_NETWORK_ID),
             method="deploy",

@@ -42,18 +42,21 @@ def wow_create_token(wallet: Wallet, name: str, symbol: str) -> str:
     """
     factory_address = get_factory_address(wallet.network_id)
 
-    invocation = wallet.invoke_contract(
-        contract_address=factory_address,
-        method="deploy",
-        abi=WOW_FACTORY_ABI,
-        args={
-            "_tokenCreator": wallet.default_address.address_id,
-            "_platformReferrer": "0x0000000000000000000000000000000000000000",
-            "_tokenURI": GENERIC_TOKEN_METADATA_URI,
-            "_name": name,
-            "_symbol": symbol,
-        },
-    ).wait()
+    try:
+        invocation = wallet.invoke_contract(
+            contract_address=factory_address,
+            method="deploy",
+            abi=WOW_FACTORY_ABI,
+            args={
+                "_tokenCreator": wallet.default_address.address_id,
+                "_platformReferrer": "0x0000000000000000000000000000000000000000",
+                "_tokenURI": GENERIC_TOKEN_METADATA_URI,
+                "_name": name,
+                "_symbol": symbol,
+            },
+        ).wait()
+    except Exception as e:
+        return f"Error creating Zora Wow ERC20 memecoin {e!s}"
 
     return f"Created WoW ERC20 memecoin {name} with symbol {symbol} on network {wallet.network_id}.\nTransaction hash for the token creation: {invocation.transaction.transaction_hash}\nTransaction link for the token creation: {invocation.transaction.transaction_link}"
 
