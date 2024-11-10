@@ -455,7 +455,7 @@ test = ["coverage (>=7)", "hypothesis", "pytest"]
 
 [[package]]
 name = "cdp-agentkit-core"
-version = "0.0.2"
+version = "0.0.3"
 description = "CDP Agentkit core primitives"
 optional = false
 python-versions = "^3.10"
@@ -1774,13 +1774,13 @@ langchain-core = ">=0.3.15,<0.4.0"
 
 [[package]]
 name = "langsmith"
-version = "0.1.141"
+version = "0.1.142"
 description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform."
 optional = false
 python-versions = "<4.0,>=3.8.1"
 files = [
-    {file = "langsmith-0.1.141-py3-none-any.whl", hash = "sha256:e133c6bed9c6d274f19735696a169dea890d35d444ae61c25fb47082aa2d0f16"},
-    {file = "langsmith-0.1.141.tar.gz", hash = "sha256:f3f17d2abc7b8a3857ad8d492b535970109b5ea40e712df91a782522ed581516"},
+    {file = "langsmith-0.1.142-py3-none-any.whl", hash = "sha256:f639ca23c9a0bb77af5fb881679b2f66ff1f21f19d0bebf4e51375e7585a8b38"},
+    {file = "langsmith-0.1.142.tar.gz", hash = "sha256:f8a84d100f3052233ff0a1d66ae14c5dfc20b7e41a1601de011384f16ee6cb82"},
 ]
 
 [package.dependencies]
@@ -3456,4 +3456,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "ff63139f921aa819b00d87669adc60682d4d9c1ed14383ffbfd3a230429f249a"
+content-hash = "f7f67841f56d21ffde846ea0b64236b738d2a30c775200fd4fa487eb57decfc5"
