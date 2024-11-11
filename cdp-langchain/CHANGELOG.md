@@ -2,12 +2,17 @@
 
 ## Unreleased
 
-## [0.0.2] - 2024-11-07
+## [0.0.4] - 2024-11-10
+
+### Added
+
+- Improved CDP API Key private key parsing.
+
+## [0.0.3] - 2024-11-09
 
 ### Added
 
 - Bump dependency `cdp-agentkit-core` to version `0.0.3`.
-
 
 ## [0.0.2] - 2024-11-07
 
