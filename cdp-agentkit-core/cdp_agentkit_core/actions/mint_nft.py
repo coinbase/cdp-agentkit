@@ -18,7 +18,7 @@ class MintNftInput(BaseModel):
     )
     destination: str = Field(
         ...,
-        description="The destination address that will receieve the NFT onchain, e.g. `0x036CbD53842c5426634e7929541eC2318f3dCF7e`",
+        description="The destination address that will receive the NFT onchain, e.g. `0x036CbD53842c5426634e7929541eC2318f3dCF7e`",
     )
 
 
@@ -28,7 +28,7 @@ def mint_nft(wallet: Wallet, contract_address: str, destination: str) -> str:
     Args:
         wallet (Wallet): The wallet to trade the asset from.
         contract_address (str): The contract address of the NFT (ERC-721) to mint, e.g. `0x036CbD53842c5426634e7929541eC2318f3dCF7e`.
-        destination (str): The destination address that will receieve the NFT onchain, e.g. `0x036CbD53842c5426634e7929541eC2318f3dCF7e`.
+        destination (str): The destination address that will receive the NFT onchain, e.g. `0x036CbD53842c5426634e7929541eC2318f3dCF7e`.
 
     Returns:
         str: A message containing the NFT mint details.
