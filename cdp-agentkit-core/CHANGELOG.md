@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added `wow_buy_token` and `wow_sell_token`.
+
 ## [0.0.3] - 2024-11-09
 
 ### Added

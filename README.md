@@ -17,6 +17,7 @@ The Coinbase Developer Platform (CDP) Agentkit simplifies bringing your AI Agent
   - Deploying ERC20 tokens
   - Deploying ERC721 tokens and minting NFTs
   - Deploying tokens on Zora's Wow Launcher (Bonding Curve)
+  - Buying and selling Zora Wow ERC20 coins
 
 ## Examples
 Check out `cdp-langchain/examples` for inspiration and help getting started!

@@ -60,6 +60,8 @@ The toolkit provides the following tools:
 8. **deploy_nft** - Deploy new NFT contracts
 9. **register_basename** - Register a basename for the wallet
 10. **wow_create_token** - Deploy a token using Zora's Wow Launcher (Bonding Curve)
+11. **wow_buy_token** - Buy Zora Wow ERC20 memecoin with ETH
+12. **wow_sell_token** - Sell Zora Wow ERC20 memecoin for ETH
 
 ### Using with an Agent
 

@@ -61,6 +61,8 @@ class CdpToolkit(BaseToolkit):
             deploy_nft
             register_basename
             wow_create_token
+            wow_buy_token
+            wow_sell_token
     Use within an agent:
         .. code-block:: python
 
