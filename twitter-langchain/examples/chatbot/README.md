@@ -33,10 +33,6 @@ python --version
 pip --version
 ```
 
-## Installation
-```bash
-```
-
 ## Run the Chatbot
 
 ### Env
@@ -47,6 +43,8 @@ Ensure the following vars are set in .env-local:
 - "TWITTER_API_KEY"
 - "TWITTER_API_SECRET"
 - "TWITTER_BEARER_TOKEN"
+
+Rename .env-local to .env
 
 ```bash
 make run

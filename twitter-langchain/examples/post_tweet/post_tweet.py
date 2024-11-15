@@ -38,15 +38,17 @@ for event in events:
 
 # Successful Output
 #  ================================ Human Message =================================
-#  Please post 'hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa' to twitter
+#  Please post 'hello, world! 2f11acf41ab2412cab56ea9a1d447d74' to twitter
 #  ================================== Ai Message ==================================
 #  Tool Calls:
 #      post_tweet (call_xVx4BMCSlCmCcbEQG1yyebbq)
 #      Call ID: call_xVx4BMCSlCmCcbEQG1yyebbq
 #      Args:
-#          text: hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa
+#          tweet: hello, world! 2f11acf41ab2412cab56ea9a1d447d74
 #  ================================= Tool Message =================================
 #  Name: post_tweet
-#  Successfully posted!
+
+#  Successfully posted to Twitter:
+#  {"data": {"text": "hello, world! 2f11acf41ab2412cab56ea9a1d447d74", "id": "1857519455640891432", "edit_history_tweet_ids": ["1857519455640891432"]}}
 #  ================================== Ai Message ==================================
-#  The message "hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa" has been successfully posted to Twitter!
+#  The tweet "hello, world! 2f11acf41ab2412cab56ea9a1d447d74" has been successfully posted to Twitter.
