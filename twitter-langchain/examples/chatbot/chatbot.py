@@ -1,3 +1,5 @@
+import asyncio
+import multiprocessing
 import os
 import sys
 import time
@@ -7,41 +9,28 @@ from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
 
-# Import CDP Agentkit Langchain Extension.
-from cdp_langchain.agent_toolkits import CdpToolkit
-from cdp_langchain.utils import CdpAgentkitWrapper
+# Import CDP Agentkit Twitter Langchain Extension.
+from twitter_langchain import (
+    TwitterApiWrapper,
+    TwitterToolkit,
+)
 
 # Configure a file to persist the agent's CDP MPC Wallet Data.
 wallet_data_file = "wallet_data.txt"
 
 
 def initialize_agent():
-    """Initialize the agent with CDP Agentkit."""
+    """Initialize the agent with CDP Agentkit Twitter Langchain."""
     # Initialize LLM.
     llm = ChatOpenAI(model="gpt-4o-mini")
 
-    wallet_data = None
-
-    if os.path.exists(wallet_data_file):
-        with open(wallet_data_file) as f:
-            wallet_data = f.read()
-
-    # Configure CDP Agentkit Langchain Extension.
+    # Configure CDP Agentkit Twitter Langchain Extension.
     values = {}
-    if wallet_data is not None:
-        # If there is a persisted agentic wallet, load it and pass to the CDP Agentkit Wrapper.
-        values = {"cdp_wallet_data": wallet_data}
 
-    agentkit = CdpAgentkitWrapper(**values)
-
-    # persist the agent's CDP MPC Wallet Data.
-    wallet_data = agentkit.export_wallet()
-    with open(wallet_data_file, "w") as f:
-        f.write(wallet_data)
-
-    # Initialize CDP Agentkit Toolkit and get tools.
-    cdp_toolkit = CdpToolkit.from_cdp_agentkit_wrapper(agentkit)
-    tools = cdp_toolkit.get_tools()
+    # Initialize CDP Agentkit Twitter Langchain
+    wrapper = TwitterApiWrapper(**values)
+    toolkit = TwitterToolkit.from_twitter_api_wrapper(wrapper)
+    tools = toolkit.get_tools()
 
     # Store buffered conversation history in memory.
     memory = MemorySaver()
