@@ -6,8 +6,8 @@ from pydantic import BaseModel, Field
 
 from cdp_agentkit_core.actions.social.twitter import TwitterAction
 
-POST_TWEET_REPLY_REPLY_PROMPT = """
-This tool will post a reply to a tweet on Twitter. The tool takes the text of the tweet as input and the tweet id to reply to. Tweets can be maximum 280 characters."""
+POST_TWEET_REPLY_PROMPT = """
+This tool will post a reply to a tweet on Twitter. The tool takes the text of the reply and the tweet id to reply to as input. Tweets can be maximum 280 characters."""
 
 
 class PostTweetReplyInput(BaseModel):
@@ -52,6 +52,6 @@ class PostTweetReplyAction(TwitterAction):
     """Twitter (X) post tweet reply action."""
 
     name: str = "post_tweet_reply"
-    description: str = POST_TWEET_REPLY_REPLY_PROMPT
+    description: str = POST_TWEET_REPLY_PROMPT
     args_schema: type[BaseModel] | None = PostTweetReplyInput
     func: Callable[..., str] = post_tweet_reply
