@@ -134,11 +134,13 @@ def test_sell_token_api_error(wallet_factory):
             mock_wallet, "invoke_contract", side_effect=Exception("API error")
         ) as mock_invoke,
     ):
-        with pytest.raises(Exception, match="API error"):
-            wow_sell_token(
-                mock_wallet,
-                MOCK_CONTRACT_ADDRESS,
-                MOCK_AMOUNT_TOKENS,
-            )
+        action_response = wow_sell_token(
+            mock_wallet,
+            MOCK_CONTRACT_ADDRESS,
+            MOCK_AMOUNT_TOKENS,
+        )
 
+        expected_response = "Error selling Zora Wow ERC20 memecoin API error"
+
+        assert action_response == expected_response
         mock_invoke.assert_called_once()

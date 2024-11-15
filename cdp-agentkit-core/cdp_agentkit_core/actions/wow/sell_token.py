@@ -47,20 +47,23 @@ def wow_sell_token(wallet: Wallet, contract_address: str, amount_tokens_in_wei: 
     # Multiply by 98/100 and floor to get 98% of quote as minimum (slippage protection)
     min_eth = str(int((eth_quote * 98) // 100))
 
-    invocation = wallet.invoke_contract(
-        contract_address=contract_address,
-        method="sell",
-        abi=WOW_ABI,
-        args={
-            "tokensToSell": str(amount_tokens_in_wei),
-            "recipient": wallet.default_address.address_id,
-            "orderReferrer": "0x0000000000000000000000000000000000000000",
-            "comment": "",
-            "expectedMarketType": "1" if has_graduated else "0",
-            "minPayoutSize": min_eth,
-            "sqrtPriceLimitX96": "0",
-        },
-    ).wait()
+    try:
+        invocation = wallet.invoke_contract(
+            contract_address=contract_address,
+            method="sell",
+            abi=WOW_ABI,
+            args={
+                "tokensToSell": str(amount_tokens_in_wei),
+                "recipient": wallet.default_address.address_id,
+                "orderReferrer": "0x0000000000000000000000000000000000000000",
+                "comment": "",
+                "expectedMarketType": "1" if has_graduated else "0",
+                "minPayoutSize": min_eth,
+                "sqrtPriceLimitX96": "0",
+            },
+        ).wait()
+    except Exception as e:
+        return f"Error selling Zora Wow ERC20 memecoin {e!s}"
 
     return (
         f"Sold WoW ERC20 memecoin with transaction hash: {invocation.transaction.transaction_hash}"

@@ -47,22 +47,26 @@ def wow_buy_token(wallet: Wallet, contract_address: str, amount_eth_in_wei: str)
     min_tokens = str(int((token_quote * 99) // 100))  # Using integer division to floor the result
 
     has_graduated = get_has_graduated(wallet.network_id, contract_address)
-    invocation = wallet.invoke_contract(
-        contract_address=contract_address,
-        method="buy",
-        abi=WOW_ABI,
-        args={
-            "recipient": wallet.default_address.address_id,
-            "refundRecipient": wallet.default_address.address_id,
-            "orderReferrer": "0x0000000000000000000000000000000000000000",
-            "expectedMarketType": has_graduated and "1" or "0",
-            "minOrderSize": min_tokens,
-            "sqrtPriceLimitX96": "0",
-            "comment": "",
-        },
-        amount=amount_eth_in_wei,
-        asset_id="wei",
-    ).wait()
+
+    try:
+        invocation = wallet.invoke_contract(
+            contract_address=contract_address,
+            method="buy",
+            abi=WOW_ABI,
+            args={
+                "recipient": wallet.default_address.address_id,
+                "refundRecipient": wallet.default_address.address_id,
+                "orderReferrer": "0x0000000000000000000000000000000000000000",
+                "expectedMarketType": has_graduated and "1" or "0",
+                "minOrderSize": min_tokens,
+                "sqrtPriceLimitX96": "0",
+                "comment": "",
+            },
+            amount=amount_eth_in_wei,
+            asset_id="wei",
+        ).wait()
+    except Exception as e:
+        return f"Error buying Zora Wow ERC20 memecoin {e!s}"
 
     return f"Purchased WoW ERC20 memecoin with transaction hash: {invocation.transaction.transaction_hash}"
 
