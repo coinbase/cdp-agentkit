@@ -6,5 +6,5 @@ export
 
 .PHONY: run
 run:
-	poetry install --with dev
+	poetry install --with dev && \
 	poetry run python account_details.py

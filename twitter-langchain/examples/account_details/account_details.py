@@ -44,15 +44,11 @@ for event in events:
 #  ================================= Tool Message =================================
 #  Name: account_details
 
-#  Successfully retrieved authenticated user account details. Please present the following as json and not markdown:
-#  id: 1234567890123456789
-#  name: My Twitter Name
-#  username: MyTwitterUserName
-#  link: https://x.com/MyTwitterUserName
+#  Successfully retrieved authenticated user account details:
+#  {"data": {"id": "1853889445319331840", "name": "CDP AgentKit", "username": "CDPAgentKit", "url": "https://x.com/CDPAgentKit"}}
 #  ================================== Ai Message ==================================
-#  {
-#      "id": "1234567890123456789",
-#      "name": "My Twitter Name",
-#      "username": "MyTwitterUserName",
-#      "link": "https://x.com/MyTwitterUserName"
-#  }
+#  Here are your Twitter account details:
+
+#  - **Name: ** CDP AgentKit
+#  - **Username: ** [@CDPAgentKit](https: // x.com/CDPAgentKit)
+#  - **Account ID: ** 1853889445319331840
