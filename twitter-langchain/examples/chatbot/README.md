@@ -3,7 +3,6 @@
 This example demonstrates an agent setup as a terminal style chatbot with access to Twitter (X) API actions.
 
 ## Ask the chatbot to engage in the Twitter (X) ecosystem!
-- "Transfer a portion of your ETH to john2879.base.eth"
 - "What are my account details?"
 - "Please post a message for me to Twitter"
 - "Please get my mentions"
