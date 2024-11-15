@@ -1,4 +1,5 @@
 from collections.abc import Callable
+from json import dumps
 
 import tweepy
 from pydantic import BaseModel
@@ -6,7 +7,16 @@ from pydantic import BaseModel
 from cdp_agentkit_core.actions.social.twitter.action import TwitterAction
 
 ACCOUNT_DETAILS_PROMPT = """
-This tool will return account details for the currently authenticated Twitter (X) user context."""
+This tool will return account details for the currently authenticated Twitter (X) user context.
+
+A successful response will return a message with the api response as a json payload:
+    {"data": {"id": "1853889445319331840", "name": "CDP AgentKit", "username": "CDPAgentKit"}}
+
+A failure response will return a message with the tweepy client api request error:
+    Error retrieving authenticated user account: 429 Too Many Requests
+
+
+"""
 
 
 class AccountDetailsInput(BaseModel):
@@ -27,13 +37,10 @@ def account_details(client: tweepy.Client) -> str:
 
     try:
         response = client.get_me()
-        user = response.data
+        data = response['data']
+        data['url'] = f"https://x.com/{data['username']}"
 
-        message = f"""Successfully retrieved authenticated user account details. Please present the following as json and not markdown:
-            id: {user.id}
-            name: {user.name}
-            username: {user.username}
-            link: https://x.com/{user.username}"""
+        message = f"""Successfully retrieved authenticated user account details:\n{dumps(response)}"""
     except tweepy.errors.TweepyException as e:
         message = f"Error retrieving authenticated user account details: {e}"
 

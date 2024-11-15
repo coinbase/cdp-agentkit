@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Added `account_mentions` action to `twitter-langchain`.
+- Added `post_tweet_reply` action to `twitter-langchain`.
+
 ## [0.0.4] - 2024-11-15
 
 ### Added

@@ -21,9 +21,8 @@ class TwitterApiWrapper(BaseModel):
         api_key = get_from_dict_or_env(values, "twitter_api_key", "TWITTER_API_KEY")
         api_secret = get_from_dict_or_env(values, "twitter_api_secret", "TWITTER_API_SECRET")
         access_token = get_from_dict_or_env(values, "twitter_access_token", "TWITTER_ACCESS_TOKEN")
-        access_token_secret = get_from_dict_or_env(
-            values, "twitter_access_token_secret", "TWITTER_ACCESS_TOKEN_SECRET"
-        )
+        access_token_secret = get_from_dict_or_env(values, "twitter_access_token_secret", "TWITTER_ACCESS_TOKEN_SECRET")
+        bearer_token = get_from_dict_or_env(values, "twitter_bearer_token", "TWITTER_BEARER_TOKEN")
 
         try:
             import tweepy
@@ -31,7 +30,7 @@ class TwitterApiWrapper(BaseModel):
             raise ImportError(
                 "Tweepy Twitter SDK is not installed. "
 
-"Please install it with `pip install tweepy`"
+                "Please install it with `pip install tweepy`"
             ) from None
 
         client = tweepy.Client(
@@ -39,6 +38,8 @@ class TwitterApiWrapper(BaseModel):
             consumer_secret=api_secret,
             access_token=access_token,
             access_token_secret=access_token_secret,
+            bearer_token=bearer_token,
+            return_type=dict,
         )
 
         values["client"] = client
@@ -46,6 +47,7 @@ class TwitterApiWrapper(BaseModel):
         values["api_secret"] = api_secret
         values["access_token"] = access_token
         values["access_token_secret"] = access_token_secret
+        values["bearer_token"] = bearer_token
 
         return values
 
