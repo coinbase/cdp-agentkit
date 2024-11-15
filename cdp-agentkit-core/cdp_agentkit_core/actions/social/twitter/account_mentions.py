@@ -8,8 +8,10 @@ from cdp_agentkit_core.actions.social.twitter.action import TwitterAction
 
 ACCOUNT_MENTIONS_PROMPT = """
 This tool will return account mentions for the currently authenticated Twitter (X) user context.
+Please note that this may only be called once every 15 minutes under the free api tier.
 
 A successful response will return a message with the api response as a json payload:
+    {"data": [{"id": "1857479287504584856", "edit_history_tweet_ids": ["1857479287504584856"], "text": "@CDPAgentKit reply"}], "meta": {"result_count": 1, "newest_id": "1857479287504584856", "oldest_id": "1857479287504584856"}}
 
 
 A failure response will return a message with the tweepy client api request error:
