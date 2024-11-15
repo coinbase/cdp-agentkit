@@ -29,10 +29,11 @@ def post_tweet_reply(client: tweepy.Client, tweet_id: str, tweet_reply: str) -> 
 
     Args:
         client (tweepy.Client): The tweepy client to use.
-        tweet (str): The text of the tweet to post to twitter. Tweets can be maximum 280 characters.
+        tweet_id (str): The id of the tweet to reply to in twitter.
+        tweet_reply (str): The text of the reply to post in reponse to a tweet on twitter.
 
     Returns:
-        str: A message containing the result of the post action and the tweet.
+        str: A message containing the result of the reply action and any associated data.
 
     """
     message = ""
