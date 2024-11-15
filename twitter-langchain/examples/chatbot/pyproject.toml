@@ -10,9 +10,9 @@ packages = []
 
 [tool.poetry.dependencies]
 cdp-sdk = "^0.10.3"
-cdp-agentkit-core = {path = "/Users/chris/repositories/cdp-agentkit/cdp-agentkit-core", develop = true}
-cdp-langchain = {path = "/Users/chris/repositories/cdp-agentkit/cdp-langchain", develop = true}
-twitter-langchain = {path = "/Users/chris/repositories/cdp-agentkit/twitter-langchain", develop = true}
+cdp-agentkit-core = {path = "../../../cdp-agentkit-core", develop = true}
+cdp-langchain = {path = "../../../cdp-langchain", develop = true}
+twitter-langchain = {path = "../../../twitter-langchain", develop = true}
 langchain = "^0.3.4"
 langchain-openai = "^0.2.4"
 langgraph = "^0.2.39"
