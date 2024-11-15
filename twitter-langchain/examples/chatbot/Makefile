@@ -6,5 +6,5 @@ export
 
 .PHONY: run
 run:
-	poetry install && \
+	poetry install --with dev && \
 	poetry run python chatbot.py
