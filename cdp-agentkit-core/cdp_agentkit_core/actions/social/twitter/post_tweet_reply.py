@@ -25,7 +25,7 @@ class PostTweetReplyInput(BaseModel):
 
 
 def post_tweet_reply(client: tweepy.Client, tweet_id: str, tweet_reply: str) -> str:
-    """post tweet reply to Twitter.
+    """Post tweet reply to Twitter.
 
     Args:
         client (tweepy.Client): The tweepy client to use.

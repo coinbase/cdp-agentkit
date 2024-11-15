@@ -32,6 +32,8 @@ def account_mentions(client: tweepy.Client, account_id: str) -> str:
     """
     message = ""
 
+    print(f"attempting to get mentions for account_id: {account_id}")
+
     try:
         response = client.get_users_mentions(account_id)
         mentions = response.data

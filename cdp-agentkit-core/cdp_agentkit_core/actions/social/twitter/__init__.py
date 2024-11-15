@@ -2,6 +2,7 @@ from cdp_agentkit_core.actions.social.twitter.account_details import AccountDeta
 from cdp_agentkit_core.actions.social.twitter.account_mentions import AccountMentionsAction
 from cdp_agentkit_core.actions.social.twitter.action import TwitterAction
 from cdp_agentkit_core.actions.social.twitter.post_tweet import PostTweetAction
+from cdp_agentkit_core.actions.social.twitter.post_tweet_reply import PostTweetReplyAction
 
 
 def get_all_twitter_actions() -> list[type[TwitterAction]]:
@@ -19,5 +20,6 @@ __all__ = [
     "AccountDetailsAction",
     "AccountMentionsAction",
     "PostTweetAction",
+    "PostTweetReplyAction",
     "TWITTER_ACTIONS",
 ]
