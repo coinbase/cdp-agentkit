@@ -39,6 +39,7 @@ class TwitterApiWrapper(BaseModel):
             access_token=access_token,
             access_token_secret=access_token_secret,
             bearer_token=bearer_token,
+            return_type=dict,
         )
 
         values["client"] = client

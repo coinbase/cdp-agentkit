@@ -1,4 +1,5 @@
 from collections.abc import Callable
+from json import dumps
 
 import tweepy
 from pydantic import BaseModel, Field
@@ -6,7 +7,15 @@ from pydantic import BaseModel, Field
 from cdp_agentkit_core.actions.social.twitter import TwitterAction
 
 POST_TWEET_PROMPT = """
-This tool will post a tweet on Twitter. The tool takes the text of the tweet as input. Tweets can be maximum 280 characters."""
+This tool will post a tweet on Twitter. The tool takes the text of the tweet as input. Tweets can be maximum 280 characters.
+
+A successful response will return a message with the api response as a json payload:
+    {"data": {"text": "hello, world!", "id": "0123456789012345678", "edit_history_tweet_ids": ["0123456789012345678"]}}
+
+A failure response will return a message with the tweepy client api request error:
+    You are not allowed to create a Tweet with duplicate content.
+
+"""
 
 
 class PostTweetInput(BaseModel):
@@ -32,10 +41,10 @@ def post_tweet(client: tweepy.Client, tweet: str) -> str:
     message = ""
 
     try:
-        client.create_tweet(text=tweet)
-        message = f"Successfully posted to Twitter:\n{tweet}"
+        response = client.create_tweet(text=tweet)
+        message = f"Successfully posted to Twitter:\n{dumps(response)}"
     except tweepy.errors.TweepyException as e:
-        message = f"Error posting to Twitter:\n{tweet}\n{e}"
+        message = f"Error posting to Twitter:\n{e}"
 
     return message
 

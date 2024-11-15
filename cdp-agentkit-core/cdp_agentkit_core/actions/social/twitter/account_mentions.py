@@ -7,7 +7,15 @@ from pydantic import BaseModel, Field
 from cdp_agentkit_core.actions.social.twitter.action import TwitterAction
 
 ACCOUNT_MENTIONS_PROMPT = """
-This tool will return account mentions for the currently authenticated Twitter (X) user context."""
+This tool will return account mentions for the currently authenticated Twitter (X) user context.
+
+A successful response will return a message with the api response as a json payload:
+
+
+A failure response will return a message with the tweepy client api request error:
+    Error retrieving authenticated user account mentions: 429 Too Many Requests
+
+"""
 
 
 class AccountMentionsInput(BaseModel):
@@ -36,11 +44,9 @@ def account_mentions(client: tweepy.Client, account_id: str) -> str:
 
     try:
         response = client.get_users_mentions(account_id)
-        mentions = response.data
-
-        message = f"Successfully retrieved authenticated user account mentions:{dumps(mentions)}"
+        message = f"Successfully retrieved authenticated user account mentions:\n{dumps(response)}"
     except tweepy.errors.TweepyException as e:
-        message = f"Error retrieving authenticated user account mentions: {e}"
+        message = f"Error retrieving authenticated user account mentions:\n{e}"
 
     return message
 

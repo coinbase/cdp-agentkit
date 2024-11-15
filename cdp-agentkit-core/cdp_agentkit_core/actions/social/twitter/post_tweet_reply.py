@@ -7,7 +7,15 @@ from pydantic import BaseModel, Field
 from cdp_agentkit_core.actions.social.twitter import TwitterAction
 
 POST_TWEET_REPLY_PROMPT = """
-This tool will post a reply to a tweet on Twitter. The tool takes the text of the reply and the tweet id to reply to as input. Tweets can be maximum 280 characters."""
+This tool will post a reply to a tweet on Twitter. The tool takes the text of the reply and the tweet id to reply to as input. Tweets can be maximum 280 characters.
+
+A successful response will return a message with the api response as a json payload:
+    {"data": {"id": "0123456789012345678", "text": "hellllloooo!", "edit_history_tweet_ids": ["1234567890123456789"]}}
+
+A failure response will return a message with the tweepy client api request error:
+    You are not allowed to create a Tweet with duplicate content.
+
+"""
 
 
 class PostTweetReplyInput(BaseModel):
@@ -40,11 +48,9 @@ def post_tweet_reply(client: tweepy.Client, tweet_id: str, tweet_reply: str) -> 
 
     try:
         response = client.create_tweet(text=tweet_reply, in_reply_to_tweet_id=tweet_id)
-        data = response.data
-
-        message = f"Successfully posted reply to Twitter:\n{dumps(data)}"
+        message = f"Successfully posted reply to Twitter:\n{dumps(response)}"
     except tweepy.errors.TweepyException as e:
-        message = f"Error posting reply to Twitter: {e}"
+        message = f"Error posting reply to Twitter:\n{e}"
 
     return message
 
