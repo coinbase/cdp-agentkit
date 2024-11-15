@@ -54,7 +54,10 @@ for tool in tools:
 
 The toolkit provides the following tools:
 
-1. **post_tweet** - Post tweet to Twitter
+1. **account_details** - Get the authenticated account details
+2. **account_mentions** - Get mentions for the account
+3. **post_tweet** - Post a tweet to the account
+3. **post_tweet_reply** - Post a reply to a tweet on Twitter
 
 ### Using with an Agent
 

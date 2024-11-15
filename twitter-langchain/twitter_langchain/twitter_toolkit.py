@@ -53,7 +53,9 @@ class TwitterToolkit(BaseToolkit):
         .. code-block:: none
 
             account_details
+            account_mentions
             post_tweet
+            post_tweet_reply
 
     Use within an agent:
         .. code-block:: python
