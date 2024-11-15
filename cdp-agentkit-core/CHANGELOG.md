@@ -4,6 +4,7 @@
 
 - Added `wow_buy_token` and `wow_sell_token`.
 - Added `token_uri` to `wow_create_token` action for custom token metadata.
+- Refactor twitter actions to conform to extendable `twitter-langchain` updates.
 
 ## [0.0.3] - 2024-11-09
 

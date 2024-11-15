@@ -1,14 +1,21 @@
-from cdp_agentkit_core.actions.social.twitter.account_details import (
-    ACCOUNT_DETAILS_PROMPT as ACCOUNT_DETAILS_PROMPT,
-)
-from cdp_agentkit_core.actions.social.twitter.account_details import (
-    AccountDetailsInput as AccountDetailsInput,
-)
-from cdp_agentkit_core.actions.social.twitter.account_details import (
-    account_details as account_details,
-)
-from cdp_agentkit_core.actions.social.twitter.post_tweet import (
-    POST_TWEET_PROMPT as POST_TWEET_PROMPT,
-)
-from cdp_agentkit_core.actions.social.twitter.post_tweet import PostTweetInput as PostTweetInput
-from cdp_agentkit_core.actions.social.twitter.post_tweet import post_tweet as post_tweet
+from cdp_agentkit_core.actions.social.twitter.account_details import AccountDetailsAction
+from cdp_agentkit_core.actions.social.twitter.action import TwitterAction
+from cdp_agentkit_core.actions.social.twitter.post_tweet import PostTweetAction
+
+
+def get_all_twitter_actions() -> list[type[TwitterAction]]:
+    actions = []
+    for action in TwitterAction.__subclasses__():
+        actions.append(action())
+
+    return actions
+
+
+TWITTER_ACTIONS = get_all_twitter_actions()
+
+__all__ = [
+    "TwitterAction",
+    "AccountDetailsAction",
+    "PostTweetAction",
+    "TWITTER_ACTIONS",
+]

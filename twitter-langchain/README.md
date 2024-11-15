@@ -21,11 +21,11 @@ pip install twitter-langchain
 Set the following environment variables:
 
 ```bash
-OPENAI_API_KEY=<your-openai-api-key>
-TWITTER_API_KEY=<your-api-key>
-TWITTER_API_SECRET=<your-api-secret>
-TWITTER_ACCESS_TOKEN=<your-access-token>
-TWITTER_ACCESS_TOKEN_SECRET=<your-access-token-secret>
+export OPENAI_API_KEY=<your-openai-api-key>
+export TWITTER_API_KEY=<your-api-key>
+export TWITTER_API_SECRET=<your-api-secret>
+export TWITTER_ACCESS_TOKEN=<your-access-token>
+export TWITTER_ACCESS_TOKEN_SECRET=<your-access-token-secret>
 ```
 
 ## Usage

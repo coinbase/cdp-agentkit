@@ -1,5 +1,9 @@
+from collections.abc import Callable
+
 import tweepy
 from pydantic import BaseModel, Field
+
+from cdp_agentkit_core.actions.social.twitter import TwitterAction
 
 POST_TWEET_PROMPT = """
 This tool will post a tweet on Twitter. The tool takes the text of the tweet as input. Tweets can be maximum 280 characters."""
@@ -34,3 +38,12 @@ def post_tweet(client: tweepy.Client, tweet: str) -> str:
         message = f"Error posting to Twitter:\n{tweet}\n{e}"
 
     return message
+
+
+class PostTweetAction(TwitterAction):
+    """Twitter (X) post tweet action."""
+
+    name: str = "post_tweet"
+    description: str = POST_TWEET_PROMPT
+    args_schema: type[BaseModel] | None = PostTweetInput
+    func: Callable[..., str] = post_tweet
