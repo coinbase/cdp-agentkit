@@ -42,7 +42,7 @@ def account_details(client: tweepy.Client) -> str:
 
         message = f"""Successfully retrieved authenticated user account details:\n{dumps(response)}"""
     except tweepy.errors.TweepyException as e:
-        message = f"Error retrieving authenticated user account details: {e}"
+        message = f"Error retrieving authenticated user account details:\n{e}"
 
     return message
 
