@@ -1,12 +1,11 @@
-from unittest.mock import patch
 from json import dumps
+from unittest.mock import patch
 
 import pytest
 import tweepy
-
 from cdp_agentkit_core.actions.social.twitter.account_mentions import (
-    account_mentions,
     AccountMentionsInput,
+    account_mentions,
 )
 
 MOCK_ACCOUNT_ID = "1234"

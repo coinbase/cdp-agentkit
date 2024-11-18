@@ -3,6 +3,7 @@ from unittest.mock import MagicMock
 import pytest
 import tweepy
 
+
 @pytest.fixture
 def tweepy_factory():
     """Create and return a factory for tweepy mock fixtures."""

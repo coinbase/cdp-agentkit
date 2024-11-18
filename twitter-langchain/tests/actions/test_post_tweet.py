@@ -1,12 +1,11 @@
-from unittest.mock import patch
 from json import dumps
+from unittest.mock import patch
 
 import pytest
 import tweepy
-
 from cdp_agentkit_core.actions.social.twitter.post_tweet import (
-    post_tweet,
     PostTweetInput,
+    post_tweet,
 )
 
 MOCK_TWEET = "hello, world!"

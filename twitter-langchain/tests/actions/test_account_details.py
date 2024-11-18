@@ -1,11 +1,9 @@
-from unittest.mock import patch
 from json import dumps
+from unittest.mock import patch
 
 import tweepy
-
 from cdp_agentkit_core.actions.social.twitter.account_details import (
     account_details,
-    AccountDetailsInput,
 )
 
 MOCK_ID = 1234
@@ -27,7 +25,7 @@ def test_account_details_success(tweepy_factory):
     mock_client_result = {
         "data": {
             "id": MOCK_ID,
-            "name": MOCK_USERNAME,        
+            "name": MOCK_USERNAME,
             "username": MOCK_USERNAME,
         },
     }
