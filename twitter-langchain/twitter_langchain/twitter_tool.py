@@ -6,6 +6,7 @@ To use this tool, you must first set as environment variables:
     TWITTER_API_SECRET
     TWITTER_ACCESS_TOKEN
     TWITTER_ACCESS_TOKEN_SECRET
+    TWITTER_BEARER_TOKEN
 
 """
 
