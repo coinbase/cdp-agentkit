@@ -33,6 +33,7 @@ class TwitterToolkit(BaseToolkit):
         TWITTER_ACCESS_TOKEN_SECRET
         TWITTER_API_KEY
         TWITTER_API_SECRET
+        TWITTER_BEARER_TOKEN
 
     Instantiate:
         .. code-block:: python
