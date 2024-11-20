@@ -10,15 +10,6 @@ MOCK_ID = 1234
 MOCK_NAME = "Test Account"
 MOCK_USERNAME = "testaccount"
 
-def test_account_details_input_model_valid():
-    """Test that AccountDetailsInput accepts valid parameters."""
-    pass
-
-
-def test_account_details_input_model_missing_params():
-    """Test that AccountDetailsInput raises error when params are missing."""
-    pass
-
 
 def test_account_details_success(tweepy_factory):
     mock_client = tweepy_factory()
@@ -40,6 +31,7 @@ def test_account_details_success(tweepy_factory):
         assert response == expected_response
         mock_get_me.assert_called_once_with()
 
+
 def test_account_details_failure(tweepy_factory):
     mock_client = tweepy_factory()
 
@@ -50,5 +42,3 @@ def test_account_details_failure(tweepy_factory):
         response = account_details(mock_client)
 
         assert response == expected_response
-
-
