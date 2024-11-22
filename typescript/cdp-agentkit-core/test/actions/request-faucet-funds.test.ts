@@ -1,24 +1,24 @@
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import { requestFaucetFundsAction } from '../../src/actions/request-faucet-funds';
-import type { Wallet } from '../../src/types';
+import { createMockWallet } from '../helpers';
+
+// Constants from Python tests
+const MOCK_TX_HASH = "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef";
 
 describe('requestFaucetFundsAction', () => {
-  let mockWallet: jest.Mocked<Wallet>;
+  const mockWallet = createMockWallet();
 
   beforeEach(() => {
-    mockWallet = {
-      faucet: jest.fn()
-    } as any;
+    jest.clearAllMocks();
+    mockWallet.faucet.mockResolvedValue(MOCK_TX_HASH);
   });
 
   it('should request faucet funds successfully', async () => {
-    const txHash = '0x123...';
-    mockWallet.faucet.mockResolvedValue(txHash);
-
     const result = await requestFaucetFundsAction.execute(mockWallet, {});
 
     expect(mockWallet.faucet).toHaveBeenCalled();
-    expect(result).toContain(txHash);
+    expect(result).toContain('Successfully requested faucet funds');
+    expect(result).toContain(MOCK_TX_HASH);
   });
 
   it('should handle errors gracefully', async () => {

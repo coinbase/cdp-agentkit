@@ -29,7 +29,7 @@ const WALLET_DATA_FILE = "wallet_data.txt";
 
 async function initializeAgent() {
   // Initialize LLM
-  const llm = new ChatOpenAI({ modelName: "gpt-4" });
+  const llm = new ChatOpenAI({ modelName: "gpt-4o-mini" });
 
   let walletData: string | undefined;
 

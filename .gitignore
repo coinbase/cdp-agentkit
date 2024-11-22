@@ -15,6 +15,9 @@
 # Python cache files
 **/__pycache__/
 
+# Node modules
+**/node_modules/
+
 # Wallet data
 **/wallet_data.txt
 

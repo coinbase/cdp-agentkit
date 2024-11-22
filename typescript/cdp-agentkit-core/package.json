@@ -28,6 +28,7 @@
     "@types/jest": "*",
     "jest": "*",
     "ts-jest": "*",
+    "ts-node": "*",
     "@jest/globals": "*",
     "@jest/types": "*"
   }
