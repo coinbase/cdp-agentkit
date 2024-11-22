@@ -26,6 +26,10 @@ export const mintNftAction: CdpAction<MintNftInput> = {
   async execute(wallet: Wallet, input: MintNftInput): Promise<string> {
     const { contractAddress, tokenId, to } = input;
     
+    if (!contractAddress) {
+      return 'Missing required fields: contractAddress is required';
+    }
+    
     try {
       const contract = await (await wallet.mintNft({
         contractAddress,
@@ -35,7 +39,7 @@ export const mintNftAction: CdpAction<MintNftInput> = {
 
       return `Minted NFT from contract ${contractAddress}.\nTransaction hash: ${contract.transaction.transactionHash}\nTransaction link: ${contract.transaction.transactionLink}`;
     } catch (e) {
-      return `Error minting NFT: ${e instanceof Error ? e.message : String(e)}`;
+      return `Failed to mint NFT: ${e instanceof Error ? e.message : String(e)}`;
     }
   }
 }; 

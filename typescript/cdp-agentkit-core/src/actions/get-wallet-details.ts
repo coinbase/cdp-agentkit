@@ -15,7 +15,7 @@ export const getWalletDetailsAction: CdpAction<BaseActionInput> = {
       const address = await wallet.getDefaultAddress();
       return `Wallet Address: ${address}\nNetwork: ${wallet.networkId}`;
     } catch (e) {
-      return `Error getting wallet details: ${e instanceof Error ? e.message : String(e)}`;
+      return `Failed to get wallet details: ${e instanceof Error ? e.message : String(e)}`;
     }
   }
 }; 

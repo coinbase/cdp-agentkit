@@ -19,12 +19,22 @@ export const deployNftAction: CdpAction<DeployNftInput> = {
   async execute(wallet: Wallet, input: DeployNftInput): Promise<string> {
     const { name, symbol, baseUri } = input;
     
-    const contract = await (await wallet.deployNft({
-      name,
-      symbol,
-      baseUri,
-    })).wait();
+    if (!name || !symbol || !baseUri) {
+      return 'Missing required fields: name, symbol, and baseUri are required';
+    }
+    
+    try {
+      const contract = await (await wallet.deployNft({
+        name,
+        symbol,
+        baseUri,
+      })).wait();
 
-    return `Deployed NFT Collection ${name} to address ${contract.contractAddress} on network ${wallet.networkId}.\nTransaction hash for the deployment: ${contract.transaction.transactionHash}\nTransaction link for the deployment: ${contract.transaction.transactionLink}`;
+      return `Deployed NFT Collection ${name} to address ${contract.contractAddress} on network ${wallet.networkId}.\n` +
+        `Transaction hash for the deployment: ${contract.transaction.transactionHash}\n` +
+        `Transaction link for the deployment: ${contract.transaction.transactionLink}`;
+    } catch (e) {
+      return `Failed to deploy NFT contract: ${e instanceof Error ? e.message : String(e)}`;
+    }
   }
 }; 

@@ -1,37 +1,43 @@
-import { describe, it, expect, jest, beforeEach } from '@jest/globals';
-import { registerBasenameAction } from '../../src/actions/register-basename';
-import { createMockWallet, createMockSmartContract } from '../helpers';
-
-// Constants from Python tests
-const MOCK_NAME = "example";
-const MOCK_CONTRACT_ADDRESS = "0x1234567890abcdef1234567890abcdef12345678";
-const MOCK_TX_HASH = "0xabcd1234567890abcdef1234567890abcdef1234567890abcdef1234567890";
+import { registerBasenameAction } from '../../src/actions';
+import type { Wallet } from '../../src/types';
 
 describe('registerBasenameAction', () => {
-  const mockWallet = createMockWallet();
-  const mockContract = createMockSmartContract({
-    contractAddress: MOCK_CONTRACT_ADDRESS,
-    transaction: {
-      transactionHash: MOCK_TX_HASH,
-      transactionLink: `https://basescan.org/tx/${MOCK_TX_HASH}`
-    }
-  });
+  let mockWallet: jest.Mocked<Wallet>;
+  const MOCK_CONTRACT_ADDRESS = '0x1234567890abcdef1234567890abcdef12345678';
 
   beforeEach(() => {
-    jest.clearAllMocks();
-    mockWallet.registerBasename.mockResolvedValue(mockContract);
+    mockWallet = {
+      networkId: 'base-sepolia',
+      registerBasename: jest.fn(),
+    } as any;
   });
 
   it('should register basename successfully', async () => {
+    const mockContract = {
+      contractAddress: MOCK_CONTRACT_ADDRESS,
+      transaction: {
+        transactionHash: '0x9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba',
+        transactionLink: 'https://basescan.org/tx/0x9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba'
+      },
+      wait: function() {
+        return Promise.resolve(this);
+      }
+    };
+
+    mockWallet.registerBasename.mockResolvedValue({
+      ...mockContract,
+      wait: () => Promise.resolve(mockContract)
+    });
+
     const input = {
-      name: MOCK_NAME
+      name: 'example'
     };
 
     const result = await registerBasenameAction.execute(mockWallet, input);
 
     expect(mockWallet.registerBasename).toHaveBeenCalledWith(input);
     expect(result).toContain('Registered Basename');
-    expect(result).toContain(MOCK_CONTRACT_ADDRESS);
+    expect(result).toContain(mockContract.transaction.transactionHash);
   });
 
   it('should handle errors gracefully', async () => {
@@ -39,7 +45,7 @@ describe('registerBasenameAction', () => {
     mockWallet.registerBasename.mockRejectedValue(error);
 
     const input = {
-      name: MOCK_NAME
+      name: 'example'
     };
 
     const result = await registerBasenameAction.execute(mockWallet, input);
@@ -50,9 +56,7 @@ describe('registerBasenameAction', () => {
   });
 
   it('should validate required inputs', async () => {
-    const input = {
-      // missing name
-    };
+    const input = {};
 
     const result = await registerBasenameAction.execute(mockWallet, input as any);
 

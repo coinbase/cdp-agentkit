@@ -1,32 +1,36 @@
-import { describe, it, expect, jest, beforeEach } from '@jest/globals';
-import { tradeAction } from '../../src/actions/trade';
-import { createMockWallet, createMockTrade } from '../helpers';
-
-// Constants from Python tests
-const MOCK_AMOUNT = "0.01";
-const MOCK_FROM_ASSET_ID = "eth";
-const MOCK_TO_ASSET_ID = "usdc";
+import { tradeAction } from '../../src/actions';
+import type { Wallet } from '../../src/types';
 
 describe('tradeAction', () => {
-  const mockWallet = createMockWallet();
-  const mockTrade = createMockTrade({
-    transaction: {
-      transactionHash: '0x1234567890abcdef...',
-      transactionLink: 'https://basescan.org/tx/0x1234567890abcdef...'
-    },
-    toAmount: '100.0'
-  });
+  let mockWallet: jest.Mocked<Wallet>;
 
   beforeEach(() => {
-    jest.clearAllMocks();
-    mockWallet.trade.mockResolvedValue(mockTrade);
+    mockWallet = {
+      trade: jest.fn(),
+    } as any;
   });
 
   it('should execute trade successfully', async () => {
+    const mockTrade = {
+      transaction: {
+        transactionHash: '0x9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba',
+        transactionLink: 'https://basescan.org/tx/0x9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba'
+      },
+      toAmount: '100.0',
+      wait: function() {
+        return Promise.resolve(this);
+      }
+    };
+
+    mockWallet.trade.mockResolvedValue({
+      ...mockTrade,
+      wait: () => Promise.resolve(mockTrade)
+    });
+
     const input = {
-      amount: MOCK_AMOUNT,
-      fromAssetId: MOCK_FROM_ASSET_ID,
-      toAssetId: MOCK_TO_ASSET_ID
+      amount: '0.01',
+      fromAssetId: 'eth',
+      toAssetId: 'usdc'
     };
 
     const result = await tradeAction.execute(mockWallet, input);
@@ -42,9 +46,9 @@ describe('tradeAction', () => {
     mockWallet.trade.mockRejectedValue(error);
 
     const input = {
-      amount: MOCK_AMOUNT,
-      fromAssetId: MOCK_FROM_ASSET_ID,
-      toAssetId: MOCK_TO_ASSET_ID
+      amount: '0.01',
+      fromAssetId: 'eth',
+      toAssetId: 'usdc'
     };
 
     const result = await tradeAction.execute(mockWallet, input);
@@ -56,8 +60,7 @@ describe('tradeAction', () => {
 
   it('should validate required inputs', async () => {
     const input = {
-      amount: MOCK_AMOUNT,
-      // missing fromAssetId and toAssetId
+      amount: '0.01'
     };
 
     const result = await tradeAction.execute(mockWallet, input as any);

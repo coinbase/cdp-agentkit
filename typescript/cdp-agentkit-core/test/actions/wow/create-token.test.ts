@@ -1,35 +1,37 @@
-import { describe, it, expect, jest, beforeEach } from '@jest/globals';
-import { wowCreateTokenAction } from '../../../src/actions/wow/create-token';
-import { createMockWallet, createMockSmartContract } from '../../helpers';
+import { wowCreateTokenAction } from '../../../src/actions';
 import { GENERIC_TOKEN_METADATA_URI } from '../../../src/actions/wow/constants';
-
-// Constants from Python tests
-const MOCK_NAME = "Test WOW Token";
-const MOCK_SYMBOL = "TWOW";
-const MOCK_TOTAL_SUPPLY = "1000000";
-const MOCK_CONTRACT_ADDRESS = "0x1234567890abcdef1234567890abcdef12345678";
-const MOCK_TX_HASH = "0xabcd1234567890abcdef1234567890abcdef1234567890abcdef1234567890";
+import type { Wallet } from '../../../src/types';
 
 describe('wowCreateTokenAction', () => {
-  const mockWallet = createMockWallet();
-  const mockContract = createMockSmartContract({
-    contractAddress: MOCK_CONTRACT_ADDRESS,
-    transaction: {
-      transactionHash: MOCK_TX_HASH,
-      transactionLink: `https://basescan.org/tx/${MOCK_TX_HASH}`
-    }
-  });
+  let mockWallet: jest.Mocked<Wallet>;
 
   beforeEach(() => {
-    jest.clearAllMocks();
-    mockWallet.wowCreateToken.mockResolvedValue(mockContract);
+    mockWallet = {
+      wowCreateToken: jest.fn(),
+    } as any;
   });
 
   it('should create WOW token successfully', async () => {
+    const mockContract = {
+      contractAddress: '0x1234567890abcdef1234567890abcdef12345678',
+      transaction: {
+        transactionHash: '0x9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba',
+        transactionLink: 'https://basescan.org/tx/0x9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba'
+      },
+      wait: function() {
+        return Promise.resolve(this);
+      }
+    };
+
+    mockWallet.wowCreateToken.mockResolvedValue({
+      ...mockContract,
+      wait: () => Promise.resolve(mockContract)
+    });
+
     const input = {
-      name: MOCK_NAME,
-      symbol: MOCK_SYMBOL,
-      totalSupply: MOCK_TOTAL_SUPPLY,
+      name: 'Test WOW Token',
+      symbol: 'TWOW',
+      totalSupply: '1000000',
       tokenUri: GENERIC_TOKEN_METADATA_URI
     };
 
@@ -37,14 +39,30 @@ describe('wowCreateTokenAction', () => {
 
     expect(mockWallet.wowCreateToken).toHaveBeenCalledWith(input);
     expect(result).toContain('Created WOW token');
-    expect(result).toContain(mockContract.contractAddress);
+    expect(result).toContain(mockContract.transaction.transactionHash);
   });
 
   it('should handle optional tokenUri', async () => {
+    const mockContract = {
+      contractAddress: '0x1234567890abcdef1234567890abcdef12345678',
+      transaction: {
+        transactionHash: '0x9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba',
+        transactionLink: 'https://basescan.org/tx/0x9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba'
+      },
+      wait: function() {
+        return Promise.resolve(this);
+      }
+    };
+
+    mockWallet.wowCreateToken.mockResolvedValue({
+      ...mockContract,
+      wait: () => Promise.resolve(mockContract)
+    });
+
     const input = {
-      name: MOCK_NAME,
-      symbol: MOCK_SYMBOL,
-      totalSupply: MOCK_TOTAL_SUPPLY
+      name: 'Test WOW Token',
+      symbol: 'TWOW',
+      totalSupply: '1000000'
     };
 
     const result = await wowCreateTokenAction.execute(mockWallet, input);
@@ -54,6 +72,7 @@ describe('wowCreateTokenAction', () => {
       tokenUri: GENERIC_TOKEN_METADATA_URI
     });
     expect(result).toContain('Created WOW token');
+    expect(result).toContain(mockContract.transaction.transactionHash);
   });
 
   it('should handle errors gracefully', async () => {
@@ -61,9 +80,9 @@ describe('wowCreateTokenAction', () => {
     mockWallet.wowCreateToken.mockRejectedValue(error);
 
     const input = {
-      name: MOCK_NAME,
-      symbol: MOCK_SYMBOL,
-      totalSupply: MOCK_TOTAL_SUPPLY
+      name: 'Test WOW Token',
+      symbol: 'TWOW',
+      totalSupply: '1000000'
     };
 
     const result = await wowCreateTokenAction.execute(mockWallet, input);
@@ -78,8 +97,7 @@ describe('wowCreateTokenAction', () => {
 
   it('should validate required inputs', async () => {
     const input = {
-      name: MOCK_NAME,
-      // missing symbol and totalSupply
+      name: 'Test WOW Token'
     };
 
     const result = await wowCreateTokenAction.execute(mockWallet, input as any);

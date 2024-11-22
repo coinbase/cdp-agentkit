@@ -1,31 +1,35 @@
-import { describe, it, expect, jest, beforeEach } from '@jest/globals';
-import { wowBuyTokenAction } from '../../../src/actions/wow/buy-token';
-import { createMockWallet, createMockTrade } from '../../helpers';
-
-// Constants from Python tests
-const MOCK_TOKEN_ADDRESS = "0x1234567890abcdef1234567890abcdef12345678";
-const MOCK_AMOUNT_IN_ETH = "0.1";
-const MOCK_TX_HASH = "0xabcd1234567890abcdef1234567890abcdef1234567890abcdef1234567890";
+import { wowBuyTokenAction } from '../../../src/actions';
+import type { Wallet } from '../../../src/types';
 
 describe('wowBuyTokenAction', () => {
-  const mockWallet = createMockWallet();
-  const mockTrade = createMockTrade({
-    transaction: {
-      transactionHash: MOCK_TX_HASH,
-      transactionLink: `https://basescan.org/tx/${MOCK_TX_HASH}`
-    },
-    toAmount: '100.0'
-  });
+  let mockWallet: jest.Mocked<Wallet>;
 
   beforeEach(() => {
-    jest.clearAllMocks();
-    mockWallet.wowBuyToken.mockResolvedValue(mockTrade);
+    mockWallet = {
+      wowBuyToken: jest.fn(),
+    } as any;
   });
 
   it('should buy WOW token successfully', async () => {
+    const mockTrade = {
+      transaction: {
+        transactionHash: '0x9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba',
+        transactionLink: 'https://basescan.org/tx/0x9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba'
+      },
+      toAmount: '100.0',
+      wait: function() {
+        return Promise.resolve(this);
+      }
+    };
+
+    mockWallet.wowBuyToken.mockResolvedValue({
+      ...mockTrade,
+      wait: () => Promise.resolve(mockTrade)
+    });
+
     const input = {
-      tokenAddress: MOCK_TOKEN_ADDRESS,
-      amountInEth: MOCK_AMOUNT_IN_ETH
+      tokenAddress: '0x1234567890abcdef1234567890abcdef12345678',
+      amountInEth: '0.1'
     };
 
     const result = await wowBuyTokenAction.execute(mockWallet, input);
@@ -40,8 +44,8 @@ describe('wowBuyTokenAction', () => {
     mockWallet.wowBuyToken.mockRejectedValue(error);
 
     const input = {
-      tokenAddress: MOCK_TOKEN_ADDRESS,
-      amountInEth: MOCK_AMOUNT_IN_ETH
+      tokenAddress: '0x1234567890abcdef1234567890abcdef12345678',
+      amountInEth: '0.1'
     };
 
     const result = await wowBuyTokenAction.execute(mockWallet, input);
@@ -52,9 +56,7 @@ describe('wowBuyTokenAction', () => {
   });
 
   it('should validate required inputs', async () => {
-    const input = {
-      // missing tokenAddress and amountInEth
-    };
+    const input = {};
 
     const result = await wowBuyTokenAction.execute(mockWallet, input as any);
 

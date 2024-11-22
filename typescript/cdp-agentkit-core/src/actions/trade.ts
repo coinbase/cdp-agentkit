@@ -19,12 +19,22 @@ export const tradeAction: CdpAction<TradeInput> = {
   async execute(wallet: Wallet, input: TradeInput): Promise<string> {
     const { amount, fromAssetId, toAssetId } = input;
     
-    const trade = await (await wallet.trade({
-      amount,
-      fromAssetId,
-      toAssetId,
-    })).wait();
+    if (!amount || !fromAssetId || !toAssetId) {
+      return 'Missing required fields: amount, fromAssetId, and toAssetId are required';
+    }
+    
+    try {
+      const trade = await (await wallet.trade({
+        amount,
+        fromAssetId,
+        toAssetId,
+      })).wait();
 
-    return `Traded ${amount} of ${fromAssetId} for ${trade.toAmount} of ${toAssetId}.\nTransaction hash for the trade: ${trade.transaction.transactionHash}\nTransaction link for the trade: ${trade.transaction.transactionLink}`;
+      return `Traded ${amount} of ${fromAssetId} for ${trade.toAmount} of ${toAssetId}.\n` +
+        `Transaction hash: ${trade.transaction.transactionHash}\n` +
+        `Transaction link: ${trade.transaction.transactionLink}`;
+    } catch (e) {
+      return `Failed to trade: ${e instanceof Error ? e.message : String(e)}`;
+    }
   }
 }; 

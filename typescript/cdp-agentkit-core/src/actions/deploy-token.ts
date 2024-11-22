@@ -26,6 +26,10 @@ export const deployTokenAction: CdpAction<DeployTokenInput> = {
   async execute(wallet: Wallet, input: DeployTokenInput): Promise<string> {
     const { name, symbol, totalSupply } = input;
     
+    if (!name || !symbol || !totalSupply) {
+      return 'Missing required fields: name, symbol, and totalSupply are required';
+    }
+    
     try {
       const contract = await (await wallet.deployToken({
         name,
@@ -33,9 +37,11 @@ export const deployTokenAction: CdpAction<DeployTokenInput> = {
         totalSupply,
       })).wait();
 
-      return `Deployed Token ${name} (${symbol}) with total supply ${totalSupply} to address ${contract.contractAddress} on network ${wallet.networkId}.\nTransaction hash for the deployment: ${contract.transaction.transactionHash}\nTransaction link for the deployment: ${contract.transaction.transactionLink}`;
+      return `Deployed Token ${name} (${symbol}) with total supply ${totalSupply} to address ${contract.contractAddress} on network ${wallet.networkId}.\n` +
+        `Transaction hash for the deployment: ${contract.transaction.transactionHash}\n` +
+        `Transaction link for the deployment: ${contract.transaction.transactionLink}`;
     } catch (e) {
-      return `Error deploying token: ${e instanceof Error ? e.message : String(e)}`;
+      return `Failed to deploy token contract: ${e instanceof Error ? e.message : String(e)}`;
     }
   }
 }; 

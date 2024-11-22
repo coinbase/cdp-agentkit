@@ -1,39 +1,44 @@
-import { describe, it, expect, jest, beforeEach } from '@jest/globals';
-import { deployTokenAction } from '../../src/actions/deploy-token';
-import { createMockWallet, createMockSmartContract } from '../helpers';
-
-// Constants from Python tests
-const MOCK_NAME = "Test Token";
-const MOCK_SYMBOL = "TEST";
-const MOCK_TOTAL_SUPPLY = "1000000";
+import { deployTokenAction } from '../../src/actions';
+import type { Wallet } from '../../src/types';
 
 describe('deployTokenAction', () => {
-  const mockWallet = createMockWallet();
-  const mockContract = createMockSmartContract({
-    contractAddress: '0x1234567890abcdef...',
-    transaction: {
-      transactionHash: '0xabcd1234567890...',
-      transactionLink: 'https://basescan.org/tx/0xabcd1234567890...'
-    }
-  });
+  let mockWallet: jest.Mocked<Wallet>;
 
   beforeEach(() => {
-    jest.clearAllMocks();
-    mockWallet.deployToken.mockResolvedValue(mockContract);
+    mockWallet = {
+      networkId: 'base-sepolia',
+      deployToken: jest.fn(),
+    } as any;
   });
 
   it('should deploy token contract successfully', async () => {
+    const mockContract = {
+      contractAddress: '0x1234567890abcdef1234567890abcdef12345678',
+      transaction: {
+        transactionHash: '0x9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba',
+        transactionLink: 'https://basescan.org/tx/0x9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba'
+      },
+      wait: function() {
+        return Promise.resolve(this);
+      }
+    };
+
+    mockWallet.deployToken.mockResolvedValue({
+      ...mockContract,
+      wait: () => Promise.resolve(mockContract)
+    });
+
     const input = {
-      name: MOCK_NAME,
-      symbol: MOCK_SYMBOL,
-      totalSupply: MOCK_TOTAL_SUPPLY
+      name: 'Test Token',
+      symbol: 'TEST',
+      totalSupply: '1000000'
     };
 
     const result = await deployTokenAction.execute(mockWallet, input);
 
     expect(mockWallet.deployToken).toHaveBeenCalledWith(input);
-    expect(result).toContain('Deployed token');
-    expect(result).toContain(mockContract.contractAddress);
+    expect(result).toContain('Deployed Token');
+    expect(result).toContain(mockContract.transaction.transactionHash);
   });
 
   it('should handle errors gracefully', async () => {
@@ -41,9 +46,9 @@ describe('deployTokenAction', () => {
     mockWallet.deployToken.mockRejectedValue(error);
 
     const input = {
-      name: MOCK_NAME,
-      symbol: MOCK_SYMBOL,
-      totalSupply: MOCK_TOTAL_SUPPLY
+      name: 'Test Token',
+      symbol: 'TEST',
+      totalSupply: '1000000'
     };
 
     const result = await deployTokenAction.execute(mockWallet, input);
@@ -55,8 +60,7 @@ describe('deployTokenAction', () => {
 
   it('should validate required inputs', async () => {
     const input = {
-      name: MOCK_NAME,
-      // missing symbol and totalSupply
+      name: 'Test Token'
     };
 
     const result = await deployTokenAction.execute(mockWallet, input as any);

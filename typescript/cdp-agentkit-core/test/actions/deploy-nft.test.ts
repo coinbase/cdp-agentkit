@@ -1,41 +1,44 @@
-import { describe, it, expect, jest, beforeEach } from '@jest/globals';
-import { deployNftAction } from '../../src/actions/deploy-nft';
-import { createMockWallet, createMockSmartContract } from '../helpers';
-
-// Constants from Python tests
-const MOCK_NAME = "Test NFT Collection";
-const MOCK_SYMBOL = "TEST";
-const MOCK_BASE_URI = "https://api.example.com/nft/";
-const MOCK_CONTRACT_ADDRESS = "0x1234567890abcdef1234567890abcdef12345678";
-const MOCK_TX_HASH = "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890";
+import { deployNftAction } from '../../src/actions';
+import type { Wallet } from '../../src/types';
 
 describe('deployNftAction', () => {
-  const mockWallet = createMockWallet();
-  const mockContract = createMockSmartContract({
-    contractAddress: MOCK_CONTRACT_ADDRESS,
-    transaction: {
-      transactionHash: MOCK_TX_HASH,
-      transactionLink: `https://basescan.org/tx/${MOCK_TX_HASH}`
-    }
-  });
+  let mockWallet: jest.Mocked<Wallet>;
 
   beforeEach(() => {
-    jest.clearAllMocks();
-    mockWallet.deployNft.mockResolvedValue(mockContract);
+    mockWallet = {
+      networkId: 'test-network',
+      deployNft: jest.fn(),
+    } as any;
   });
 
-  it('should deploy NFT contract successfully', async () => {
+  it('should deploy NFT collection successfully', async () => {
+    const mockContract = {
+      contractAddress: '0x1234567890abcdef1234567890abcdef12345678',
+      transaction: {
+        transactionHash: '0x9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba',
+        transactionLink: 'https://basescan.org/tx/0x9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba'
+      },
+      wait: function() {
+        return Promise.resolve(this);
+      }
+    };
+
+    mockWallet.deployNft.mockResolvedValue({
+      ...mockContract,
+      wait: () => Promise.resolve(mockContract)
+    });
+
     const input = {
-      name: MOCK_NAME,
-      symbol: MOCK_SYMBOL,
-      baseUri: MOCK_BASE_URI
+      name: 'Test NFT Collection',
+      symbol: 'TNFT',
+      baseUri: 'ipfs://test/'
     };
 
     const result = await deployNftAction.execute(mockWallet, input);
 
     expect(mockWallet.deployNft).toHaveBeenCalledWith(input);
     expect(result).toContain('Deployed NFT Collection');
-    expect(result).toContain(MOCK_CONTRACT_ADDRESS);
+    expect(result).toContain(mockContract.contractAddress);
   });
 
   it('should handle errors gracefully', async () => {
@@ -43,9 +46,9 @@ describe('deployNftAction', () => {
     mockWallet.deployNft.mockRejectedValue(error);
 
     const input = {
-      name: MOCK_NAME,
-      symbol: MOCK_SYMBOL,
-      baseUri: MOCK_BASE_URI
+      name: 'Test NFT Collection',
+      symbol: 'TNFT',
+      baseUri: 'ipfs://test/'
     };
 
     const result = await deployNftAction.execute(mockWallet, input);
@@ -57,8 +60,7 @@ describe('deployNftAction', () => {
 
   it('should validate required inputs', async () => {
     const input = {
-      name: MOCK_NAME,
-      // missing symbol and baseUri
+      name: 'Test NFT Collection'
     };
 
     const result = await deployNftAction.execute(mockWallet, input as any);

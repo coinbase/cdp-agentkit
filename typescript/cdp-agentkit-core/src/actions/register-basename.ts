@@ -25,6 +25,10 @@ export const registerBasenameAction: CdpAction<RegisterBasenameInput> = {
   async execute(wallet: Wallet, input: RegisterBasenameInput): Promise<string> {
     const { name } = input;
     
+    if (!name) {
+      return 'Missing required fields: name is required';
+    }
+    
     try {
       const registration = await (await wallet.registerBasename({
         name,
@@ -33,9 +37,11 @@ export const registerBasenameAction: CdpAction<RegisterBasenameInput> = {
       const suffix = wallet.networkId.includes('mainnet') ? '.base.eth' : '.basetest.eth';
       const fullName = `${name}${suffix}`;
 
-      return `Registered Basename ${fullName} to wallet address.\nTransaction hash for the registration: ${registration.transaction.transactionHash}\nTransaction link for the registration: ${registration.transaction.transactionLink}`;
+      return `Registered Basename ${fullName} to wallet address.\n` +
+        `Transaction hash for the registration: ${registration.transaction.transactionHash}\n` +
+        `Transaction link for the registration: ${registration.transaction.transactionLink}`;
     } catch (e) {
-      return `Error registering Basename: ${e instanceof Error ? e.message : String(e)}`;
+      return `Failed to register basename: ${e instanceof Error ? e.message : String(e)}`;
     }
   }
 }; 

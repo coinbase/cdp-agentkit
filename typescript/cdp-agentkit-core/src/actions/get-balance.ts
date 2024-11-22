@@ -21,11 +21,15 @@ export const getBalanceAction: CdpAction<GetBalanceInput> = {
   async execute(wallet: Wallet, input: GetBalanceInput): Promise<string> {
     const { assetId } = input;
     
+    if (!assetId) {
+      return 'Missing required fields: assetId is required';
+    }
+    
     try {
       const balance = await wallet.getBalance(assetId);
       return `Balance of ${assetId}: ${balance}`;
     } catch (e) {
-      return `Error getting balance: ${e instanceof Error ? e.message : String(e)}`;
+      return `Failed to get balance: ${e instanceof Error ? e.message : String(e)}`;
     }
   }
 }; 

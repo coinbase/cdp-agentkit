@@ -30,19 +30,26 @@ export const transferAction: CdpAction<TransferInput> = {
   description: TRANSFER_PROMPT,
   
   async execute(wallet: Wallet, input: TransferInput): Promise<string> {
-    const { amount, assetId, destination: to, gasless = false } = input;
+    const { amount, assetId, destination, gasless = false } = input;
+    
+    if (!amount || !assetId || !destination) {
+      return 'Missing required fields: amount, assetId, and destination are required';
+    }
     
     try {
       const transfer = await (await wallet.transfer({
         amount,
         assetId,
-        to,
+        to: destination,
         gasless,
       })).wait();
 
-      return `Transferred ${amount} of ${assetId} to ${to}.\nTransaction hash for the transfer: ${transfer.transactionHash}\nTransaction link for the transfer: ${transfer.transactionLink}`;
+      const gaslessText = gasless ? ' (gasless)' : '';
+      return `Successfully transferred${gaslessText} ${amount} ${assetId} to ${destination}.\n` +
+        `Transaction hash: ${transfer.transactionHash}\n` +
+        `Transaction link: ${transfer.transactionLink}`;
     } catch (e) {
-      return `Error transferring the asset: ${e instanceof Error ? e.message : String(e)}`;
+      return `Failed to transfer: ${e instanceof Error ? e.message : String(e)}`;
     }
   }
 }; 

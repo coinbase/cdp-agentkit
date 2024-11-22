@@ -18,11 +18,21 @@ export const wowSellTokenAction: CdpAction<WowSellTokenInput> = {
   async execute(wallet: Wallet, input: WowSellTokenInput): Promise<string> {
     const { tokenAddress, amountIn } = input;
     
-    const trade = await (await wallet.wowSellToken({
-      tokenAddress,
-      amountIn,
-    })).wait();
+    if (!tokenAddress || !amountIn) {
+      return 'Missing required fields: tokenAddress and amountIn are required';
+    }
+    
+    try {
+      const trade = await (await wallet.wowSellToken({
+        tokenAddress,
+        amountIn,
+      })).wait();
 
-    return `Sold ${amountIn} WOW tokens at ${tokenAddress} for ETH.\nTransaction hash: ${trade.transaction.transactionHash}\nTransaction link: ${trade.transaction.transactionLink}`;
+      return `Sold ${amountIn} WOW tokens at ${tokenAddress} for ETH.\n` +
+        `Transaction hash: ${trade.transaction.transactionHash}\n` +
+        `Transaction link: ${trade.transaction.transactionLink}`;
+    } catch (e) {
+      return `Failed to sell WOW token: ${e instanceof Error ? e.message : String(e)}`;
+    }
   }
 }; 
