@@ -1,120 +1,137 @@
-import { config } from 'dotenv';
-// Load environment variables before any other imports
-config({ path: './.env' });  // Explicitly specify the path
+import { config } from "dotenv";
+config({ path: "./.env" });
 
 import { ChatOpenAI } from "@langchain/openai";
-import { AgentExecutor, createReactAgent } from "langchain/agents";
+import { AgentExecutor, createOpenAIFunctionsAgent } from "langchain/agents";
 import { CdpAgentkitWrapper, CdpToolkit } from "@cdp/langchain/dist";
-import { readFile, writeFile } from 'fs/promises';
-import { pull } from "langchain/hub";
-import type { PromptTemplate } from "@langchain/core/prompts";
-import * as readline from 'readline';
+import { DynamicTool } from "langchain/tools";
+import { readFile, writeFile } from "fs/promises";
+import * as readline from "readline";
+import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { z } from "zod";
 
-// Validate required environment variables
-const requiredEnvVars = [
-  'OPENAI_API_KEY',
-  'CDP_API_KEY_NAME',
-  'CDP_API_KEY_PRIVATE_KEY',
-  'CDP_NETWORK_ID'
-];
+const WALLET_DATA_FILE = "wallet_data.txt";
+const REQUIRED_ENV_VARS = ["OPENAI_API_KEY", "CDP_API_KEY_NAME", "CDP_API_KEY_PRIVATE_KEY", "CDP_NETWORK_ID"];
 
-for (const envVar of requiredEnvVars) {
-  if (!process.env[envVar]) {
-    throw new Error(`Missing required environment variable: ${envVar}`);
+function ensureEnvVars(vars: string[]) {
+  for (const envVar of vars) {
+    if (!process.env[envVar]) {
+      throw new Error(`Missing required environment variable: ${envVar}`);
+    }
   }
 }
 
-// Configure a file to persist the agent's CDP MPC Wallet Data
-const WALLET_DATA_FILE = "wallet_data.txt";
+async function handleWalletData(agentkit: CdpAgentkitWrapper) {
+  const walletData = agentkit.exportWallet();
+  await writeFile(WALLET_DATA_FILE, walletData);
+}
 
 async function initializeAgent() {
-  // Initialize LLM
-  const llm = new ChatOpenAI({ modelName: "gpt-4o-mini" });
+  ensureEnvVars(REQUIRED_ENV_VARS);
 
-  let walletData: string | undefined;
+  const llm = new ChatOpenAI({
+    modelName: "gpt-3.5-turbo-16k",
+    temperature: 0,
+    maxConcurrency: 5,
+  });
 
-  try {
-    walletData = await readFile(WALLET_DATA_FILE, 'utf8');
-  } catch (e) {
-    // File doesn't exist yet
-  }
+  const walletData = await (async () => {
+    try {
+      return await readFile(WALLET_DATA_FILE, "utf8");
+    } catch {
+      return null;
+    }
+  })();
 
-  // Configure CDP Agentkit Wrapper
-  const values = {
-    cdpApiKeyName: process.env.CDP_API_KEY_NAME,
-    cdpApiKeyPrivateKey: process.env.CDP_API_KEY_PRIVATE_KEY,
-    networkId: process.env.CDP_NETWORK_ID,
-    ...(walletData ? { cdpWalletData: walletData } : {})
-  };
-  
-  const agentkit = await CdpAgentkitWrapper.create(values);
+  const agentkit = await CdpAgentkitWrapper.create({
+    cdpApiKeyName: process.env.CDP_API_KEY_NAME!,
+    cdpApiKeyPrivateKey: process.env.CDP_API_KEY_PRIVATE_KEY!,
+    networkId: process.env.CDP_NETWORK_ID!,
+    ...(walletData && { cdpWalletData: walletData }),
+  });
 
-  // Persist the agent's CDP MPC Wallet Data
-  const newWalletData = agentkit.exportWallet();
-  await writeFile(WALLET_DATA_FILE, newWalletData);
+  await handleWalletData(agentkit);
 
-  // Initialize CDP Agentkit Toolkit and get tools
-  const cdpToolkit = CdpToolkit.fromCdpAgentkitWrapper(agentkit);
-  const tools = cdpToolkit.getTools();
+  const cdpTools = CdpToolkit.fromCdpAgentkitWrapper(agentkit).getTools();
 
-  // Get the prompt to use
-  const prompt = await pull<PromptTemplate>("hwchase17/react");
+  const respondTool = new DynamicTool({
+    name: "respond",
+    description: "Use this to give a conversational response to the user",
+    func: async (input: string) => input,
+  });
 
-  // Create ReAct Agent using the LLM and CDP Agentkit tools
-  const agent = await createReactAgent({
+  const allTools = [...cdpTools, respondTool];
+
+  const SYSTEM_MESSAGE = `
+    You are a helpful and friendly blockchain assistant that can interact with the Coinbase Developer Platform. Speak in a conversational manner, in lower case and use emojis. Like a genz new yorker.
+    
+    Available CDP Tools:
+    - get_wallet_details: Shows your wallet address and network
+    - get_balance: Check balance (use with assetId: "eth" or "usdc")
+    - request_faucet_funds: Request testnet funds
+    - deploy_token, deploy_nft, mint_nft: For token/NFT operations
+    
+    Guidelines:
+    1. For blockchain operations, use CDP tools first, then explain results
+    2. For conversational responses:
+       - Acknowledge previous context
+       - Stay relevant to the blockchain/wallet context
+       - Be friendly but professional
+    
+    Example responses:
+    - To "nice": "Thanks! Yes, your wallet is all set up on base-sepolia. Would you like to check your balance or get some testnet funds?"
+    - To "thanks": "You're welcome! Let me know if you'd like to try out any blockchain operations."
+    
+    Keep responses natural and contextual while maintaining blockchain expertise.
+  `;
+
+  const prompt = ChatPromptTemplate.fromMessages([
+    ["system", SYSTEM_MESSAGE],
+    ["human", "{input}"],
+    ["system", "{agent_scratchpad}"],
+  ]);
+
+  const agent = await createOpenAIFunctionsAgent({
     llm,
-    tools,
+    tools: allTools,
     prompt,
   });
 
-  const agentExecutor = new AgentExecutor({
-    agent,
-    tools,
-    verbose: false,
-  });
-
-  return { agent: agentExecutor };
+  return { agent, tools: allTools };
 }
 
-// Chat Mode
 async function runChatMode(agent: AgentExecutor) {
-  console.log("Starting chat mode... Type 'exit' to end.");
-  
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
+  console.log("Chat mode active. Type 'exit' to quit.");
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
-  const question = (query: string) => new Promise<string>((resolve) => {
-    rl.question(query, resolve);
-  });
-
-  while (true) {
-    try {
-      const userInput = await question("\nUser: ");
-      if (!userInput || userInput.toLowerCase() === "exit") {
-        rl.close();
-        break;
-      }
-
-      const result = await agent.invoke({
-        input: userInput,
-      });
-
-      console.log("\nAgent:", result.output);
-      console.log("-".repeat(20));
-    } catch (e) {
-      console.error("Error:", e);
+  for await (const input of rl) {
+    if (input.trim().toLowerCase() === "exit") {
       rl.close();
       break;
+    }
+    try {
+      const { output } = await agent.invoke({ input });
+      console.log("Agent:", output);
+    } catch (error: unknown) {
+      console.error("Error:", error instanceof Error ? error.message : String(error));
     }
   }
 }
 
 async function main() {
-  console.log("Starting Agent...");
-  const { agent } = await initializeAgent();
-  await runChatMode(agent);
+  try {
+    const { agent, tools } = await initializeAgent();
+    const executor = AgentExecutor.fromAgentAndTools({
+      agent,
+      tools,
+      maxIterations: 3,
+      verbose: false,
+      returnIntermediateSteps: false,
+    });
+    await runChatMode(executor);
+  } catch (error: unknown) {
+    console.error("Error:", error instanceof Error ? error.message : String(error));
+  }
 }
 
-main().catch(console.error); 
+main();
