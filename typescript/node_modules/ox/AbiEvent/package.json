@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/AbiEvent.d.ts",
-  "main": "../_cjs/core/AbiEvent.js",
-  "module": "../_esm/core/AbiEvent.js"
-}

@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/RpcResponse.d.ts",
-  "main": "../_cjs/core/RpcResponse.js",
-  "module": "../_esm/core/RpcResponse.js"
-}

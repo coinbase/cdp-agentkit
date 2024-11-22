@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/HdKey.d.ts",
-  "main": "../_cjs/core/HdKey.js",
-  "module": "../_esm/core/HdKey.js"
-}

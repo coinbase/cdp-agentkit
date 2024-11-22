@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/Siwe.d.ts",
-  "main": "../_cjs/core/Siwe.js",
-  "module": "../_esm/core/Siwe.js"
-}

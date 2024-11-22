@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/TransactionEnvelopeEip2930.d.ts",
-  "main": "../_cjs/core/TransactionEnvelopeEip2930.js",
-  "module": "../_esm/core/TransactionEnvelopeEip2930.js"
-}

@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/Filter.d.ts",
-  "main": "../_cjs/core/Filter.js",
-  "module": "../_esm/core/Filter.js"
-}

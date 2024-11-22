@@ -1,1 +1,0 @@
-{"version":3,"file":"assertCurrentChain.js","sourceRoot":"","sources":["../../../utils/chain/assertCurrentChain.ts"],"names":[],"mappings":";;AAmBA,gDAOC;AA1BD,oDAK8B;AAc9B,SAAgB,kBAAkB,CAAC,EACjC,KAAK,EACL,cAAc,GACe;IAC7B,IAAI,CAAC,KAAK;QAAE,MAAM,IAAI,6BAAkB,EAAE,CAAA;IAC1C,IAAI,cAAc,KAAK,KAAK,CAAC,EAAE;QAC7B,MAAM,IAAI,6BAAkB,CAAC,EAAE,KAAK,EAAE,cAAc,EAAE,CAAC,CAAA;AAC3D,CAAC"}

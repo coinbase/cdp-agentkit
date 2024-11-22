@@ -1,1 +1,0 @@
-{"version":3,"file":"setCoinbase.js","sourceRoot":"","sources":["../../../actions/test/setCoinbase.ts"],"names":[],"mappings":";;AAyCA,kCAWC;AAXM,KAAK,UAAU,WAAW,CAI/B,MAAoE,EACpE,EAAE,OAAO,EAAyB;IAElC,MAAM,MAAM,CAAC,OAAO,CAAC;QACnB,MAAM,EAAE,GAAG,MAAM,CAAC,IAAI,cAAc;QACpC,MAAM,EAAE,CAAC,OAAO,CAAC;KAClB,CAAC,CAAA;AACJ,CAAC"}

@@ -1,1 +1,0 @@
-{"version":3,"file":"getPermissions.js","sourceRoot":"","sources":["../../../actions/wallet/getPermissions.ts"],"names":[],"mappings":"AAYA;;;;;;;;;;;;;;;;;;;GAmBG;AACH,MAAM,CAAC,KAAK,UAAU,cAAc,CAGlC,MAAyC;IACzC,MAAM,WAAW,GAAG,MAAM,MAAM,CAAC,OAAO,CACtC,EAAE,MAAM,EAAE,uBAAuB,EAAE,EACnC,EAAE,MAAM,EAAE,IAAI,EAAE,CACjB,CAAA;IACD,OAAO,WAAW,CAAA;AACpB,CAAC"}

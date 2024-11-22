@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/AccessList.d.ts",
-  "main": "../_cjs/core/AccessList.js",
-  "module": "../_esm/core/AccessList.js"
-}

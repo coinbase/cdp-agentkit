@@ -1,1 +1,0 @@
-{"version":3,"file":"defineChain.js","sourceRoot":"","sources":["../../../utils/chain/defineChain.ts"],"names":[],"mappings":"AAGA,MAAM,UAAU,WAAW,CAGzB,KAAY;IACZ,OAAO;QACL,UAAU,EAAE,SAAS;QACrB,IAAI,EAAE,SAAS;QACf,WAAW,EAAE,SAAS;QACtB,GAAG,KAAK;KAC0B,CAAA;AACtC,CAAC"}

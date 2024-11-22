@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/PersonalMessage.d.ts",
-  "main": "../_cjs/core/PersonalMessage.js",
-  "module": "../_esm/core/PersonalMessage.js"
-}

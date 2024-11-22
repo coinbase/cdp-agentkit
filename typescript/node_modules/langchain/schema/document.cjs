@@ -1,1 +1,0 @@
-module.exports = require('../dist/schema/document.cjs');

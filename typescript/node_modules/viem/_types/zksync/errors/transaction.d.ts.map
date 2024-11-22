@@ -1,1 +1,0 @@
-{"version":3,"file":"transaction.d.ts","sourceRoot":"","sources":["../../../zksync/errors/transaction.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,EAAE,MAAM,sBAAsB,CAAA;AAEhD,MAAM,MAAM,iCAAiC,GAC3C,6BAA6B,GAAG;IAC9B,IAAI,EAAE,+BAA+B,CAAA;CACtC,CAAA;AACH,qBAAa,6BAA8B,SAAQ,SAAS;;CAa3D"}

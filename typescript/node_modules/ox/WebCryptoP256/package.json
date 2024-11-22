@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/WebCryptoP256.d.ts",
-  "main": "../_cjs/core/WebCryptoP256.js",
-  "module": "../_esm/core/WebCryptoP256.js"
-}

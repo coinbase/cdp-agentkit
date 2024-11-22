@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/Base58.d.ts",
-  "main": "../_cjs/core/Base58.js",
-  "module": "../_esm/core/Base58.js"
-}

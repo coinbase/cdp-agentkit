@@ -1,1 +1,0 @@
-export * from '../dist/embeddings/cloudflare_workersai.js'

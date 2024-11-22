@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/Rlp.d.ts",
-  "main": "../_cjs/core/Rlp.js",
-  "module": "../_esm/core/Rlp.js"
-}

@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/BlsPoint.d.ts",
-  "main": "../_cjs/core/BlsPoint.js",
-  "module": "../_esm/core/BlsPoint.js"
-}

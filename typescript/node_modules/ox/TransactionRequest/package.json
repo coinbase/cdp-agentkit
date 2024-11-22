@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/TransactionRequest.d.ts",
-  "main": "../_cjs/core/TransactionRequest.js",
-  "module": "../_esm/core/TransactionRequest.js"
-}

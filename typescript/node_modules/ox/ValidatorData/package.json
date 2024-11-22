@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/ValidatorData.d.ts",
-  "main": "../_cjs/core/ValidatorData.js",
-  "module": "../_esm/core/ValidatorData.js"
-}

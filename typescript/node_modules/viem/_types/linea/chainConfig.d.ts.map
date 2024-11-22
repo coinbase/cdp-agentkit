@@ -1,1 +1,0 @@
-{"version":3,"file":"chainConfig.d.ts","sourceRoot":"","sources":["../../linea/chainConfig.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAe,yBAAyB,EAAE,MAAM,mBAAmB,CAAA;AAG/E,eAAO,MAAM,WAAW;;;;;CAiBQ,CAAA;AAMhC,iBAAe,kBAAkB,CAAC,EAChC,MAAM,EACN,QAAQ,EACR,OAAO,EACP,IAAI,GACL,EAAE,UAAU,CAAC,yBAAyB,CAAC,CAAC,CAAC,CAAC,GAAG,UAAU,CAAC,yBAAyB,CAAC,CAqBlF"}

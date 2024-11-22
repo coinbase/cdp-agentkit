@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/Bytes.d.ts",
-  "main": "../_cjs/core/Bytes.js",
-  "module": "../_esm/core/Bytes.js"
-}

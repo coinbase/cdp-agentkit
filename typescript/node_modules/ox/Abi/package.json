@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/Abi.d.ts",
-  "main": "../_cjs/core/Abi.js",
-  "module": "../_esm/core/Abi.js"
-}

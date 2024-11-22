@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/Address.d.ts",
-  "main": "../_cjs/core/Address.js",
-  "module": "../_esm/core/Address.js"
-}

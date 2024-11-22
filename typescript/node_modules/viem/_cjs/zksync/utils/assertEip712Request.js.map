@@ -1,1 +1,0 @@
-{"version":3,"file":"assertEip712Request.js","sourceRoot":"","sources":["../../../zksync/utils/assertEip712Request.ts"],"names":[],"mappings":";;AAwBA,kDAIC;AA1BD,+EAGiD;AAGjD,6DAGiC;AACjC,qEAA8D;AAY9D,SAAgB,mBAAmB,CAAC,IAAmC;IACrE,IAAI,CAAC,IAAA,4CAAmB,EAAC,IAAW,CAAC;QACnC,MAAM,IAAI,8CAA6B,EAAE,CAAA;IAC3C,IAAA,gCAAa,EAAC,IAAW,CAAC,CAAA;AAC5B,CAAC"}

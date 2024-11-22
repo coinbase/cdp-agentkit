@@ -1,1 +1,0 @@
-export * from '../dist/vectorstores/mongodb_atlas.js'

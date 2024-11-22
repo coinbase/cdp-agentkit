@@ -1,1 +1,0 @@
-{"version":3,"file":"dropTransaction.js","sourceRoot":"","sources":["../../../actions/test/dropTransaction.ts"],"names":[],"mappings":"AAkBA;;;;;;;;;;;;;;;;;;;;;GAqBG;AACH,MAAM,CAAC,KAAK,UAAU,eAAe,CAInC,MAAoE,EACpE,EAAE,IAAI,EAA6B;IAEnC,MAAM,MAAM,CAAC,OAAO,CAAC;QACnB,MAAM,EAAE,GAAG,MAAM,CAAC,IAAI,kBAAkB;QACxC,MAAM,EAAE,CAAC,IAAI,CAAC;KACf,CAAC,CAAA;AACJ,CAAC"}

@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/Kzg.d.ts",
-  "main": "../_cjs/core/Kzg.js",
-  "module": "../_esm/core/Kzg.js"
-}

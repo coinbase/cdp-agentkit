@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/TransactionReceipt.d.ts",
-  "main": "../_cjs/core/TransactionReceipt.js",
-  "module": "../_esm/core/TransactionReceipt.js"
-}

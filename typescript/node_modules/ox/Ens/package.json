@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/Ens.d.ts",
-  "main": "../_cjs/core/Ens.js",
-  "module": "../_esm/core/Ens.js"
-}

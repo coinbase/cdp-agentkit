@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/Json.d.ts",
-  "main": "../_cjs/core/Json.js",
-  "module": "../_esm/core/Json.js"
-}

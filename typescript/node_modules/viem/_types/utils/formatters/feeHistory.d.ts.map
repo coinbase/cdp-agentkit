@@ -1,1 +1,0 @@
-{"version":3,"file":"feeHistory.d.ts","sourceRoot":"","sources":["../../../utils/formatters/feeHistory.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,SAAS,EAAE,MAAM,uBAAuB,CAAA;AACtD,OAAO,KAAK,EAAE,UAAU,EAAE,MAAM,oBAAoB,CAAA;AACpD,OAAO,KAAK,EAAE,aAAa,EAAE,MAAM,oBAAoB,CAAA;AAEvD,MAAM,MAAM,yBAAyB,GAAG,SAAS,CAAA;AAEjD,wBAAgB,gBAAgB,CAAC,UAAU,EAAE,aAAa,GAAG,UAAU,CAStE"}

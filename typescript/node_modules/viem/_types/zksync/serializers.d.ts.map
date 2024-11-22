@@ -1,1 +1,0 @@
-{"version":3,"file":"serializers.d.ts","sourceRoot":"","sources":["../../zksync/serializers.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,SAAS,EAAE,MAAM,aAAa,CAAA;AAQ5C,OAAO,KAAK,EACV,6BAA6B,EAG9B,MAAM,wBAAwB,CAAA;AAI/B,wBAAgB,oBAAoB,CAClC,WAAW,EAAE,6BAA6B,EAC1C,SAAS,CAAC,EAAE,SAAS,GAAG,SAAS,+IAUlC;AAED,eAAO,MAAM,WAAW;;CAEa,CAAA"}

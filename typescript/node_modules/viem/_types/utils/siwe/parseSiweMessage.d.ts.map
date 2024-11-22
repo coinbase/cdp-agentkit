@@ -1,1 +1,0 @@
-{"version":3,"file":"parseSiweMessage.d.ts","sourceRoot":"","sources":["../../../utils/siwe/parseSiweMessage.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAAE,YAAY,EAAE,QAAQ,EAAE,MAAM,sBAAsB,CAAA;AAClE,OAAO,KAAK,EAAE,WAAW,EAAE,MAAM,YAAY,CAAA;AAE7C;;;;;;GAMG;AACH,wBAAgB,gBAAgB,CAC9B,OAAO,EAAE,MAAM,GACd,QAAQ,CAAC,YAAY,CAAC,WAAW,CAAC,CAAC,CAgCrC"}

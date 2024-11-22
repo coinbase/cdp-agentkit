@@ -1,1 +1,0 @@
-{"version":3,"file":"getLogProof.js","sourceRoot":"","sources":["../../../zksync/actions/getLogProof.ts"],"names":[],"mappings":";;AAeA,kCAYC;AAZM,KAAK,UAAU,WAAW,CAI/B,MAAgE,EAChE,UAAiC;IAEjC,MAAM,MAAM,GAAG,MAAM,MAAM,CAAC,OAAO,CAAC;QAClC,MAAM,EAAE,uBAAuB;QAC/B,MAAM,EAAE,CAAC,UAAU,CAAC,MAAM,EAAE,UAAU,CAAC,KAAK,CAAC;KAC9C,CAAC,CAAA;IACF,OAAO,MAAM,CAAA;AACf,CAAC"}

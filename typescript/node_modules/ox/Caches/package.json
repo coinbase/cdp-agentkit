@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/Caches.d.ts",
-  "main": "../_cjs/core/Caches.js",
-  "module": "../_esm/core/Caches.js"
-}

@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/RpcTransport.d.ts",
-  "main": "../_cjs/core/RpcTransport.js",
-  "module": "../_esm/core/RpcTransport.js"
-}

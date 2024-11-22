@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/Mnemonic.d.ts",
-  "main": "../_cjs/core/Mnemonic.js",
-  "module": "../_esm/core/Mnemonic.js"
-}

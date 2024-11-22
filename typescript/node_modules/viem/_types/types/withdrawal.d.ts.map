@@ -1,1 +1,0 @@
-{"version":3,"file":"withdrawal.d.ts","sourceRoot":"","sources":["../../types/withdrawal.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,GAAG,EAAE,MAAM,WAAW,CAAA;AAEpC,MAAM,MAAM,UAAU,GAAG;IACvB,OAAO,EAAE,GAAG,CAAA;IACZ,MAAM,EAAE,GAAG,CAAA;IACX,KAAK,EAAE,GAAG,CAAA;IACV,cAAc,EAAE,GAAG,CAAA;CACpB,CAAA"}

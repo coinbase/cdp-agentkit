@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/Provider.d.ts",
-  "main": "../_cjs/core/Provider.js",
-  "module": "../_esm/core/Provider.js"
-}

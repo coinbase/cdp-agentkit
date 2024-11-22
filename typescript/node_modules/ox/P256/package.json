@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/P256.d.ts",
-  "main": "../_cjs/core/P256.js",
-  "module": "../_esm/core/P256.js"
-}

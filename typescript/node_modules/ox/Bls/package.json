@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/Bls.d.ts",
-  "main": "../_cjs/core/Bls.js",
-  "module": "../_esm/core/Bls.js"
-}

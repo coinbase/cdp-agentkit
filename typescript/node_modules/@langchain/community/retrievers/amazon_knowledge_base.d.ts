@@ -1,1 +1,0 @@
-export * from '../dist/retrievers/amazon_knowledge_base.js'

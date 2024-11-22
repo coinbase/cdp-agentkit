@@ -1,1 +1,0 @@
-{"version":3,"file":"stopImpersonatingAccount.js","sourceRoot":"","sources":["../../../actions/test/stopImpersonatingAccount.ts"],"names":[],"mappings":";;AAyCA,4DAWC;AAXM,KAAK,UAAU,wBAAwB,CAI5C,MAAoE,EACpE,EAAE,OAAO,EAAsC;IAE/C,MAAM,MAAM,CAAC,OAAO,CAAC;QACnB,MAAM,EAAE,GAAG,MAAM,CAAC,IAAI,2BAA2B;QACjD,MAAM,EAAE,CAAC,OAAO,CAAC;KAClB,CAAC,CAAA;AACJ,CAAC"}

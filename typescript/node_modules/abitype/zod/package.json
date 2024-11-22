@@ -1,5 +1,0 @@
-{
-  "type": "module",
-  "types": "../dist/types/exports/zod.d.ts",
-  "main": "../dist/cjs/exports/zod.js"
-}

@@ -1,1 +1,0 @@
-{"version":3,"file":"getTransactionDetails.js","sourceRoot":"","sources":["../../../zksync/actions/getTransactionDetails.ts"],"names":[],"mappings":"AAcA,MAAM,CAAC,KAAK,UAAU,qBAAqB,CAIzC,MAAgE,EAChE,UAA2C;IAE3C,MAAM,MAAM,GAAG,MAAM,MAAM,CAAC,OAAO,CAAC;QAClC,MAAM,EAAE,2BAA2B;QACnC,MAAM,EAAE,CAAC,UAAU,CAAC,MAAM,CAAC;KAC5B,CAAC,CAAA;IACF,OAAO,MAAM,CAAA;AACf,CAAC"}

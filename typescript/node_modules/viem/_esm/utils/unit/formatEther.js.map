@@ -1,1 +1,0 @@
-{"version":3,"file":"formatEther.js","sourceRoot":"","sources":["../../../utils/unit/formatEther.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,UAAU,EAAE,MAAM,yBAAyB,CAAA;AAEpD,OAAO,EAA6B,WAAW,EAAE,MAAM,kBAAkB,CAAA;AAIzE;;;;;;;;;;GAUG;AACH,MAAM,UAAU,WAAW,CAAC,GAAW,EAAE,OAAuB,KAAK;IACnE,OAAO,WAAW,CAAC,GAAG,EAAE,UAAU,CAAC,IAAI,CAAC,CAAC,CAAA;AAC3C,CAAC"}

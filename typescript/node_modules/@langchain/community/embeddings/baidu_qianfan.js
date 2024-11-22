@@ -1,1 +1,0 @@
-export * from '../dist/embeddings/baidu_qianfan.js'

@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "types": "../_types/core/AesGcm.d.ts",
-  "main": "../_cjs/core/AesGcm.js",
-  "module": "../_esm/core/AesGcm.js"
-}
