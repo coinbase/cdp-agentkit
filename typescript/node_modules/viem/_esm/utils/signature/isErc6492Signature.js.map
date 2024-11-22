@@ -1,0 +1,1 @@
+{"version":3,"file":"isErc6492Signature.js","sourceRoot":"","sources":["../../../utils/signature/isErc6492Signature.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,iBAAiB,EAAE,MAAM,0BAA0B,CAAA;AAG5D,OAAO,EAA0B,QAAQ,EAAE,MAAM,kBAAkB,CAAA;AAMnE,uEAAuE;AACvE,MAAM,UAAU,kBAAkB,CAChC,SAAuC;IAEvC,OAAO,QAAQ,CAAC,SAAS,EAAE,CAAC,EAAE,CAAC,KAAK,iBAAiB,CAAA;AACvD,CAAC"}

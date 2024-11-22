@@ -1,0 +1,1 @@
+{"version":3,"file":"getL1ChainId.js","sourceRoot":"","sources":["../../../zksync/actions/getL1ChainId.ts"],"names":[],"mappings":";;AASA,oCAQC;AARM,KAAK,UAAU,YAAY,CAIhC,MAAgE;IAEhE,MAAM,MAAM,GAAG,MAAM,MAAM,CAAC,OAAO,CAAC,EAAE,MAAM,EAAE,eAAe,EAAE,CAAC,CAAA;IAChE,OAAO,MAAM,CAAA;AACf,CAAC"}

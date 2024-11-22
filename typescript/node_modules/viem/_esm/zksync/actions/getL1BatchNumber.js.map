@@ -1,0 +1,1 @@
+{"version":3,"file":"getL1BatchNumber.js","sourceRoot":"","sources":["../../../zksync/actions/getL1BatchNumber.ts"],"names":[],"mappings":"AASA,MAAM,CAAC,KAAK,UAAU,gBAAgB,CAIpC,MAAgE;IAEhE,MAAM,MAAM,GAAG,MAAM,MAAM,CAAC,OAAO,CAAC,EAAE,MAAM,EAAE,mBAAmB,EAAE,CAAC,CAAA;IACpE,OAAO,MAAM,CAAA;AACf,CAAC"}

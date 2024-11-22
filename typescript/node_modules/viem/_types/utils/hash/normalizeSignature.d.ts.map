@@ -1,0 +1,1 @@
+{"version":3,"file":"normalizeSignature.d.ts","sourceRoot":"","sources":["../../../utils/hash/normalizeSignature.ts"],"names":[],"mappings":"AACA,OAAO,KAAK,EAAE,SAAS,EAAE,MAAM,uBAAuB,CAAA;AAEtD,KAAK,4BAA4B,GAAG,MAAM,CAAA;AAC1C,KAAK,4BAA4B,GAAG,MAAM,CAAA;AAC1C,MAAM,MAAM,2BAA2B,GAAG,SAAS,CAAA;AAEnD,wBAAgB,kBAAkB,CAChC,SAAS,EAAE,4BAA4B,GACtC,4BAA4B,CAsD9B"}

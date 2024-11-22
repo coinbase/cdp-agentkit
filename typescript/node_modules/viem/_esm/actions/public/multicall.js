@@ -1,0 +1,183 @@
+import { multicall3Abi } from '../../constants/abis.js';
+import { AbiDecodingZeroDataError } from '../../errors/abi.js';
+import { BaseError } from '../../errors/base.js';
+import { RawContractError } from '../../errors/contract.js';
+import { decodeFunctionResult, } from '../../utils/abi/decodeFunctionResult.js';
+import { encodeFunctionData, } from '../../utils/abi/encodeFunctionData.js';
+import { getChainContractAddress, } from '../../utils/chain/getChainContractAddress.js';
+import { getContractError, } from '../../utils/errors/getContractError.js';
+import { getAction } from '../../utils/getAction.js';
+import { readContract } from './readContract.js';
+/**
+ * Similar to [`readContract`](https://viem.sh/docs/contract/readContract), but batches up multiple functions on a contract in a single RPC call via the [`multicall3` contract](https://github.com/mds1/multicall).
+ *
+ * - Docs: https://viem.sh/docs/contract/multicall
+ *
+ * @param client - Client to use
+ * @param parameters - {@link MulticallParameters}
+ * @returns An array of results with accompanying status. {@link MulticallReturnType}
+ *
+ * @example
+ * import { createPublicClient, http, parseAbi } from 'viem'
+ * import { mainnet } from 'viem/chains'
+ * import { multicall } from 'viem/contract'
+ *
+ * const client = createPublicClient({
+ *   chain: mainnet,
+ *   transport: http(),
+ * })
+ * const abi = parseAbi([
+ *   'function balanceOf(address) view returns (uint256)',
+ *   'function totalSupply() view returns (uint256)',
+ * ])
+ * const results = await multicall(client, {
+ *   contracts: [
+ *     {
+ *       address: '0xFBA3912Ca04dd458c843e2EE08967fC04f3579c2',
+ *       abi,
+ *       functionName: 'balanceOf',
+ *       args: ['0xA0Cf798816D4b9b9866b5330EEa46a18382f251e'],
+ *     },
+ *     {
+ *       address: '0xFBA3912Ca04dd458c843e2EE08967fC04f3579c2',
+ *       abi,
+ *       functionName: 'totalSupply',
+ *     },
+ *   ],
+ * })
+ * // [{ result: 424122n, status: 'success' }, { result: 1000000n, status: 'success' }]
+ */
+export async function multicall(client, parameters) {
+    const { allowFailure = true, batchSize: batchSize_, blockNumber, blockTag, multicallAddress: multicallAddress_, stateOverride, } = parameters;
+    const contracts = parameters.contracts;
+    const batchSize = batchSize_ ??
+        ((typeof client.batch?.multicall === 'object' &&
+            client.batch.multicall.batchSize) ||
+            1_024);
+    let multicallAddress = multicallAddress_;
+    if (!multicallAddress) {
+        if (!client.chain)
+            throw new Error('client chain not configured. multicallAddress is required.');
+        multicallAddress = getChainContractAddress({
+            blockNumber,
+            chain: client.chain,
+            contract: 'multicall3',
+        });
+    }
+    const chunkedCalls = [[]];
+    let currentChunk = 0;
+    let currentChunkSize = 0;
+    for (let i = 0; i < contracts.length; i++) {
+        const { abi, address, args, functionName } = contracts[i];
+        try {
+            const callData = encodeFunctionData({ abi, args, functionName });
+            currentChunkSize += (callData.length - 2) / 2;
+            // Check to see if we need to create a new chunk.
+            if (
+            // Check if batching is enabled.
+            batchSize > 0 &&
+                // Check if the current size of the batch exceeds the size limit.
+                currentChunkSize > batchSize &&
+                // Check if the current chunk is not already empty.
+                chunkedCalls[currentChunk].length > 0) {
+                currentChunk++;
+                currentChunkSize = (callData.length - 2) / 2;
+                chunkedCalls[currentChunk] = [];
+            }
+            chunkedCalls[currentChunk] = [
+                ...chunkedCalls[currentChunk],
+                {
+                    allowFailure: true,
+                    callData,
+                    target: address,
+                },
+            ];
+        }
+        catch (err) {
+            const error = getContractError(err, {
+                abi,
+                address,
+                args,
+                docsPath: '/docs/contract/multicall',
+                functionName,
+            });
+            if (!allowFailure)
+                throw error;
+            chunkedCalls[currentChunk] = [
+                ...chunkedCalls[currentChunk],
+                {
+                    allowFailure: true,
+                    callData: '0x',
+                    target: address,
+                },
+            ];
+        }
+    }
+    const aggregate3Results = await Promise.allSettled(chunkedCalls.map((calls) => getAction(client, readContract, 'readContract')({
+        abi: multicall3Abi,
+        address: multicallAddress,
+        args: [calls],
+        blockNumber,
+        blockTag,
+        functionName: 'aggregate3',
+        stateOverride,
+    })));
+    const results = [];
+    for (let i = 0; i < aggregate3Results.length; i++) {
+        const result = aggregate3Results[i];
+        // If an error occurred in a `readContract` invocation (ie. network error),
+        // then append the failure reason to each contract result.
+        if (result.status === 'rejected') {
+            if (!allowFailure)
+                throw result.reason;
+            for (let j = 0; j < chunkedCalls[i].length; j++) {
+                results.push({
+                    status: 'failure',
+                    error: result.reason,
+                    result: undefined,
+                });
+            }
+            continue;
+        }
+        // If the `readContract` call was successful, then decode the results.
+        const aggregate3Result = result.value;
+        for (let j = 0; j < aggregate3Result.length; j++) {
+            // Extract the response from `readContract`
+            const { returnData, success } = aggregate3Result[j];
+            // Extract the request call data from the original call.
+            const { callData } = chunkedCalls[i][j];
+            // Extract the contract config for this call from the `contracts` argument
+            // for decoding.
+            const { abi, address, functionName, args } = contracts[results.length];
+            try {
+                if (callData === '0x')
+                    throw new AbiDecodingZeroDataError();
+                if (!success)
+                    throw new RawContractError({ data: returnData });
+                const result = decodeFunctionResult({
+                    abi,
+                    args,
+                    data: returnData,
+                    functionName,
+                });
+                results.push(allowFailure ? { result, status: 'success' } : result);
+            }
+            catch (err) {
+                const error = getContractError(err, {
+                    abi,
+                    address,
+                    args,
+                    docsPath: '/docs/contract/multicall',
+                    functionName,
+                });
+                if (!allowFailure)
+                    throw error;
+                results.push({ error, result: undefined, status: 'failure' });
+            }
+        }
+    }
+    if (results.length !== contracts.length)
+        throw new BaseError('multicall results mismatch');
+    return results;
+}
+//# sourceMappingURL=multicall.js.map

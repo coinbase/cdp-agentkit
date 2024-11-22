@@ -1,0 +1,1 @@
+{"version":3,"file":"getBaseTokenL1Address.js","sourceRoot":"","sources":["../../../zksync/actions/getBaseTokenL1Address.ts"],"names":[],"mappings":"AASA,MAAM,CAAC,KAAK,UAAU,qBAAqB,CAIzC,MAAgE;IAEhE,MAAM,MAAM,GAAG,MAAM,MAAM,CAAC,OAAO,CAAC,EAAE,MAAM,EAAE,2BAA2B,EAAE,CAAC,CAAA;IAC5E,OAAO,MAAM,CAAA;AACf,CAAC"}

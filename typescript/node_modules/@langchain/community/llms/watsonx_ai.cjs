@@ -1,0 +1,1 @@
+module.exports = require('../dist/llms/watsonx_ai.cjs');

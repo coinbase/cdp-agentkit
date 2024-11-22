@@ -1,0 +1,1 @@
+module.exports = require('../../../dist/experimental/hubs/makersuite/googlemakersuitehub.cjs');

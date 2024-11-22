@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/Blobs.d.ts",
+  "main": "../_cjs/core/Blobs.js",
+  "module": "../_esm/core/Blobs.js"
+}

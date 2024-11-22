@@ -1,0 +1,20 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": ".",
+    "moduleResolution": "Node",
+    "module": "CommonJS",
+    "baseUrl": "../../../",
+    "paths": {
+      "langchain/*": ["node_modules/langchain/dist/*"],
+      "@langchain/*": ["node_modules/@langchain/*"],
+      "@cdp/*": ["cdp-*"]
+    }
+  },
+  "include": ["./**/*"],
+  "references": [
+    { "path": "../../../cdp-agentkit-core" },
+    { "path": "../../" }
+  ]
+}

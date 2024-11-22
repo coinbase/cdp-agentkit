@@ -1,0 +1,1 @@
+{"version":3,"file":"account.d.ts","sourceRoot":"","sources":["../../../zksync/types/account.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,YAAY,EAAE,YAAY,EAAE,MAAM,yBAAyB,CAAA;AAEzE,MAAM,MAAM,kBAAkB,GAAG,YAAY,CAAC,oBAAoB,CAAC,GAAG;IACpE,IAAI,EAAE,WAAW,CAAC,YAAY,CAAC,MAAM,CAAC,CAAC,CAAA;CACxC,CAAA"}

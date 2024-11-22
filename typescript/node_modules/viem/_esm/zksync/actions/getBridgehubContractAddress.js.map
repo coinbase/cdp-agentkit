@@ -1,0 +1,1 @@
+{"version":3,"file":"getBridgehubContractAddress.js","sourceRoot":"","sources":["../../../zksync/actions/getBridgehubContractAddress.ts"],"names":[],"mappings":"AASA,MAAM,CAAC,KAAK,UAAU,2BAA2B,CAI/C,MAAgE;IAEhE,MAAM,MAAM,GAAG,MAAM,MAAM,CAAC,OAAO,CAAC,EAAE,MAAM,EAAE,0BAA0B,EAAE,CAAC,CAAA;IAC3E,OAAO,MAAM,CAAA;AACf,CAAC"}

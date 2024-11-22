@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/WebAuthnP256.d.ts",
+  "main": "../_cjs/core/WebAuthnP256.js",
+  "module": "../_esm/core/WebAuthnP256.js"
+}

@@ -1,0 +1,1 @@
+{"version":3,"file":"getL1BatchDetails.js","sourceRoot":"","sources":["../../../zksync/actions/getL1BatchDetails.ts"],"names":[],"mappings":";;AAcA,8CAYC;AAZM,KAAK,UAAU,iBAAiB,CAIrC,MAAgE,EAChE,UAAuC;IAEvC,MAAM,MAAM,GAAG,MAAM,MAAM,CAAC,OAAO,CAAC;QAClC,MAAM,EAAE,uBAAuB;QAC/B,MAAM,EAAE,CAAC,UAAU,CAAC,MAAM,CAAC;KAC5B,CAAC,CAAA;IACF,OAAO,MAAM,CAAA;AACf,CAAC"}

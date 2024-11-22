@@ -1,0 +1,11 @@
+{
+  "name": "chatbot-example",
+  "private": true,
+  "scripts": {
+    "prestart": "cd ../../.. && npm run build",
+    "start": "tsx chatbot.ts"
+  },
+  "dependencies": {
+    "dotenv": "*"
+  }
+} 

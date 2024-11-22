@@ -1,0 +1,1 @@
+{"version":3,"file":"token-is-eth.js","sourceRoot":"","sources":["../../../zksync/errors/token-is-eth.ts"],"names":[],"mappings":";;;AAAA,kDAAgD;AAKhD,MAAa,eAAgB,SAAQ,mBAAS;IAC5C;QACE,KAAK,CACH,CAAC,wBAAwB,EAAE,EAAE,EAAE,gCAAgC,CAAC,CAAC,IAAI,CACnE,IAAI,CACL,EACD,EAAE,IAAI,EAAE,iBAAiB,EAAE,CAC5B,CAAA;IACH,CAAC;CACF;AATD,0CASC"}

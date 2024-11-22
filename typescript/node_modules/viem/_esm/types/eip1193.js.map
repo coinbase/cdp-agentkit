@@ -1,0 +1,1 @@
+{"version":3,"file":"eip1193.js","sourceRoot":"","sources":["../../types/eip1193.ts"],"names":[],"mappings":"AAgDA,MAAM,OAAO,gBAAiB,SAAQ,KAAK;IAIzC,YAAY,IAAY,EAAE,OAAe;QACvC,KAAK,CAAC,OAAO,CAAC,CAAA;QAJhB;;;;;WAAY;QACZ;;;;;WAAe;QAIb,IAAI,CAAC,IAAI,GAAG,IAAI,CAAA;QAChB,IAAI,CAAC,OAAO,GAAG,OAAO,CAAA;IACxB,CAAC;CACF"}

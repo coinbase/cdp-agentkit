@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/Errors.d.ts",
+  "main": "../_cjs/core/Errors.js",
+  "module": "../_esm/core/Errors.js"
+}

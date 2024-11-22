@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/PublicKey.d.ts",
+  "main": "../_cjs/core/PublicKey.js",
+  "module": "../_esm/core/PublicKey.js"
+}

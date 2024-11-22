@@ -1,0 +1,112 @@
+{
+  "name": "@scure/bip39",
+  "version": "1.4.0",
+  "description": "Secure, audited & minimal implementation of BIP39 mnemonic phrases",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "wordlists/*.js",
+    "wordlists/*.d.ts",
+    "esm",
+    "src/index.ts"
+  ],
+  "dependencies": {
+    "@noble/hashes": "~1.5.0",
+    "@scure/base": "~1.1.8"
+  },
+  "devDependencies": {
+    "@paulmillr/jsbt": "0.2.1",
+    "micro-should": "0.4.0",
+    "prettier": "3.3.2",
+    "typescript": "5.5.2"
+  },
+  "author": "Paul Miller (https://paulmillr.com)",
+  "homepage": "https://paulmillr.com/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paulmillr/scure-bip39.git"
+  },
+  "contributors": [
+    {
+      "name": "Patricio Palladino",
+      "email": "patricio@nomiclabs.io"
+    },
+    {
+      "name": "Paul Miller",
+      "url": "https://paulmillr.com"
+    }
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc && tsc -p tsconfig.esm.json",
+    "lint": "prettier --check 'src/**/*.ts' 'test/*.test.ts' 'scripts/*.js'",
+    "format": "prettier --write 'src/**/*.ts' 'test/*.test.ts' 'scripts/*.js'",
+    "test": "cd test && tsc && node bip39.test.js",
+    "fetch-wordlist": "./scripts/fetch-wordlist.js"
+  },
+  "sideEffects": false,
+  "main": "index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "require": "./index.js"
+    },
+    "./index": {
+      "import": "./esm/index.js",
+      "require": "./index.js"
+    },
+    "./wordlists/czech": {
+      "import": "./esm/wordlists/czech.js",
+      "require": "./wordlists/czech.js"
+    },
+    "./wordlists/english": {
+      "import": "./esm/wordlists/english.js",
+      "require": "./wordlists/english.js"
+    },
+    "./wordlists/french": {
+      "import": "./esm/wordlists/french.js",
+      "require": "./wordlists/french.js"
+    },
+    "./wordlists/italian": {
+      "import": "./esm/wordlists/italian.js",
+      "require": "./wordlists/italian.js"
+    },
+    "./wordlists/japanese": {
+      "import": "./esm/wordlists/japanese.js",
+      "require": "./wordlists/japanese.js"
+    },
+    "./wordlists/korean": {
+      "import": "./esm/wordlists/korean.js",
+      "require": "./wordlists/korean.js"
+    },
+    "./wordlists/portuguese": {
+      "import": "./esm/wordlists/portuguese.js",
+      "require": "./wordlists/portuguese.js"
+    },
+    "./wordlists/simplified-chinese": {
+      "import": "./esm/wordlists/simplified-chinese.js",
+      "require": "./wordlists/simplified-chinese.js"
+    },
+    "./wordlists/spanish": {
+      "import": "./esm/wordlists/spanish.js",
+      "require": "./wordlists/spanish.js"
+    },
+    "./wordlists/traditional-chinese": {
+      "import": "./esm/wordlists/traditional-chinese.js",
+      "require": "./wordlists/traditional-chinese.js"
+    }
+  },
+  "keywords": [
+    "bip39",
+    "mnemonic",
+    "phrase",
+    "code",
+    "bip0039",
+    "bip-39",
+    "wordlist",
+    "scure",
+    "noble"
+  ],
+  "funding": "https://paulmillr.com/funding/"
+}

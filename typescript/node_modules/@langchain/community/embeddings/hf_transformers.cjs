@@ -1,0 +1,1 @@
+module.exports = require('../dist/embeddings/hf_transformers.cjs');

@@ -1,0 +1,1 @@
+{"version":3,"file":"impersonateAccount.js","sourceRoot":"","sources":["../../../actions/test/impersonateAccount.ts"],"names":[],"mappings":";;AAyCA,gDAWC;AAXM,KAAK,UAAU,kBAAkB,CAItC,MAAoE,EACpE,EAAE,OAAO,EAAgC;IAEzC,MAAM,MAAM,CAAC,OAAO,CAAC;QACnB,MAAM,EAAE,GAAG,MAAM,CAAC,IAAI,qBAAqB;QAC3C,MAAM,EAAE,CAAC,OAAO,CAAC;KAClB,CAAC,CAAA;AACJ,CAAC"}

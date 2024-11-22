@@ -1,0 +1,29 @@
+import type { ErrorType } from '../../errors/utils.js';
+import type { BlobSidecars } from '../../types/eip4844.js';
+import type { ByteArray, Hex } from '../../types/misc.js';
+import { type CommitmentToVersionedHashErrorType } from './commitmentToVersionedHash.js';
+type To = 'hex' | 'bytes';
+export type SidecarsToVersionedHashesParameters<sidecars extends BlobSidecars = BlobSidecars, to extends To | undefined = undefined> = {
+    /** Sidecars from blobs. */
+    sidecars: sidecars | BlobSidecars;
+    /** Return type. */
+    to?: to | To | undefined;
+    /** Version to tag onto the hashes. */
+    version?: number | undefined;
+};
+export type SidecarsToVersionedHashesReturnType<to extends To> = (to extends 'bytes' ? readonly ByteArray[] : never) | (to extends 'hex' ? readonly Hex[] : never);
+export type SidecarsToVersionedHashesErrorType = CommitmentToVersionedHashErrorType | ErrorType;
+/**
+ * Transforms a list of sidecars to their versioned hashes.
+ *
+ * @example
+ * ```ts
+ * import { toBlobSidecars, sidecarsToVersionedHashes, stringToHex } from 'viem'
+ *
+ * const sidecars = toBlobSidecars({ data: stringToHex('hello world') })
+ * const versionedHashes = sidecarsToVersionedHashes({ sidecars })
+ * ```
+ */
+export declare function sidecarsToVersionedHashes<const sidecars extends BlobSidecars, to extends To = (sidecars extends BlobSidecars<Hex> ? 'hex' : never) | (sidecars extends BlobSidecars<ByteArray> ? 'bytes' : never)>(parameters: SidecarsToVersionedHashesParameters<sidecars, to>): SidecarsToVersionedHashesReturnType<to>;
+export {};
+//# sourceMappingURL=sidecarsToVersionedHashes.d.ts.map

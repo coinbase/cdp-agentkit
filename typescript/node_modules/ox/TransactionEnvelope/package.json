@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/TransactionEnvelope.d.ts",
+  "main": "../_cjs/core/TransactionEnvelope.js",
+  "module": "../_esm/core/TransactionEnvelope.js"
+}

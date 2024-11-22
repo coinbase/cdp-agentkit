@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/Block.d.ts",
+  "main": "../_cjs/core/Block.js",
+  "module": "../_esm/core/Block.js"
+}

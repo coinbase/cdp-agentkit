@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/Value.d.ts",
+  "main": "../_cjs/core/Value.js",
+  "module": "../_esm/core/Value.js"
+}

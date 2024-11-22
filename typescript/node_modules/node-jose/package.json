@@ -1,0 +1,62 @@
+{
+  "name": "node-jose",
+  "version": "2.2.0",
+  "description": "A JavaScript implementation of the JSON Object Signing and Encryption (JOSE) for current web browsers and node.js-based servers",
+  "keywords": [
+    "crypto",
+    "jose",
+    "jwa",
+    "jwe",
+    "jwk",
+    "jws"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cisco/node-jose.git"
+  },
+  "license": "Apache-2.0",
+  "author": "Cisco Systems, Inc. <https://www.cisco.com>",
+  "contributors": [
+    "Stephen Augustus <foo@auggie.dev>",
+    "Matthew A. Miller <linuxwolf@outer-planes.net>",
+    "Ian W. Remmel <design@ianwremmel.com>",
+    "Joe Hildebrand <joe-github@cursive.net>",
+    "Filip Skokan <panva.ip@gmail.com>"
+  ],
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "mocha './test/**/*-test.js'"
+  },
+  "browser": {
+    "crypto": false
+  },
+  "react-native": {
+    "crypto": false
+  },
+  "dependencies": {
+    "base64url": "^3.0.1",
+    "buffer": "^6.0.3",
+    "es6-promise": "^4.2.8",
+    "lodash": "^4.17.21",
+    "long": "^5.2.0",
+    "node-forge": "^1.2.1",
+    "pako": "^2.0.4",
+    "process": "^0.11.10",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "bowser": "^2.11.0",
+    "chai": "^4.3.7",
+    "is-safari": "^1.0.0",
+    "jose-cookbook": "git+https://github.com/ietf-jose/cookbook.git",
+    "mocha": "^10.1.0"
+  },
+  "bugs": {
+    "url": "https://github.com/cisco/node-jose/issues"
+  },
+  "homepage": "https://github.com/cisco/node-jose#readme",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  }
+}

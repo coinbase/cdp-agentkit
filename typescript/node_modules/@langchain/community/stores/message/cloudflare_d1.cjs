@@ -1,0 +1,1 @@
+module.exports = require('../../dist/stores/message/cloudflare_d1.cjs');

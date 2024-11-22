@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/Withdrawal.d.ts",
+  "main": "../_cjs/core/Withdrawal.js",
+  "module": "../_esm/core/Withdrawal.js"
+}

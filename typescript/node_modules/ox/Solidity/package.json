@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/Solidity.d.ts",
+  "main": "../_cjs/core/Solidity.js",
+  "module": "../_esm/core/Solidity.js"
+}

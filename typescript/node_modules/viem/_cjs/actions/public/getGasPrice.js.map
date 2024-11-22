@@ -1,0 +1,1 @@
+{"version":3,"file":"getGasPrice.js","sourceRoot":"","sources":["../../../actions/public/getGasPrice.ts"],"names":[],"mappings":";;AA+BA,kCAQC;AARM,KAAK,UAAU,WAAW,CAG/B,MAAyC;IACzC,MAAM,QAAQ,GAAG,MAAM,MAAM,CAAC,OAAO,CAAC;QACpC,MAAM,EAAE,cAAc;KACvB,CAAC,CAAA;IACF,OAAO,MAAM,CAAC,QAAQ,CAAC,CAAA;AACzB,CAAC"}

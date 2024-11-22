@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/trusted-setups/index.d.ts",
+  "main": "../_cjs/trusted-setups/index.js",
+  "module": "../_esm/trusted-setups/index.js"
+}

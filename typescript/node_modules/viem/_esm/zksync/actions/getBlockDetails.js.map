@@ -1,0 +1,1 @@
+{"version":3,"file":"getBlockDetails.js","sourceRoot":"","sources":["../../../zksync/actions/getBlockDetails.ts"],"names":[],"mappings":"AAcA,MAAM,CAAC,KAAK,UAAU,eAAe,CAInC,MAAgE,EAChE,UAAqC;IAErC,MAAM,MAAM,GAAG,MAAM,MAAM,CAAC,OAAO,CAAC;QAClC,MAAM,EAAE,qBAAqB;QAC7B,MAAM,EAAE,CAAC,UAAU,CAAC,MAAM,CAAC;KAC5B,CAAC,CAAA;IACF,OAAO,MAAM,CAAA;AACf,CAAC"}

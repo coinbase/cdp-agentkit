@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/Bloom.d.ts",
+  "main": "../_cjs/core/Bloom.js",
+  "module": "../_esm/core/Bloom.js"
+}

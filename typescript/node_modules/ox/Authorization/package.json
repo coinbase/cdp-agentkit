@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/Authorization.d.ts",
+  "main": "../_cjs/core/Authorization.js",
+  "module": "../_esm/core/Authorization.js"
+}

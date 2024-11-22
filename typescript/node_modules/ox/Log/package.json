@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/Log.d.ts",
+  "main": "../_cjs/core/Log.js",
+  "module": "../_esm/core/Log.js"
+}

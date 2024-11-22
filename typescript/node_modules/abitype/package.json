@@ -1,0 +1,80 @@
+{
+  "name": "abitype",
+  "description": "Strict TypeScript types for Ethereum ABIs",
+  "version": "1.0.6",
+  "license": "MIT",
+  "repository": "wevm/abitype",
+  "files": [
+    "dist",
+    "/abis",
+    "/zod",
+    "src/**/*.ts",
+    "!dist/**/*.tsbuildinfo",
+    "!jsr.json",
+    "!src/**/*.bench.ts",
+    "!src/**/*.bench-d.ts",
+    "!src/**/*.test.ts",
+    "!src/**/*.test-d.ts"
+  ],
+  "sideEffects": false,
+  "main": "./dist/cjs/exports/index.js",
+  "module": "./dist/esm/exports/index.js",
+  "types": "./dist/types/exports/index.d.ts",
+  "typings": "./dist/types/exports/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/exports/index.d.ts",
+      "import": "./dist/esm/exports/index.js",
+      "default": "./dist/cjs/exports/index.js"
+    },
+    "./abis": {
+      "types": "./dist/types/exports/abis.d.ts",
+      "import": "./dist/esm/exports/abis.js",
+      "default": "./dist/cjs/exports/abis.js"
+    },
+    "./zod": {
+      "types": "./dist/types/exports/zod.d.ts",
+      "import": "./dist/esm/exports/zod.js",
+      "default": "./dist/cjs/exports/zod.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "abis": [
+        "./dist/types/exports/abis.d.ts"
+      ],
+      "zod": [
+        "./dist/types/exports/zod.d.ts"
+      ]
+    }
+  },
+  "peerDependencies": {
+    "typescript": ">=5.0.4",
+    "zod": "^3 >=3.22.0"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    },
+    "zod": {
+      "optional": true
+    }
+  },
+  "contributors": [
+    "awkweb.eth <t@wevm.dev>",
+    "jxom.eth <j@wevm.dev>"
+  ],
+  "funding": "https://github.com/sponsors/wevm",
+  "keywords": [
+    "abi",
+    "eth",
+    "ethereum",
+    "types",
+    "typescript",
+    "viem",
+    "wagmi",
+    "web3",
+    "wevm"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/RpcSchema.d.ts",
+  "main": "../_cjs/core/RpcSchema.js",
+  "module": "../_esm/core/RpcSchema.js"
+}

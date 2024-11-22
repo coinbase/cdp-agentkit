@@ -1,0 +1,36 @@
+{
+  "name": "webauthn-p256",
+  "description": "P256 signature utilities for WebAuthn",
+  "version": "0.0.10",
+  "type": "module",
+  "main": "./_cjs/index.js",
+  "module": "./_esm/index.js",
+  "types": "./_types/index.d.ts",
+  "typings": "./_types/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./_types/index.d.ts",
+      "import": "./_esm/index.js",
+      "default": "./_cjs/index.js"
+    }
+  },
+  "dependencies": {
+    "@noble/curves": "^1.4.0",
+    "@noble/hashes": "^1.4.0"
+  },
+  "license": "MIT",
+  "homepage": "https://wevm.dev",
+  "repository": "wevm/webauthn-p256",
+  "authors": [
+    "awkweb",
+    "jxom"
+  ],
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/wevm"
+    }
+  ],
+  "keywords": []
+}

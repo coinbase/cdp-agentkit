@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/Secp256k1.d.ts",
+  "main": "../_cjs/core/Secp256k1.js",
+  "module": "../_esm/core/Secp256k1.js"
+}

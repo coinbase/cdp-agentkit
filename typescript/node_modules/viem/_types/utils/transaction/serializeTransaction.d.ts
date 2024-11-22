@@ -1,0 +1,28 @@
+import { type InvalidLegacyVErrorType } from '../../errors/transaction.js';
+import type { ErrorType } from '../../errors/utils.js';
+import type { Signature } from '../../types/misc.js';
+import type { TransactionSerializable, TransactionSerializableGeneric, TransactionSerialized, TransactionType } from '../../types/transaction.js';
+import type { OneOf } from '../../types/utils.js';
+import { type BlobsToCommitmentsErrorType } from '../blob/blobsToCommitments.js';
+import { type blobsToProofsErrorType } from '../blob/blobsToProofs.js';
+import { type CommitmentsToVersionedHashesErrorType } from '../blob/commitmentsToVersionedHashes.js';
+import { type ToBlobSidecarsErrorType } from '../blob/toBlobSidecars.js';
+import { type ConcatHexErrorType } from '../data/concat.js';
+import { type ToHexErrorType } from '../encoding/toHex.js';
+import { type ToRlpErrorType } from '../encoding/toRlp.js';
+import { type SerializeAuthorizationListErrorType } from '../../experimental/eip7702/utils/serializeAuthorizationList.js';
+import { type AssertTransactionEIP1559ErrorType, type AssertTransactionEIP2930ErrorType, type AssertTransactionEIP4844ErrorType, type AssertTransactionEIP7702ErrorType, type AssertTransactionLegacyErrorType } from './assertTransaction.js';
+import { type GetTransactionType, type GetTransactionTypeErrorType } from './getTransactionType.js';
+import { type SerializeAccessListErrorType } from './serializeAccessList.js';
+export type SerializedTransactionReturnType<transaction extends TransactionSerializable = TransactionSerializable, _transactionType extends TransactionType = GetTransactionType<transaction>> = TransactionSerialized<_transactionType>;
+export type SerializeTransactionFn<transaction extends TransactionSerializableGeneric = TransactionSerializable, _transactionType extends TransactionType = never> = typeof serializeTransaction<OneOf<TransactionSerializable | transaction>, _transactionType>;
+export type SerializeTransactionErrorType = GetTransactionTypeErrorType | SerializeTransactionEIP1559ErrorType | SerializeTransactionEIP2930ErrorType | SerializeTransactionEIP4844ErrorType | SerializeTransactionEIP7702ErrorType | SerializeTransactionLegacyErrorType | ErrorType;
+export declare function serializeTransaction<const transaction extends TransactionSerializable, _transactionType extends TransactionType = GetTransactionType<transaction>>(transaction: transaction, signature?: Signature | undefined): SerializedTransactionReturnType<transaction, _transactionType>;
+type SerializeTransactionEIP7702ErrorType = AssertTransactionEIP7702ErrorType | SerializeAuthorizationListErrorType | ConcatHexErrorType | InvalidLegacyVErrorType | ToHexErrorType | ToRlpErrorType | SerializeAccessListErrorType | ErrorType;
+type SerializeTransactionEIP4844ErrorType = AssertTransactionEIP4844ErrorType | BlobsToCommitmentsErrorType | CommitmentsToVersionedHashesErrorType | blobsToProofsErrorType | ToBlobSidecarsErrorType | ConcatHexErrorType | InvalidLegacyVErrorType | ToHexErrorType | ToRlpErrorType | SerializeAccessListErrorType | ErrorType;
+type SerializeTransactionEIP1559ErrorType = AssertTransactionEIP1559ErrorType | ConcatHexErrorType | InvalidLegacyVErrorType | ToHexErrorType | ToRlpErrorType | SerializeAccessListErrorType | ErrorType;
+type SerializeTransactionEIP2930ErrorType = AssertTransactionEIP2930ErrorType | ConcatHexErrorType | InvalidLegacyVErrorType | ToHexErrorType | ToRlpErrorType | SerializeAccessListErrorType | ErrorType;
+type SerializeTransactionLegacyErrorType = AssertTransactionLegacyErrorType | InvalidLegacyVErrorType | ToHexErrorType | ToRlpErrorType | ErrorType;
+export declare function toYParitySignatureArray(transaction: TransactionSerializableGeneric, signature_?: Signature | undefined): `0x${string}`[];
+export {};
+//# sourceMappingURL=serializeTransaction.d.ts.map

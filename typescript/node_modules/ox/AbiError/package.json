@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/AbiError.d.ts",
+  "main": "../_cjs/core/AbiError.js",
+  "module": "../_esm/core/AbiError.js"
+}

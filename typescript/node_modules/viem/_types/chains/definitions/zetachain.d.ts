@@ -1,0 +1,33 @@
+export declare const zetachain: {
+    blockExplorers: {
+        readonly default: {
+            readonly name: "ZetaScan";
+            readonly url: "https://explorer.zetachain.com";
+        };
+    };
+    contracts: {
+        readonly multicall3: {
+            readonly address: "0xcA11bde05977b3631167028862bE2a173976CA11";
+            readonly blockCreated: 1632781;
+        };
+    };
+    id: 7000;
+    name: "ZetaChain";
+    nativeCurrency: {
+        readonly decimals: 18;
+        readonly name: "Zeta";
+        readonly symbol: "ZETA";
+    };
+    rpcUrls: {
+        readonly default: {
+            readonly http: readonly ["https://zetachain-evm.blockpi.network/v1/rpc/public"];
+        };
+    };
+    sourceId?: number | undefined;
+    testnet: false;
+    custom?: Record<string, unknown> | undefined;
+    fees?: import("../../index.js").ChainFees<undefined> | undefined;
+    formatters?: undefined;
+    serializers?: import("../../index.js").ChainSerializers<undefined, import("../../index.js").TransactionSerializable> | undefined;
+};
+//# sourceMappingURL=zetachain.d.ts.map

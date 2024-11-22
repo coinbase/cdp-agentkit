@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/Hex.d.ts",
+  "main": "../_cjs/core/Hex.js",
+  "module": "../_esm/core/Hex.js"
+}

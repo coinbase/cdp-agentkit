@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/AbiItem.d.ts",
+  "main": "../_cjs/core/AbiItem.js",
+  "module": "../_esm/core/AbiItem.js"
+}

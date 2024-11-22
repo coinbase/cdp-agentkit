@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/AccountProof.d.ts",
+  "main": "../_cjs/core/AccountProof.js",
+  "module": "../_esm/core/AccountProof.js"
+}

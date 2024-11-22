@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/Base64.d.ts",
+  "main": "../_cjs/core/Base64.js",
+  "module": "../_esm/core/Base64.js"
+}

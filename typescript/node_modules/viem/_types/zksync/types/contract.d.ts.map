@@ -1,0 +1,1 @@
+{"version":3,"file":"contract.d.ts","sourceRoot":"","sources":["../../../zksync/types/contract.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,OAAO,EAAE,MAAM,SAAS,CAAA;AAEtC,MAAM,MAAM,uBAAuB,GAAG;IACpC,OAAO,EAAE,OAAO,CAAA;IAChB,QAAQ,EAAE,OAAO,CAAA;IACjB,QAAQ,EAAE,OAAO,CAAA;CAClB,CAAA;AAED,MAAM,MAAM,sBAAsB,GAC9B,QAAQ,GACR,SAAS,GACT,eAAe,GACf,gBAAgB,GAChB,SAAS,CAAA"}

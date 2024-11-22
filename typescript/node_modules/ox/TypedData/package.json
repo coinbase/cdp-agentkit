@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/TypedData.d.ts",
+  "main": "../_cjs/core/TypedData.js",
+  "module": "../_esm/core/TypedData.js"
+}

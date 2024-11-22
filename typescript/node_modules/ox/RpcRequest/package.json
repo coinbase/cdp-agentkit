@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/RpcRequest.d.ts",
+  "main": "../_cjs/core/RpcRequest.js",
+  "module": "../_esm/core/RpcRequest.js"
+}

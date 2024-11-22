@@ -1,0 +1,5 @@
+{
+  "type": "module",
+  "types": "../dist/types/exports/abis.d.ts",
+  "main": "../dist/cjs/exports/abis.js"
+}

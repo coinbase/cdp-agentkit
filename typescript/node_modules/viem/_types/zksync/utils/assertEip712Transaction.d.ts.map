@@ -1,0 +1,1 @@
+{"version":3,"file":"assertEip712Transaction.d.ts","sourceRoot":"","sources":["../../../zksync/utils/assertEip712Transaction.ts"],"names":[],"mappings":"AAGA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,sBAAsB,CAAA;AAGxD,OAAO,KAAK,EACV,6BAA6B,EAE9B,MAAM,yBAAyB,CAAA;AAGhC,wBAAgB,uBAAuB,CACrC,WAAW,EAAE,YAAY,CAAC,6BAA6B,CAAC,QAsBzD"}

@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/AbiFunction.d.ts",
+  "main": "../_cjs/core/AbiFunction.js",
+  "module": "../_esm/core/AbiFunction.js"
+}

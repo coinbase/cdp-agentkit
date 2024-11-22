@@ -1,0 +1,12 @@
+import { type HttpRequestErrorType, type RpcRequestErrorType, type TimeoutErrorType, type WebSocketRequestErrorType } from '../errors/request.js';
+import { type ChainDisconnectedErrorType, type InternalRpcErrorType, type InvalidInputRpcErrorType, type InvalidParamsRpcErrorType, type InvalidRequestRpcErrorType, type JsonRpcVersionUnsupportedErrorType, type LimitExceededRpcErrorType, type MethodNotFoundRpcErrorType, type MethodNotSupportedRpcErrorType, type ParseRpcErrorType, type ProviderDisconnectedErrorType, type ResourceNotFoundRpcErrorType, type ResourceUnavailableRpcErrorType, type RpcErrorType, type SwitchChainErrorType, type TransactionRejectedRpcErrorType, type UnauthorizedProviderErrorType, type UnknownRpcErrorType, type UnsupportedProviderMethodErrorType, type UserRejectedRequestErrorType } from '../errors/rpc.js';
+import type { ErrorType } from '../errors/utils.js';
+import type { EIP1193RequestFn, EIP1193RequestOptions } from '../types/eip1193.js';
+import type { CreateBatchSchedulerErrorType } from './promise/createBatchScheduler.js';
+import { type WithRetryErrorType } from './promise/withRetry.js';
+import type { GetSocketRpcClientErrorType } from './rpc/socket.js';
+export type RequestErrorType = ChainDisconnectedErrorType | CreateBatchSchedulerErrorType | HttpRequestErrorType | InternalRpcErrorType | InvalidInputRpcErrorType | InvalidParamsRpcErrorType | InvalidRequestRpcErrorType | GetSocketRpcClientErrorType | JsonRpcVersionUnsupportedErrorType | LimitExceededRpcErrorType | MethodNotFoundRpcErrorType | MethodNotSupportedRpcErrorType | ParseRpcErrorType | ProviderDisconnectedErrorType | ResourceNotFoundRpcErrorType | ResourceUnavailableRpcErrorType | RpcErrorType | RpcRequestErrorType | SwitchChainErrorType | TimeoutErrorType | TransactionRejectedRpcErrorType | UnauthorizedProviderErrorType | UnknownRpcErrorType | UnsupportedProviderMethodErrorType | UserRejectedRequestErrorType | WebSocketRequestErrorType | WithRetryErrorType | ErrorType;
+export declare function buildRequest<request extends (args: any) => Promise<any>>(request: request, options?: EIP1193RequestOptions): EIP1193RequestFn;
+/** @internal */
+export declare function shouldRetry(error: Error): boolean;
+//# sourceMappingURL=buildRequest.d.ts.map

@@ -1,0 +1,17 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@cdp/langchain": ["../src"],
+      "@cdp/langchain/*": ["../src/*"],
+      "@cdp/agentkit-core": ["../../cdp-agentkit-core/src"],
+      "@cdp/agentkit-core/*": ["../../cdp-agentkit-core/src/*"]
+    }
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules", "dist"],
+  "references": [{ "path": ".." }, { "path": "../../cdp-agentkit-core" }]
+}

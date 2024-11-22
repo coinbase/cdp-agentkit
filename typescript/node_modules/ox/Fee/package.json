@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/Fee.d.ts",
+  "main": "../_cjs/core/Fee.js",
+  "module": "../_esm/core/Fee.js"
+}

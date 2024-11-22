@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/AbiParameters.d.ts",
+  "main": "../_cjs/core/AbiParameters.js",
+  "module": "../_esm/core/AbiParameters.js"
+}

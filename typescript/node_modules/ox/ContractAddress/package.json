@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/ContractAddress.d.ts",
+  "main": "../_cjs/core/ContractAddress.js",
+  "module": "../_esm/core/ContractAddress.js"
+}

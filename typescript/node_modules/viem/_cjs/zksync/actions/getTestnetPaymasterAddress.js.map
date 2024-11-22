@@ -1,0 +1,1 @@
+{"version":3,"file":"getTestnetPaymasterAddress.js","sourceRoot":"","sources":["../../../zksync/actions/getTestnetPaymasterAddress.ts"],"names":[],"mappings":";;AASA,gEAQC;AARM,KAAK,UAAU,0BAA0B,CAI9C,MAAgE;IAEhE,MAAM,MAAM,GAAG,MAAM,MAAM,CAAC,OAAO,CAAC,EAAE,MAAM,EAAE,yBAAyB,EAAE,CAAC,CAAA;IAC1E,OAAO,MAAM,CAAA;AACf,CAAC"}

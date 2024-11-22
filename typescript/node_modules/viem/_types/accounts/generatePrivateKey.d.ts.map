@@ -1,0 +1,1 @@
+{"version":3,"file":"generatePrivateKey.d.ts","sourceRoot":"","sources":["../../accounts/generatePrivateKey.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAAE,SAAS,EAAE,MAAM,oBAAoB,CAAA;AACnD,OAAO,KAAK,EAAE,GAAG,EAAE,MAAM,kBAAkB,CAAA;AAC3C,OAAO,EAAE,KAAK,cAAc,EAAS,MAAM,4BAA4B,CAAA;AAEvE,MAAM,MAAM,2BAA2B,GAAG,cAAc,GAAG,SAAS,CAAA;AAEpE;;;;GAIG;AACH,wBAAgB,kBAAkB,IAAI,GAAG,CAExC"}

@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/AbiConstructor.d.ts",
+  "main": "../_cjs/core/AbiConstructor.js",
+  "module": "../_esm/core/AbiConstructor.js"
+}

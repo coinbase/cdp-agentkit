@@ -1,0 +1,1 @@
+{"version":3,"file":"watchAsset.js","sourceRoot":"","sources":["../../../actions/wallet/watchAsset.ts"],"names":[],"mappings":";;AAwCA,gCAeC;AAfM,KAAK,UAAU,UAAU,CAI9B,MAAyC,EACzC,MAA4B;IAE5B,MAAM,KAAK,GAAG,MAAM,MAAM,CAAC,OAAO,CAChC;QACE,MAAM,EAAE,mBAAmB;QAC3B,MAAM;KACP,EACD,EAAE,UAAU,EAAE,CAAC,EAAE,CAClB,CAAA;IACD,OAAO,KAAK,CAAA;AACd,CAAC"}

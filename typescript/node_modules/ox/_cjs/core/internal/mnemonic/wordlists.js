@@ -1,0 +1,24 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.traditionalChinese = exports.spanish = exports.simplifiedChinese = exports.portuguese = exports.korean = exports.japanese = exports.italian = exports.french = exports.english = exports.czech = void 0;
+var czech_1 = require("@scure/bip39/wordlists/czech");
+Object.defineProperty(exports, "czech", { enumerable: true, get: function () { return czech_1.wordlist; } });
+var english_1 = require("@scure/bip39/wordlists/english");
+Object.defineProperty(exports, "english", { enumerable: true, get: function () { return english_1.wordlist; } });
+var french_1 = require("@scure/bip39/wordlists/french");
+Object.defineProperty(exports, "french", { enumerable: true, get: function () { return french_1.wordlist; } });
+var italian_1 = require("@scure/bip39/wordlists/italian");
+Object.defineProperty(exports, "italian", { enumerable: true, get: function () { return italian_1.wordlist; } });
+var japanese_1 = require("@scure/bip39/wordlists/japanese");
+Object.defineProperty(exports, "japanese", { enumerable: true, get: function () { return japanese_1.wordlist; } });
+var korean_1 = require("@scure/bip39/wordlists/korean");
+Object.defineProperty(exports, "korean", { enumerable: true, get: function () { return korean_1.wordlist; } });
+var portuguese_1 = require("@scure/bip39/wordlists/portuguese");
+Object.defineProperty(exports, "portuguese", { enumerable: true, get: function () { return portuguese_1.wordlist; } });
+var simplified_chinese_1 = require("@scure/bip39/wordlists/simplified-chinese");
+Object.defineProperty(exports, "simplifiedChinese", { enumerable: true, get: function () { return simplified_chinese_1.wordlist; } });
+var spanish_1 = require("@scure/bip39/wordlists/spanish");
+Object.defineProperty(exports, "spanish", { enumerable: true, get: function () { return spanish_1.wordlist; } });
+var traditional_chinese_1 = require("@scure/bip39/wordlists/traditional-chinese");
+Object.defineProperty(exports, "traditionalChinese", { enumerable: true, get: function () { return traditional_chinese_1.wordlist; } });
+//# sourceMappingURL=wordlists.js.map

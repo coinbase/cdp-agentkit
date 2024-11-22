@@ -1,0 +1,59 @@
+{
+  "name": "bip32",
+  "version": "4.0.0",
+  "description": "A BIP32 compatible library",
+  "keywords": [
+    "bip32",
+    "bitcoinjs",
+    "bitcoin",
+    "secp256k1"
+  ],
+  "main": "./src/index.js",
+  "types": "./types/index.d.ts",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "scripts": {
+    "build": "tsc -p ./tsconfig.json",
+    "coverage-report": "npm run build && npm run nobuild:coverage-report",
+    "coverage": "npm run build && npm run nobuild:coverage",
+    "format": "npm run prettier -- --write",
+    "format:ci": "npm run prettier -- --check",
+    "gitdiff:ci": "npm run build && git diff --exit-code",
+    "lint": "tslint -p tsconfig.json -c tslint.json",
+    "nobuild:coverage-report": "nyc report --reporter=lcov",
+    "nobuild:coverage": "nyc --check-coverage --branches 90 --functions 90 npm run nobuild:unit",
+    "nobuild:unit": "tape test/*.js",
+    "prettier": "prettier 'ts-src/**/*.ts' --ignore-path ./.prettierignore",
+    "test": "npm run build && npm run format:ci && npm run lint && npm run nobuild:coverage",
+    "unit": "npm run build && npm run nobuild:unit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bitcoinjs/bip32.git"
+  },
+  "files": [
+    "src",
+    "types"
+  ],
+  "dependencies": {
+    "@noble/hashes": "^1.2.0",
+    "@scure/base": "^1.1.1",
+    "typeforce": "^1.11.5",
+    "wif": "^2.0.6"
+  },
+  "devDependencies": {
+    "@types/node": "18.x",
+    "nyc": "^15.0.0",
+    "prettier": "1.16.4",
+    "tape": "^4.13.2",
+    "tiny-secp256k1": "^2.2.1",
+    "tslint": "^6.1.0",
+    "typescript": "4.7"
+  },
+  "author": "Daniel Cousens",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bitcoinjs/bip32/issues"
+  }
+}

@@ -1,0 +1,1 @@
+{"version":3,"file":"proof.d.ts","sourceRoot":"","sources":["../../../zksync/types/proof.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,IAAI,EAAE,MAAM,qBAAqB,CAAA;AAE/C,MAAM,MAAM,YAAY,GAAG;IACzB,EAAE,EAAE,MAAM,CAAA;IACV,KAAK,EAAE,IAAI,EAAE,CAAA;IACb,IAAI,EAAE,IAAI,CAAA;CACX,CAAA"}

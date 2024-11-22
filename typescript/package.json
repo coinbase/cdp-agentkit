@@ -1,0 +1,38 @@
+{
+  "name": "@cdp/typescript-workspace",
+  "private": true,
+  "workspaces": [
+    "cdp-agentkit-core",
+    "cdp-langchain",
+    "cdp-langchain/examples/*"
+  ],
+  "scripts": {
+    "build": "npm install && npm run build:core && npm run build:langchain",
+    "build:core": "cd cdp-agentkit-core && npm run build",
+    "build:langchain": "cd cdp-langchain && npm run build",
+    "clean": "rm -rf */dist */*.tsbuildinfo node_modules package-lock.json */node_modules */package-lock.json",
+    "dev": "tsc -b --watch",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write \"**/*.ts\""
+  },
+  "dependencies": {
+    "@langchain/community": "*",
+    "@langchain/core": "*",
+    "@langchain/openai": "*",
+    "camelcase": "^6.3.0",
+    "decamelize": "^6.0.0",
+    "langchain": "*",
+    "openai": "^4.73.0",
+    "zod": "*",
+    "tsx": "*",
+    "dotenv": "*"
+  },
+  "devDependencies": {
+    "@types/node": "*",
+    "@typescript-eslint/eslint-plugin": "*",
+    "@typescript-eslint/parser": "*",
+    "eslint": "*",
+    "prettier": "*",
+    "typescript": "*"
+  }
+}

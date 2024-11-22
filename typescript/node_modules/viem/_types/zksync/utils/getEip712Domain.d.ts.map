@@ -1,0 +1,1 @@
+{"version":3,"file":"getEip712Domain.d.ts","sourceRoot":"","sources":["../../../zksync/utils/getEip712Domain.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAAE,cAAc,EAAE,MAAM,oBAAoB,CAAA;AACxD,OAAO,KAAK,EACV,+BAA+B,EAC/B,6BAA6B,EAE9B,MAAM,yBAAyB,CAAA;AAIhC,eAAO,MAAM,eAAe,EAAE,cAAc,CAC1C,6BAA6B,EAC7B,+BAA+B,CAkChC,CAAA"}

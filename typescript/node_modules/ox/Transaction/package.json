@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "types": "../_types/core/Transaction.d.ts",
+  "main": "../_cjs/core/Transaction.js",
+  "module": "../_esm/core/Transaction.js"
+}

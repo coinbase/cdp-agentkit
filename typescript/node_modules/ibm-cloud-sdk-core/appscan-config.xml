@@ -1,0 +1,8 @@
+<Configuration>
+  <Targets>
+    <Target path=".">
+      <Exclude>scripts/</Exclude>
+      <Exclude>test/</Exclude>
+    </Target>
+  </Targets>
+</Configuration>
