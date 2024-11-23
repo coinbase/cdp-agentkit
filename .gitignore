@@ -1,87 +1,48 @@
-**/.DS_Store
+# OS files
+.DS_Store
 
-**/.python-version
-
-# IDE
-.idea/*
-.vscode/*
-
-## Emacs
-*~
-\#*\#
-.\#*
-**/.projectile
-
-# Python cache files
-**/__pycache__/
-
-# Node modules
-**/node_modules/
-
-# Wallet data
-**/wallet_data.txt
-
-# Tools
-**/.pytest_cache
-
-**/.ruff_cache
-
-**/.mypy_cache
-
-**/.coverage
-
-# Build
-**/_build/
-
-**/build/
-
-**/dist/
-
-# Virtual Environments
-**/venv/
-**/.venv/
-
-# Environment Configurations
-**/env/
-**/.env/
-**/.env
-**/.env.local/
-**/.env.test/
-
-# TypeScript build info
-**/tsconfig.tsbuildinfo
-
-# Logs
-**/npm-debug.log*
-**/yarn-debug.log*
-**/yarn-error.log*
-**/lerna-debug.log*
-
-# Test coverage
-**/coverage/
-**/.nyc_output/
-
-# Local env files
-.env
-.env.local
-.env.*.local
-.env.test
-.env.production
-
-# Package files
-**/package-lock.json
-**/yarn.lock
-**/pnpm-lock.yaml
-
-# Python specific
-**/__pycache__/
-**/*.py[cod]
-**/*.so
+# Python
+__pycache__/
+*.py[cod]
+*.so
 .Python
 *.egg
 *.egg-info/
 .eggs/
-*.pyc
+.pytest_cache
+.ruff_cache
+.mypy_cache
+.coverage
+.python-version
 
-# Poetry
-**/poetry.lock
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+tsconfig.tsbuildinfo
+
+# IDE
+.idea/
+.vscode/
+*~
+\#*\#
+.\#*
+.projectile
+
+# Build and dist
+_build/
+build/
+dist/
+coverage/
+.nyc_output/
+
+# Environment and configs
+.env*
+venv/
+.venv/
+env/
+
+# Project specific
+wallet_data.txt
