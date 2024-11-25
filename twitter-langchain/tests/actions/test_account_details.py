@@ -12,6 +12,7 @@ MOCK_USERNAME = "testaccount"
 
 
 def test_account_details_success(tweepy_factory):
+    """Test successful retrievial of the authenticated Twitter (X) account."""
     mock_client = tweepy_factory()
     mock_client_result = {
         "data": {
@@ -25,14 +26,15 @@ def test_account_details_success(tweepy_factory):
     expected_result["data"]["url"] = f"https://x.com/{MOCK_USERNAME}"
     expected_response = f"Successfully retrieved authenticated user account details:\n{dumps(expected_result)}"
 
-    with patch.object(mock_client, "get_me", return_value=mock_client_result) as mock_get_me:
+    with patch.object(mock_client, "get_me", return_value=mock_client_result) as mock_tweepy_get_me:
         response = account_details(mock_client)
 
         assert response == expected_response
-        mock_get_me.assert_called_once_with()
+        mock_tweepy_get_me.assert_called_once_with()
 
 
 def test_account_details_failure(tweepy_factory):
+    """Test failure when an API error occurs."""
     mock_client = tweepy_factory()
 
     expected_result = tweepy.errors.TweepyException("Tweepy Error")
@@ -42,3 +44,4 @@ def test_account_details_failure(tweepy_factory):
         response = account_details(mock_client)
 
         assert response == expected_response
+        mock_tweepy_get_me.assert_called_once_with()
