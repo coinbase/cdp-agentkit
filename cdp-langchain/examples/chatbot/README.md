@@ -38,3 +38,19 @@ pip install cdp-langchain
 ```bash
 python chatbot.py
 ```
+
+## Run it on a Gaia node
+
+You can run an LLM on your own machine using the [Gaia network node software](https://github.com/GaiaNet-AI/gaianet-node). With open-source LLMs fine-tined for tool calls, such as the [Llama-3-Groq model on Gaia](https://github.com/GaiaNet-AI/node-configs/tree/main/llama-3-groq-8b-tool), you can use your own Gaia node as a free and decentrailized alternative to OpenAI.
+
+To configure the agentic chatbot to use decentrailized AI, you just need to change one line of code to point the `base_url` to your Gaia node. 
+In this example, the `https://llamatool.us.gaianet.network/v1` is a [public Gaia node](https://docs.gaianet.ai/user-guide/nodes#tool-use-llama) running a [tool call LLM](https://docs.gaianet.ai/tutorial/tool-call).
+
+```
+llm = ChatOpenAI(model="llama", api_key="GAIA", base_url="https://llamatool.us.gaianet.network/v1")
+```
+
+That's it. Now you can chat with the agent to perform on-chain actions through your COinbase MPC wallet!
+
+
+

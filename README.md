@@ -21,7 +21,7 @@ The Coinbase Developer Platform (CDP) Agentkit simplifies bringing your AI Agent
 
 ## Examples
 Check out `cdp-langchain/examples` for inspiration and help getting started!
-- [Chatbot](./cdp-langchain/examples/chatbot/README.md): Simple example of a Chatbot that can perform complex onchain interactions, using OpenAI.
+- [Chatbot](./cdp-langchain/examples/chatbot/README.md): Simple example of a Chatbot that can perform complex onchain interactions, using OpenAI or the decentralized [Gaia network](https://www.gaianet.ai/).
 
 ## Repository Structure
 CDP Agentkit is organized as a [monorepo](https://en.wikipedia.org/wiki/Monorepo) that contains multiple packages.
