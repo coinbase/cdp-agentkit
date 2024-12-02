@@ -32,7 +32,7 @@ Check out [cdp-langchain/examples](./cdp-langchain/examples) for inspiration and
 CDP Agentkit is organized as a [monorepo](https://en.wikipedia.org/wiki/Monorepo) that contains multiple packages.
 
 ### cdp-agentkit-core
-Core primitives and framework-agnostic tools that are meant to be composable and used via CDP Agentkit framework extensions (ie, cdp-langchain).
+Core primitives and framework-agnostic tools that are meant to be composable and used via CDP Agentkit framework extensions (ie, `cdp-langchain`).
 See [CDP Agentkit Core](./cdp-agentkit-core/README.md) to get started!
 
 ### cdp-langchain
