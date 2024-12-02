@@ -1,4 +1,4 @@
-# CDP Agentkit Contribution Guide
+# CDP Agentkit Contributing Guide
 Thank you for your interest in contributing to CDP Agentkit! We welcome all contributions, no matter how big or small. Some of the ways you can contribute include:
 - Adding new actions to the core package
 - Updating existing Langchain Toolkits or adding new Langchain Toolkits to support new tools
