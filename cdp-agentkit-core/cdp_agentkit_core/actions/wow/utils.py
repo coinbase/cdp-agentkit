@@ -32,8 +32,8 @@ def get_buy_quote(network_id: str, token_address: str, amount_eth_in_wei: str):
     """
     has_graduated = get_has_graduated(network_id, token_address)
     token_quote = (
-        has_graduated
-        and (get_uniswap_quote(network_id, token_address, amount_eth_in_wei, "buy")).amount_out
+        (has_graduated
+        and (get_uniswap_quote(network_id, token_address, amount_eth_in_wei, "buy")).amount_out)
         or SmartContract.read(
             network_id,
             token_address,
@@ -56,8 +56,8 @@ def get_sell_quote(network_id: str, token_address: str, amount_tokens_in_wei: st
     """
     has_graduated = get_has_graduated(network_id, token_address)
     token_quote = (
-        has_graduated
-        and (get_uniswap_quote(network_id, token_address, amount_tokens_in_wei, "sell")).amount_out
+        (has_graduated
+        and (get_uniswap_quote(network_id, token_address, amount_tokens_in_wei, "sell")).amount_out)
         or SmartContract.read(
             network_id,
             token_address,

@@ -26,18 +26,18 @@ def get_all_cdp_actions() -> list[type[CdpAction]]:
 CDP_ACTIONS = get_all_cdp_actions()
 
 __all__ = [
+    "CDP_ACTIONS",
     "CdpAction",
-    "GetWalletDetailsAction",
     "DeployNftAction",
     "DeployTokenAction",
     "GetBalanceAction",
+    "GetWalletDetailsAction",
     "MintNftAction",
     "RegisterBasenameAction",
     "RequestFaucetFundsAction",
     "TradeAction",
     "TransferAction",
-    "WowCreateTokenAction",
     "WowBuyTokenAction",
+    "WowCreateTokenAction",
     "WowSellTokenAction",
-    "CDP_ACTIONS",
 ]

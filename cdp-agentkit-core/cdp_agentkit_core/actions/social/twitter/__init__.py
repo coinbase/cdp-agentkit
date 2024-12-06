@@ -16,10 +16,10 @@ def get_all_twitter_actions() -> list[type[TwitterAction]]:
 TWITTER_ACTIONS = get_all_twitter_actions()
 
 __all__ = [
-    "TwitterAction",
+    "TWITTER_ACTIONS",
     "AccountDetailsAction",
     "AccountMentionsAction",
     "PostTweetAction",
     "PostTweetReplyAction",
-    "TWITTER_ACTIONS",
+    "TwitterAction",
 ]

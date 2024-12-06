@@ -6,8 +6,21 @@ from pydantic import BaseModel, Field
 from cdp_agentkit_core.actions import CdpAction
 
 TRANSFER_PROMPT = """
-This tool will transfer an asset from the wallet to another onchain address. It takes the amount, the asset ID to transfer, the destination to send the funds (either an onchain address, an ENS `example.eth`, or Basename `example.base.eth`), and whether to do a gasless transfer as inputs. The gasless option is available on `base-sepolia` and `base-mainnet` networks for `usdc` asset only. Always use the gasless option when it is available. Always use the asset ID `usdc` when attempting to transfer USDC. Always ensure that you have enough balance of the input asset ID to complete the transfer."""
+This tool will transfer an asset from the wallet to another onchain address.
 
+It takes the following inputs:
+- amount: The amount to transfer
+- assetId: The asset ID to transfer
+- destination: Where to send the funds (can be an onchain address, ENS 'example.eth', or Basename 'example.base.eth')
+- gasless: Whether to do a gasless transfer
+
+Important notes:
+- Gasless transfers are only available on base-sepolia and base-mainnet (base) networks for 'usdc' asset
+- Always use gasless transfers when available
+- Always use asset ID 'usdc' when transferring USDC
+- Ensure sufficient balance of the input asset before transferring
+- When sending native assets (e.g. 'eth' on base-mainnet), ensure there is sufficient balance for the transfer itself AND the gas cost of this transfer
+"""
 
 class TransferInput(BaseModel):
     """Input argument schema for transfer action."""

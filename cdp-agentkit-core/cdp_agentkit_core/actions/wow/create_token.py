@@ -11,7 +11,18 @@ from cdp_agentkit_core.actions.wow.constants import (
 )
 
 WOW_CREATE_TOKEN_PROMPT = """
-This tool will create a Zora Wow ERC20 memecoin using the WoW factory. This tool takes the token name, token symbol, and optionally a token URI containing metadata about the token. It uses a bonding curve so there is no need to add liquidity to the pool upfront. It is only supported on Base Sepolia and Base Mainnet.
+This tool can only be used to create a Zora Wow ERC20 memecoin using the WoW factory. Do not use this tool for any other purpose, or creating other types of tokens.
+
+Inputs:
+- Token name (e.g. WowCoin)
+- Token symbol (e.g. WOW)
+- Token URI (optional) - Contains metadata about the token
+
+Important notes:
+- Uses a bonding curve - no upfront liquidity needed
+- Only supported on the following networks:
+  - Base Sepolia (ie, 'base-sepolia')
+  - Base Mainnet (ie, 'base', 'base-mainnnet')
 """
 
 

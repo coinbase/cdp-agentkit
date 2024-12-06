@@ -11,7 +11,20 @@ from cdp_agentkit_core.actions.wow.uniswap.index import get_has_graduated
 from cdp_agentkit_core.actions.wow.utils import get_sell_quote
 
 WOW_SELL_TOKEN_PROMPT = """
-This tool will sell a Zora Wow ERC20 memecoin for ETH. This tool takes the WOW token contract address, and the amount of tokens to sell (in wei, meaning 1 is 1 wei or 0.000000000000000001 of the token). The minimum to sell is 100000000000000 wei which is 0.0000001 ether. The amount is a string and cannot have any decimal points, since the unit of measurement is wei. Make sure to use the exact amount provided, and if there's any doubt, check by getting more information before continuing with the action. It is only supported on Base Sepolia and Base Mainnet.
+This tool can only be used to sell a Zora Wow ERC20 memecoin for ETH. Do not use this tool for any other purpose, or trading other assets.
+
+Inputs:
+- WOW token contract address
+- Amount of tokens to sell (in wei)
+
+Important notes:
+- The amount is a string and cannot have any decimal points, since the unit of measurement is wei.
+- Make sure to use the exact amount provided, and if there's any doubt, check by getting more information before continuing with the action.
+- 1 wei = 0.000000000000000001 ETH
+- Minimum purchase amount is 100000000000000 wei (0.0000001 ETH)
+- Only supported on the following networks:
+  - Base Sepolia (ie, 'base-sepolia')
+  - Base Mainnet (ie, 'base', 'base-mainnnet')
 """
 
 

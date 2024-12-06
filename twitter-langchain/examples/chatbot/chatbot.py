@@ -78,7 +78,7 @@ def run_chat_mode(agent_executor, config):
     print("Starting chat mode... Type 'exit' to end.")
     while True:
         try:
-            user_input = input("\nUser: ")
+            user_input = input("\nPrompt: ")
             if user_input.lower() == "exit":
                 break
 
