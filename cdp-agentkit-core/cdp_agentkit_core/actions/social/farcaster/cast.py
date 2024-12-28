@@ -1,18 +1,14 @@
 from typing import List, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from cdp_agentkit_core.actions.social.farcaster.action import FarcasterAction
 
 
 class CastInput(BaseModel):
     """Input for casting to Farcaster."""
-    
+    model_config = ConfigDict(extra="forbid")
     text: str = Field(..., description="The text content to cast")
     channel_id: Optional[str] = Field(None, description="Optional channel to post in")
     embeds: Optional[List[str]] = Field(None, description="Optional list of URLs to embed")
-
-    class Config:
-        """Pydantic config."""
-        extra = "forbid"
 
 
 class CastAction(FarcasterAction):

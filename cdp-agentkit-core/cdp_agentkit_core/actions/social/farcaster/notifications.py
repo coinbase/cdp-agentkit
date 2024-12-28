@@ -1,10 +1,11 @@
 from typing import List, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from cdp_agentkit_core.actions.social.farcaster.action import FarcasterAction
 
 
 class NotificationsInput(BaseModel):
     """Input for getting Farcaster notifications."""
+    model_config = ConfigDict(extra="forbid")
     
     types: Optional[List[str]] = Field(
         None,
@@ -14,10 +15,6 @@ class NotificationsInput(BaseModel):
         None,
         description="The FID of the user to get notifications for. If not provided, uses the authenticated user's FID."
     )
-
-    class Config:
-        """Pydantic config."""
-        extra = "forbid"
 
 
 class NotificationsAction(FarcasterAction):

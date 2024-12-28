@@ -1,19 +1,16 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from cdp_agentkit_core.actions.social.farcaster.action import FarcasterAction
 from typing import Optional
 
 
 class UserDetailsInput(BaseModel):
     """Input argument schema for Farcaster user details action."""
+    model_config = ConfigDict(extra="forbid")
 
     fid: Optional[str] = Field(
         None,
         description="The FID (Farcaster ID) of the user to get details for. If not provided, uses the authenticated user's FID."
     )
-
-    class Config:
-        """Pydantic config."""
-        extra = "forbid"
 
 
 class UserDetailsAction(FarcasterAction):
