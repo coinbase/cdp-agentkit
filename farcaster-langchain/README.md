@@ -69,7 +69,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
 from langgraph.prebuilt import create_react_agent
 
-llm = ChatOpenAI(model="gpt-4-turbo-preview")
+llm = ChatOpenAI(model="gpt-4o-mini")
 
 # Create agent
 agent_executor = create_react_agent(llm, tools)

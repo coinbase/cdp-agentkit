@@ -27,7 +27,7 @@ def initialize_agent():
 
     # Initialize LLM
     print("Initializing LLM...")
-    llm = ChatOpenAI(model="gpt-4-turbo-preview")
+    llm = ChatOpenAI(model="gpt-4o-mini")
 
     # Configure CDP Agentkit Farcaster Langchain Extension
     values = {
