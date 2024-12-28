@@ -16,14 +16,6 @@ from farcaster_langchain import (
 def initialize_agent():
     """Initialize the agent with CDP Agentkit Farcaster Langchain."""
     print("Initializing agent...")
-    
-    # Check for required environment variables
-    # if not os.getenv("OPENAI_API_KEY"):
-    #     raise ValueError("OPENAI_API_KEY environment variable is not set")
-    # if not os.getenv("NEYNAR_API_KEY"):
-    #     raise ValueError("NEYNAR_API_KEY environment variable is not set")
-    # if not os.getenv("NEYNAR_SIGNER_UUID"):
-    #     raise ValueError("NEYNAR_SIGNER_UUID environment variable is not set")
 
     # Initialize LLM
     print("Initializing LLM...")
