@@ -12,7 +12,7 @@ lint-fix:
 
 .PHONY: docs
 docs:
-	sphinx-apidoc -f -o ./docs ./warpcast_langchain
+	sphinx-apidoc -f -o ./docs ./farcaster_langchain
 
 .PHONY: local-docs
 local-docs: docs

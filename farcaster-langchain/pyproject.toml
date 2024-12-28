@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "warpcast-langchain"
+name = "farcaster-langchain"
 version = "0.0.1"
-description = "Warpcast Langchain Toolkit"
+description = "Farcaster Langchain Toolkit"
 authors = ["Lautaro <lautaro@deadcow.xyz>"]
 license = "Apache-2.0"
 readme = "README.md"
