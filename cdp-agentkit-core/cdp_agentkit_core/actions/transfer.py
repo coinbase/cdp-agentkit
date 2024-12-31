@@ -68,6 +68,28 @@ def transfer(
     return f"Transferred {amount} of {asset_id} to {destination}.\nTransaction hash for the transfer: {transfer_result.transaction_hash}\nTransaction link for the transfer: {transfer_result.transaction_link}"
 
 
+def transfer_eth(wallet: Wallet, amount: str, destination: str) -> str:
+    """Transfer a specified amount of ETH to a destination onchain.
+
+    Args:
+        wallet (Wallet): The wallet to transfer the ETH from.
+        amount (str): The amount of ETH to transfer, e.g. `0.005`.
+        destination (str): The destination to transfer the ETH (e.g. `0x58dBecc0894Ab4C24F98a0e684c989eD07e4e027`, `example.eth`, `example.base.eth`).
+
+    Returns:
+        str: A message containing the transfer details.
+
+    """
+    try:
+        transfer_result = wallet.transfer(
+            amount=amount, asset_id="eth", destination=destination, gasless=False
+        ).wait()
+    except Exception as e:
+        return f"Error transferring ETH {e!s}"
+
+    return f"Transferred {amount} of ETH to {destination}.\nTransaction hash for the transfer: {transfer_result.transaction_hash}\nTransaction link for the transfer: {transfer_result.transaction_link}"
+
+
 class TransferAction(CdpAction):
     """Transfer action."""
 
@@ -75,3 +97,12 @@ class TransferAction(CdpAction):
     description: str = TRANSFER_PROMPT
     args_schema: type[BaseModel] | None = TransferInput
     func: Callable[..., str] = transfer
+
+
+class TransferEthAction(CdpAction):
+    """Transfer ETH action."""
+
+    name: str = "transfer_eth"
+    description: str = "This tool will transfer ETH from the wallet to another onchain address."
+    args_schema: type[BaseModel] | None = TransferInput
+    func: Callable[..., str] = transfer_eth
