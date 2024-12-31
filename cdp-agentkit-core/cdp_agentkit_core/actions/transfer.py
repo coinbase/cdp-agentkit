@@ -13,6 +13,7 @@ It takes the following inputs:
 - assetId: The asset ID to transfer
 - destination: Where to send the funds (can be an onchain address, ENS 'example.eth', or Basename 'example.base.eth')
 - gasless: Whether to do a gasless transfer
+- auth_token: Optional authentication token for the transfer
 
 Important notes:
 - Gasless transfers are only available on base-sepolia and base-mainnet (base) networks for 'usdc' asset
@@ -40,10 +41,14 @@ class TransferInput(BaseModel):
         default=False,
         description="whether to do a gasless transfer (gasless is available on Base Sepolia and Mainnet for USDC) Always do the gasless option when it is available.",
     )
+    auth_token: str | None = Field(
+        default=None,
+        description="Optional authentication token for the transfer.",
+    )
 
 
 def transfer(
-    wallet: Wallet, amount: str, asset_id: str, destination: str, gasless: bool = False
+    wallet: Wallet, amount: str, asset_id: str, destination: str, gasless: bool = False, auth_token: str | None = None
 ) -> str:
     """Transfer a specified amount of an asset to a destination onchain. USDC Transfers on Base Sepolia and Mainnet can be gasless. Always use the gasless option when available.
 
@@ -53,14 +58,16 @@ def transfer(
         asset_id (str): The asset ID to transfer (e.g., "eth", "usdc", or a valid contract address like "0x036CbD53842c5426634e7929541eC2318f3dCF7e").
         destination (str): The destination to transfer the funds (e.g. `0x58dBecc0894Ab4C24F98a0e684c989eD07e4e027`, `example.eth`, `example.base.eth`).
         gasless (bool): Whether to send a gasless transfer (Defaults to False.).
+        auth_token (str | None): Optional authentication token for the transfer.
 
     Returns:
         str: A message containing the transfer details.
 
     """
     try:
+        headers = {"Authorization": f"Bearer {auth_token}"} if auth_token else {}
         transfer_result = wallet.transfer(
-            amount=amount, asset_id=asset_id, destination=destination, gasless=gasless
+            amount=amount, asset_id=asset_id, destination=destination, gasless=gasless, headers=headers
         ).wait()
     except Exception as e:
         return f"Error transferring the asset {e!s}"
