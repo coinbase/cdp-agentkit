@@ -32,6 +32,12 @@ def initialize_agent():
         # If there is a persisted agentic wallet, load it and pass to the CDP Agentkit Wrapper.
         values = {"cdp_wallet_data": wallet_data}
 
+    # Ensure the private key is correctly formatted
+    cdp_api_key_private_key = os.getenv("CDP_API_KEY_PRIVATE_KEY")
+    if cdp_api_key_private_key:
+        cdp_api_key_private_key = cdp_api_key_private_key.replace("\\n", "\n")
+        os.environ["CDP_API_KEY_PRIVATE_KEY"] = cdp_api_key_private_key
+
     agentkit = CdpAgentkitWrapper(**values)
 
     # persist the agent's CDP MPC Wallet Data.

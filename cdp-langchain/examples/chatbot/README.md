@@ -35,6 +35,19 @@ pip install cdp-langchain
   - "OPENAI_API_KEY"
   - "NETWORK_ID" (Defaults to `base-sepolia`)
 
+### Ensure Private Key Formatting
+
+Ensure the private key is correctly formatted by replacing `\\n` with `\n`:
+
+```python
+import os
+
+cdp_api_key_private_key = os.getenv("CDP_API_KEY_PRIVATE_KEY")
+if cdp_api_key_private_key:
+    cdp_api_key_private_key = cdp_api_key_private_key.replace("\\n", "\n")
+    os.environ["CDP_API_KEY_PRIVATE_KEY"] = cdp_api_key_private_key
+```
+
 ```bash
 python chatbot.py
 ```
