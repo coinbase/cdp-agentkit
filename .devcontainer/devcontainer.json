@@ -1,0 +1,7 @@
+{
+  "tasks": {
+    "test": "cd cdp-agentkit-core && poetry install --with dev && poetry run make test && cd .. && cd cdp-langchain && poetry install --with dev && poetry run make test && cd .. && cd twitter-langchain && poetry install --with dev && poetry run make test",
+    "build": "cd cdp-agentkit-core && poetry install && cd ../cdp-langchain && poetry install && cd ../twitter-langchain && poetry install",
+    "launch": "cd cdp-langchain && poetry install && export CDP_API_KEY=<your_cdp_api_key> && poetry run python -m cdp_langchain"
+  }
+}
