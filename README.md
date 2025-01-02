@@ -45,3 +45,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 - [CDP Agentkit Documentation](https://docs.cdp.coinbase.com/agentkit/docs/welcome)
 - [CDP Agentkit Core API Reference](https://coinbase.github.io/cdp-agentkit/cdp-agentkit-core/index.html)
 - [CDP Agentkit Langchain Extension API Reference](https://coinbase.github.io/cdp-agentkit/cdp-langchain/index.html)
+- [Twitter Langchain API Reference](https://coinbase.github.io/cdp-agentkit/twitter-langchain/index.html)

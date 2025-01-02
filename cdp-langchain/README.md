@@ -112,5 +112,8 @@ The following operations support gasless transactions on Base Mainnet:
 - EURC transfers
 - cbBTC transfers
 
+## API Reference
+For detailed API documentation, please visit the [CDP Agentkit Langchain Extension API Reference](https://coinbase.github.io/cdp-agentkit/cdp-langchain/index.html).
+
 ## Contributing
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for detailed setup instructions and contribution guidelines.
