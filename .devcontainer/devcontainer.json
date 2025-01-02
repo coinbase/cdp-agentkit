@@ -1,0 +1,6 @@
+{
+  "tasks": {
+    "test": "poetry install --with dev && poetry run make test",
+    "build": "poetry install"
+  }
+}
