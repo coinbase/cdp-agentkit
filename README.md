@@ -11,6 +11,7 @@ The **Coinbase Developer Platform (CDP) Agentkit for Python** simplifies bringin
 - **Framework-agnostic**: Common AI Agent primitives that can be used with any AI framework.
 - **LangChain integration**: Seamless integration with [LangChain](https://python.langchain.com/docs/introduction/) for easy agentic workflows. More frameworks coming soon!
 - **Twitter integration**: Seamless integration of Langchain with [Twitter](https://developer.twitter.com/en/docs/twitter-api) for easy agentic workflows.
+- **Warpcast integration**: Seamless integration of Langchain with [Warpcast](https://warpcast.com/) for easy agentic workflows.
 - **Support for various on-chain actions**:
 
   - Faucet for testnet funds
@@ -42,6 +43,10 @@ See [CDP Langchain](./cdp-langchain/README.md) to get started!
 ### twitter-langchain
 Langchain Toolkit extension for Twitter. Enables agentic workflows to interact with Twitter, such as to post a tweet.
 See [Twitter Langchain](./twitter-langchain/README.md) to get started!
+
+### warpcast-langchain
+Langchain Toolkit extension for Warpcast. Enables agentic workflows to interact with Warpcast, such as to post a cast.
+See [Warpcast Langchain](./warpcast-langchain/README.md) to get started!
 
 ## Contributing
 CDP Agentkit welcomes community contributions.

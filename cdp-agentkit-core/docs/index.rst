@@ -10,3 +10,4 @@ CDP Agentkit - Core Documentation
    :hidden:
 
    modules
+   cdp_agentkit_core.actions.social.warpcast
