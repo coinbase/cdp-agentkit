@@ -1,5 +1,6 @@
 from collections.abc import Callable
 from json import dumps
+import logging
 
 import tweepy
 from pydantic import BaseModel
@@ -21,10 +22,12 @@ A failure response will return a message with the tweepy client api request erro
 
 class AccountDetailsInput(BaseModel):
     """Input argument schema for Twitter account details action."""
+    pass
 
 
 def account_details(client: tweepy.Client) -> str:
-    """Get the authenticated Twitter (X) user account details.
+    """
+    Get the authenticated Twitter (X) user account details.
 
     Args:
         client (tweepy.Client): The Twitter (X) client used to authenticate with.
@@ -32,17 +35,25 @@ def account_details(client: tweepy.Client) -> str:
     Returns:
         str: A message containing account details for the authenticated user context.
 
+    Example:
+        >>> client = tweepy.Client(bearer_token="YOUR_BEARER_TOKEN")
+        >>> account_details(client)
+        'Successfully retrieved authenticated user account details: {"data": {"id": "123456789", "name": "Your Name", "username": "yourusername", "url": "https://x.com/yourusername"}}'
     """
     message = ""
 
     try:
+        # Retrieve the authenticated user's account details
         response = client.get_me()
         data = response['data']
         data['url'] = f"https://x.com/{data['username']}"
 
         message = f"""Successfully retrieved authenticated user account details:\n{dumps(response)}"""
+        logging.info(message)
     except tweepy.errors.TweepyException as e:
+        # Handle any exceptions raised by the tweepy library
         message = f"Error retrieving authenticated user account details:\n{e}"
+        logging.error(message)
 
     return message
 
