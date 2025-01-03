@@ -13,7 +13,7 @@ MOCK_USERNAME = "testaccount"
 
 
 def test_account_details_success(tweepy_factory):
-    """Test successful retrievial of the authenticated Twitter (X) account."""
+    """Test successful retrieval of the authenticated Twitter (X) account."""
     mock_client = tweepy_factory()
     mock_client_result = {
         "data": {
