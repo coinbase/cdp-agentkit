@@ -107,3 +107,6 @@ See [CONTRIBUTING.md](../CONTRIBUTING.md) for detailed setup instructions and co
 ## Documentation
 For detailed documentation, please visit:
 - [Agentkit-Core](https://coinbase.github.io/cdp-agentkit/cdp-agentkit-core/)
+
+## API Reference
+For detailed API documentation, please visit the [Twitter Langchain API Reference](https://coinbase.github.io/cdp-agentkit/twitter-langchain/index.html).

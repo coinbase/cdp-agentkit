@@ -42,6 +42,11 @@ CDP Agentkit welcomes community contributions.
 See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 
 ## Documentation
-- [CDP Agentkit Documentation](https://docs.cdp.coinbase.com/agentkit/docs/welcome)
+For detailed documentation, please visit:
+- [Agentkit-Core](https://coinbase.github.io/cdp-agentkit/cdp-agentkit-core/)
+
+## API Reference
+For detailed API documentation, please visit:
 - [CDP Agentkit Core API Reference](https://coinbase.github.io/cdp-agentkit/cdp-agentkit-core/index.html)
 - [CDP Agentkit Langchain Extension API Reference](https://coinbase.github.io/cdp-agentkit/cdp-langchain/index.html)
+- [Twitter Langchain API Reference](https://coinbase.github.io/cdp-agentkit/twitter-langchain/index.html)
