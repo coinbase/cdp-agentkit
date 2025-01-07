@@ -1,0 +1,23 @@
+{
+  "name": "ethkey-protocol",
+  "version": "1.0.0",
+  "description": "Smart contracts for the ETHkey protocol",
+  "main": "index.js",
+  "scripts": {
+    "compile": "truffle compile",
+    "migrate": "truffle migrate",
+    "test": "truffle test"
+  },
+  "dependencies": {
+    "ethers": "^5.7.2",
+    "ganache-cli": "^6.12.2",
+    "truffle": "^5.11.5",
+    "web3": "^1.10.4"
+  },
+  "author": "Setland34",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^10.1.0"
+  },
+  "keywords": []
+}
