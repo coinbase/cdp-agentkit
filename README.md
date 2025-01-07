@@ -149,6 +149,17 @@ Keep track of changes and updates made to the repository in this section.
 ## Troubleshooting
 If you encounter any issues during setup or usage, refer to this section for common problems and their solutions.
 
+### Common Issues and Solutions
+
+* **Missing dependencies**: Ensure you have Node.js (v14.x or higher), npm (v6.x or higher), Truffle (v5.x or higher), and Ganache CLI (v6.x or higher) installed. Follow the instructions in the `README.md` to install these dependencies.
+* **Incorrect network configuration**: Verify that the network settings in `truffle-config.js` are correctly configured for the desired network. Ensure that the `MNEMONIC` and `ALCHEMY_API_KEY` environment variables are set correctly.
+* **Ganache CLI not running**: Make sure Ganache CLI is running before attempting to compile or migrate the smart contracts. Use the command `ganache-cli` to start it.
+* **Compilation errors**: Ensure that the Solidity compiler version specified in `truffle-config.js` matches the version used in your smart contracts. Update the version if necessary.
+* **Migration issues**: If migrations fail, check the network configuration and ensure that the development network is running. Use the command `truffle migrate --network development` to migrate the contracts.
+* **Testing issues**: Ensure that the test environment is correctly set up and that all dependencies are installed. Use the command `truffle test` to run the tests. For forked mainnet state tests, use the command `forge test --fork-url https://eth-sepolia.g.alchemy.com/v2/YOURKEY`.
+* **Environment variables**: Ensure that all required environment variables are set correctly. Refer to the `README.md` for the necessary environment variables and their values.
+* **API key issues**: Verify that the API keys for services like Alchemy and OpenAI are correctly set in the environment variables. Double-check the values and ensure they are valid.
+
 ## License
 This repository is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
 
