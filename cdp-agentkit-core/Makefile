@@ -21,3 +21,11 @@ local-docs: docs
 .PHONY: test
 test:
 	pytest
+
+.PHONY: publish
+publish:
+	poetry publish --build
+
+.PHONY: publish-docs
+publish-docs:
+	ghp-import -n -p -f docs/_build/html
