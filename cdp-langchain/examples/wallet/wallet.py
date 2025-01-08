@@ -6,10 +6,10 @@ from cdp_langchain.utils import CdpAgentkitWrapper
 
 
 def initialize_agentkit():
-    """Initialize the CDP Agentkit
+    """Initialize the CDP Agentkit.
 
     Returns:
-        tuple: Agent executor and config
+        tuple: Agentkit and its config.
 
     """
     config = {}
