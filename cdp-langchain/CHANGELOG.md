@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## [0.0.9] - 2025-01-08
+
+### Added
+
 - Bump dependency `cdp-agentkit-core` to version `0.0.7`.
 - Bump dependency `cdp-sdk` to version `0.13.0`.
 - Wallet mnemonic phrase import
