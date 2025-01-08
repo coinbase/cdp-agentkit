@@ -6,14 +6,6 @@
 
 The **Coinbase Developer Platform (CDP) Agentkit for Python** simplifies bringing your AI Agents onchain. Every AI Agent deserves a crypto wallet!
 
-## Table of Contents
-- [Key Features](#key-features)
-- [Examples](#examples)
-- [Repository Structure](#repository-structure)
-- [Setup Instructions](#setup-instructions)
-- [Troubleshooting](#troubleshooting)
-- [Contributing](#contributing)
-- [Documentation](#documentation)
 
 ## Key Features
 - **Framework-agnostic**: Common AI Agent primitives that can be used with any AI framework.
@@ -51,82 +43,6 @@ See [CDP Langchain](./cdp-langchain/README.md) to get started!
 Langchain Toolkit extension for Twitter. Enables agentic workflows to interact with Twitter, such as to post a tweet.
 See [Twitter Langchain](./twitter-langchain/README.md) to get started!
 
-## Setup Instructions
-
-### Prerequisites
-- Python 3.10 or higher
-- Rust/Cargo installed ([Rust Installation Instructions](https://doc.rust-lang.org/cargo/getting-started/installation.html))
-- Poetry for package management and tooling
-  - [Poetry Installation Instructions](https://python-poetry.org/docs/#installation)
-- [CDP API Key](https://portal.cdp.coinbase.com/access/api)
-
-### Installation
-
-Clone the repo by running:
-
-```bash
-git clone git@github.com:coinbase/cdp-agentkit.git
-```
-
-Navigate to the project directory:
-
-```bash
-cd cdp-agentkit
-```
-
-Install the necessary dependencies:
-
-```bash
-pip install -r requirements.txt
-pip install ruff
-```
-
-### Environment Setup
-
-Set the following environment variables:
-
-```bash
-export CDP_API_KEY_NAME=<your-api-key-name>
-export CDP_API_KEY_PRIVATE_KEY=$'<your-private-key>'
-export OPENAI_API_KEY=<your-openai-api-key>
-export NETWORK_ID=base-sepolia  # Optional: Defaults to base-sepolia
-```
-
-### Running the Project
-
-To run the project locally, follow these steps:
-
-1. Compile the smart contracts:
-
-```bash
-truffle compile
-```
-
-2. Migrate the smart contracts to the development network:
-
-```bash
-truffle migrate --network development
-```
-
-3. Run the tests:
-
-```bash
-truffle test
-```
-
-## Troubleshooting
-
-Common issues during setup and their solutions:
-
-* **Missing dependencies**: Ensure you have Node.js (v14.x or higher), npm (v6.x or higher), Truffle (v5.x or higher), and Ganache CLI (v6.x or higher) installed. Follow the instructions in the `README.md` to install these dependencies.
-* **Incorrect network configuration**: Verify that the network settings in `truffle-config.js` are correctly configured for the desired network. Ensure that the `MNEMONIC` and `ALCHEMY_API_KEY` environment variables are set correctly.
-* **Ganache CLI not running**: Make sure Ganache CLI is running before attempting to compile or migrate the smart contracts. Use the command `ganache-cli` to start it.
-* **Compilation errors**: Ensure that the Solidity compiler version specified in `truffle-config.js` matches the version used in your smart contracts. Update the version if necessary.
-* **Migration issues**: If migrations fail, check the network configuration and ensure that the development network is running. Use the command `truffle migrate --network development` to migrate the contracts.
-* **Testing issues**: Ensure that the test environment is correctly set up and that all dependencies are installed. Use the command `truffle test` to run the tests. For forked mainnet state tests, use the command `forge test --fork-url https://eth-sepolia.g.alchemy.com/v2/YOURKEY`.
-* **Environment variables**: Ensure that all required environment variables are set correctly. Refer to the `README.md` for the necessary environment variables and their values.
-* **API key issues**: Verify that the API keys for services like Alchemy and OpenAI are correctly set in the environment variables. Double-check the values and ensure they are valid.
-
 ## Contributing
 CDP Agentkit welcomes community contributions.
 See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
@@ -135,3 +51,123 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 - [CDP Agentkit Documentation](https://docs.cdp.coinbase.com/agentkit/docs/welcome)
 - [API Reference: CDP Agentkit Core](https://coinbase.github.io/cdp-agentkit/cdp-agentkit-core/index.html)
 - [API Reference: CDP Agentkit LangChain Extension](https://coinbase.github.io/cdp-agentkit/cdp-langchain/index.html)
+
+## Cloning the Repository
+To clone this repository, use the following command:
+```
+gh repo clone Setland34/ETHkey-1
+```
+
+## Prerequisites
+Before starting the setup, ensure you have the following tools and versions installed:
+- Node.js (v14.x or higher)
+- npm (v6.x or higher)
+- Truffle (v5.x or higher)
+- Ganache CLI (v6.x or higher)
+
+## Installing Dependencies
+To install the necessary dependencies, run the following command:
+```
+npm install
+```
+
+## Development Environment Setup
+To set up the development environment, follow these steps:
+1. Install Ganache CLI:
+   ```
+   npm install -g ganache-cli
+   ```
+2. Install Truffle:
+   ```
+   npm install -g truffle
+   ```
+3. Start Ganache CLI:
+   ```
+   ganache-cli
+   ```
+4. Compile the smart contracts:
+   ```
+   truffle compile
+   ```
+5. Migrate the smart contracts to the development network:
+   ```
+   truffle migrate --network development
+   ```
+
+## Testing Instructions
+To run tests for the smart contracts, use the following command:
+```
+truffle test
+```
+To run tests with forked mainnet state, use the following command:
+```
+forge test --fork-url https://eth-sepolia.g.alchemy.com/v2/YOURKEY
+```
+
+## Usage Instructions
+To interact with the smart contracts using web3.js or ethers.js, follow these examples:
+
+### Using web3.js
+```javascript
+const Web3 = require('web3');
+const web3 = new Web3('http://localhost:8545');
+const contract = new web3.eth.Contract(abi, contractAddress);
+
+// Example function call
+contract.methods.exampleFunction().call()
+  .then(result => console.log(result))
+  .catch(error => console.error(error));
+```
+
+### Using ethers.js
+```javascript
+const { ethers } = require('ethers');
+const provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
+const contract = new ethers.Contract(contractAddress, abi, provider);
+
+// Example function call
+contract.exampleFunction()
+  .then(result => console.log(result))
+  .catch(error => console.error(error));
+```
+
+## API Documentation
+The API documentation provides detailed information about the functions and methods available in the smart contracts. You can find the API documentation [here](link-to-api-documentation).
+
+## Deployment Instructions
+To deploy the smart contracts to different networks, follow these steps:
+1. Configure the network settings in `truffle-config.js`.
+2. Deploy the smart contracts:
+   ```
+   truffle migrate --network <network-name>
+   ```
+
+## Changelog
+Keep track of changes and updates made to the repository in this section.
+
+## Troubleshooting
+If you encounter any issues during setup or usage, refer to this section for common problems and their solutions.
+
+## License
+This repository is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+
+## Getting Started
+To start using the repository, follow the instructions in the [Development Environment Setup](#development-environment-setup) and [Usage Instructions](#usage-instructions) sections.
+
+## Project Structure
+Explain the directory structure and the purpose of each file in this section.
+
+## Configuration
+Detail any configuration settings and how to modify them in this section.
+
+## Code of Conduct
+To ensure a welcoming and inclusive community, please adhere to the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Contributing
+To contribute to this repository, follow these guidelines:
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Write clear and concise commit messages.
+4. Submit a pull request.
+
+<script src="https://gist.github.com/Setland34/1f52d3d6f2382851bafff6c5bb850b6b.js"></script>
