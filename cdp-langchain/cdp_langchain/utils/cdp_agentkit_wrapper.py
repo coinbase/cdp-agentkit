@@ -8,7 +8,7 @@ from typing import Any
 from langchain_core.utils import get_from_dict_or_env
 from pydantic import BaseModel, model_validator
 
-from cdp import Wallet
+from cdp import MnemonicSeedPhrase, Wallet
 from cdp_langchain import __version__
 from cdp_langchain.constants import CDP_LANGCHAIN_DEFAULT_SOURCE
 
@@ -29,6 +29,7 @@ class CdpAgentkitWrapper(BaseModel):
         cdp_api_key_private_key = get_from_dict_or_env(
             values, "cdp_api_key_private_key", "CDP_API_KEY_PRIVATE_KEY"
         ).replace("\\n", "\n")
+        mnemonic_phrase = get_from_dict_or_env(values, "mnemonic_phrase", "MNEMONIC_PHRASE", "")
         network_id = get_from_dict_or_env(values, "network_id", "NETWORK_ID", "base-sepolia")
         wallet_data_json = values.get("cdp_wallet_data")
 
@@ -49,12 +50,16 @@ class CdpAgentkitWrapper(BaseModel):
         if wallet_data_json:
             wallet_data = WalletData.from_dict(json.loads(wallet_data_json))
             wallet = Wallet.import_data(wallet_data)
+        elif mnemonic_phrase:
+            phrase = MnemonicSeedPhrase(mnemonic_phrase)
+            wallet = Wallet.import_wallet(phrase)
         else:
             wallet = Wallet.create(network_id=network_id)
 
         values["wallet"] = wallet
         values["cdp_api_key_name"] = cdp_api_key_name
         values["cdp_api_key_private_key"] = cdp_api_key_private_key
+        values["mnemonic_phrase"] = mnemonic_phrase
         values["network_id"] = network_id
 
         return values
