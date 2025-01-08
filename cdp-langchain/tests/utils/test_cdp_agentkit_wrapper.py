@@ -40,6 +40,15 @@ def mock_wallet_import_data():
 
 
 @pytest.fixture
+def mock_wallet_import_wallet():
+    """Fixture for mocked CDP SDK Wallet import mnemonic phrase."""
+    with patch("cdp.Wallet.import_wallet") as mock_wallet:
+        mock_wallet_instance = Mock(spec=Wallet)
+        mock_wallet.return_value = mock_wallet_instance
+        yield mock_wallet
+
+
+@pytest.fixture
 def env_vars(monkeypatch: pytest.MonkeyPatch):
     """Fixture to set environment variables."""
     test_vars = {
@@ -125,6 +134,34 @@ def test_initialization_with_direct_values_and_persisted_wallet(
     )
 
     mock_wallet_import_data.assert_called_once()
+
+
+def test_initialization_with_direct_values_and_mnemonic_phrase(
+    mock_cdp_configure: Mock,
+    mock_wallet_import_wallet: Mock,
+):
+    """Test initialization with directly provided values and persisted wallet."""
+    test_values = {
+        "cdp_api_key_name": "test-cdp-api-key-name",
+        "cdp_api_key_private_key": "test-cdp-api-key-private-key",
+        "network_id": "base-sepolia",
+        "mnemonic_phrase": "eternal phone creek robot disorder climb thought eternal noodle flat cage bubble liquid sting can",
+    }
+
+    wrapper = CdpAgentkitWrapper(**test_values)
+
+    assert wrapper.cdp_api_key_name == test_values["cdp_api_key_name"]
+    assert wrapper.cdp_api_key_private_key == test_values["cdp_api_key_private_key"]
+    assert wrapper.network_id == test_values["network_id"]
+
+    mock_cdp_configure.assert_called_once_with(
+        api_key_name=test_values["cdp_api_key_name"],
+        private_key=test_values["cdp_api_key_private_key"],
+        source=CDP_LANGCHAIN_DEFAULT_SOURCE,
+        source_version=__version__,
+    )
+
+    mock_wallet_import_wallet.assert_called_once()
 
 
 def test_missing_environment_variables(monkeypatch: pytest.MonkeyPatch):
