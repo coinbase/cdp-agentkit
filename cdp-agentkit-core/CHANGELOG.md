@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [0.0.7] - 2025-01-08
+
 ### Added
 
 - Bump `cdp-sdk` dependency to `0.13.0`.
