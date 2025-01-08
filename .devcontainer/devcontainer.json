@@ -1,7 +1,6 @@
 {
   "tasks": {
     "test": "make test",
-    "build": "poetry install",
-    "launch": "make test"
+    "build": "poetry install"
   }
 }

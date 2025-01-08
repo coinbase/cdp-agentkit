@@ -2,6 +2,7 @@
 install:
     pip install -r requirements.txt
     pip install ruff
+    pip install pytest
 
 .PHONY: format
 format:
