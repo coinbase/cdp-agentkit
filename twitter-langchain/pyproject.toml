@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "twitter-langchain"
-version = "0.0.6"
+version = "0.0.7"
 description = "Twitter Langchain Toolkit"
 authors = ["John Peterson <john.peterson@coinbase.com>"]
 license = "Apache-2.0"
