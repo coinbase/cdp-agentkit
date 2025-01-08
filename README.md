@@ -6,6 +6,8 @@
 
 The **Coinbase Developer Platform (CDP) Agentkit for Python** simplifies bringing your AI Agents onchain. Every AI Agent deserves a crypto wallet!
 
+It's AWESOME!
+
 
 ## Key Features
 - **Framework-agnostic**: Common AI Agent primitives that can be used with any AI framework.
