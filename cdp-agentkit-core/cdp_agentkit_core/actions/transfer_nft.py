@@ -19,31 +19,28 @@ Important notes:
 - The wallet must either own the NFT or have approval to transfer it
 """
 
+
 class TransferNftInput(BaseModel):
     """Input argument schema for NFT transfer action."""
-    contract_address: str = Field(
-        ..., 
-        description="The NFT contract address to interact with"
-    )
-    token_id: str = Field(
-        ...,
-        description="The ID of the NFT to transfer"
-    )
+
+    contract_address: str = Field(..., description="The NFT contract address to interact with")
+    token_id: str = Field(..., description="The ID of the NFT to transfer")
     destination: str = Field(
         ...,
-        description="The destination to transfer the NFT, e.g. `0x58dBecc0894Ab4C24F98a0e684c989eD07e4e027`, `example.eth`, `example.base.eth`"
+        description="The destination to transfer the NFT, e.g. `0x58dBecc0894Ab4C24F98a0e684c989eD07e4e027`, `example.eth`, `example.base.eth`",
     )
     from_address: str = Field(
         default=None,
-        description="The address to transfer from. If not provided, defaults to the wallet's default address"
+        description="The address to transfer from. If not provided, defaults to the wallet's default address",
     )
 
+
 def transfer_nft(
-    wallet: Wallet, 
-    contract_address: str, 
-    token_id: str, 
+    wallet: Wallet,
+    contract_address: str,
+    token_id: str,
     destination: str,
-    from_address: str | None = None
+    from_address: str | None = None,
 ) -> str:
     """Transfer an NFT (ERC721 token) to a destination address.
 
@@ -56,22 +53,20 @@ def transfer_nft(
 
     Returns:
         str: A message containing the transfer details.
+
     """
     try:
         from_addr = from_address if from_address is not None else wallet.default_address.address_id
         transfer_result = wallet.invoke_contract(
             contract_address=contract_address,
             method="transferFrom",
-            args={
-                "from": from_addr,
-                "to": destination,
-                "tokenId": token_id
-            }
+            args={"from": from_addr, "to": destination, "tokenId": token_id},
         ).wait()
     except Exception as e:
         return f"Error transferring the NFT (contract: {contract_address}, ID: {token_id}) from {from_addr} to {destination}): {e!s}"
 
     return f"Transferred NFT (ID: {token_id}) from contract {contract_address} to {destination}.\nTransaction hash: {transfer_result.transaction_hash}\nTransaction link: {transfer_result.transaction_link}"
+
 
 class TransferNftAction(CdpAction):
     """Transfer NFT action."""

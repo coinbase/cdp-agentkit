@@ -67,7 +67,9 @@ def test_get_balance_nft_no_tokens(wallet_factory):
             MOCK_CONTRACT_ADDRESS,
         )
 
-        expected_response = f"Address {MOCK_ADDRESS} owns no NFTs in contract {MOCK_CONTRACT_ADDRESS}"
+        expected_response = (
+            f"Address {MOCK_ADDRESS} owns no NFTs in contract {MOCK_CONTRACT_ADDRESS}"
+        )
         assert action_response == expected_response
 
 

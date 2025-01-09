@@ -35,10 +35,10 @@ def test_transfer_nft_success(wallet_factory, contract_invocation_factory):
     """Test successful NFT transfer with valid parameters."""
     mock_wallet = wallet_factory()
     mock_contract_invocation = contract_invocation_factory()
-    
+
     # Set the mock wallet address
     mock_wallet.address = "0xdefaultAddress"
-    
+
     # Set the mock transaction properties
     mock_contract_invocation.transaction_hash = "0xvalidTransactionHash"
     mock_contract_invocation.transaction_link = "https://basescan.org/tx/0xvalidTransactionHash"
@@ -52,10 +52,7 @@ def test_transfer_nft_success(wallet_factory, contract_invocation_factory):
         ) as mock_contract_invocation_wait,
     ):
         action_response = transfer_nft(
-            mock_wallet, 
-            MOCK_CONTRACT_ADDRESS, 
-            MOCK_TOKEN_ID, 
-            MOCK_DESTINATION
+            mock_wallet, MOCK_CONTRACT_ADDRESS, MOCK_TOKEN_ID, MOCK_DESTINATION
         )
 
         expected_response = f"Transferred NFT (ID: {MOCK_TOKEN_ID}) from contract {MOCK_CONTRACT_ADDRESS} to {MOCK_DESTINATION}.\nTransaction hash: {mock_contract_invocation.transaction_hash}\nTransaction link: {mock_contract_invocation.transaction_link}"
@@ -81,10 +78,7 @@ def test_transfer_nft_api_error(wallet_factory):
         mock_wallet, "invoke_contract", side_effect=Exception("API error")
     ) as mock_invoke_contract:
         action_response = transfer_nft(
-            mock_wallet, 
-            MOCK_CONTRACT_ADDRESS, 
-            MOCK_TOKEN_ID, 
-            MOCK_DESTINATION
+            mock_wallet, MOCK_CONTRACT_ADDRESS, MOCK_TOKEN_ID, MOCK_DESTINATION
         )
 
         expected_response = f"Error transferring the NFT (contract: {MOCK_CONTRACT_ADDRESS}, ID: {MOCK_TOKEN_ID}) from {mock_wallet.address} to {MOCK_DESTINATION}): API error"
@@ -98,4 +92,4 @@ def test_transfer_nft_api_error(wallet_factory):
                 "to": MOCK_DESTINATION,
                 "tokenId": MOCK_TOKEN_ID,
             },
-        ) 
+        )
