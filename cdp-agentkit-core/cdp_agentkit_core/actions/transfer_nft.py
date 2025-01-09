@@ -33,12 +33,17 @@ class TransferNftInput(BaseModel):
         ...,
         description="The destination to transfer the NFT, e.g. `0x58dBecc0894Ab4C24F98a0e684c989eD07e4e027`, `example.eth`, `example.base.eth`"
     )
+    from_address: str = Field(
+        default=None,
+        description="The address to transfer from. If not provided, defaults to the wallet's default address"
+    )
 
 def transfer_nft(
     wallet: Wallet, 
     contract_address: str, 
     token_id: str, 
-    destination: str
+    destination: str,
+    from_address: str | None = None
 ) -> str:
     """Transfer an NFT (ERC721 token) to a destination address.
 
@@ -47,22 +52,24 @@ def transfer_nft(
         contract_address (str): The NFT contract address.
         token_id (str): The ID of the NFT to transfer.
         destination (str): The destination to transfer the NFT.
+        from_address (str | None): The address to transfer from. Defaults to wallet's default address.
 
     Returns:
         str: A message containing the transfer details.
     """
     try:
+        from_addr = from_address if from_address is not None else wallet.default_address.address_id
         transfer_result = wallet.invoke_contract(
             contract_address=contract_address,
             method="transferFrom",
             args={
-                "from": wallet.default_address.address_id,
+                "from": from_addr,
                 "to": destination,
                 "tokenId": token_id
             }
         ).wait()
     except Exception as e:
-        return f"Error transferring the NFT (contract: {contract_address}, ID: {token_id}) from {wallet.default_address.address_id} to {destination}): {e!s}"
+        return f"Error transferring the NFT (contract: {contract_address}, ID: {token_id}) from {from_addr} to {destination}): {e!s}"
 
     return f"Transferred NFT (ID: {token_id}) from contract {contract_address} to {destination}.\nTransaction hash: {transfer_result.transaction_hash}\nTransaction link: {transfer_result.transaction_link}"
 

@@ -64,6 +64,7 @@ class CdpToolkit(BaseToolkit):
             wow_buy_token
             wow_sell_token
             transfer_nft
+            get_balance_nft
     Use within an agent:
         .. code-block:: python
 

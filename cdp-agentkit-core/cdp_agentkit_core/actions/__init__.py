@@ -12,7 +12,7 @@ from cdp_agentkit_core.actions.wow.buy_token import WowBuyTokenAction
 from cdp_agentkit_core.actions.wow.create_token import WowCreateTokenAction
 from cdp_agentkit_core.actions.wow.sell_token import WowSellTokenAction
 from cdp_agentkit_core.actions.transfer_nft import TransferNftAction
-
+from cdp_agentkit_core.actions.get_balance_nft import GetBalanceNftAction
 
 # WARNING: All new CdpAction subclasses must be imported above, otherwise they will not be discovered
 # by get_all_cdp_actions(). The import ensures the class is registered as a subclass of CdpAction.
@@ -42,4 +42,5 @@ __all__ = [
     "WowCreateTokenAction",
     "WowSellTokenAction",
     "TransferNftAction",
+    "GetBalanceNftAction"
 ]
