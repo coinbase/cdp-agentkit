@@ -20,4 +20,4 @@ local-docs: docs
 
 .PHONY: test
 test:
-	pytest
+	poetry run pytest
