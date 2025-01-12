@@ -11,6 +11,7 @@ It takes the contract address of the NFT onchain and the destination address onc
 Do not use the contract address as the destination address. If you are unsure of the destination address, please ask the user before proceeding.
 """
 
+
 class MintNftInput(BaseModel):
     """Input argument schema for mint NFT action."""
 

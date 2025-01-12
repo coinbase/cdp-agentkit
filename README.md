@@ -21,6 +21,7 @@ The **Coinbase Developer Platform (CDP) Agentkit for Python** simplifies bringin
   - Deploying [ERC-721](https://www.coinbase.com/learn/crypto-glossary/what-is-erc-721) tokens and minting NFTs
   - Buying and selling [Zora Wow](https://wow.xyz/) ERC-20 coins
   - Deploying tokens on [Zora's Wow Launcher](https://wow.xyz/mechanics) (Bonding Curve)
+  - Wrapping ETH to WETH on Base
 
   Or [add your own](./CONTRIBUTING.md#adding-an-action-to-agentkit-core)!
 

@@ -10,6 +10,7 @@ This tool will get the balance of all the addresses in the wallet for a given as
 It takes the asset ID as input. Always use 'eth' for the native asset ETH and 'usdc' for USDC.
 """
 
+
 class GetBalanceInput(BaseModel):
     """Input argument schema for get balance action."""
 

@@ -63,6 +63,7 @@ class CdpToolkit(BaseToolkit):
             wow_create_token
             wow_buy_token
             wow_sell_token
+            wrap_eth
     Use within an agent:
         .. code-block:: python
 

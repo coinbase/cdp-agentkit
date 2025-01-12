@@ -1,18 +1,18 @@
 .PHONY: format
 format:
-	ruff format .
+	poetry run ruff format .
 
 .PHONY: lint
 lint:
-	ruff check .
+	poetry run ruff check .
 
 .PHONY: lint-fix
 lint-fix:
-	ruff check . --fix
+	poetry run ruff check . --fix
 
 .PHONY: docs
 docs:
-	sphinx-apidoc -f -o ./docs ./cdp_agentkit_core
+	poetry run sphinx-apidoc -f -o ./docs ./cdp_agentkit_core
 
 .PHONY: local-docs
 local-docs: docs

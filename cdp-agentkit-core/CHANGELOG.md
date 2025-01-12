@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Added `wrap_eth` action to wrap ETH to WETH on Base.
+
 ## [0.0.7] - 2025-01-08
 
 ### Added

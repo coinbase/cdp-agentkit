@@ -32,15 +32,14 @@ def get_buy_quote(network_id: str, token_address: str, amount_eth_in_wei: str):
     """
     has_graduated = get_has_graduated(network_id, token_address)
     token_quote = (
-        (has_graduated
-        and (get_uniswap_quote(network_id, token_address, amount_eth_in_wei, "buy")).amount_out)
-        or SmartContract.read(
-            network_id,
-            token_address,
-            "getEthBuyQuote",
-            abi=WOW_ABI,
-            args={"ethOrderSize": str(amount_eth_in_wei)},
-        )
+        has_graduated
+        and (get_uniswap_quote(network_id, token_address, amount_eth_in_wei, "buy")).amount_out
+    ) or SmartContract.read(
+        network_id,
+        token_address,
+        "getEthBuyQuote",
+        abi=WOW_ABI,
+        args={"ethOrderSize": str(amount_eth_in_wei)},
     )
     return token_quote
 
@@ -56,14 +55,13 @@ def get_sell_quote(network_id: str, token_address: str, amount_tokens_in_wei: st
     """
     has_graduated = get_has_graduated(network_id, token_address)
     token_quote = (
-        (has_graduated
-        and (get_uniswap_quote(network_id, token_address, amount_tokens_in_wei, "sell")).amount_out)
-        or SmartContract.read(
-            network_id,
-            token_address,
-            "getTokenSellQuote",
-            WOW_ABI,
-            args={"tokenOrderSize": str(amount_tokens_in_wei)},
-        )
+        has_graduated
+        and (get_uniswap_quote(network_id, token_address, amount_tokens_in_wei, "sell")).amount_out
+    ) or SmartContract.read(
+        network_id,
+        token_address,
+        "getTokenSellQuote",
+        WOW_ABI,
+        args={"tokenOrderSize": str(amount_tokens_in_wei)},
     )
     return token_quote

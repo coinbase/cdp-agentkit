@@ -37,10 +37,12 @@ def account_details(client: tweepy.Client) -> str:
 
     try:
         response = client.get_me()
-        data = response['data']
-        data['url'] = f"https://x.com/{data['username']}"
+        data = response["data"]
+        data["url"] = f"https://x.com/{data['username']}"
 
-        message = f"""Successfully retrieved authenticated user account details:\n{dumps(response)}"""
+        message = (
+            f"""Successfully retrieved authenticated user account details:\n{dumps(response)}"""
+        )
     except tweepy.errors.TweepyException as e:
         message = f"Error retrieving authenticated user account details:\n{e}"
 

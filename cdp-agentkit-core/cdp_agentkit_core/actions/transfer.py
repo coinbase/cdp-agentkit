@@ -22,6 +22,7 @@ Important notes:
 - When sending native assets (e.g. 'eth' on base-mainnet), ensure there is sufficient balance for the transfer itself AND the gas cost of this transfer
 """
 
+
 class TransferInput(BaseModel):
     """Input argument schema for transfer action."""
 
