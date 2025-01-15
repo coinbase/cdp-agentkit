@@ -22,7 +22,7 @@ DEPOSIT_PROMPT = """
 This tool allows depositing assets into a Morpho Vault. It takes:
 
 - vault_address: The address of the Morpho Vault to deposit to
-- assets: The amount of assets to deposit in native units
+- assets: The amount of assets to deposit in whole units
   Examples for WETH:
   - 1 WETH
   - 0.1 WETH
@@ -44,7 +44,7 @@ def deposit_to_morpho(
     Args:
         wallet (Wallet): The wallet to execute the deposit from
         vault_address (str): The address of the Morpho Vault
-        assets (str): The amount of assets to deposit in native units (e.g., 0.01 WETH)
+        assets (str): The amount of assets to deposit in whole units (e.g., 0.01 WETH)
         receiver (str): The address to receive the shares
         token_address (str): The address of the token to approve
 

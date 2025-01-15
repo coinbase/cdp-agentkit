@@ -1,6 +1,6 @@
 from cdp import Wallet
 
-from cdp_agentkit_core.actions.morpho.constants import ERC20_ABI
+from cdp_agentkit_core.actions.morpho.constants import ERC20_APPROVE_ABI
 
 
 def approve(wallet: Wallet, token_address: str, spender: str, amount: int) -> str:
@@ -22,7 +22,7 @@ def approve(wallet: Wallet, token_address: str, spender: str, amount: int) -> st
         invocation = wallet.invoke_contract(
             contract_address=token_address,
             method="approve",
-            abi=ERC20_ABI,
+            abi=ERC20_APPROVE_ABI,
             args={
                 "spender": spender,
                 "value": amount_str,
