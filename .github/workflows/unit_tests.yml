@@ -2,11 +2,11 @@ name: Run Unit Tests
 on: [pull_request]
 
 jobs:
-  test-agentkit:
+  test-cdp-agentkit-core-python:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./cdp-agentkit-core
+        working-directory: ./cdp-agentkit-core/python
     strategy:
       matrix:
         python: ['3.10', '3.11', '3.12']
@@ -30,8 +30,8 @@ jobs:
         id: cached-poetry-dependencies
         uses: actions/cache@v3
         with:
-          path: ./cdp-agentkit-core/.venv
-          key: venv-agentkit-${{ runner.os }}-${{ matrix.python }}-${{ hashFiles('cdp-agentkit-core/poetry.lock') }}
+          path: ./cdp-agentkit-core/python/.venv
+          key: venv-agentkit-${{ runner.os }}-${{ matrix.python }}-${{ hashFiles('cdp-agentkit-core/python/poetry.lock') }}
 
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
@@ -40,11 +40,11 @@ jobs:
       - name: Run tests
         run: poetry run make test
 
-  test-langchain:
+  test-cdp-langchain-python:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./cdp-langchain
+        working-directory: ./cdp-langchain/python
     strategy:
       matrix:
         python: ['3.10', '3.11', '3.12']
@@ -68,8 +68,8 @@ jobs:
         id: cached-poetry-dependencies
         uses: actions/cache@v3
         with:
-          path: ./cdp-langchain/.venv
-          key: venv-langchain-${{ runner.os }}-${{ matrix.python }}-${{ hashFiles('cdp-langchain/poetry.lock') }}
+          path: ./cdp-langchain/python/.venv
+          key: venv-langchain-${{ runner.os }}-${{ matrix.python }}-${{ hashFiles('cdp-langchain/python/poetry.lock') }}
 
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
@@ -78,11 +78,11 @@ jobs:
       - name: Run tests
         run: poetry run make test
 
-  test-twitter-langchain:
+  test-twitter-langchain-python:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./twitter-langchain
+        working-directory: ./twitter-langchain/python
     strategy:
       matrix:
         python: ['3.10', '3.11', '3.12']
@@ -106,8 +106,8 @@ jobs:
         id: cached-poetry-dependencies
         uses: actions/cache@v3
         with:
-          path: ./twitter-langchain/.venv
-          key: venv-twitter-langchain-${{ runner.os }}-${{ matrix.python }}-${{ hashFiles('cdp-twitter-langchain/poetry.lock') }}
+          path: ./twitter-langchain/python/.venv
+          key: venv-twitter-langchain-${{ runner.os }}-${{ matrix.python }}-${{ hashFiles('cdp-twitter-langchain/python/poetry.lock') }}
 
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
@@ -115,3 +115,19 @@ jobs:
 
       - name: Run tests
         run: poetry run make test
+
+  test-agentkit-typescript:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ["18", "20"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - name: Install and test AgentKit.js
+        run: |
+          npm i
+          npm run test

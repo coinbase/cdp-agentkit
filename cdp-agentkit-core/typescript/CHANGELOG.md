@@ -1,0 +1,52 @@
+# CDP AgentKit Core Changelog
+
+## Unreleased
+
+## [0.0.11] - 2025-01-13
+
+### Added
+
+- Added `wrap_eth` action to wrap ETH to WETH on Base.
+
+## [0.0.10] - 2025-01-09
+
+### Removed
+- rogue console.log
+
+## [0.0.9] - 2025-01-08
+
+### Added
+
+- Bump dependency `coinbase-sdk-nodejs` to version `0.13.0`.
+- Supporting mnemonic phrase wallet import
+
+### Refactored
+
+- Tests
+- Use `ZodString.min(1)` instead of deprecated `ZodString.nonempty()`.
+
+## [0.0.8] - 2024-12-09
+
+### Added
+
+- Twitter (X) Agentkit.
+- Twitter (X) account details action to retrieve the authenticated user's information.
+- Twitter (X) account mentions action to retrieve the authenticated user's mentions.
+- Twitter (X) post tweet action to the authenticated user's feed.
+- Twitter (X) post tweet reply action to any post.
+
+## [0.0.7] - 2024-12-06
+
+### Added
+
+- Improved prompts for all actions.
+
+## [0.0.6] - 2024-12-03
+
+### Fixed
+
+## [0.0.5] - 2024-11-29
+
+### Added
+
+Initial release of the CDP Node.js AgentKit.

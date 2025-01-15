@@ -6,14 +6,35 @@ This toolkit contains tools that enable an LLM agent to interact with [Twitter](
 ## Setup
 
 ### Prerequisites
-- Python 3.10 or higher 
+
+#### OpenAI
+
 - [OpenAI API Key](https://platform.openai.com/api-keys)
+
+#### Twitter (X)
+
 - [Twitter (X) App Developer Keys](https://developer.x.com/en/portal/dashboard)
+
+#### Python
+
+- Python 3.10 or higher 
+
+#### Typescript
+
+- Node.js 18 or higher
 
 ### Installation
 
+#### Python
+
 ```bash
 pip install twitter-langchain
+```
+
+#### Typescript
+
+```bash
+npm install @coinbase/twitter-langchain
 ```
 
 ### Environment Setup
@@ -32,6 +53,8 @@ export TWITTER_BEARER_TOKEN=<your-bearer-token>
 ## Usage
 
 ### Basic Setup
+
+#### Python
 
 ```python
 from twitter_langchain import (
@@ -53,6 +76,24 @@ for tool in tools:
     print(tool.name)
 ```
 
+#### Typescript
+
+```typescript
+import { TwitterAgentkit } from "@coinbase/cdp-agentkit-core";
+import { TwitterToolkit } from "@coinbase/twitter-langchain";
+
+// Initialize Twitter AgentKit
+const agentkit = new TwitterAgentkit();
+
+// Create toolkit
+const toolkit = new TwitterToolkit(agentkit);
+
+// Get available tools
+const tools = toolkit.getTools();
+```
+
+### Available Tools
+
 The toolkit provides the following tools:
 
 1. **account_details** - Get the authenticated account details
@@ -61,6 +102,8 @@ The toolkit provides the following tools:
 3. **post_tweet_reply** - Post a reply to a tweet on Twitter
 
 ### Using with an Agent
+
+#### Python
 
 ```python
 import uuid
@@ -105,9 +148,43 @@ Successfully posted!
 The message "hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa" has been successfully posted to Twitter!
 ```
 
-## Contributing
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for detailed setup instructions and contribution guidelines.
+#### Typescript
 
-## Documentation
-For detailed documentation, please visit:
-- [Agentkit-Core](https://coinbase.github.io/cdp-agentkit/cdp-agentkit-core/)
+#### Additional Installations
+
+```bash
+npm install @langchain/langgraph @langchain/openai
+```
+
+```typescript
+import { ChatOpenAI } from "@langchain/openai";
+import { createReactAgent } from "@langchain/langgraph/prebuilt";
+
+// Initialize LLM
+const model = new ChatOpenAI({
+  model: "gpt-4o-mini",
+});
+
+// Create agent executor
+const agent = createReactAgent({
+  llm: model,
+  tools,
+});
+
+// Example usage
+const result = await agent.invoke({
+  messages: [new HumanMessage("please post 'hello, world!' to twitter")],
+});
+
+console.log(result.messages[result.messages.length - 1].content);
+```
+
+## Examples
+
+Check out [twitter-langchain/examples](./examples) for inspiration and help getting started!
+- [Chatbot Python](./examples/chatbot-python/README.md): Simple example of a Python Chatbot that can interact on Twitter (X), using OpenAI.
+- [Chatbot Typescript](./examples/chatbot-typescript/README.md): Simple example of a Node.js Chatbot that can interact on Twitter (X), using OpenAI.
+
+## Contributing
+
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for detailed setup instructions and contribution guidelines.

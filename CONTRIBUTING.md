@@ -5,16 +5,6 @@ Thank you for your interest in contributing to CDP Agentkit! We welcome all cont
 - Creating new AI frameworks extensions
 - Adding tests and improving documentation
 
-## Development
-
-### Prerequisites
-- Python 3.10 or higher
-- Rust/Cargo installed ([Rust Installation Instructions](https://doc.rust-lang.org/cargo/getting-started/installation.html))
-- Poetry for package management and tooling
-  - [Poetry Installation Instructions](https://python-poetry.org/docs/#installation)
-
-`cdp-langchain` also requires a [CDP API Key](https://portal.cdp.coinbase.com/access/api).
-
 ### Set-up
 
 Clone the repo by running:
@@ -23,8 +13,100 @@ Clone the repo by running:
 git clone git@github.com:coinbase/cdp-agentkit.git
 ```
 
+## Python Development
+### Prerequisites
+- Python 3.10 or higher
+- Rust/Cargo installed ([Rust Installation Instructions](https://doc.rust-lang.org/cargo/getting-started/installation.html))
+- Poetry for package management and tooling
+  - [Poetry Installation Instructions](https://python-poetry.org/docs/#installation)
+
+`cdp-langchain` also requires a [CDP API Key](https://portal.cdp.coinbase.com/access/api).
+
+### Development Tools
+#### Formatting
+`make format`
+
+#### Linting
+- Check linter
+`make lint`
+
+- Fix linter errors
+`make lint-fix`
+
+#### Unit Testing
+- Run unit tests
+`make test`
+
+## Typescript Development
+### Prerequisites
+- Node.js 18 or higher
+- npm for package management
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+### Development Tools
+#### Building
+
+To build all packages:
+
+```bash
+npm run build
+```
+
+#### Linting & Formatting
+
+To check for lint errors:
+
+```bash
+npm run lint
+```
+
+To automatically fix lint errors:
+
+```bash
+npm run lint-fix
+```
+
+To format code:
+
+```bash
+npm run format
+```
+
+#### Testing
+
+To run all tests:
+
+```bash
+npm test
+```
+
+#### Documentation
+
+To generate documentation:
+
+```bash
+npm run docs
+```
+
+#### Typescript Code Style
+
+All code must follow the project's ESLint and Prettier configurations. The key rules are:
+- Use TypeScript
+- Follow JSDoc documentation standards
+- Use 2 spaces for indentation
+- Maximum line length of 100 characters
+- Double quotes for strings
+- Semicolons required
+
+
 ## Adding an Action to Agentkit Core
-- Actions are defined in `./cdp_agentkit_core/actions` module. See `./cdp_agentkit_core/actions/mint_nft.py` for an example.
+### Python
+- Actions are defined in `./cdp-agentkit-core/python/cdp_agentkit_core/actions` module. See `./cdp-agentkit-core/python/cdp_agentkit_core/actions/mint_nft.py` for an example.
 - Actions are created by subclassing `CdpAction`
   E.g.
 ```python
@@ -37,7 +119,7 @@ class DeployNftAction(CdpAction):
     func: Callable[..., str] = mint_nft
 ```
 
-### Components of an Agentic Action
+#### Components of an Agentic Action
 - `name` - Name of the action.
 - `description` - A string that will provide the AI Agent with context on what the function does and a natural language description of the input.
   - E.g. 
@@ -84,12 +166,88 @@ def mint_nft(wallet: Wallet, contract_address: str, destination: str) -> str:
     return f"Minted NFT from contract {contract_address} to address {destination} on network {wallet.network_id}.\nTransaction hash for the mint: {mint_invocation.transaction.transaction_hash}\nTransaction link for the mint: {mint_invocation.transaction.transaction_link}"
 ```
 
+### Typescript
+Actions are defined in `cdp-agentkit-core/typescript/src/actions` module. See `cdp-agentkit-core/typescript/src/actions/cdp/mint_nft.ts` for an example.
+
+Actions are created by implementing the `CdpAction` interface:
+
+```typescript
+import { CdpAction } from "./cdp_action";
+import { Wallet } from "@coinbase/coinbase-sdk";
+import { z } from "zod";
+
+const MINT_NFT_PROMPT = `
+This tool will mint an NFT (ERC-721) to a specified destination address onchain via a contract invocation. It takes the contract address of the NFT onchain and the destination address onchain that will receive the NFT as inputs. Do not use the contract address as the destination address. If you are unsure of the destination address, please ask the user before proceeding.`;
+
+/**
+ * Input schema for mint NFT action.
+ */
+const MintNftInput = z
+  .object({
+    contractAddress: z.string().describe("The contract address of the NFT to mint"),
+    destination: z.string().describe("The destination address that will receive the NFT"),
+  })
+  .strip()
+  .describe("Instructions for minting an NFT");
+
+/**
+ * Mints an NFT (ERC-721) to a specified destination address onchain.
+ *
+ * @param wallet - The wallet to mint the NFT from.
+ * @param args - The input arguments for the action.
+ * @returns A message containing the NFT mint details.
+ */
+async function mintNft(wallet: Wallet, args: z.infer<typeof MintNftInput>): Promise<string> {
+  const mintArgs = {
+    to: args.destination,
+    quantity: "1",
+  };
+
+  try {
+    const mintInvocation = await wallet.invokeContract({
+      contractAddress: args.contractAddress,
+      method: "mint",
+      args: mintArgs,
+    });
+
+    const result = await mintInvocation.wait();
+
+    return `Minted NFT from contract ${args.contractAddress} to address ${args.destination} on network ${wallet.getNetworkId()}.\nTransaction hash for the mint: ${result.getTransaction().getTransactionHash()}\nTransaction link for the mint: ${result.getTransaction().getTransactionLink()}`;
+  } catch (error) {
+    return `Error minting NFT: ${error}`;
+  }
+}
+
+/**
+ * Mint NFT action.
+ */
+export class MintNftAction implements CdpAction<typeof MintNftInput> {
+  public name = "mint_nft";
+  public description = MINT_NFT_PROMPT;
+  public argsSchema = MintNftInput;
+  public func = mintNft;
+}
+```
+
+#### Components of an Agentic Action
+
+1. **Input Schema**: Define the input parameters using Zod schemas
+2. **Prompt**: A description that helps the AI understand when and how to use the action
+3. **Action Class**: Implements the `CdpAction` interface with:
+   - `name`: Unique identifier for the action
+   - `description`: The prompt text
+   - `argsSchema`: The Zod schema for validating inputs
+   - `func`: The implementation function
+4. **Implementation Function**: The actual logic that executes the action
+
 ## Adding an Agentic Action to Langchain Toolkit
+For both Python and Typescript, follow these steps:
 1. Ensure the action is implemented in `cdp-agentkit-core` and in a released version.
 2. Update the `cdp-agentkit-core` dependency to the latest version.
 3. Add the action to the list of tools in the `CdpToolkit` class documentation.
 
 ## Adding an Agentic Action to the Twitter Toolkit
+### Python
 1. Ensure the action is implemented in `cdp-agentkit-core/actions/social/twitter`.
 2. Add a wrapper method to `TwitterApiWrapper` in `./twitter_langchain/twitter_api_wrapper.py`
    - E.g.
@@ -131,20 +289,28 @@ def mint_nft(wallet: Wallet, contract_address: str, destination: str) -> str:
     - Add the action to the list of tools
     - Add any additional ENV requirements
 
-## Development Tools
-### Formatting
-`make format`
 
-### Linting
-- Check linter
-`make lint`
-
-- Fix linter errors
-`make lint-fix`
-
-### Unit Testing
-- Run unit tests
-`make test`
 
 ## Changelog
 - For new features and bug fixes, please add a new changelog entry to the `CHANGELOG.md` file in the appropriate packages and include that in your Pull Request.
+
+## Pull Request Process
+
+1. Create a new branch for your changes
+2. Make your changes following the coding standards
+3. Add tests for any new functionality
+4. Update documentation as needed
+5. Update the CHANGELOG.md
+6. Submit a pull request
+
+## Getting Help
+
+If you have questions or need help, please:
+1. Check the existing documentation
+2. Search through existing issues
+3. Create a new issue with your question
+
+Thank you for contributing to CDP AgentKit!
+
+
+

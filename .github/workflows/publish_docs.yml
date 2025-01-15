@@ -9,6 +9,33 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Set up Node 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install and Build JSDocs
+        run: |
+          npm i
+          npm run build
+          npm run docs
+
+      - name: Build CDP AgentKit Core JSDocs
+        run: |
+          mkdir -p docs/cdp-agentkit-core/typescript
+          cp -r cdp-agentkit-core/typescript/docs/* docs/cdp-agentkit-core/typescript
+
+      - name: Build CDP LangChain JSDocs
+        run: |
+          mkdir -p docs/cdp-langchain/typescript
+          cp -r cdp-langchain/typescript/docs/* docs/cdp-langchain/typescript
+
+      - name: Build Twitter LangChain JSDocs
+        run: |
+          mkdir -p docs/twitter-langchain/typescript
+          cp -r twitter-langchain/typescript/docs/* docs/twitter-langchain/typescript
+
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
@@ -21,82 +48,78 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-      # cdp-agentkit-core
-      - name: Load cached venv for cdp-agentkit-core
+      - name: Load cached venv for CDP AgentKit Core Python
         id: cached-poetry-dependencies-core
         uses: actions/cache@v3
         with:
-          path: ./cdp-agentkit-core/.venv
-          key: venv-agentkit-${{ runner.os }}-3.10-${{ hashFiles('cdp-agentkit-core/poetry.lock') }}
+          path: ./cdp-agentkit-core/python/.venv
+          key: venv-agentkit-${{ runner.os }}-3.10-${{ hashFiles('cdp-agentkit-core/python/poetry.lock') }}
 
-      - name: Install dependencies for cdp-agentkit-core
+      - name: Install dependencies for CDP AgentKit Core Python
         if: steps.cached-poetry-dependencies-core.outputs.cache-hit != 'true'
         run: |
-          cd cdp-agentkit-core
+          cd cdp-agentkit-core/python
           poetry install --with dev
           cd ..
 
-      - name: Build Sphinx Documentation for cdp-agentkit-core
+      - name: Build Sphinx Documentation for CDP AgentKit Core Python
         run: |
-          cd cdp-agentkit-core
+          cd cdp-agentkit-core/python
           poetry run make docs
           cd docs
           poetry run make html
           cd ../..
-          mkdir -p docs/cdp-agentkit-core
-          cp -r cdp-agentkit-core/docs/_build/html/* docs/cdp-agentkit-core
+          mkdir -p docs/cdp-agentkit-core/python
+          cp -r cdp-agentkit-core/python/docs/_build/html/* docs/cdp-agentkit-core/python
 
-      # cdp-langchain
-      - name: Load cached venv for cdp-langchain
+      - name: Load cached venv for CDP LangChain Python
         id: cached-poetry-dependencies-langchain
         uses: actions/cache@v3
         with:
-          path: ./cdp-langchain/.venv
-          key: venv-langchain-${{ runner.os }}-3.10-${{ hashFiles('cdp-langchain/poetry.lock') }}
+          path: ./cdp-langchain/python/.venv
+          key: venv-langchain-${{ runner.os }}-3.10-${{ hashFiles('cdp-langchain/python/poetry.lock') }}
 
-      - name: Install dependencies for cdp-langchain
+      - name: Install dependencies for CDP LangChain Python
         if: steps.cached-poetry-dependencies-langchain.outputs.cache-hit != 'true'
         run: |
-          cd cdp-langchain
+          cd cdp-langchain/python
           poetry install --with dev
           cd ..
 
-      - name: Build Sphinx Documentation for cdp-langchain
+      - name: Build Sphinx Documentation for CDP LangChain Python
         run: |
-          cd cdp-langchain
+          cd cdp-langchain/python
           poetry run make docs
           cd docs
           poetry run make html
           cd ../..
-          mkdir -p docs/cdp-langchain
-          cp -r cdp-langchain/docs/_build/html/* docs/cdp-langchain
+          mkdir -p docs/cdp-langchain/python
+          cp -r cdp-langchain/python/docs/_build/html/* docs/cdp-langchain/python
 
-      # twitter-langchain
-      - name: Load cached venv for twitter-langchain
+      - name: Load cached venv for Twitter LangChain Python
         id: cached-poetry-dependencies-twitter-langchain
         uses: actions/cache@v3
         with:
-          path: ./twitter-langchain/.venv
-          key: venv-twitter-langchain-${{ runner.os }}-3.10-${{ hashFiles('twitter-langchain/poetry.lock') }}
+          path: ./twitter-langchain/python/.venv
+          key: venv-twitter-langchain-${{ runner.os }}-3.10-${{ hashFiles('twitter-langchain/python/poetry.lock') }}
 
-      - name: Install dependencies for twitter-langchain
+      - name: Install dependencies for Twitter LangChain Python
         if: steps.cached-poetry-dependencies-twitter-langchain.outputs.cache-hit != 'true'
         run: |
-          cd twitter-langchain
+          cd twitter-langchain/python
           poetry install --with dev
           cd ..
 
-      - name: Build Sphinx Documentation for twitter-langchain
+      - name: Build Sphinx Documentation for Twitter LangChain Python
         run: |
-          cd twitter-langchain
+          cd twitter-langchain/python
           poetry run make docs
           cd docs
           poetry run make html
           cd ../..
-          mkdir -p docs/twitter-langchain
-          cp -r twitter-langchain/docs/_build/html/* docs/twitter-langchain
+          mkdir -p docs/twitter-langchain/python
+          cp -r twitter-langchain/python/docs/_build/html/* docs/twitter-langchain/python
 
-      # deploy
       - name: Deploy to Github Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
