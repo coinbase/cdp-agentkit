@@ -6,7 +6,7 @@ import { METAMORPHO_ABI } from "./constants";
 const WITHDRAW_PROMPT = `
 This tool allows withdrawing assets from a Morpho Vault. It takes:
 
-- vault_address: The address of the Morpho Vault to withdraw from
+- vaultAddress: The address of the Morpho Vault to withdraw from
 - assets: The amount of assets to withdraw in atomic units
 - receiver: The address to receive the shares
 `;
