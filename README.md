@@ -76,10 +76,10 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 ## Documentation
 
 - [CDP Agentkit Documentation](https://docs.cdp.coinbase.com/agentkit/docs/welcome)
-- [API Reference: CDP Agentkit Core Python](https://coinbase.github.io/cdp-agentkit/cdp-agentkit-core/python/index.html)
-- [API Reference: CDP Agentkit LangChain Extension Python](https://coinbase.github.io/cdp-agentkit/cdp-langchain/python/index.html)
-- [API Reference: CDP Agentkit Core Node.js](https://coinbase.github.io/cdp-agentkit/cdp-agentkit-core/typescript/index.html)
-- [API Reference: CDP Agentkit LangChain Extension Node.js](https://coinbase.github.io/cdp-agentkit/cdp-langchain/typescript/index.html)
+- [API Reference: CDP Agentkit Core Python](https://coinbase.github.io/agentkit/cdp-agentkit-core/python/index.html)
+- [API Reference: CDP Agentkit LangChain Extension Python](https://coinbase.github.io/agentkit/cdp-langchain/python/index.html)
+- [API Reference: CDP Agentkit Core Node.js](https://coinbase.github.io/agentkit/cdp-agentkit-core/typescript/index.html)
+- [API Reference: CDP Agentkit LangChain Extension Node.js](https://coinbase.github.io/agentkit/cdp-langchain/typescript/index.html)
 
 ## Security and bug reports
 

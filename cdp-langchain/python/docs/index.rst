@@ -1,7 +1,7 @@
 CDP Agentkit - LangChain Documentation
 ======================================
 
-.. include:: README.md
+.. include:: ../README.md
    :parser: myst_parser.sphinx_
 
 .. toctree::
