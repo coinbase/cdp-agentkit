@@ -20,6 +20,9 @@ This tool allows depositing assets into a Morpho Vault. It takes:
 - token_address: The address of the token to approve
 `;
 
+/**
+ * Input schema for Morpho Vault deposit action
+ */
 export const MorphoDepositInput = z.object({
   vaultAddress: z.string()
     .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
@@ -35,6 +38,12 @@ export const MorphoDepositInput = z.object({
     .describe("The address of the token to approve")
 }).describe("Input schema for Morpho Vault deposit action");
 
+/**
+ * Deposits assets into a Morpho Vault
+ * @param Wallet - The wallet instance to execute the transaction
+ * @param args - The input arguments for the action
+ * @returns A success message with transaction details or an error message
+ */
 export async function depositToMorpho(
   wallet: Wallet,
   args: z.infer<typeof MorphoDepositInput>
@@ -73,6 +82,9 @@ export async function depositToMorpho(
     }
 }
 
+/**
+ * Morpho Vault deposit action.
+ */
 export class MorphoDepositAction implements CdpAction<typeof MorphoDepositInput> {
   public name = "morpho_deposit";
   public description = DEPOSIT_PROMPT;

@@ -1,4 +1,6 @@
 import { CdpAction, CdpActionSchemaAny } from "../cdp/cdp_action";
+
+import { MorphoDepositAction } from "./deposit";
 import { MorphoWithdrawAction } from "./withdraw";
 
 /**
@@ -8,9 +10,9 @@ import { MorphoWithdrawAction } from "./withdraw";
  * @returns - Array of Morpho action instances
  */
 export function getAllMorphoActions(): CdpAction<CdpActionSchemaAny>[] {
-  return [new MorphoWithdrawAction()];
+  return [new MorphoDepositAction(), new MorphoWithdrawAction()];
 }
 
 export const MORPHO_ACTIONS = getAllMorphoActions();
 
-export { MorphoWithdrawAction }; 
+export { MorphoWithdrawAction };

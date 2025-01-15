@@ -34,7 +34,7 @@ export const MorphoWithdrawInput = z
  *
  * @param wallet - The wallet to execute the withdrawal from
  * @param args - The input arguments for the action
- * @returns A success message with transaction hash or error message
+ * @returns A success message with transaction details or error message
  */
 export async function withdrawFromMorpho(
   wallet: Wallet,
