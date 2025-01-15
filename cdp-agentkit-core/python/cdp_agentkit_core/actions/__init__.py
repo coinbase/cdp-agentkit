@@ -4,8 +4,12 @@ from cdp_agentkit_core.actions.deploy_token import DeployTokenAction
 from cdp_agentkit_core.actions.get_balance import GetBalanceAction
 from cdp_agentkit_core.actions.get_wallet_details import GetWalletDetailsAction
 from cdp_agentkit_core.actions.mint_nft import MintNftAction
+from cdp_agentkit_core.actions.morpho.borrow import MorphoBorrowAction
 from cdp_agentkit_core.actions.morpho.deposit import MorphoDepositAction
+from cdp_agentkit_core.actions.morpho.repay import MorphoRepayAction
+from cdp_agentkit_core.actions.morpho.supply_collateral import MorphoSupplyCollateralAction
 from cdp_agentkit_core.actions.morpho.withdraw import MorphoWithdrawAction
+from cdp_agentkit_core.actions.morpho.withdraw_collateral import MorphoWithdrawCollateralAction
 from cdp_agentkit_core.actions.register_basename import RegisterBasenameAction
 from cdp_agentkit_core.actions.request_faucet_funds import RequestFaucetFundsAction
 from cdp_agentkit_core.actions.trade import TradeAction
@@ -46,4 +50,8 @@ __all__ = [
     "WrapEthAction",
     "MorphoDepositAction",
     "MorphoWithdrawAction",
+    "MorphoWithdrawCollateralAction",
+    "MorphoSupplyCollateralAction",
+    "MorphoBorrowAction",
+    "MorphoRepayAction",
 ]
