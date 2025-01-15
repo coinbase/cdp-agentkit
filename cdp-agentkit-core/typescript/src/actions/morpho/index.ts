@@ -15,4 +15,4 @@ export function getAllMorphoActions(): CdpAction<CdpActionSchemaAny>[] {
 
 export const MORPHO_ACTIONS = getAllMorphoActions();
 
-export { MorphoWithdrawAction };
+export { MorphoDepositAction, MorphoWithdrawAction };
