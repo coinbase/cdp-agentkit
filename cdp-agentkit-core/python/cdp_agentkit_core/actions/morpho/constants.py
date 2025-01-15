@@ -38,3 +38,107 @@ METAMORPHO_ABI = [
         "type": "function",
     },
 ]
+
+
+BLUE_ABI = [
+    {
+        "inputs": [
+            {
+                "name": "marketParams",
+                "type": "tuple",
+                "internalType": "struct MarketParams",
+                "components": [
+                    {"name": "loanToken", "type": "address", "internalType": "address"},
+                    {"name": "collateralToken", "type": "address", "internalType": "address"},
+                    {"name": "oracle", "type": "address", "internalType": "address"},
+                    {"name": "irm", "type": "address", "internalType": "address"},
+                    {"name": "lltv", "type": "uint256", "internalType": "uint256"},
+                ],
+            },
+            {"name": "assets", "type": "uint256", "internalType": "uint256"},
+            {"name": "shares", "type": "uint256", "internalType": "uint256"},
+            {"name": "onBehalf", "type": "address", "internalType": "address"},
+            {"name": "receiver", "type": "address", "internalType": "address"},
+        ],
+        "name": "borrow",
+        "outputs": [
+            {"name": "", "type": "uint256", "internalType": "uint256"},
+            {"name": "", "type": "uint256", "internalType": "uint256"},
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function",
+    },
+    {
+        "inputs": [
+            {
+                "name": "marketParams",
+                "type": "tuple",
+                "internalType": "struct MarketParams",
+                "components": [
+                    {"name": "loanToken", "type": "address", "internalType": "address"},
+                    {"name": "collateralToken", "type": "address", "internalType": "address"},
+                    {"name": "oracle", "type": "address", "internalType": "address"},
+                    {"name": "irm", "type": "address", "internalType": "address"},
+                    {"name": "lltv", "type": "uint256", "internalType": "uint256"},
+                ],
+            },
+            {"name": "assets", "type": "uint256", "internalType": "uint256"},
+            {"name": "shares", "type": "uint256", "internalType": "uint256"},
+            {"name": "onBehalf", "type": "address", "internalType": "address"},
+            {"name": "data", "type": "bytes", "internalType": "bytes"},
+        ],
+        "name": "repay",
+        "outputs": [
+            {"name": "", "type": "uint256", "internalType": "uint256"},
+            {"name": "", "type": "uint256", "internalType": "uint256"},
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function",
+    },
+    {
+        "inputs": [
+            {
+                "name": "marketParams",
+                "type": "tuple",
+                "internalType": "struct MarketParams",
+                "components": [
+                    {"name": "loanToken", "type": "address", "internalType": "address"},
+                    {"name": "collateralToken", "type": "address", "internalType": "address"},
+                    {"name": "oracle", "type": "address", "internalType": "address"},
+                    {"name": "irm", "type": "address", "internalType": "address"},
+                    {"name": "lltv", "type": "uint256", "internalType": "uint256"},
+                ],
+            },
+            {"name": "assets", "type": "uint256", "internalType": "uint256"},
+            {"name": "onBehalf", "type": "address", "internalType": "address"},
+            {"name": "data", "type": "bytes", "internalType": "bytes"},
+        ],
+        "name": "supplyCollateral",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function",
+    },
+    {
+        "inputs": [
+            {
+                "name": "marketParams",
+                "type": "tuple",
+                "internalType": "struct MarketParams",
+                "components": [
+                    {"name": "loanToken", "type": "address", "internalType": "address"},
+                    {"name": "collateralToken", "type": "address", "internalType": "address"},
+                    {"name": "oracle", "type": "address", "internalType": "address"},
+                    {"name": "irm", "type": "address", "internalType": "address"},
+                    {"name": "lltv", "type": "uint256", "internalType": "uint256"},
+                ],
+            },
+            {"name": "assets", "type": "uint256", "internalType": "uint256"},
+            {"name": "onBehalf", "type": "address", "internalType": "address"},
+            {"name": "receiver", "type": "address", "internalType": "address"},
+        ],
+        "name": "withdrawCollateral",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function",
+    },
+]
