@@ -17,7 +17,7 @@ This tool allows depositing assets into a Morpho Vault. It takes:
   - 0.1 WETH
   - 0.01 WETH
 - receiver: The address to receive the shares
-- token_address: The address of the token to approve
+- tokenAddress: The address of the token to approve
 `;
 
 /**
