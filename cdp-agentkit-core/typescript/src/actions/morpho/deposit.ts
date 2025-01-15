@@ -11,7 +11,7 @@ const DEPOSIT_PROMPT = `
 This tool allows depositing assets into a Morpho Vault. It takes:
 
 - vault_address: The address of the Morpho Vault to deposit to
-- assets: The amount of assets to deposit in native units
+- assets: The amount of assets to deposit in whole units
   Examples for WETH:
   - 1 WETH
   - 0.1 WETH
