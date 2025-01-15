@@ -68,7 +68,7 @@ jobs:
           poetry run make docs
           cd docs
           poetry run make html
-          cd ../..
+          cd ../../..
           mkdir -p docs/cdp-agentkit-core/python
           cp -r cdp-agentkit-core/python/docs/_build/html/* docs/cdp-agentkit-core/python
 
@@ -92,7 +92,7 @@ jobs:
           poetry run make docs
           cd docs
           poetry run make html
-          cd ../..
+          cd ../../..
           mkdir -p docs/cdp-langchain/python
           cp -r cdp-langchain/python/docs/_build/html/* docs/cdp-langchain/python
 
@@ -116,7 +116,7 @@ jobs:
           poetry run make docs
           cd docs
           poetry run make html
-          cd ../..
+          cd ../../..
           mkdir -p docs/twitter-langchain/python
           cp -r twitter-langchain/python/docs/_build/html/* docs/twitter-langchain/python
 
