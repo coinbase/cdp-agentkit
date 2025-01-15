@@ -39,6 +39,7 @@
     "typescript"
   ],
   "dependencies": {
+    "@alloralabs/allora-sdk": "^0.0.4",
     "@coinbase/coinbase-sdk": "^0.13.0",
     "twitter-api-v2": "^1.18.2",
     "viem": "^2.21.51",
