@@ -38,6 +38,7 @@ Check out [cdp-langchain/examples](./cdp-langchain/examples) for inspiration and
 
 CDP Agentkit is organized as a [monorepo](https://en.wikipedia.org/wiki/Monorepo) that contains multiple packages.
 
+```
 ./
 ├── cdp-agentkit-core/
 │   ├── python/
@@ -50,6 +51,7 @@ CDP Agentkit is organized as a [monorepo](https://en.wikipedia.org/wiki/Monorepo
     ├── python/
     ├── typescript/
     └── examples/
+```
 
 ### cdp-agentkit-core
 
