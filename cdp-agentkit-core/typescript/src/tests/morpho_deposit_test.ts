@@ -63,7 +63,7 @@ describe("Morpho Deposit Action", () => {
     mockContractInvocation = {
       wait: jest.fn().mockResolvedValue({
         getTransactionHash: jest.fn().mockReturnValue(TRANSACTION_HASH),
-        getTransactionLink: jest.fn().mockReturnValue(TRANSACTION_LINK)
+        getTransactionLink: jest.fn().mockReturnValue(TRANSACTION_LINK),
       }),
     } as unknown as jest.Mocked<ContractInvocation>;
 
@@ -78,9 +78,9 @@ describe("Morpho Deposit Action", () => {
     mockWallet.invokeContract.mockResolvedValue(mockContractInvocation);
 
     // Mock Asset.fetch
-    jest.spyOn(Asset, 'fetch').mockResolvedValue({
+    jest.spyOn(Asset, "fetch").mockResolvedValue({
       toAtomicAmount: jest.fn().mockImplementation((amount: Decimal) => amount.toString()),
-    } as any);
+    } as unknown as Asset);
 
     mockApprove.mockResolvedValue("Approval successful");
   });
@@ -99,7 +99,7 @@ describe("Morpho Deposit Action", () => {
       mockWallet,
       MOCK_TOKEN_ADDRESS,
       MOCK_VAULT_ADDRESS,
-      MOCK_ASSETS
+      MOCK_ASSETS,
     );
 
     expect(mockWallet.invokeContract).toHaveBeenCalledWith({

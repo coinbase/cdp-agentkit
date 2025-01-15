@@ -39,7 +39,7 @@ describe("Morpho Withdraw Input", () => {
 
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error.issues[0].path[0]).toBe('vaultAddress');
+      expect(result.error.issues[0].path[0]).toBe("vaultAddress");
     }
   });
 
@@ -53,7 +53,7 @@ describe("Morpho Withdraw Input", () => {
 
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error.issues[0].path[0]).toBe('assets');
+      expect(result.error.issues[0].path[0]).toBe("assets");
     }
   });
 });
@@ -109,7 +109,6 @@ describe("Morpho Withdraw Action", () => {
       },
     });
     expect(mockContractInvocation.wait).toHaveBeenCalled();
-    
     expect(response).toContain(`Withdrawn ${MOCK_ASSETS}`);
     expect(response).toContain(`from Morpho Vault ${MOCK_VAULT_ADDRESS}`);
     expect(response).toContain(`with transaction hash: ${TRANSACTION_HASH}`);
@@ -131,4 +130,4 @@ describe("Morpho Withdraw Action", () => {
     expect(mockWallet.invokeContract).toHaveBeenCalled();
     expect(response).toContain(`Error withdrawing from Morpho Vault: ${error}`);
   });
-}); 
+});
