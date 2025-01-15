@@ -26,7 +26,3 @@ export async function approve(
     return `Error approving tokens: ${error}`;
   }
 } 
-
-// export function toWei(amount: number, decimals: number): bigint {
-//   return BigInt(Math.floor(amount * Math.pow(10, decimals)));
-// } 
