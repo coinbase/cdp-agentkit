@@ -23,8 +23,8 @@ export const MorphoWithdrawInput = z
       .describe("The address of the Morpho Vault to withdraw from"),
     assets: z
       .string()
-      .regex(/^\d+$/, "Must be a valid integer or decimal number")
-      .describe("The amount of assets to deposit e.g. 0.0005 WETH"),
+      .regex(/^\d+$/, "Must be a valid atomic value")
+      .describe("The amount of assets to withdraw in atomic units e.g. 1"),
     receiver: z
       .string()
       .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")

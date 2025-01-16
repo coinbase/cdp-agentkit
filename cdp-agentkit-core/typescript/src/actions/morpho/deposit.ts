@@ -31,7 +31,7 @@ export const MorphoDepositInput = z
       .describe("The address of the Morpho Vault to deposit to"),
     assets: z
       .string()
-      .regex(/^\d+(\.\d+)?$/, "Must be a valid integer or decimal number")
+      .regex(/^\d+(\.\d+)?$/, "Must be a valid integer or decimal value")
       .describe("The amount of assets to deposit e.g. 0.0005 WETH"),
     receiver: z
       .string()
