@@ -5,7 +5,7 @@ import { approve } from "../actions/morpho/utils";
 import { Decimal } from "decimal.js";
 
 const MOCK_VAULT_ADDRESS = "0x1234567890123456789012345678901234567890";
-const MOCK_ASSETS = "1000000000000000000"; // 1 token in wei
+const MOCK_ASSETS = "1000000000000000000";
 const MOCK_RECEIVER_ID = "0x9876543210987654321098765432109876543210";
 const MOCK_TOKEN_ADDRESS = "0x4200000000000000000000000000000000000006";
 
@@ -47,6 +47,47 @@ describe("Morpho Deposit Input", () => {
 
     expect(result.success).toBe(false);
   });
+
+  it("should handle valid asset string formats", () => {
+    const validInput = {
+      vaultAddress: MOCK_VAULT_ADDRESS,
+      assets: MOCK_ASSETS,
+      receiver: MOCK_RECEIVER_ID,
+      tokenAddress: MOCK_TOKEN_ADDRESS,
+    };
+
+    const validInputs = [
+      { ...validInput, assets: "1000000000000000000" },
+      { ...validInput, assets: "1.5" },
+      { ...validInput, assets: "0.00001" },
+    ];
+
+    validInputs.forEach(input => {
+      const result = action.argsSchema.safeParse(input);
+      expect(result.success).toBe(true);
+    });
+  });
+
+  it("should reject invalid asset strings", () => {
+    const validInput = {
+      vaultAddress: MOCK_VAULT_ADDRESS,
+      assets: MOCK_ASSETS,
+      receiver: MOCK_RECEIVER_ID,
+      tokenAddress: MOCK_TOKEN_ADDRESS,
+    };
+
+    const invalidInputs = [
+      { ...validInput, assets: "" },
+      { ...validInput, assets: "1,000" },
+      { ...validInput, assets: "1.2.3" },
+      { ...validInput, assets: "abc" },
+    ];
+
+    invalidInputs.forEach(input => {
+      const result = action.argsSchema.safeParse(input);
+      expect(result.success).toBe(false);
+    });
+  });
 });
 
 describe("Morpho Deposit Action", () => {
@@ -77,7 +118,6 @@ describe("Morpho Deposit Action", () => {
 
     mockWallet.invokeContract.mockResolvedValue(mockContractInvocation);
 
-    // Mock Asset.fetch
     jest.spyOn(Asset, "fetch").mockResolvedValue({
       toAtomicAmount: jest.fn().mockImplementation((amount: Decimal) => amount.toString()),
     } as unknown as Asset);
@@ -93,13 +133,15 @@ describe("Morpho Deposit Action", () => {
       tokenAddress: MOCK_TOKEN_ADDRESS,
     };
 
+    const assets = BigInt(MOCK_ASSETS);
+
     const response = await action.func(mockWallet, args);
 
     expect(mockApprove).toHaveBeenCalledWith(
       mockWallet,
       MOCK_TOKEN_ADDRESS,
       MOCK_VAULT_ADDRESS,
-      MOCK_ASSETS,
+      assets,
     );
 
     expect(mockWallet.invokeContract).toHaveBeenCalledWith({

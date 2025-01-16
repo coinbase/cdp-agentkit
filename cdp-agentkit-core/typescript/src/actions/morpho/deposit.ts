@@ -31,8 +31,8 @@ export const MorphoDepositInput = z
       .describe("The address of the Morpho Vault to deposit to"),
     assets: z
       .string()
-      .regex(/^\d+$/, "Must be a valid number string")
-      .describe("The amount of assets to deposit in native units"),
+      .regex(/^\d+(\.\d+)?$/, "Must be a valid integer or decimal number")
+      .describe("The amount of assets to deposit e.g. 0.0005 WETH"),
     receiver: z
       .string()
       .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
@@ -54,7 +54,7 @@ export async function depositToMorpho(
   wallet: Wallet,
   args: z.infer<typeof MorphoDepositInput>,
 ): Promise<string> {
-  if (BigInt(args.assets) <= 0) {
+  if (Number(args.assets) <= 0) {
     return "Error: Assets amount must be greater than 0";
   }
 
@@ -77,9 +77,6 @@ export async function depositToMorpho(
       assets: atomicAssets.toString(),
       receiver: args.receiver,
     };
-
-    console.log("++++++++++++++++");
-    console.log(contractArgs);
 
     const invocation = await wallet.invokeContract({
       contractAddress: args.vaultAddress,
