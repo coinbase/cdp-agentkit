@@ -23,20 +23,26 @@ This tool allows depositing assets into a Morpho Vault. It takes:
 /**
  * Input schema for Morpho Vault deposit action
  */
-export const MorphoDepositInput = z.object({
-  vaultAddress: z.string()
-    .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
-    .describe("The address of the Morpho Vault to deposit to"),
-  assets: z.string()
-    .regex(/^\d+$/, "Must be a valid number string")
-    .describe("The amount of assets to deposit in native units"),
-  receiver: z.string()
-    .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
-    .describe("The address to receive the shares"),
-  tokenAddress: z.string()
-    .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
-    .describe("The address of the token to approve")
-}).describe("Input schema for Morpho Vault deposit action");
+export const MorphoDepositInput = z
+  .object({
+    vaultAddress: z
+      .string()
+      .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
+      .describe("The address of the Morpho Vault to deposit to"),
+    assets: z
+      .string()
+      .regex(/^\d+$/, "Must be a valid number string")
+      .describe("The amount of assets to deposit in native units"),
+    receiver: z
+      .string()
+      .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
+      .describe("The address to receive the shares"),
+    tokenAddress: z
+      .string()
+      .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
+      .describe("The address of the token to approve"),
+  })
+  .describe("Input schema for Morpho Vault deposit action");
 
 /**
  * Deposits assets into a Morpho Vault
@@ -46,40 +52,48 @@ export const MorphoDepositInput = z.object({
  */
 export async function depositToMorpho(
   wallet: Wallet,
-  args: z.infer<typeof MorphoDepositInput>
+  args: z.infer<typeof MorphoDepositInput>,
 ): Promise<string> {
-    if (Number(args.assets) <= 0) {
-        return "Error: Assets amount must be greater than 0";
+  if (BigInt(args.assets) <= 0) {
+    return "Error: Assets amount must be greater than 0";
+  }
+
+  try {
+    const tokenAsset = await Asset.fetch(wallet.getNetworkId(), args.tokenAddress);
+
+    const atomicAssets = BigInt(tokenAsset.toAtomicAmount(new Decimal(args.assets)).toString());
+
+    const approvalResult = await approve(
+      wallet,
+      args.tokenAddress,
+      args.vaultAddress,
+      atomicAssets,
+    );
+    if (approvalResult.startsWith("Error")) {
+      return `Error approving Morpho Vault as spender: ${approvalResult}`;
     }
 
-    try {
-        const tokenAsset = await Asset.fetch(wallet.getNetworkId(), args.tokenAddress);
-        
-        const atomicAssets = tokenAsset.toAtomicAmount(new Decimal(args.assets));
+    const contractArgs = {
+      assets: atomicAssets.toString(),
+      receiver: args.receiver,
+    };
 
-        const approvalResult = await approve(wallet, args.tokenAddress, args.vaultAddress, atomicAssets);
-        if (approvalResult.startsWith("Error")) {
-            return `Error approving Morpho Vault as spender: ${approvalResult}`;
-        }
+    console.log("++++++++++++++++");
+    console.log(contractArgs);
 
-        const contractArgs = {
-            assets: atomicAssets,
-            receiver: args.receiver
-        };
-        
-        const invocation = await wallet.invokeContract({
-            contractAddress: args.vaultAddress,
-            method: "deposit",
-            abi: METAMORPHO_ABI,
-            args: contractArgs
-        });
+    const invocation = await wallet.invokeContract({
+      contractAddress: args.vaultAddress,
+      method: "deposit",
+      abi: METAMORPHO_ABI,
+      args: contractArgs,
+    });
 
-        const result = await invocation.wait();
+    const result = await invocation.wait();
 
-        return `Deposited ${args.assets} to Morpho Vault ${args.vaultAddress} with transaction hash: ${result.getTransactionHash()} and transaction link: ${result.getTransactionLink()}`;
-    } catch (error) {
-        return `Error depositing to Morpho Vault: ${error}`;
-    }
+    return `Deposited ${args.assets} to Morpho Vault ${args.vaultAddress} with transaction hash: ${result.getTransactionHash()} and transaction link: ${result.getTransactionLink()}`;
+  } catch (error) {
+    return `Error depositing to Morpho Vault: ${error}`;
+  }
 }
 
 /**
@@ -90,4 +104,4 @@ export class MorphoDepositAction implements CdpAction<typeof MorphoDepositInput>
   public description = DEPOSIT_PROMPT;
   public argsSchema = MorphoDepositInput;
   public func = depositToMorpho;
-} 
+}
