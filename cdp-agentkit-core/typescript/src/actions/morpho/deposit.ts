@@ -32,7 +32,7 @@ export const MorphoDepositInput = z
     assets: z
       .string()
       .regex(/^\d+(\.\d+)?$/, "Must be a valid integer or decimal value")
-      .describe("The amount of assets to deposit e.g. 0.0005 WETH"),
+      .describe("The amount of assets to deposit in whole units e.g. 0.0005 WETH"),
     receiver: z
       .string()
       .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")

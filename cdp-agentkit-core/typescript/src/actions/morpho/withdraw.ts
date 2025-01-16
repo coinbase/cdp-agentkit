@@ -31,7 +31,7 @@ export const MorphoWithdrawInput = z
       .describe("The address to receive the shares"),
   })
   .strip()
-  .describe("Instructions for withdrawing from Morpho Vault");
+  .describe("Input schema for Morpho Vault withdraw action");
 
 /**
  * Withdraw assets from a Morpho Vault.
