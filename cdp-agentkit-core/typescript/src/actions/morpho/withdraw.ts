@@ -23,7 +23,7 @@ export const MorphoWithdrawInput = z
       .describe("The address of the Morpho Vault to withdraw from"),
     assets: z
       .string()
-      .regex(/^\d+$/, "Must be a valid atomic value")
+      .regex(/^\d+$/, "Must be a valid whole number")
       .describe("The amount of assets to withdraw in atomic units e.g. 1"),
     receiver: z
       .string()
