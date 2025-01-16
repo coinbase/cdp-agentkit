@@ -1,6 +1,7 @@
-import { CdpAction } from "../cdp/cdp_action";
-import { Wallet } from "@coinbase/coinbase-sdk";
+import { Asset, Wallet } from "@coinbase/coinbase-sdk";
 import { z } from "zod";
+
+import { CdpAction } from "../cdp/cdp_action";
 import { METAMORPHO_ABI } from "./constants";
 
 const WITHDRAW_PROMPT = `
@@ -16,13 +17,16 @@ This tool allows withdrawing assets from a Morpho Vault. It takes:
  */
 export const MorphoWithdrawInput = z
   .object({
-    vaultAddress: z.string()
+    vaultAddress: z
+      .string()
       .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
       .describe("The address of the Morpho Vault to withdraw from"),
-    assets: z.string()
-      .regex(/^\d+$/, "Must be a valid number string")
-      .describe("The amount of assets to withdraw in atomic units"),
-    receiver: z.string()
+    assets: z
+      .string()
+      .regex(/^\d+$/, "Must be a valid integer or decimal number")
+      .describe("The amount of assets to deposit e.g. 0.0005 WETH"),
+    receiver: z
+      .string()
       .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
       .describe("The address to receive the shares"),
   })

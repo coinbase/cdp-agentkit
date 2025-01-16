@@ -43,18 +43,39 @@ describe("Morpho Withdraw Input", () => {
     }
   });
 
-  it("should fail with invalid assets amount", () => {
-    const invalidInput = {
+  it("should handle valid asset string formats", () => {
+    const validInput = {
       vaultAddress: MOCK_VAULT_ADDRESS,
-      assets: "not_a_number",
+      assets: MOCK_ASSETS,
       receiver: MOCK_RECEIVER_ID,
     };
-    const result = action.argsSchema.safeParse(invalidInput);
 
-    expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error.issues[0].path[0]).toBe("assets");
-    }
+    const validInputs = [{ ...validInput, assets: "1000000000000000000" }];
+
+    validInputs.forEach(input => {
+      const result = action.argsSchema.safeParse(input);
+      expect(result.success).toBe(true);
+    });
+  });
+
+  it("should reject invalid asset strings", () => {
+    const validInput = {
+      vaultAddress: MOCK_VAULT_ADDRESS,
+      assets: MOCK_ASSETS,
+      receiver: MOCK_RECEIVER_ID,
+    };
+
+    const invalidInputs = [
+      { ...validInput, assets: "" },
+      { ...validInput, assets: "1,000" },
+      { ...validInput, assets: "1.2.3" },
+      { ...validInput, assets: "abc" },
+    ];
+
+    invalidInputs.forEach(input => {
+      const result = action.argsSchema.safeParse(input);
+      expect(result.success).toBe(false);
+    });
   });
 });
 

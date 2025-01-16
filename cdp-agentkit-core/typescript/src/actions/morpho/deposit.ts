@@ -54,13 +54,14 @@ export async function depositToMorpho(
   wallet: Wallet,
   args: z.infer<typeof MorphoDepositInput>,
 ): Promise<string> {
-  if (Number(args.assets) <= 0) {
+  const n = args.assets.replace(/\.\d+/, "");
+
+  if (BigInt(n) < 0) {
     return "Error: Assets amount must be greater than 0";
   }
 
   try {
     const tokenAsset = await Asset.fetch(wallet.getNetworkId(), args.tokenAddress);
-
     const atomicAssets = BigInt(tokenAsset.toAtomicAmount(new Decimal(args.assets)).toString());
 
     const approvalResult = await approve(
