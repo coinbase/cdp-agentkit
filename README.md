@@ -2,6 +2,8 @@
   <h1 style="font-size: 3em; margin-bottom: 20px;">
     AgentKit
   </h1>
+    <img src="./agentkit-banner.svg" alt="AgentKit Banner" width="100%" />
+
 
   <p style="font-size: 1.2em; max-width: 600px; margin: 0 auto 20px;">
     Simplify bringing your AI Agents onchain. Every AI Agent deserves a crypto wallet!
