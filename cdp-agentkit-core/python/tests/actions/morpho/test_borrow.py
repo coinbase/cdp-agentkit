@@ -94,7 +94,13 @@ def test_borrow_success(wallet_factory, contract_invocation_factory, asset_facto
             method="borrow",
             abi=BLUE_ABI,
             args={
-                "marketParams": MOCK_MARKET_PARAMS,
+                "marketParams": [
+                    MOCK_MARKET_PARAMS["loanToken"],
+                    MOCK_MARKET_PARAMS["collateralToken"],
+                    MOCK_MARKET_PARAMS["oracle"],
+                    MOCK_MARKET_PARAMS["irm"],
+                    str(MOCK_MARKET_PARAMS["lltv"]),
+                ],
                 "assets": MOCK_ASSETS_WEI,
                 "shares": "0",
                 "onBehalf": MOCK_WALLET_ADDRESS,

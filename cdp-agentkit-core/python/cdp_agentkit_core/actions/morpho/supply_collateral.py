@@ -1,18 +1,33 @@
 from collections.abc import Callable
 from decimal import Decimal
+from typing import TypedDict
 
 from cdp import Asset, Wallet
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from cdp_agentkit_core.actions import CdpAction
 from cdp_agentkit_core.actions.morpho.constants import BLUE_ABI, MORPHO_BASE_ADDRESS
 from cdp_agentkit_core.actions.morpho.utils import approve
 
 
+# Define the structure for market parameters
+class MarketParams(TypedDict):
+    """Type definition for Morpho market parameters."""
+
+    loanToken: str  # address
+    collateralToken: str  # address
+    oracle: str  # address
+    irm: str  # address
+    lltv: str  # uint256
+
+
 class MorphoSupplyCollateralInput(BaseModel):
     """Input schema for Morpho Markets supply collateral action."""
 
-    market_params: dict
+    market_params: MarketParams = Field(
+        ...,
+        description="Market parameters including loan token, collateral token, oracle, irm, and lltv addresses",
+    )
     assets: str
     on_behalf: str
 
@@ -69,8 +84,17 @@ def supply_collateral_to_morpho(
         if approval_result.startswith("Error"):
             return f"Error approving Morpho Blue as spender: {approval_result}"
 
+        # Convert market_params dictionary to the required tuple format
+        market_params_tuple = [
+            market_params["loanToken"],
+            market_params["collateralToken"],
+            market_params["oracle"],
+            market_params["irm"],
+            str(market_params["lltv"]),  # Convert lltv to int for uint256
+        ]
+
         supply_args = {
-            "marketParams": market_params,
+            "marketParams": market_params_tuple,
             "assets": atomic_assets,
             "onBehalf": on_behalf,
             "data": "0x",  # Empty bytes
