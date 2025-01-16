@@ -40,7 +40,7 @@ export async function withdrawFromMorpho(
   wallet: Wallet,
   args: z.infer<typeof MorphoWithdrawInput>,
 ): Promise<string> {
-  if (parseInt(args.assets) <= 0) {
+  if (BigInt(args.assets) <= 0) {
     return "Error: Assets amount must be greater than 0";
   }
 
