@@ -10,6 +10,7 @@ import { TradeAction } from "./trade";
 import { TransferAction } from "./transfer";
 import { WrapEthAction } from "./wrap_eth";
 import { WOW_ACTIONS } from "./defi/wow";
+import { MORPHO_ACTIONS } from "../morpho";
 
 /**
  * Retrieves all CDP action instances.
@@ -32,7 +33,9 @@ export function getAllCdpActions(): CdpAction<CdpActionSchemaAny>[] {
   ];
 }
 
-export const CDP_ACTIONS = getAllCdpActions().concat(WOW_ACTIONS);
+export const CDP_ACTIONS = getAllCdpActions()
+  .concat(MORPHO_ACTIONS)
+  .concat(WOW_ACTIONS);
 
 export {
   CdpAction,
