@@ -1,8 +1,12 @@
 from unittest.mock import patch
 
 import pytest
+from cdp.address_reputation import (
+    AddressReputation,
+    AddressReputationMetadata,
+    AddressReputationModel,
+)
 
-from cdp.address_reputation import AddressReputation, AddressReputationMetadata, AddressReputationModel
 from cdp_agentkit_core.actions.address_reputation import (
     AddressReputationAction,
     AddressReputationInput,
@@ -47,9 +51,8 @@ def test_address_reputation_input_model_invalid_address():
         )
 
 
-def test_address_reputation_success(address_factory):
+def test_address_reputation_success():
     """Test successful address reputation check."""
-    # Create the model and reputation instances
     mock_model = AddressReputationModel(
         score=85,
         metadata=AddressReputationMetadata(
@@ -67,27 +70,27 @@ def test_address_reputation_success(address_factory):
     )
     mock_reputation = AddressReputation(model=mock_model)
 
-    with patch('cdp_agentkit_core.actions.address_reputation.Address') as MockAddress:
-        mock_address_instance = MockAddress.return_value
+    with patch('cdp_agentkit_core.actions.address_reputation.Address') as mock_address:
+        mock_address_instance = mock_address.return_value
         mock_address_instance.reputation.return_value = mock_reputation
-        
+
         action_response = check_address_reputation(MOCK_ADDRESS, MOCK_NETWORK)
         expected_response = str(mock_reputation)
 
-        MockAddress.assert_called_once_with(MOCK_NETWORK, MOCK_ADDRESS)
+        mock_address.assert_called_once_with(MOCK_NETWORK, MOCK_ADDRESS)
         mock_address_instance.reputation.assert_called_once()
         assert action_response == expected_response
 
 
-def test_address_reputation_failure(address_factory):
+def test_address_reputation_failure():
     """Test address reputation check failure."""
-    with patch('cdp_agentkit_core.actions.address_reputation.Address') as MockAddress:
-        mock_address_instance = MockAddress.return_value
+    with patch('cdp_agentkit_core.actions.address_reputation.Address') as mock_address:
+        mock_address_instance = mock_address.return_value
         mock_address_instance.reputation.side_effect = Exception("API error")
-        
+
         action_response = check_address_reputation(MOCK_ADDRESS, MOCK_NETWORK)
         expected_response = "Error checking address reputation: API error"
 
-        MockAddress.assert_called_once_with(MOCK_NETWORK, MOCK_ADDRESS)
+        mock_address.assert_called_once_with(MOCK_NETWORK, MOCK_ADDRESS)
         mock_address_instance.reputation.assert_called_once()
         assert action_response == expected_response

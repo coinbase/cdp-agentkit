@@ -1,4 +1,5 @@
-from cdp_agentkit_core.actions.cdp_action import CdpAction
+from cdp_agentkit_core.actions.cdp_action import CdpAction  # noqa: I001
+
 from cdp_agentkit_core.actions.address_reputation import AddressReputationAction
 from cdp_agentkit_core.actions.deploy_nft import DeployNftAction
 from cdp_agentkit_core.actions.deploy_token import DeployTokenAction

@@ -1,11 +1,11 @@
-import { Wallet, Address } from "@coinbase/coinbase-sdk";
-import { AddressReputationAction, AddressReputationInput } from "../actions/cdp/address_reputation";
+import { Address } from "@coinbase/coinbase-sdk";
+import { AddressReputationAction } from "../actions/cdp/address_reputation";
 
 const MOCK_ADDRESS = "0x1234567890123456789012345678901234567890";
 const MOCK_NETWORK = "base-sepolia";
 
 jest.mock("@coinbase/coinbase-sdk", () => ({
-  Address: jest.fn()
+  Address: jest.fn(),
 }));
 
 describe("Address Reputation Input", () => {
@@ -53,6 +53,7 @@ describe("Address Reputation Action", () => {
   });
 
   it("should successfully check address reputation", async () => {
+    // TODO: ask John if there is a better way...
     const mockReputation = {
       score: 85,
       metadata: {
@@ -65,12 +66,12 @@ describe("Address Reputation Action", () => {
         bridge_transactions_performed: 5,
         lend_borrow_stake_transactions: 10,
         ens_contract_interactions: 2,
-        smart_contract_deployments: 1
+        smart_contract_deployments: 1,
       },
-      toString: () => "Address Reputation: (score=85, metadata=(...))"
-    };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as unknown as jest.Mocked<any>;
 
-    mockAddress.reputation.mockResolvedValue(mockReputation as any);
+    mockAddress.reputation.mockResolvedValue(mockReputation);
 
     const args = {
       network: MOCK_NETWORK,
@@ -80,6 +81,7 @@ describe("Address Reputation Action", () => {
     const action = new AddressReputationAction();
     const response = await action.func(args);
 
+    console.log(mockReputation.toString());
     expect(response).toBe(mockReputation.toString());
   });
 

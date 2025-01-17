@@ -1,8 +1,8 @@
+import re
 from collections.abc import Callable
 
 from cdp import Address
 from pydantic import BaseModel, Field, field_validator
-import re
 
 from cdp_agentkit_core.actions import CdpAction
 
@@ -31,7 +31,20 @@ class AddressReputationInput(BaseModel):
     )
 
     @field_validator("address")
+    @classmethod
     def validate_address(cls, v: str) -> str:
+        """Validate that the provided address is a valid Ethereum address.
+
+        Args:
+            v (str): The address string to validate
+
+        Returns:
+            str: The validated address string
+
+        Raises:
+            ValueError: If the address format is invalid
+
+        """
         if not re.match(r"^0x[a-fA-F0-9]{40}$", v):
             raise ValueError("Invalid Ethereum address format")
         return v
@@ -46,6 +59,7 @@ def check_address_reputation(address: str, network: str) -> str:
 
     Returns:
         str: A string containing the reputation json data or error message
+
     """
     try:
         address = Address(network, address)
