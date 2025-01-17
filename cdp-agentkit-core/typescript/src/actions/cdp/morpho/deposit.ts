@@ -2,7 +2,7 @@ import { Asset, Wallet } from "@coinbase/coinbase-sdk";
 import { z } from "zod";
 import { Decimal } from "decimal.js";
 
-import { CdpAction } from "../cdp/cdp_action";
+import { CdpAction } from "../cdp_action";
 
 import { METAMORPHO_ABI } from "./constants";
 import { approve } from "./utils";

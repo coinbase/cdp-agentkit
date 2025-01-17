@@ -1,6 +1,6 @@
 import { Coinbase, ContractInvocation, Wallet } from "@coinbase/coinbase-sdk";
-import { MorphoWithdrawAction } from "../actions/morpho/withdraw";
-import { METAMORPHO_ABI } from "../actions/morpho/constants";
+import { MorphoWithdrawAction } from "../actions/cdp/morpho/withdraw";
+import { METAMORPHO_ABI } from "../actions/cdp/morpho/constants";
 
 const MOCK_VAULT_ADDRESS = "0x1234567890123456789012345678901234567890";
 const MOCK_ASSETS = "1000000000000000000"; // 1 token in wei
