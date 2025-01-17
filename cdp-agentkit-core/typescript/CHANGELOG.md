@@ -12,6 +12,10 @@
 - Added `pyth_fetch_price` action to fetch the price of a given price feed from Pyth.
 - Bump dependency `coinbase-sdk-nodejs` to version `0.14.1`.
 
+### Fixed
+
+- Allow wallet mnemonic seed import to optionally accept `networkId` input argument.
+
 ## [0.0.11] - 2025-01-13
 
 ### Added
