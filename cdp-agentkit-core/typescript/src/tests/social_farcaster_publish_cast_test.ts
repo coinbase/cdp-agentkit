@@ -58,7 +58,6 @@ describe("Publish Cast Action", () => {
     const args = {
       castText: "Hello, world!",
     };
-    const error = new Error("An error has occured");
     const response = await publishCast(args);
 
     expect(response).toContain("Error publishing to Farcaster:");
