@@ -53,7 +53,6 @@ describe("Address Reputation Action", () => {
   });
 
   it("should successfully check address reputation", async () => {
-    // TODO: ask John if there is a better way...
     const mockReputation = {
       score: 85,
       metadata: {
@@ -68,6 +67,7 @@ describe("Address Reputation Action", () => {
         ens_contract_interactions: 2,
         smart_contract_deployments: 1,
       },
+      // TODO: ask John if there is a better way...
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as unknown as jest.Mocked<any>;
 
@@ -81,7 +81,6 @@ describe("Address Reputation Action", () => {
     const action = new AddressReputationAction();
     const response = await action.func(args);
 
-    console.log(mockReputation.toString());
     expect(response).toBe(mockReputation.toString());
   });
 

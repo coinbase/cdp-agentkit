@@ -15,13 +15,11 @@ This tool checks the reputation of an address on a given network. It takes:
  */
 export const AddressReputationInput = z
   .object({
-    network: z
-      .string()
-      .describe("The network to check the address on"),
     address: z
       .string()
       .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
       .describe("The Ethereum address to check"),
+    network: z.string().describe("The network to check the address on"),
   })
   .strip()
   .describe("Input schema for address reputation check");
@@ -37,7 +35,7 @@ export async function checkAddressReputation(
   args: z.infer<typeof AddressReputationInput>,
 ): Promise<string> {
   try {
-    const address = new Address(args.address, args.network);
+    const address = new Address(args.network, args.address);
     const reputation = await address.reputation();
     return reputation.toString();
   } catch (error) {
