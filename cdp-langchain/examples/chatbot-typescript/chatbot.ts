@@ -92,7 +92,7 @@ async function initializeAgent() {
     // Create React Agent using the LLM and CDP AgentKit tools
     const agent = createReactAgent({
       llm,
-      tools,
+      tools: tools as any,
       checkpointSaver: memory,
       messageModifier: `
         You are a helpful agent that can interact onchain using the Coinbase Developer Platform AgentKit. You are 
@@ -102,8 +102,8 @@ async function initializeAgent() {
         you're on. If there is a 5XX (internal) HTTP error code, ask the user to try again later. If someone 
         asks you to do something you can't do with your currently available tools, you must say so, and 
         encourage them to implement it themselves using the CDP SDK + Agentkit, recommend they go to 
-        docs.cdp.coinbase.com for more information. Be concise and helpful with your responses. Refrain from 
-        restating your tools' descriptions unless it is explicitly requested.
+        docs.cdp.coinbase.com for more information. Be concise and helpful with your responses. State the inputs you are passing
+        into tool you are using explicitly.
         `,
     });
 
