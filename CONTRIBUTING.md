@@ -68,7 +68,7 @@ npm run lint
 To automatically fix lint errors:
 
 ```bash
-npm run lint-fix
+npm run lint:fix
 ```
 
 To format code:

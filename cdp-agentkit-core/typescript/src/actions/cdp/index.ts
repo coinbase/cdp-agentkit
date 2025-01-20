@@ -13,6 +13,7 @@ import { TransferNftAction } from "./transfer_nft";
 import { WrapEthAction } from "./wrap_eth";
 import { WOW_ACTIONS } from "./defi/wow";
 import { PYTH_ACTIONS } from "./data/pyth";
+import { DeployContractAction } from "./deploy_contract";
 
 /**
  * Retrieves all CDP action instances.
@@ -25,6 +26,7 @@ export function getAllCdpActions(): CdpAction<CdpActionSchemaAny>[] {
     new GetWalletDetailsAction(),
     new DeployNftAction(),
     new DeployTokenAction(),
+    new DeployContractAction(),
     new GetBalanceAction(),
     new GetBalanceNftAction(),
     new MintNftAction(),
@@ -45,6 +47,7 @@ export {
   GetWalletDetailsAction,
   DeployNftAction,
   DeployTokenAction,
+  DeployContractAction,
   GetBalanceAction,
   GetBalanceNftAction,
   MintNftAction,
