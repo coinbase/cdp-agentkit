@@ -4,7 +4,7 @@ from cdp import Wallet
 from pydantic import BaseModel, Field
 from typing import Any
 
-from python.cdp_agentkit_core.actions import CdpAction
+from cdp_agentkit_core.actions import CdpAction
 
 
 DEPLOY_CONTRACT_PROMPT = """
