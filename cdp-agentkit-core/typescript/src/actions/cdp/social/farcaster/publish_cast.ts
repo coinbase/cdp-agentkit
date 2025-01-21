@@ -42,7 +42,7 @@ export async function publishCast(args: z.infer<typeof PublishCastInput>): Promi
     const SIGNER_UUID = process.env.NEYNAR_MANAGED_SIGNER;
 
     const headers: HeadersInit = {
-      api_key: NEYNAR_API_KEY!, // Note the changed key format
+      api_key: NEYNAR_API_KEY!,
       "Content-Type": "application/json",
     };
 
@@ -54,11 +54,7 @@ export async function publishCast(args: z.infer<typeof PublishCastInput>): Promi
         text: args.castText,
       }),
     });
-    console.log(NEYNAR_API_KEY);
-    console.log(args);
-    console.log(response);
     const data = await response.json();
-    console.log(data);
     return `Successfully published cast to Farcaster:\n${JSON.stringify(data)}`;
   } catch (error) {
     return `Error publishing to Farcaster:\n${error}`;

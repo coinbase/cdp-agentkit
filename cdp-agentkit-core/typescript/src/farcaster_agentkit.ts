@@ -36,6 +36,8 @@ const EnvSchema = z.object({
  * Farcaster Agentkit
  */
 export class FarcasterAgentkit {
+  private config: z.infer<typeof FarcasterAgentkitOptions>;
+
   /**
    * Initializes a new instance of FarcasterAgentkit with the provided options.
    * If no options are provided, it attempts to load the required environment variables.
@@ -44,25 +46,25 @@ export class FarcasterAgentkit {
    * @throws An error if the provided options are invalid or if the environment variables cannot be loaded.
    */
   public constructor(options?: z.infer<typeof FarcasterAgentkitOptions>) {
-    if (!options) {
-      try {
-        const env = EnvSchema.parse(process.env);
+    try {
+      const env = EnvSchema.parse(process.env);
 
-        options = {
-          apiKey: env.NEYNAR_API_KEY!,
-          managedSigner: env.NEYNAR_MANAGED_SIGNER!,
-        };
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          error.errors.forEach(err => console.log(`Error: ${err.path[0]} is required`));
-        }
-        throw new Error("Farcaster ENV could not be loaded.");
+      options = {
+        apiKey: options.apiKey || env.NEYNAR_API_KEY!,
+        managedSigner: options.managedSigner || env.NEYNAR_MANAGED_SIGNER!,
+      };
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        error.errors.forEach(err => console.log(`Error: ${err.path[0]} is required`));
       }
+      throw new Error("Farcaster config could not be loaded.");
     }
 
     if (!this.validateOptions(options)) {
       throw new Error("Farcaster Agentkit options could not be validated.");
     }
+
+    this.config = options;
   }
 
   /**

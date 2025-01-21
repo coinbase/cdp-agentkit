@@ -3,6 +3,7 @@
  */
 
 import { FarcasterAction, FarcasterActionSchemaAny } from "./farcaster_action";
+import { AccountDetailsAction } from "./account_details";
 import { PublishCastAction } from "./publish_cast";
 
 /**
@@ -11,7 +12,7 @@ import { PublishCastAction } from "./publish_cast";
  * @returns {FarcasterAction<FarcasterActionSchemaAny>[]} An array of Farcaster action instances.
  */
 export function getAllFarcasterActions(): FarcasterAction<FarcasterActionSchemaAny>[] {
-  return [new PublishCastAction()];
+  return [new AccountDetailsAction(), new PublishCastAction()];
 }
 
 /**
@@ -22,4 +23,4 @@ export const FARCASTER_ACTIONS = getAllFarcasterActions();
 /**
  * All Farcaster action types.
  */
-export { FarcasterAction, FarcasterActionSchemaAny, PublishCastAction };
+export { AccountDetailsAction, FarcasterAction, FarcasterActionSchemaAny, PublishCastAction };
