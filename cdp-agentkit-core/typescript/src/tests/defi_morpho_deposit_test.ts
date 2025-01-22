@@ -1,4 +1,3 @@
-import { Decimal } from "decimal.js";
 import { Coinbase, ContractInvocation, Wallet, Asset } from "@coinbase/coinbase-sdk";
 
 import { approve } from "../actions/cdp/utils";
