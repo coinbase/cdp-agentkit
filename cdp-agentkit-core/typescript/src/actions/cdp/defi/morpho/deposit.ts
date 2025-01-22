@@ -11,18 +11,18 @@ const DEPOSIT_PROMPT = `
 This tool allows depositing assets into a Morpho Vault. 
 
 It takes:
-- vault_address: The address of the Morpho Vault to deposit to
+- vaultAddress: The address of the Morpho Vault to deposit to
 - assets: The amount of assets to deposit in whole units
   Examples for WETH:
   - 1 WETH
   - 0.1 WETH
   - 0.01 WETH
 - receiver: The address to receive the shares
-- token_address: The address of the token to approve
+- tokenAddress: The address of the token to approve
 
 Important notes:
 - Make sure to use the exact amount provided. Do not convert units for assets for this action. 
-- Please use a token address (example 0x4200000000000000000000000000000000000006) for the token_address field. If you are unsure of the token address, please clarify what the requested token address is before continuing.
+- Please use a token address (example 0x4200000000000000000000000000000000000006) for the tokenAddress field. If you are unsure of the token address, please clarify what the requested token address is before continuing.
 `;
 
 /**
