@@ -5,9 +5,8 @@ from cdp import Asset, Wallet
 from pydantic import BaseModel, Field
 
 from cdp_agentkit_core.actions import CdpAction
-from cdp_agentkit_core.actions.utils import approve
-
 from cdp_agentkit_core.actions.morpho.constants import METAMORPHO_ABI
+from cdp_agentkit_core.actions.utils import approve
 
 
 class MorphoDepositInput(BaseModel):
@@ -32,7 +31,7 @@ class MorphoDepositInput(BaseModel):
 
 
 DEPOSIT_PROMPT = """
-This tool allows depositing assets into a Morpho Vault. 
+This tool allows depositing assets into a Morpho Vault.
 It takes:
 
 - vault_address: The address of the Morpho Vault to deposit to
@@ -45,7 +44,7 @@ It takes:
 - token_address: The address of the token to approve
 
 Important notes:
-- Make sure to use the exact amount provided. Do not convert units for assets for this action. 
+- Make sure to use the exact amount provided. Do not convert units for assets for this action.
 - Please use a token address (example 0x4200000000000000000000000000000000000006) for the token_address field. If you are unsure of the token address, please clarify what the requested token address is before continuing.
 """
 
