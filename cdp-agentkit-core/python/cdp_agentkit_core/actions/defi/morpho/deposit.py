@@ -2,20 +2,32 @@ from collections.abc import Callable
 from decimal import Decimal
 
 from cdp import Asset, Wallet
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from cdp_agentkit_core.actions import CdpAction
-from cdp_agentkit_core.actions.morpho.constants import METAMORPHO_ABI
-from cdp_agentkit_core.actions.morpho.utils import approve
+from cdp_agentkit_core.actions.defi.morpho.constants import METAMORPHO_ABI
+from cdp_agentkit_core.actions.defi.morpho.utils import approve
 
 
 class MorphoDepositInput(BaseModel):
     """Input schema for Morpho Vault deposit action."""
 
-    vault_address: str
-    assets: str
-    receiver: str
-    token_address: str
+    vault_address: str = Field(
+        ...,
+        description="The address of the Morpho Vault to deposit to"
+    )
+    assets: str = Field(
+        ...,
+        description="The amount of assets to deposit in whole units (e.g., '1 WETH', '0.1 WETH')"
+    )
+    receiver: str = Field(
+        ...,
+        description="The address to receive the vault shares"
+    )
+    token_address: str = Field(
+        ...,
+        description="The address of the token to approve for deposit"
+    )
 
 
 DEPOSIT_PROMPT = """
