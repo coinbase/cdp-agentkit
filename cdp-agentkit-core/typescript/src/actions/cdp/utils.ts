@@ -1,6 +1,6 @@
 import { Wallet } from "@coinbase/coinbase-sdk";
 
-import { ERC20_APPROVE_ABI } from "./constants";
+import { ERC20_APPROVE_ABI } from "./defi/morpho/constants";
 
 /**
  * Approve a spender to spend a specified amount of tokens.

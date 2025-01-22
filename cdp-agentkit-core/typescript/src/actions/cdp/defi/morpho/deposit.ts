@@ -3,21 +3,26 @@ import { z } from "zod";
 import { Decimal } from "decimal.js";
 
 import { CdpAction } from "../../cdp_action";
+import { approve } from "../../utils";
 
 import { METAMORPHO_ABI } from "./constants";
-import { approve } from "./utils";
 
 const DEPOSIT_PROMPT = `
-This tool allows depositing assets into a Morpho Vault. It takes:
+This tool allows depositing assets into a Morpho Vault. 
 
-- vaultAddress: The address of the Morpho Vault to deposit to
+It takes:
+- vault_address: The address of the Morpho Vault to deposit to
 - assets: The amount of assets to deposit in whole units
   Examples for WETH:
   - 1 WETH
   - 0.1 WETH
   - 0.01 WETH
 - receiver: The address to receive the shares
-- tokenAddress: The address of the token to approve
+- token_address: The address of the token to approve
+
+Important notes:
+- Make sure to use the exact amount provided. Do not convert units for assets for this action. 
+- Please use a token address (example 0x4200000000000000000000000000000000000006) for the token_address field. If you are unsure of the token address, please clarify what the requested token address is before continuing.
 `;
 
 /**
@@ -25,22 +30,24 @@ This tool allows depositing assets into a Morpho Vault. It takes:
  */
 export const MorphoDepositInput = z
   .object({
+    assets: z
+      .string()
+      .regex(/^\d+(\.\d+)?$/, "Must be a valid integer or decimal value")
+      .describe("The quantity of assets to deposit, in whole units"),
+    receiver: z
+      .string()
+      .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
+      .describe(
+        "The address that will own the position on the vault which will receive the shares",
+      ),
+    tokenAddress: z
+      .string()
+      .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
+      .describe("The address of the assets token to approve for deposit"),
     vaultAddress: z
       .string()
       .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
       .describe("The address of the Morpho Vault to deposit to"),
-    assets: z
-      .string()
-      .regex(/^\d+(\.\d+)?$/, "Must be a valid integer or decimal value")
-      .describe("The amount of assets to deposit in whole units e.g. 0.0005 WETH"),
-    receiver: z
-      .string()
-      .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
-      .describe("The address to receive the shares"),
-    tokenAddress: z
-      .string()
-      .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
-      .describe("The address of the token to approve"),
   })
   .describe("Input schema for Morpho Vault deposit action");
 

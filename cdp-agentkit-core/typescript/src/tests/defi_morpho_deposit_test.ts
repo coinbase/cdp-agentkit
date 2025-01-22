@@ -1,15 +1,17 @@
+import { Decimal } from "decimal.js";
 import { Coinbase, ContractInvocation, Wallet, Asset } from "@coinbase/coinbase-sdk";
+
+import { approve } from "../actions/cdp/utils";
+
 import { MorphoDepositAction } from "../actions/cdp/defi/morpho/deposit";
 import { METAMORPHO_ABI } from "../actions/cdp/defi/morpho/constants";
-import { approve } from "../actions/cdp/defi/morpho/utils";
-import { Decimal } from "decimal.js";
 
 const MOCK_VAULT_ADDRESS = "0x1234567890123456789012345678901234567890";
 const MOCK_ASSETS = "1000000000000000000";
 const MOCK_RECEIVER_ID = "0x9876543210987654321098765432109876543210";
 const MOCK_TOKEN_ADDRESS = "0x4200000000000000000000000000000000000006";
 
-jest.mock("../actions/cdp/defi/morpho/utils");
+jest.mock("../actions/cdp/utils");
 const mockApprove = approve as jest.MockedFunction<typeof approve>;
 
 describe("Morpho Deposit Input", () => {
