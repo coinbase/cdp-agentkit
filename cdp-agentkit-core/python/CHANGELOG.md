@@ -8,6 +8,7 @@
 
 - Added `morpho_deposit` action to deposit to Morpho Vault.
 - Added `morpho_withdrawal` action to withdraw from Morpho Vault.
+- Bump `cdp-sdk` dependency to `0.15.0`.
 
 ## [0.0.9] - 2025-01-17
 
