@@ -1,7 +1,7 @@
 import { Asset, Wallet } from "@coinbase/coinbase-sdk";
 import { z } from "zod";
 
-import { CdpAction } from "../cdp_action";
+import { CdpAction } from "../../cdp_action";
 import { METAMORPHO_ABI } from "./constants";
 
 const WITHDRAW_PROMPT = `

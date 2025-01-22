@@ -2,7 +2,7 @@ import { Asset, Wallet } from "@coinbase/coinbase-sdk";
 import { z } from "zod";
 import { Decimal } from "decimal.js";
 
-import { CdpAction } from "../cdp_action";
+import { CdpAction } from "../../cdp_action";
 
 import { METAMORPHO_ABI } from "./constants";
 import { approve } from "./utils";
@@ -54,15 +54,15 @@ export async function depositToMorpho(
   wallet: Wallet,
   args: z.infer<typeof MorphoDepositInput>,
 ): Promise<string> {
-  const n = args.assets.replace(/\.\d+/, "");
+  const assets = new Decimal(args.assets);
 
-  if (BigInt(n) < 0) {
+  if (assets.comparedTo(new Decimal(0.0)) != 1) {
     return "Error: Assets amount must be greater than 0";
   }
 
   try {
     const tokenAsset = await Asset.fetch(wallet.getNetworkId(), args.tokenAddress);
-    const atomicAssets = BigInt(tokenAsset.toAtomicAmount(new Decimal(args.assets)).toString());
+    const atomicAssets = BigInt(tokenAsset.toAtomicAmount(assets).toString());
 
     const approvalResult = await approve(
       wallet,

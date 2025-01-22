@@ -1,4 +1,4 @@
-import { CdpAction, CdpActionSchemaAny } from "../cdp_action";
+import { CdpAction, CdpActionSchemaAny } from "../../cdp_action";
 
 import { MorphoDepositAction } from "./deposit";
 import { MorphoWithdrawAction } from "./withdraw";
