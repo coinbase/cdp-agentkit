@@ -19,6 +19,12 @@ describe("FarcasterToolkit", () => {
 
     mockActions = [
       {
+        name: "farcaster_account_details",
+        description: "Retrieve Farcaster account details",
+        argsSchema: z.object({}),
+        func: jest.fn().mockResolvedValue("Successfully retrieved Farcaster account details"),
+      },
+      {
         name: "publish_cast",
         description: "Publish a new cast",
         argsSchema: z.object({ castText: z.string() }),
@@ -32,23 +38,24 @@ describe("FarcasterToolkit", () => {
 
   it("should initialize with correct tools", () => {
     expect(farcasterToolkit.tools).toHaveLength(mockActions.length);
-    expect(farcasterToolkit.tools[0].name).toBe("publish_cast");
+    expect(farcasterToolkit.tools[0].name).toBe("farcaster_account_details");
+    expect(farcasterToolkit.tools[1].name).toBe("publish_cast");
   });
 
   it("should execute action from toolkit", async () => {
-    const tool = farcasterToolkit.tools[0];
+    const tool = farcasterToolkit.tools[1];
     const args = { castText: "Hello world" };
     const response = await tool.call(args);
 
-    expect(mockActions[0].func).toHaveBeenCalledWith(mockAgentkit, args);
+    expect(mockActions[1].func).toHaveBeenCalledWith(mockAgentkit, args);
     expect(response).toBe("Cast published successfully");
   });
 
   it("should handle action execution failure", async () => {
     const error = new Error("Failed to publish cast");
-    mockActions[0].func.mockRejectedValue(error);
+    mockActions[1].func.mockRejectedValue(error);
 
-    const tool = farcasterToolkit.tools[0];
+    const tool = farcasterToolkit.tools[1];
     const args = { castText: "Hello world" };
     const response = await tool.call(args);
 
@@ -59,6 +66,7 @@ describe("FarcasterToolkit", () => {
     const tools = farcasterToolkit.getTools();
 
     expect(tools).toHaveLength(mockActions.length);
-    expect(tools[0].name).toBe("publish_cast");
+    expect(tools[0].name).toBe("farcaster_account_details");
+    expect(tools[1].name).toBe("publish_cast");
   });
 });

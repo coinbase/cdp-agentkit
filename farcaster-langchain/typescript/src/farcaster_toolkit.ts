@@ -9,13 +9,14 @@ import { FarcasterTool } from "./farcaster_tool";
  * the state of a service; e.g., by creating, deleting, or updating,
  * reading underlying data.
  *
- * For example, this toolkit can be used to publish casts and anything
- * else you can implement with the Farcaster API!
+ * For example, this toolkit can be used to retrieve account details, publish casts,
+ * and anything else you can implement with the Farcaster API!
  *
  * Setup:
  * You will need to set the following environment variables:
  * ```bash
  * export OPENAI_API_KEY=<your-openai-api-key>
+ * export AGENT_FID=<your-agents-fid>
  * export NEYNAR_API_KEY=<your-neynar-api-key>
  * export NEYNAR_MANAGED_SIGNER=<your-neynar-managed-signer>
  * ```
@@ -24,6 +25,7 @@ import { FarcasterTool } from "./farcaster_tool";
  * ```typescript
  * // optional if not available via the ENV
  * const options = {
+ *  agentFid: "<your-agents-fid>",
  *  neynarApiKey: "<your-neynar-api-key>",
  *  neynarManagedSigner: "<your-neynar-managed-signer>"
  * };
@@ -33,6 +35,7 @@ import { FarcasterTool } from "./farcaster_tool";
  * const tools = toolkit.getTools();
  *
  * // Available tools include:
+ * // - account details
  * // - publish cast
  * ```
  */

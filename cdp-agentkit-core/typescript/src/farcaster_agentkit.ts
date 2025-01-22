@@ -50,8 +50,8 @@ export class FarcasterAgentkit {
       const env = EnvSchema.parse(process.env);
 
       options = {
-        apiKey: options.apiKey || env.NEYNAR_API_KEY!,
-        managedSigner: options.managedSigner || env.NEYNAR_MANAGED_SIGNER!,
+        apiKey: options?.apiKey || env.NEYNAR_API_KEY!,
+        managedSigner: options?.managedSigner || env.NEYNAR_MANAGED_SIGNER!,
       };
     } catch (error) {
       if (error instanceof z.ZodError) {

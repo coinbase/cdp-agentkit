@@ -9,7 +9,9 @@ import {
 /**
  * This tool allows agents to interact with the Farcaster API and control an authenticated Farcaster account.
  *
- * To use this tool, you must first set the following environment variables:
+ * To use this tool, you must first configure with proper options or
+ * set the following environment variables:
+ * - AGENT_FID
  * - NEYNAR_API_KEY
  * - NEYNAR_MANAGED_SIGNER
  */
