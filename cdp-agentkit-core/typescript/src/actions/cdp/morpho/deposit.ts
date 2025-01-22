@@ -21,7 +21,7 @@ This tool allows depositing assets into a Morpho Vault. It takes:
 `;
 
 /**
- * Input schema for Morpho Vault deposit action
+ * Input schema for Morpho Vault deposit action.
  */
 export const MorphoDepositInput = z
   .object({
