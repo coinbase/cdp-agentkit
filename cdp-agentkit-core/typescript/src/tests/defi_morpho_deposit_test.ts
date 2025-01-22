@@ -122,7 +122,7 @@ describe("Morpho Deposit Action", () => {
     mockWallet.invokeContract.mockResolvedValue(mockContractInvocation);
 
     jest.spyOn(Asset, "fetch").mockResolvedValue({
-      toAtomicAmount: jest.fn().mockImplementation((amount: Decimal) => BigInt(MOCK_ATOMIC_ASSETS)),
+      toAtomicAmount: jest.fn().mockImplementation((_: Decimal) => BigInt(MOCK_ATOMIC_ASSETS)),
     } as unknown as Asset);
 
     mockApprove.mockResolvedValue("Approval successful");
