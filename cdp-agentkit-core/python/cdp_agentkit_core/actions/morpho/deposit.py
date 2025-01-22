@@ -5,8 +5,9 @@ from cdp import Asset, Wallet
 from pydantic import BaseModel, Field
 
 from cdp_agentkit_core.actions import CdpAction
-from cdp_agentkit_core.actions.defi.morpho.constants import METAMORPHO_ABI
-from cdp_agentkit_core.actions.defi.morpho.utils import approve
+from cdp_agentkit_core.actions.utils import approve
+
+from cdp_agentkit_core.actions.morpho.constants import METAMORPHO_ABI
 
 
 class MorphoDepositInput(BaseModel):
@@ -31,26 +32,21 @@ class MorphoDepositInput(BaseModel):
 
 
 DEPOSIT_PROMPT = """
-This tool will deposit assets into a Morpho Vault.
+This tool allows depositing assets into a Morpho Vault. 
+It takes:
 
-With the following wallet context:
-    network_id: base-sepolia
-    default_address: 0x1234567890123456789012345678901234567890
+- vault_address: The address of the Morpho Vault to deposit to
+- assets: The amount of assets to deposit in whole units
+    Examples for WETH:
+    - 1 WETH
+    - 0.1 WETH
+    - 0.01 WETH
+- receiver: The address to receive the shares
+- token_address: The address of the token to approve
 
-An example prompt to use this tool could be:
-    'please deposit 0.0005 WETH into the morpho vault located at 0xb754c2a7FF8493CE1404E5ecFDE562e8f023DEF6'
-
-Each network will have a different token address for the asset type being requested for deposit. On base-sepolia, the token address for WETH is: 0x4200000000000000000000000000000000000006.
-
-If the receiver is not provided, use the wallet's default address.
-
-Do not convert assets to atmoic units.
-
-A successful response will return a message in the following format:
-    'Deposited {assets} to Morpho Vault {vault_address} with transaction hash: {contract_invocation.transaction_hash} and transaction link: {contract_invocation.transaction_link}'
-
-A failure response will return a message in the following format:
-    'Error depositing to Morpho Vault: {e!s}'
+Important notes:
+- Make sure to use the exact amount provided. Do not convert units for assets for this action. 
+- Please use a token address (example 0x4200000000000000000000000000000000000006) for the token_address field. If you are unsure of the token address, please clarify what the requested token address is before continuing.
 """
 
 

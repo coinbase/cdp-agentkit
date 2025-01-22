@@ -4,7 +4,7 @@ from cdp import Wallet
 from pydantic import BaseModel, Field
 
 from cdp_agentkit_core.actions import CdpAction
-from cdp_agentkit_core.actions.defi.morpho.constants import METAMORPHO_ABI
+from cdp_agentkit_core.actions.morpho.constants import METAMORPHO_ABI
 
 
 class MorphoWithdrawInput(BaseModel):

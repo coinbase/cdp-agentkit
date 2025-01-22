@@ -3,8 +3,8 @@ from unittest.mock import patch
 
 import pytest
 
-from cdp_agentkit_core.actions.defi.morpho.constants import METAMORPHO_ABI
-from cdp_agentkit_core.actions.defi.morpho.deposit import (
+from cdp_agentkit_core.actions.morpho.constants import METAMORPHO_ABI
+from cdp_agentkit_core.actions.morpho.deposit import (
     MorphoDepositInput,
     deposit_to_morpho,
 )
@@ -50,10 +50,10 @@ def test_deposit_success(wallet_factory, contract_invocation_factory, asset_fact
 
     with (
         patch(
-            "cdp_agentkit_core.actions.defi.morpho.deposit.approve", return_value="Approval successful"
+            "cdp_agentkit_core.actions.morpho.deposit.approve", return_value="Approval successful"
         ) as mock_approve,
         patch(
-            "cdp_agentkit_core.actions.defi.morpho.deposit.Asset.fetch", return_value=mock_asset
+            "cdp_agentkit_core.actions.morpho.deposit.Asset.fetch", return_value=mock_asset
         ) as mock_get_asset,
         patch.object(
             mock_asset, "to_atomic_amount", return_value=MOCK_ASSETS_WEI
@@ -102,10 +102,10 @@ def test_deposit_api_error(wallet_factory, asset_factory):
 
     with (
         patch(
-            "cdp_agentkit_core.actions.defi.morpho.deposit.approve", return_value="Approval successful"
+            "cdp_agentkit_core.actions.morpho.deposit.approve", return_value="Approval successful"
         ),
         patch(
-            "cdp_agentkit_core.actions.defi.morpho.deposit.Asset.fetch", return_value=mock_asset
+            "cdp_agentkit_core.actions.morpho.deposit.Asset.fetch", return_value=mock_asset
         ) as mock_get_asset,
         patch.object(
             mock_asset, "to_atomic_amount", return_value=MOCK_ASSETS_WEI
@@ -137,11 +137,11 @@ def test_deposit_approval_failure(wallet_factory, asset_factory):
 
     with (
         patch(
-            "cdp_agentkit_core.actions.defi.morpho.deposit.approve",
+            "cdp_agentkit_core.actions.morpho.deposit.approve",
             return_value="Error: Approval failed",
         ) as mock_approve,
         patch(
-            "cdp_agentkit_core.actions.defi.morpho.deposit.Asset.fetch", return_value=mock_asset
+            "cdp_agentkit_core.actions.morpho.deposit.Asset.fetch", return_value=mock_asset
         ) as mock_get_asset,
         patch.object(
             mock_asset, "to_atomic_amount", return_value=MOCK_ASSETS_WEI

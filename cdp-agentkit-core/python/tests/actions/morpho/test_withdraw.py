@@ -2,8 +2,8 @@ from unittest.mock import patch
 
 import pytest
 
-from cdp_agentkit_core.actions.defi.morpho.constants import METAMORPHO_ABI
-from cdp_agentkit_core.actions.defi.morpho.withdraw import (
+from cdp_agentkit_core.actions.morpho.constants import METAMORPHO_ABI
+from cdp_agentkit_core.actions.morpho.withdraw import (
     MorphoWithdrawInput,
     withdraw_from_morpho,
 )

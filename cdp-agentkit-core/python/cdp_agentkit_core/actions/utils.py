@@ -1,6 +1,7 @@
 from cdp import Wallet
 
-from cdp_agentkit_core.actions.defi.morpho.constants import ERC20_APPROVE_ABI
+# TODO: ask John if this should be moved up too?
+from cdp_agentkit_core.actions.morpho.constants import ERC20_APPROVE_ABI
 
 
 def approve(wallet: Wallet, token_address: str, spender: str, amount: int) -> str:
