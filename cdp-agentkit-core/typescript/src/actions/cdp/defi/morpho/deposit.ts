@@ -70,7 +70,6 @@ export async function depositToMorpho(
   try {
     const tokenAsset = await Asset.fetch(wallet.getNetworkId(), args.tokenAddress);
     const atomicAssets = tokenAsset.toAtomicAmount(assets);
-    // const atomicAssets = BigInt(tokenAsset.toAtomicAmount(assets).toString());
 
     const approvalResult = await approve(
       wallet,
