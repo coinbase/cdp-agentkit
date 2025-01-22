@@ -12,7 +12,6 @@ import { TransferAction } from "./transfer";
 import { TransferNftAction } from "./transfer_nft";
 import { WrapEthAction } from "./wrap_eth";
 
-// TODO: ask John if this is the right path for morpho actions
 import { MORPHO_ACTIONS } from "./defi/morpho";
 import { PYTH_ACTIONS } from "./data/pyth";
 import { WOW_ACTIONS } from "./defi/wow";
