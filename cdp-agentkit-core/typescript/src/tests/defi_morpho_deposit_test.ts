@@ -7,7 +7,8 @@ import { MorphoDepositAction } from "../actions/cdp/defi/morpho/deposit";
 import { METAMORPHO_ABI } from "../actions/cdp/defi/morpho/constants";
 
 const MOCK_VAULT_ADDRESS = "0x1234567890123456789012345678901234567890";
-const MOCK_ASSETS = "1000000000000000000";
+const MOCK_ATOMIC_ASSETS = "1000000000000000000";
+const MOCK_WHOLE_ASSETS = "0.0001";
 const MOCK_RECEIVER_ID = "0x9876543210987654321098765432109876543210";
 const MOCK_TOKEN_ADDRESS = "0x4200000000000000000000000000000000000006";
 
@@ -20,7 +21,7 @@ describe("Morpho Deposit Input", () => {
   it("should successfully parse valid input", () => {
     const validInput = {
       vaultAddress: MOCK_VAULT_ADDRESS,
-      assets: MOCK_ASSETS,
+      assets: MOCK_WHOLE_ASSETS,
       receiver: MOCK_RECEIVER_ID,
       tokenAddress: MOCK_TOKEN_ADDRESS,
     };
@@ -41,7 +42,7 @@ describe("Morpho Deposit Input", () => {
   it("should fail with invalid vault address", () => {
     const invalidInput = {
       vaultAddress: "not_an_address",
-      assets: MOCK_ASSETS,
+      assets: MOCK_WHOLE_ASSETS,
       receiver: MOCK_RECEIVER_ID,
       tokenAddress: MOCK_TOKEN_ADDRESS,
     };
@@ -53,7 +54,7 @@ describe("Morpho Deposit Input", () => {
   it("should handle valid asset string formats", () => {
     const validInput = {
       vaultAddress: MOCK_VAULT_ADDRESS,
-      assets: MOCK_ASSETS,
+      assets: MOCK_WHOLE_ASSETS,
       receiver: MOCK_RECEIVER_ID,
       tokenAddress: MOCK_TOKEN_ADDRESS,
     };
@@ -73,7 +74,7 @@ describe("Morpho Deposit Input", () => {
   it("should reject invalid asset strings", () => {
     const validInput = {
       vaultAddress: MOCK_VAULT_ADDRESS,
-      assets: MOCK_ASSETS,
+      assets: MOCK_WHOLE_ASSETS,
       receiver: MOCK_RECEIVER_ID,
       tokenAddress: MOCK_TOKEN_ADDRESS,
     };
@@ -121,7 +122,7 @@ describe("Morpho Deposit Action", () => {
     mockWallet.invokeContract.mockResolvedValue(mockContractInvocation);
 
     jest.spyOn(Asset, "fetch").mockResolvedValue({
-      toAtomicAmount: jest.fn().mockImplementation((amount: Decimal) => amount.toString()),
+      toAtomicAmount: jest.fn().mockImplementation((amount: Decimal) => BigInt(MOCK_ATOMIC_ASSETS)),
     } as unknown as Asset);
 
     mockApprove.mockResolvedValue("Approval successful");
@@ -130,20 +131,19 @@ describe("Morpho Deposit Action", () => {
   it("should successfully deposit to Morpho vault", async () => {
     const args = {
       vaultAddress: MOCK_VAULT_ADDRESS,
-      assets: MOCK_ASSETS,
+      assets: MOCK_WHOLE_ASSETS,
       receiver: MOCK_RECEIVER_ID,
       tokenAddress: MOCK_TOKEN_ADDRESS,
     };
 
-    const assets = BigInt(MOCK_ASSETS);
-
+    const atomicAssets = BigInt(MOCK_ATOMIC_ASSETS);
     const response = await action.func(mockWallet, args);
 
     expect(mockApprove).toHaveBeenCalledWith(
       mockWallet,
       MOCK_TOKEN_ADDRESS,
       MOCK_VAULT_ADDRESS,
-      assets,
+      atomicAssets,
     );
 
     expect(mockWallet.invokeContract).toHaveBeenCalledWith({
@@ -151,13 +151,13 @@ describe("Morpho Deposit Action", () => {
       method: "deposit",
       abi: METAMORPHO_ABI,
       args: {
-        assets: MOCK_ASSETS,
+        assets: MOCK_ATOMIC_ASSETS,
         receiver: MOCK_RECEIVER_ID,
       },
     });
 
     expect(mockContractInvocation.wait).toHaveBeenCalled();
-    expect(response).toContain(`Deposited ${MOCK_ASSETS}`);
+    expect(response).toContain(`Deposited ${MOCK_WHOLE_ASSETS}`);
     expect(response).toContain(`to Morpho Vault ${MOCK_VAULT_ADDRESS}`);
     expect(response).toContain(`with transaction hash: ${TRANSACTION_HASH}`);
     expect(response).toContain(`and transaction link: ${TRANSACTION_LINK}`);
@@ -166,7 +166,7 @@ describe("Morpho Deposit Action", () => {
   it("should handle approval failure", async () => {
     const args = {
       vaultAddress: MOCK_VAULT_ADDRESS,
-      assets: MOCK_ASSETS,
+      assets: MOCK_WHOLE_ASSETS,
       receiver: MOCK_RECEIVER_ID,
       tokenAddress: MOCK_TOKEN_ADDRESS,
     };
@@ -183,7 +183,7 @@ describe("Morpho Deposit Action", () => {
   it("should handle deposit errors", async () => {
     const args = {
       vaultAddress: MOCK_VAULT_ADDRESS,
-      assets: MOCK_ASSETS,
+      assets: MOCK_WHOLE_ASSETS,
       receiver: MOCK_RECEIVER_ID,
       tokenAddress: MOCK_TOKEN_ADDRESS,
     };
