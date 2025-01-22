@@ -29,7 +29,7 @@ describe("Utils - Approve", () => {
       mockWallet,
       MOCK_TOKEN_ADDRESS,
       MOCK_SPENDER_ADDRESS,
-      MOCK_AMOUNT
+      MOCK_AMOUNT,
     );
 
     expect(mockWallet.invokeContract).toHaveBeenCalledWith({
@@ -43,7 +43,7 @@ describe("Utils - Approve", () => {
     });
     expect(mockContractInvocation.wait).toHaveBeenCalled();
     expect(response).toBe(
-      `Approved ${MOCK_AMOUNT} tokens for ${MOCK_SPENDER_ADDRESS} with transaction hash: ${TRANSACTION_HASH}`
+      `Approved ${MOCK_AMOUNT} tokens for ${MOCK_SPENDER_ADDRESS} with transaction hash: ${TRANSACTION_HASH}`,
     );
   });
 
@@ -55,7 +55,7 @@ describe("Utils - Approve", () => {
       mockWallet,
       MOCK_TOKEN_ADDRESS,
       MOCK_SPENDER_ADDRESS,
-      MOCK_AMOUNT
+      MOCK_AMOUNT,
     );
 
     expect(mockWallet.invokeContract).toHaveBeenCalled();
