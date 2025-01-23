@@ -1,6 +1,7 @@
 import { CdpAction, CdpActionSchemaAny } from "./cdp_action";
 import { DeployNftAction } from "./deploy_nft";
 import { DeployTokenAction } from "./deploy_token";
+import { DeployContractAction } from "./deploy_contract";
 import { GetBalanceAction } from "./get_balance";
 import { GetBalanceNftAction } from "./get_balance_nft";
 import { GetWalletDetailsAction } from "./get_wallet_details";
@@ -14,7 +15,6 @@ import { WrapEthAction } from "./wrap_eth";
 
 import { MORPHO_ACTIONS } from "./defi/morpho";
 import { PYTH_ACTIONS } from "./data/pyth";
-import { DeployContractAction } from "./deploy_contract";
 import { WOW_ACTIONS } from "./defi/wow";
 
 /**

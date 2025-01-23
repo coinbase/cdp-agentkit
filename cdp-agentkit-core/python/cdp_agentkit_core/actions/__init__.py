@@ -55,17 +55,3 @@ __all__ = [
     "PythFetchPriceFeedIDAction",
     "PythFetchPriceAction",
 ]
-
-
-class CdpAction(ABC):
-    """Base class for CDP actions."""
-
-    name: str
-    description: str
-    args_schema: Optional[type[BaseModel]] = None
-    func: Callable
-
-    @abstractmethod
-    def __init__(self) -> None:
-        """Initialize the action."""
-        pass
