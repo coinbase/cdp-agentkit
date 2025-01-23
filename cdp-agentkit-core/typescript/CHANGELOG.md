@@ -8,7 +8,6 @@
 
 - Added `morpho_deposit` action to deposit to Morpho Vault.
 - Added `morpho_withdrawal` action to withdraw from Morpho Vault.
-- Bump dependency `coinbase-sdk-nodejs` to version `0.15.0`.
 
 ## [0.0.12] - 2025-01-17
 
