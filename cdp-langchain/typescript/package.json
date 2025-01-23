@@ -7,9 +7,7 @@
   "license": "Apache-2.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "tsc",
     "lint": "npx --yes eslint -c .eslintrc.json src/**/*.ts",
@@ -40,7 +38,7 @@
     "langchain"
   ],
   "dependencies": {
-    "@coinbase/cdp-agentkit-core": "file:../../cdp-agentkit-core/typescript",
+    "@coinbase/cdp-agentkit-core": "^0.0.13",
     "@coinbase/coinbase-sdk": "^0.15.0",
     "@langchain/core": "^0.3.19",
     "zod": "^3.22.4"

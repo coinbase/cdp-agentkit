@@ -437,42 +437,38 @@ test = ["coverage (>=7)", "hypothesis", "pytest"]
 
 [[package]]
 name = "cdp-agentkit-core"
-version = "0.0.9"
+version = "0.0.10"
 description = "CDP Agentkit core primitives"
 optional = false
-python-versions = "^3.10"
-files = []
-develop = true
+python-versions = "<4.0,>=3.10"
+files = [
+    {file = "cdp_agentkit_core-0.0.10-py3-none-any.whl", hash = "sha256:2f99ff552cfb6e50f8ce9ee621a0bfb9900b73e2704cc6414c711563a7c54d7d"},
+    {file = "cdp_agentkit_core-0.0.10.tar.gz", hash = "sha256:7d69eae91a325b69a4f4e882427d3bfcf6e455fcc27582876300e1902a749c14"},
+]
 
 [package.dependencies]
-cdp-sdk = "^0.14.1"
-pydantic = "^2.0"
-web3 = "^7.6.0"
-
-[package.source]
-type = "directory"
-url = "../../../cdp-agentkit-core/python"
+cdp-sdk = ">=0.14.1,<0.15.0"
+pydantic = ">=2.0,<3.0"
+web3 = ">=7.6.0,<8.0.0"
 
 [[package]]
 name = "cdp-langchain"
-version = "0.0.11"
+version = "0.0.12"
 description = "CDP Agentkit Langchain Extension"
 optional = false
-python-versions = "^3.10"
-files = []
-develop = true
+python-versions = "<4.0,>=3.10"
+files = [
+    {file = "cdp_langchain-0.0.12-py3-none-any.whl", hash = "sha256:15590e83788f0920786b52b9c5778351baab038c5683de1250a4b618f6af810a"},
+    {file = "cdp_langchain-0.0.12.tar.gz", hash = "sha256:35d5a42d9cb44f02e15577450842c81222d5013c5078b0328c3ee41bafd6937d"},
+]
 
 [package.dependencies]
-cdp-agentkit-core = "^0.0.9"
-cdp-sdk = "^0.14.1"
-langchain = "^0.3.4"
-langchain-openai = "^0.2.4"
-langgraph = "^0.2.39"
-pydantic = "^2.0"
-
-[package.source]
-type = "directory"
-url = "../../python"
+cdp-agentkit-core = ">=0.0.10,<0.0.11"
+cdp-sdk = ">=0.14.1,<0.15.0"
+langchain = ">=0.3.4,<0.4.0"
+langchain-openai = ">=0.2.4,<0.3.0"
+langgraph = ">=0.2.39,<0.3.0"
+pydantic = ">=2.0,<3.0"
 
 [[package]]
 name = "cdp-sdk"
@@ -1780,13 +1776,13 @@ orjson = ">=3.10.1"
 
 [[package]]
 name = "langsmith"
-version = "0.3.0"
+version = "0.3.1"
 description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform."
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "langsmith-0.3.0-py3-none-any.whl", hash = "sha256:dff7d4fc507acfcb790c77e2d58b4c687101daf306195b08bac66c56a0a82d5c"},
-    {file = "langsmith-0.3.0.tar.gz", hash = "sha256:601addc2cc6bddd5aee32bf94bd6729c94b5e50da72a091f6285fca1a9cf18ef"},
+    {file = "langsmith-0.3.1-py3-none-any.whl", hash = "sha256:b6afbb214ae82b6d96b8134718db3a7d2598b2a7eb4ab1212bcd6d96e04eda10"},
+    {file = "langsmith-0.3.1.tar.gz", hash = "sha256:9242a49d37e2176a344ddec97bf57b958dc0e1f0437e150cefd0fb70195f0e26"},
 ]
 
 [package.dependencies]
@@ -2092,13 +2088,13 @@ files = [
 
 [[package]]
 name = "openai"
-version = "1.59.9"
+version = "1.60.0"
 description = "The official Python library for the openai API"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "openai-1.59.9-py3-none-any.whl", hash = "sha256:61a0608a1313c08ddf92fe793b6dbd1630675a1fe3866b2f96447ce30050c448"},
-    {file = "openai-1.59.9.tar.gz", hash = "sha256:ec1a20b0351b4c3e65c6292db71d8233515437c6065efd4fd50edeb55df5f5d2"},
+    {file = "openai-1.60.0-py3-none-any.whl", hash = "sha256:df06c43be8018274980ac363da07d4b417bd835ead1c66e14396f6f15a0d5dda"},
+    {file = "openai-1.60.0.tar.gz", hash = "sha256:7fa536cd4b644718645b874d2706e36dbbef38b327e42ca0623275da347ee1a9"},
 ]
 
 [package.dependencies]
@@ -3524,4 +3520,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "a71a552225c3661b1d0f3e26e3a29195218d403f3bc9c89873a0c63c3246cb5e"
+content-hash = "e4a261895df6d7249a960f3e5dfc95b4bb362e6ec6d877409b62851b13106e27"
