@@ -67,7 +67,8 @@ describe("Address Reputation Action", () => {
         ens_contract_interactions: 2,
         smart_contract_deployments: 1,
       },
-      // TODO: ask John if there is a better way...
+
+      // TODO: remove this once AddressReputation is exported from the sdk
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as unknown as jest.Mocked<any>;
 

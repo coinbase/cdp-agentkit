@@ -6,14 +6,14 @@ from pydantic import BaseModel, Field, field_validator
 
 from cdp_agentkit_core.actions import CdpAction
 
-#  TODO: ask John what he thinks about standardizing responses to be the json API responses
 ADDRESS_REPUTATION_PROMPT = """
 This tool checks the reputation of an address on a given network. It takes:
 
-- network: The network the address is on (e.g. "base-sepolia")
+- network: The network the address is on (e.g. "base-mainnet")
 - address: The Ethereum address to check
 
-and returns:
+Important notes:
+- This tool will not currently work on base-sepolia
 """
 
 

@@ -6,8 +6,11 @@ import { CdpAction } from "./cdp_action";
 const ADDRESS_REPUTATION_PROMPT = `
 This tool checks the reputation of an address on a given network. It takes:
 
-- network: The network to check the address on (e.g. "base-sepolia")
+- network: The network to check the address on (e.g. "base-mainnet")
 - address: The Ethereum address to check
+
+Important notes:
+- This tool will not currently work on base-sepolia
 `;
 
 /**
