@@ -72,13 +72,8 @@ class DeployContractInput(BaseModel):
         description='The constructor arguments for the contract'
     )
 
-    class Config:
-        schema_extra = {
-            "description": "Instructions for deploying an arbitrary contract"
-        }
 
-
-async def deploy_contract(wallet: Wallet, args: DeployContractInput) -> str:
+def deploy_contract(wallet: Wallet, solidity_version: str, solidity_input_json: str, contract_name: str, constructor_args: Optional[dict[str, Any]] = None) -> str:
     """Deploy an arbitrary contract.
 
     Args:
@@ -89,18 +84,16 @@ async def deploy_contract(wallet: Wallet, args: DeployContractInput) -> str:
         str: A message containing the deployed contract address and details.
     """
     try:
-        solidity_version = SOLIDITY_VERSIONS[args.solidity_version]
+        solidity_version = SOLIDITY_VERSIONS[solidity_version]
         
-        contract = await wallet.deploy_contract(
+        contract = wallet.deploy_contract(
             solidity_version=solidity_version,
-            solidity_input_json=args.solidity_input_json,
-            contract_name=args.contract_name,
-            constructor_args=args.constructor_args or {}
-        )
+            solidity_input_json=solidity_input_json,
+            contract_name=contract_name,
+            constructor_args=constructor_args or {}
+        ).wait()
 
-        result = await contract.wait()
-
-        return f"Deployed contract {args.contract_name} at address {result.contract_address}. Transaction link: {result.transaction.transaction_link}"
+        return f"Deployed contract {contract_name} at address {contract.contract_address}. Transaction link: {contract.transaction.transaction_link}"
     except Exception as e:
         return f"Error deploying contract: {e}"
 
