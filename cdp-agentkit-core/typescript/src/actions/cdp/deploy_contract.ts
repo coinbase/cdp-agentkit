@@ -17,7 +17,7 @@ map where the key is the argument name and the value is the argument value. Enco
 
 const SolidityVersions = {
   "0.8.28": "0.8.28+commit.7893614a",
-  "0.8.27": "0.8.27+commit.40a35a09", 
+  "0.8.27": "0.8.27+commit.40a35a09",
   "0.8.26": "0.8.26+commit.8a97fa7a",
   "0.8.25": "0.8.25+commit.b61c2a91",
   "0.8.24": "0.8.24+commit.e11b9ed9",
@@ -36,7 +36,7 @@ const SolidityVersions = {
   "0.8.11": "0.8.11+commit.d7f03943",
   "0.8.10": "0.8.10+commit.fc410830",
   "0.8.9": "0.8.9+commit.e5eed63a",
-  "0.8.8": "0.8.8+commit.dddeac2f", 
+  "0.8.8": "0.8.8+commit.dddeac2f",
   "0.8.7": "0.8.7+commit.e28d00a7",
   "0.8.6": "0.8.6+commit.11564f7e",
   "0.8.5": "0.8.5+commit.a4f2e591",
@@ -44,15 +44,17 @@ const SolidityVersions = {
   "0.8.3": "0.8.3+commit.8d00100c",
   "0.8.2": "0.8.2+commit.661d1103",
   "0.8.1": "0.8.1+commit.df193b15",
-  "0.8.0": "0.8.0+commit.c7dfd78e"
- } as const;
+  "0.8.0": "0.8.0+commit.c7dfd78e",
+} as const;
 
 /**
  * Input schema for deploy contract action.
  */
 export const DeployContractInput = z
   .object({
-    solidityVersion: z.enum(Object.keys(SolidityVersions) as [string, ...string[]]).describe("The solidity compiler version"),
+    solidityVersion: z
+      .enum(Object.keys(SolidityVersions) as [string, ...string[]])
+      .describe("The solidity compiler version"),
     solidityInputJson: z.string().describe("The input json for the solidity compiler"),
     contractName: z.string().describe("The name of the contract class to be deployed"),
     constructorArgs: z

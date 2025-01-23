@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from typing import Any, Optional
+from typing import Any
 
 from cdp import Wallet
 from pydantic import BaseModel, Field
@@ -14,7 +14,7 @@ Input json structure:
 
 The solidity version must be >= 0.8.0 and <= 0.8.28.
 
-You must set the abi and evm.bytecode in the outputSelection. Do not include any extra spaces in the JSON key fields. Remappings can be set as needed in settings. 
+You must set the abi and evm.bytecode in the outputSelection. Do not include any extra spaces in the JSON key fields. Remappings can be set as needed in settings.
 Sources should contain inline contract code. Include library source if needed. If the constructor takes in parameters, you must pass in the constructor args, which is a key-value
 map where the key is the argument name and the value is the argument value. Encode uint/int/bytes/string/address values as strings, boolean values as true/false. For arrays/tuples, encode based on contained type.
 """
@@ -40,7 +40,7 @@ SOLIDITY_VERSIONS = {
     "0.8.11": "0.8.11+commit.d7f03943",
     "0.8.10": "0.8.10+commit.fc410830",
     "0.8.9": "0.8.9+commit.e5eed63a",
-    "0.8.8": "0.8.8+commit.dddeac2f", 
+    "0.8.8": "0.8.8+commit.dddeac2f",
     "0.8.7": "0.8.7+commit.e28d00a7",
     "0.8.6": "0.8.6+commit.11564f7e",
     "0.8.5": "0.8.5+commit.a4f2e591",
@@ -48,49 +48,49 @@ SOLIDITY_VERSIONS = {
     "0.8.3": "0.8.3+commit.8d00100c",
     "0.8.2": "0.8.2+commit.661d1103",
     "0.8.1": "0.8.1+commit.df193b15",
-    "0.8.0": "0.8.0+commit.c7dfd78e"
+    "0.8.0": "0.8.0+commit.c7dfd78e",
 }
 
 
 class DeployContractInput(BaseModel):
     """Input argument schema for deploy contract action."""
 
-    solidity_version: str = Field(
-        ..., 
-        description='The solidity compiler version'
-    )
-    solidity_input_json: str = Field(
-        ..., 
-        description='The input json for the solidity compiler'
-    )
-    contract_name: str = Field(
-        ..., 
-        description='The name of the contract class to be deployed'
-    )
-    constructor_args: Optional[dict[str, Any]] = Field(
-        default=None,
-        description='The constructor arguments for the contract'
+    solidity_version: str = Field(..., description="The solidity compiler version")
+    solidity_input_json: str = Field(..., description="The input json for the solidity compiler")
+    contract_name: str = Field(..., description="The name of the contract class to be deployed")
+    constructor_args: dict[str, Any] | None = Field(
+        default=None, description="The constructor arguments for the contract"
     )
 
 
-def deploy_contract(wallet: Wallet, solidity_version: str, solidity_input_json: str, contract_name: str, constructor_args: Optional[dict[str, Any]] = None) -> str:
+def deploy_contract(
+    wallet: Wallet,
+    solidity_version: str,
+    solidity_input_json: str,
+    contract_name: str,
+    constructor_args: dict[str, Any] | None = None,
+) -> str:
     """Deploy an arbitrary contract.
 
     Args:
         wallet (Wallet): The wallet to deploy the contract from.
-        args (DeployContractInput): The input arguments for the action.
+        solidity_version (str): The solidity compiler version.
+        solidity_input_json (str): The input json for the solidity compiler.
+        contract_name (str): The name of the contract class to be deployed.
+        constructor_args (dict[str, Any] | None): The constructor arguments for the contract.
 
     Returns:
         str: A message containing the deployed contract address and details.
+
     """
     try:
         solidity_version = SOLIDITY_VERSIONS[solidity_version]
-        
+
         contract = wallet.deploy_contract(
             solidity_version=solidity_version,
             solidity_input_json=solidity_input_json,
             contract_name=contract_name,
-            constructor_args=constructor_args or {}
+            constructor_args=constructor_args or {},
         ).wait()
 
         return f"Deployed contract {contract_name} at address {contract.contract_address}. Transaction link: {contract.transaction.transaction_link}"
