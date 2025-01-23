@@ -1,9 +1,9 @@
 import { CdpAction } from "./cdp_action";
-import { Wallet, Amount } from "@coinbase/coinbase-sdk";
+import { Wallet } from "@coinbase/coinbase-sdk";
 import { z } from "zod";
 
 const DEPLOY_CONTRACT_PROMPT = `
-Deploys smart contract with required args: solidity version string, solidity input json (string), contract name (string), and optional constructor args (Record<string,any>).
+Deploys smart contract with required args: solidity version (string), solidity input json (string), contract name (string), and optional constructor args (Record<string,any>).
 
 Input json structure:
 {"language":"Solidity","settings":{"remappings":[],"outputSelection":{"*":{"*":["abi","evm.bytecode"]}}},"sources":{}}
@@ -67,7 +67,7 @@ export const DeployContractInput = z
  * Deploys an arbitrary contract.
  *
  * @param wallet - The wallet to deploy the contract from.
- * @param args - The input arguments for the action. The four required fields are solidityVersion, solidityInputJson, contractName, and constructorArgs.
+ * @param args - The input arguments for the action. The three required fields are solidityVersion, solidityInputJson, and contractName. The constructorArgs field is only required if the contract has a constructor.
  * @returns A message containing the deployed contract address and details.
  */
 export async function deployContract(
