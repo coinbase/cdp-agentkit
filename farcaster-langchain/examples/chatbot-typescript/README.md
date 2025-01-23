@@ -2,7 +2,7 @@
 
 This example demonstrates an agent setup as a terminal style chatbot with access to Farcaster API actions.
 
-## Ask the chatbot to engage in the Web3 ecosystem!
+## Ask the chatbot to engage in the onchain ecosystem!
 - "Please send a cast for me to Farcaster"
 
 ## Requirements
