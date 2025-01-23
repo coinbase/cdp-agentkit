@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+## [0.0.10] - 2025-01-24
+
+### Added
+
+- Added `hyperbolic` module.
+- Added `get_spend_history` action.
+- Added `get_available_gpus` action.
+- Added `get_spend_history` action.
+- Added `get_gpu_status` action.
+- Added `rent_compute` action.
+- Added `terminate_compute` action.
+- Added `utils` module for Hyperbolic API key handling.
+
 ## [0.0.9] - 2025-01-17
 
 ### Added

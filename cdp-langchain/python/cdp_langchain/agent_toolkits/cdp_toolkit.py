@@ -16,7 +16,7 @@ class CdpToolkit(BaseToolkit):
         reading underlying data.
 
         For example, this toolkit can be used to create wallets, transactions,
-        and smart contract invocations on CDP supported blockchains.
+        and smart contract invocations on CDP supported blockchains. It can also be used to search for GPU machines on Hyperbolic.
 
         See [Security](https://python.langchain.com/docs/security) for more information.
 
@@ -32,6 +32,7 @@ class CdpToolkit(BaseToolkit):
             export CDP_API_KEY_NAME="cdp-api-key-name"
             export CDP_API_KEY_PRIVATE_KEY="cdp-api-key-private-key"
             export NETWORK_ID="network-id"
+            export HYPERBOLIC_API_KEY="your-api-key"
 
     Instantiate:
         .. code-block:: python
@@ -66,6 +67,8 @@ class CdpToolkit(BaseToolkit):
             wow_buy_token
             wow_sell_token
             wrap_eth
+            get_available_gpus
+            get_current_balance
     Use within an agent:
         .. code-block:: python
 
@@ -138,7 +141,7 @@ class CdpToolkit(BaseToolkit):
             )
             for action in actions
         ]
-
+        print([tool.name for tool in tools])
         return cls(tools=tools)  # type: ignore[arg-type]
 
     def get_tools(self) -> list[BaseTool]:

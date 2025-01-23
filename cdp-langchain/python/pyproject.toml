@@ -15,7 +15,7 @@ langchain-openai = "^0.2.4"
 langgraph = "^0.2.39"
 cdp-sdk = "^0.14.1"
 pydantic = "^2.0"
-cdp-agentkit-core = "^0.0.9"
+cdp-agentkit-core = { path = "../../cdp-agentkit-core/python", develop = true }
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.7.1"
@@ -29,7 +29,6 @@ sphinx-autobuild = "^2024.9.19"
 sphinxcontrib-napoleon = "^0.7"
 sphinx-autodoc-typehints = "^2.4.4"
 myst-parser = "^4.0.0"
-cdp-agentkit-core = { path = "../../cdp-agentkit-core/python", develop = true }
 
 [build-system]
 requires = ["poetry-core"]

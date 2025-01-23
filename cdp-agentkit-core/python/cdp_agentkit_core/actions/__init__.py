@@ -4,6 +4,12 @@ from cdp_agentkit_core.actions.deploy_token import DeployTokenAction
 from cdp_agentkit_core.actions.get_balance import GetBalanceAction
 from cdp_agentkit_core.actions.get_balance_nft import GetBalanceNftAction
 from cdp_agentkit_core.actions.get_wallet_details import GetWalletDetailsAction
+from cdp_agentkit_core.actions.hyperbolic.get_available_gpus import GetAvailableGpusAction
+from cdp_agentkit_core.actions.hyperbolic.get_current_balance import GetCurrentBalanceAction
+from cdp_agentkit_core.actions.hyperbolic.get_gpu_status import GetGpuStatusAction
+from cdp_agentkit_core.actions.hyperbolic.get_spend_history import GetSpendHistoryAction
+from cdp_agentkit_core.actions.hyperbolic.rent_compute import RentComputeAction
+from cdp_agentkit_core.actions.hyperbolic.terminate_compute import TerminateComputeAction
 from cdp_agentkit_core.actions.mint_nft import MintNftAction
 from cdp_agentkit_core.actions.pyth.fetch_price import PythFetchPriceAction
 from cdp_agentkit_core.actions.pyth.fetch_price_feed_id import PythFetchPriceFeedIDAction
@@ -50,4 +56,10 @@ __all__ = [
     "WrapEthAction",
     "PythFetchPriceFeedIDAction",
     "PythFetchPriceAction",
+    "GetAvailableGpusAction",
+    "GetCurrentBalanceAction",
+    "GetGpuStatusAction",
+    "GetSpendHistoryAction",
+    "RentComputeAction",
+    "TerminateComputeAction",
 ]
