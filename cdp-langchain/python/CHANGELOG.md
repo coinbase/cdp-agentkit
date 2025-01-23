@@ -7,7 +7,6 @@
 ### Added
 
 - Bump dependency `cdp-agentkit-core` to version `0.0.10`.
-- Bump dependency `cdp-sdk` to version `0.15.0`.
 
 ## [0.0.11] - 2025-01-17
 
