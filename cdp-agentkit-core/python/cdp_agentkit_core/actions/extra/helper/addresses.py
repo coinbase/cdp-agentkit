@@ -1,0 +1,41 @@
+lyf_addresses = {
+  "base-mainnet": {
+    "EXTRA_COMMUNITY": "0x89F0885DA2553232aeEf201692F8C97E24715c83",
+    "EXTRA_TREASURY": "0x4059e170D325163e2eC96cF8Ca489C40B6927A8c",
+    "EXTRA_GOV": "0x750f7153e6c92a24089a34eC6AFe65740C9bd40A",
+    "FLASHLOAN_LIQUIDATE_CONTRACT": "0x84c0C64c2608eC04FDFdD15fc8eE5DF77F4E398e",
+    "FLASHLOAN_LIQUIDATE_CONTRACT_V2": "0x4F9bF74aAc66b7A12Cb5Fb331CE1284CC9431960",
+    "VeloFactoryV2": "0x420DD381b31aEf6683db6B902084cB0FFECe40Da",
+    "VeloRouterV2": "0xcF77a3Ba9A5CA399B7c97c74d54e5b1Beb874E43",
+    "VeloV3Quoter": "0x254cF9E1E6e233aa1AC962CB9B05b2cfeAaE15b0",
+    "AddressRegistry": "0x85603119C938750Dfb5904f8a501b64F3F3A01D2",
+    "VaultConfigManager": "0x0068422b1B244aB06E02685Bc1E3FEbc418A9d42",
+    "ReserveLogicLibraryAddress": "0xEc120bC6e12Cea127553B1f53445947B1f73A132",
+    "ETokenDeployerAddress": "0xeccE0f5E758D01C142ebD5Ed2565038E4c0EDd80",
+    "StakingRewardsDeployer": "0xcEFa665165281B7a9807BDCd4d7Ac54a54Ca1e13",
+    "LendingPoolContractAddress": "0xBB505c54D71E9e599cB8435b4F0cEEc05fC71cbD",
+    "VaultFactory": "0x155620A2E6A9392c754B73296d9655061525729B",
+    "VaultDeployerSelectorLib": "0xAC9E42209038bcA0B2B026906De97a032400F2b4",
+    "VaultPositionManager": "0xf9cFB8a62f50e10AdDE5Aa888B44cF01C5957055",
+    "VeTokenAddress": "0xe0BeC4F45aEF64CeC9dCB9010d4beFfB13e91466",
+    "VeRewardDistributor": "0xB7D8613728efCfbB18bCD63dEeC06F64441D322a",
+    "SwapPathManager": "0x5B5bf5A296aD2c98567B1950Cc4BC32bFA4b3308",
+    "ChainLinkOracle": "0x93D09944B4b520289BeAAac646673095ca0fb1c4",
+    "DataProviderContract": "0x4cBd1af1Db7960Db8B4962d9a0389D912C3bc0b0",
+    "VaultLibraries": {
+      "1": {
+        "VaultDeployerLib": "0x2C58eCe45aC754B80FD39F5e7E67a4b0E91a1525",
+        "VaultInitializerLib": "0x47efC0Fe6a096c98D7e022daed2309aa9286DFef",
+        "VaultPositionLogicLib": "0x4F4940a87d63A290d43B6550911896fF7AEe354C",
+        "VaultOwnerActionsLib": "0x3AFCb1Ab1A78ECDD075647566258561acbeC01D5",
+        "VaultRewardsLogicLib": "0xF9d40a60fD6bDc866daf0918264a30acCE1DC9Cc"
+      },
+    },
+  }
+}
+
+token_addresses = {
+  "base-mainnet": {
+    "WETH": "0x4200000000000000000000000000000000000006",
+  }
+}

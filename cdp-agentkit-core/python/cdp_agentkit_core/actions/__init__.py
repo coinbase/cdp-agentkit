@@ -18,6 +18,12 @@ from cdp_agentkit_core.actions.wow.buy_token import WowBuyTokenAction
 from cdp_agentkit_core.actions.wow.create_token import WowCreateTokenAction
 from cdp_agentkit_core.actions.wow.sell_token import WowSellTokenAction
 from cdp_agentkit_core.actions.wrap_eth import WrapEthAction
+from cdp_agentkit_core.actions.extra import (ExtrafiLYFListLendingAction, ExtrafiLYFLendingAPRAction,
+                                             ExtrafiLYFSupplyToLendingAction, ExtrafiLYFGetLendingPositionsAction,
+                                             ExtrafiLYFWithdrawFromLendingAction, ExtrafiLYFListFarmingAction,
+                                             ExtrafiLYFFarmingAPRAction, ExtrafiLYFInvestToFarmingHelperAction,
+                                             ExtrafiLYFInvestToFarmingAction, ExtrafiLYFGetFarmingPositionsAction,
+                                             ExtrafiLYFRepayFarmingDebtAction, ExtrafiLYFCloseFarmingPositionsAction)
 
 
 # WARNING: All new CdpAction subclasses must be imported above, otherwise they will not be discovered
@@ -54,4 +60,16 @@ __all__ = [
     "MorphoWithdrawAction",
     "PythFetchPriceFeedIDAction",
     "PythFetchPriceAction",
+    "ExtrafiLYFListLendingAction",
+    "ExtrafiLYFLendingAPRAction",
+    "ExtrafiLYFSupplyToLendingAction",
+    "ExtrafiLYFGetLendingPositionsAction",
+    "ExtrafiLYFWithdrawFromLendingAction",
+    "ExtrafiLYFListFarmingAction",
+    "ExtrafiLYFFarmingAPRAction",
+    "ExtrafiLYFInvestToFarmingHelperAction",
+    "ExtrafiLYFInvestToFarmingAction",
+    "ExtrafiLYFGetFarmingPositionsAction",
+    "ExtrafiLYFRepayFarmingDebtAction",
+    "ExtrafiLYFCloseFarmingPositionsAction",
 ]
