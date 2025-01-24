@@ -8,8 +8,8 @@
 
 - Added `address_reputation` to retrieve the reputation score for an address
 - Added `deploy_contract` action to deploy a contract using the Solidity compiler
-- Added `farcaster_account_details` action.
-- Added `farcaster_post_cast` action.
+- Added `farcaster_account_details` to retrieve farcaster account details
+- Added `farcaster_post_cast` to post a cast to farcaster
 - Bump dependency `coinbase-sdk-nodejs` to version `0.15.0`.
 
 ## [0.0.13] - 2025-01-22
