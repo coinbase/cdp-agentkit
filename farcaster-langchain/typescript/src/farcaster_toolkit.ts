@@ -9,7 +9,7 @@ import { FarcasterTool } from "./farcaster_tool";
  * the state of a service; e.g., by creating, deleting, or updating,
  * reading underlying data.
  *
- * For example, this toolkit can be used to retrieve account details, publish casts,
+ * For example, this toolkit can be used to retrieve account details, post casts,
  * and anything else you can implement with the Farcaster API!
  *
  * Setup:
