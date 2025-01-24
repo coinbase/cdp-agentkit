@@ -15,7 +15,7 @@ This tool will retrieve the account details for the agent's Farcaster account.
 The tool takes the FID of the agent's account.
 
 A successful response will return a message with the API response as a JSON payload:
-    {}
+    { "object": "user", "fid": 193," username": "derek", "display_name": "Derek", ... }
 
 A failure response will return a message with the Farcaster API request error:
     Unable to retrieve account details.
