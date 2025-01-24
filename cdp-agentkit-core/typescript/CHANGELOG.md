@@ -2,7 +2,6 @@
 
 ## Unreleased
 
-- Added Farcaster toolkit, tool framework, and example chatbot.
 - Added `farcaster_account_details` action.
 - Added `publish_cast` action.
 
