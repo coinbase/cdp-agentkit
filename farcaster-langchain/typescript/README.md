@@ -56,7 +56,7 @@ const tools = farcasterToolkit.getTools();
 The toolkit provides the following tools:
 
 1.  **farcaster_account_details** - Retrieve account details for the agent's Farcaster account
-2.  **farcaster_post_cast**       - post a cast to Farcaster
+2.  **farcaster_post_cast**       - Post a cast to Farcaster
 
 
 ## Examples
