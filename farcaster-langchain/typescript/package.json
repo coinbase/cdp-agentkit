@@ -42,6 +42,6 @@
     "zod": "^3.22.4"
   },
   "peerDependencies": {
-    "@coinbase/coinbase-sdk": "^0.13.0"
+    "@coinbase/coinbase-sdk": "^0.15.0"
   }
 }
