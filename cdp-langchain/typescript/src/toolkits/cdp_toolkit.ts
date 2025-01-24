@@ -34,6 +34,7 @@ import { CdpTool } from "../tools/cdp_tool";
  * // - transfer
  * // - transfer_nft
  * // - trade
+ * // - cross_chain_swap
  * // - deploy_token
  * // - mint_nft
  * // - deploy_nft

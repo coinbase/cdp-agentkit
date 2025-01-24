@@ -16,6 +16,7 @@ import { WrapEthAction } from "./wrap_eth";
 import { MORPHO_ACTIONS } from "./defi/morpho";
 import { PYTH_ACTIONS } from "./data/pyth";
 import { WOW_ACTIONS } from "./defi/wow";
+import { CrossChainSwapAction } from "./cross_chain_swap";
 
 /**
  * Retrieves all CDP action instances.
@@ -38,6 +39,7 @@ export function getAllCdpActions(): CdpAction<CdpActionSchemaAny>[] {
     new TransferAction(),
     new TransferNftAction(),
     new WrapEthAction(),
+    new CrossChainSwapAction(),
   ];
 }
 
@@ -62,4 +64,5 @@ export {
   TransferAction,
   TransferNftAction,
   WrapEthAction,
+  CrossChainSwapAction,
 };
