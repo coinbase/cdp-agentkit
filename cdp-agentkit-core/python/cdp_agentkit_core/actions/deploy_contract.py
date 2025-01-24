@@ -12,11 +12,15 @@ Deploys smart contract with required args: solidity version (string), solidity i
 Input json structure:
 {"language":"Solidity","settings":{"remappings":[],"outputSelection":{"*":{"*":["abi","evm.bytecode"]}}},"sources":{}}
 
-The solidity version must be >= 0.8.0 and <= 0.8.28.
+You must set the outputSelection to {"*":{"*":["abi","evm.bytecode"]}} in the settings. The solidity version must be >= 0.8.0 and <= 0.8.28.
 
-You must set the abi and evm.bytecode in the outputSelection. Do not include any extra spaces in the JSON key fields. Remappings can be set as needed in settings.
-Sources should contain inline contract code. Include library source if needed. If the constructor takes in parameters, you must pass in the constructor args, which is a key-value
-map where the key is the argument name and the value is the argument value. Encode uint/int/bytes/string/address values as strings, boolean values as true/false. For arrays/tuples, encode based on contained type.
+Sources should contain one or more contracts with the following structure:
+{"contract_name.sol":{"content":"contract code"}}
+
+The contract code should be escaped. Contracts cannot import from external contracts but can import from one another.
+
+Constructor args are required if the contract has a constructor. They are a key-value
+map where the key is the arg name and the value is the arg value. Encode uint/int/bytes/string/address values as strings, boolean values as true/false. For arrays/tuples, encode based on contained type.
 """
 
 SOLIDITY_VERSIONS = {
