@@ -5,7 +5,9 @@
   "repository": "https://github.com/coinbase/agentkit",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "lint": "npx --yes eslint -c .eslintrc.json src/**/*.ts",
@@ -41,6 +43,6 @@
     "zod": "^3.22.4"
   },
   "peerDependencies": {
-    "@coinbase/coinbase-sdk": "^0.14.1"
+    "@coinbase/coinbase-sdk": "^0.15.0"
   }
 }
