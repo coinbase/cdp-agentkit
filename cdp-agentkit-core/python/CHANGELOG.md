@@ -2,12 +2,16 @@
 
 ## Unreleased
 
+## [0.0.11] - 2025-01-24
+
 ### Added
 
-- Add action `superfluid_create_flow` to create a flow using Superfluid
-- Add action `superfluid_update_flow` to update a flow using Superfluid
-- Add action `superfluid_delete_flow` to delete a flow using Superfluid
-- Add action `deploy_contract` to deploy a contract using the Solidity compiler
+- Added `address_reputation` to retrieve the reputation score for an address
+- Added `superfluid_create_flow` to create a flow using Superfluid
+- Added `superfluid_update_flow` to update a flow using Superfluid
+- Added `superfluid_delete_flow` to delete a flow using Superfluid
+- Added `deploy_contract` to deploy a contract using the Solidity compiler
+- Bump `cdp-sdk` dependency to `0.15.0`.
 
 ## [0.0.10] - 2025-01-22
 
