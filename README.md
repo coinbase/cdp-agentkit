@@ -81,7 +81,7 @@ See [CDP Langchain](./cdp-langchain/README.md) to get started!
 ### farcaster-langchain
 
 Langchain Toolkit extension for Farcaster. Enables agentic workflows to interact with Farcaster, such as to post a tweet.
-See [Farcaster Langchain](./farcaster-langchain/README.md) to get started!
+See [Farcaster Langchain](./farcaster-langchain/typescript/README.md) to get started!
 
 ### twitter-langchain
 

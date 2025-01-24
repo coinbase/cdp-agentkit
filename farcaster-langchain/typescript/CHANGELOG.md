@@ -3,3 +3,4 @@
 ### Unreleased
 
 - Initial release of the CDP AgentKit.js Farcaster Extension.
+- Added Farcaster toolkit, tool framework, and example chatbot.
