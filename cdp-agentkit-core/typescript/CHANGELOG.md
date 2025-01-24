@@ -2,15 +2,30 @@
 
 ## Unreleased
 
+- Added Farcaster toolkit, tool framework, and example chatbot.
+- Added `farcaster_account_details` action.
+- Added `publish_cast` action.
+
+## [0.0.13] - 2025-01-22
+
+### Added
+
+- Added `morpho_deposit` action to deposit to Morpho Vault.
+- Added `morpho_withdrawal` action to withdraw from Morpho Vault.
+
+## [0.0.12] - 2025-01-17
+
 ### Added
 
 - Added `get_balance_nft` action.
 - Added `transfer_nft` action.
 - Added `pyth_fetch_price_feed_id` action to fetch the price feed ID for a given token symbol from Pyth.
 - Added `pyth_fetch_price` action to fetch the price of a given price feed from Pyth.
-- Added Farcaster toolkit, tool framework, and example chatbot.
-- Added `farcaster_account_details` action.
-- Added `publish_cast` action.
+- Bump dependency `coinbase-sdk-nodejs` to version `0.14.1`.
+
+### Fixed
+
+- Allow wallet mnemonic seed import to optionally accept `networkId` input argument.
 
 ## [0.0.11] - 2025-01-13
 
@@ -21,6 +36,7 @@
 ## [0.0.10] - 2025-01-09
 
 ### Removed
+
 - rogue console.log
 
 ## [0.0.9] - 2025-01-08

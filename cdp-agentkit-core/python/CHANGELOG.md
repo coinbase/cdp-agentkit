@@ -4,10 +4,26 @@
 
 ### Added
 
+- Add action `superfluid_create_flow` to create a flow using Superfluid
+- Add action `superfluid_update_flow` to update a flow using Superfluid
+- Add action `superfluid_delete_flow` to delete a flow using Superfluid
+
+## [0.0.10] - 2025-01-22
+
+### Added
+
+- Added `morpho_deposit` action to deposit to Morpho Vault.
+- Added `morpho_withdrawal` action to withdraw from Morpho Vault.
+
+## [0.0.9] - 2025-01-17
+
+### Added
+
 - Added `get_balance_nft` action.
 - Added `transfer_nft` action.
 - Added `pyth_fetch_price_feed_id` action to fetch the price feed ID for a given token symbol from Pyth.
 - Added `pyth_fetch_price` action to fetch the price of a given price feed from Pyth.
+- Bump `cdp-sdk` dependency to `0.14.1`.
 
 ## [0.0.8] - 2025-01-13
 

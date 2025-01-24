@@ -1,9 +1,9 @@
 [tool.poetry]
 name = "cdp-langchain"
-version = "0.0.10"
+version = "0.0.12"
 description = "CDP Agentkit Langchain Extension"
 authors = ["John Peterson <john.peterson@coinbase.com>"]
-readme = "../README.md"
+readme = "README.md"
 license = "Apache-2.0"
 keywords = ["coinbase", "sdk", "crypto", "cdp", "agentkit", "ai", "agent", "langchain", "toolkit"]
 packages = [{ include = "cdp_langchain" }]
@@ -13,9 +13,9 @@ python = "^3.10"
 langchain = "^0.3.4"
 langchain-openai = "^0.2.4"
 langgraph = "^0.2.39"
-cdp-sdk = "^0.13.0"
+cdp-sdk = "^0.14.1"
 pydantic = "^2.0"
-cdp-agentkit-core = "^0.0.8"
+cdp-agentkit-core = "^0.0.10"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.7.1"
