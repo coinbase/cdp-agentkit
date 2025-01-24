@@ -1,4 +1,5 @@
 # CDP Agentkit Extension - Langchain Toolkit
+
 CDP integration with Langchain to enable agentic workflows using the core primitives defined in `cdp-agentkit-core`.
 
 This toolkit contains tools that enable an LLM agent to interact with the [Coinbase Developer Platform](https://docs.cdp.coinbase.com/). The toolkit provides a wrapper around the CDP SDK, allowing agents to perform onchain operations like transfers, trades, and smart contract interactions.
@@ -7,31 +8,11 @@ This toolkit contains tools that enable an LLM agent to interact with the [Coinb
 
 ### Prerequisites
 
-#### CDP
-
 - [CDP API Key](https://portal.cdp.coinbase.com/access/api)
-
-#### OpenAI
-
 - [OpenAI API Key](https://platform.openai.com/docs/quickstart#create-and-export-an-api-key)
-
-#### Python
-
-- Python 3.10 or higher 
-
-#### Typescript
-
 - Node.js 18 or higher
 
 ### Installation
-
-#### Python
-
-```bash
-pip install cdp-langchain
-```
-
-#### Typescript
 
 ```bash
 npm install @coinbase/cdp-langchain
@@ -52,27 +33,6 @@ export NETWORK_ID=base-sepolia  # Optional: Defaults to base-sepolia
 
 ### Basic Setup
 
-#### Python
-
-```python
-from cdp_langchain.agent_toolkits import CdpToolkit
-from cdp_langchain.utils import CdpAgentkitWrapper
-
-# Initialize CDP wrapper
-cdp = CdpAgentkitWrapper()
-
-# Create toolkit from wrapper
-toolkit = CdpToolkit.from_cdp_agentkit_wrapper(cdp)
-
-# Get available tools
-tools = toolkit.get_tools()
-for tool in tools:
-    print(tool.name)
-```
-
-#### Typescript
-
-```typescript
 ```typescript
 import { CdpToolkit } from "@coinbase/cdp-langchain";
 import { CdpAgentkit } from "@coinbase/cdp-agentkit-core";
@@ -89,54 +49,29 @@ const tools = toolkit.getTools();
 
 The toolkit provides the following tools:
 
-1. **get_wallet_details** - Get details about the MPC Wallet
-2. **get_balance** - Get balance for specific assets
-3. **request_faucet_funds** - Request test tokens from faucet
-4. **transfer** - Transfer assets between addresses
-5. **trade** - Trade assets (Mainnet only)
-6. **deploy_token** - Deploy ERC-20 token contracts
-7. **mint_nft** - Mint NFTs from existing contracts
-8. **deploy_nft** - Deploy new NFT contracts
-9. **register_basename** - Register a basename for the wallet
-10. **wow_create_token** - Deploy a token using Zora's Wow Launcher (Bonding Curve)
-11. **wow_buy_token** - Buy Zora Wow ERC20 memecoin with ETH
-12. **wow_sell_token** - Sell Zora Wow ERC20 memecoin for ETH
-13. **wrap_eth** - Wrap ETH to WETH
+1.  **deploy_nft**               - Deploy new NFT contracts
+2.  **deploy_token**             - Deploy ERC-20 token contracts
+3.  **get_balance**              - Get balance for specific assets
+4.  **get_balance_nft**          - Get balance for specific NFTs (ERC-721)
+5.  **get_wallet_details**       - Get details about the MPC Wallet
+6.  **mint_nft**                 - Mint NFTs from existing contracts
+7.  **morpho_deposit**           - Deposit into a morpho vault
+8.  **morpho_withdraw**          - Withdraw from a morpho vault
+9.  **pyth_fetch_price**         - Fetch the price of a given price feed from Pyth Network
+10. **pyth_fetch_price_feed_id** - Fetch the price feed ID for a given token symbol from Pyth Network
+11. **register_basename**        - Register a basename for the wallet
+12. **request_faucet_funds**     - Request test tokens from faucet
+13. **trade**                    - Trade assets (Mainnet only)
+14. **transfer**                 - Transfer assets between addresses
+15. **transfer_nft**             - Transfer an NFT (ERC-721)
+16. **wow_buy_token**            - Buy Zora Wow ERC20 memecoin with ETH
+17. **wow_create_token**         - Deploy a token using Zora's Wow Launcher (Bonding Curve)
+18. **wow_sell_token**           - Sell Zora Wow ERC20 memecoin for ETH
+19. **wrap_eth**                 - Wrap ETH to WETH
 
 ### Using with an Agent
 
-#### Python
-
-```python
-from langchain_openai import ChatOpenAI
-from langgraph.prebuilt import create_react_agent
-
-# Initialize LLM
-llm = ChatOpenAI(model="gpt-4o-mini")
-
-# Get tools and create agent
-tools = toolkit.get_tools()
-agent_executor = create_react_agent(llm, tools)
-
-# Example usage
-events = agent_executor.stream(
-    {"messages": [("user", "Send 0.005 ETH to john2879.base.eth")]},
-    stream_mode="values"
-)
-
-for event in events:
-    event["messages"][-1].pretty_print()
-```
-Expected output:
-```
-Transferred 0.005 of eth to john2879.base.eth.
-Transaction hash for the transfer: 0x78c7c2878659a0de216d0764fc87eff0d38b47f3315fa02ba493a83d8e782d1e
-Transaction link for the transfer: https://sepolia.basescan.org/tx/0x78c7c2878659a0de216d0764fc87eff0d38b47f3315fa02ba493a83d8e782d1
-```
-
-#### Typescript
-
-##### Additional Installations
+#### Additional Installations
 
 ```bash
 npm install @langchain/langgraph @langchain/openai
@@ -166,24 +101,11 @@ const result = await agent.invoke({
 console.log(result.messages[result.messages.length - 1].content);
 ```
 
-## CDP Tookit Specific Features
+## CDP Toolkit Specific Features
 
 ### Wallet Management
 
 The toolkit maintains an MPC wallet that persists between sessions:
-
-#### Python
-
-```python
-# Export wallet data
-wallet_data = cdp.export_wallet()
-
-# Import wallet data
-values = {"cdp_wallet_data": wallet_data}
-cdp = CdpAgentkitWrapper(**values)
-```
-
-#### Typescript
 
 ```typescript
 // Export wallet data
@@ -207,9 +129,8 @@ The following operations support gasless transactions on Base Mainnet:
 ## Examples
 
 Check out [cdp-langchain/examples](./examples) for inspiration and help getting started!
-- [Chatbot Python](./examples/chatbot-python/README.md): Simple example of a Python Chatbot that can perform complex onchain interactions, using OpenAI.
 - [Chatbot Typescript](./examples/chatbot-typescript/README.md): Simple example of a Node.js Chatbot that can perform complex onchain interactions, using OpenAI.
 
 ## Contributing
 
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for detailed setup instructions and contribution guidelines.
+See [CONTRIBUTING.md](../../CONTRIBUTING.md) for detailed setup instructions and contribution guidelines.
