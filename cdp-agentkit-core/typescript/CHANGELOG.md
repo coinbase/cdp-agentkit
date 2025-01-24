@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Added `cross_chain_swap` action.
+
 ## [0.0.13] - 2025-01-22
 
 ### Added
