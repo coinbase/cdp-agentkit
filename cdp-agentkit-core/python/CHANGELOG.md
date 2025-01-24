@@ -7,10 +7,10 @@
 ### Added
 
 - Added `address_reputation` to retrieve the reputation score for an address
+- Added `deploy_contract` to deploy a contract using the Solidity compiler
 - Added `superfluid_create_flow` to create a flow using Superfluid
 - Added `superfluid_update_flow` to update a flow using Superfluid
 - Added `superfluid_delete_flow` to delete a flow using Superfluid
-- Added `deploy_contract` to deploy a contract using the Solidity compiler
 - Bump `cdp-sdk` dependency to `0.15.0`.
 
 ## [0.0.10] - 2025-01-22
