@@ -35,8 +35,8 @@ import { FarcasterTool } from "./farcaster_tool";
  * const tools = toolkit.getTools();
  *
  * // Available tools include:
- * // - account details
- * // - publish cast
+ * // - farcaster_account_details
+ * // - farcaster_post_cast
  * ```
  */
 export class FarcasterToolkit extends Toolkit {
