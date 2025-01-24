@@ -10,7 +10,6 @@
 - Added `deploy_contract` action to deploy a contract using the Solidity compiler
 - Added `farcaster_account_details` to retrieve farcaster account details
 - Added `farcaster_post_cast` to post a cast to farcaster
-- Bump dependency `@coinbase/coinbase-sdk` to version `0.15.0`.
 
 ## [0.0.13] - 2025-01-22
 
@@ -27,7 +26,6 @@
 - Added `transfer_nft` action.
 - Added `pyth_fetch_price_feed_id` action to fetch the price feed ID for a given token symbol from Pyth.
 - Added `pyth_fetch_price` action to fetch the price of a given price feed from Pyth.
-- Bump dependency `@coinbase/coinbase-sdk` to version `0.14.1`.
 
 ### Fixed
 
@@ -49,7 +47,6 @@
 
 ### Added
 
-- Bump dependency `@coinbase/coinbase-sdk` to version `0.13.0`.
 - Supporting mnemonic phrase wallet import
 
 ### Refactored
