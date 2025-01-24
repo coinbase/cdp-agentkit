@@ -10,7 +10,8 @@ This tool checks the reputation of an address on a given network. It takes:
 - address: The Ethereum address to check
 
 Important notes:
-- This tool will not currently work on base-sepolia
+- This tool will not work on base-sepolia, you can default to using base-mainnet instead
+- The wallet's default address and its network may be used if not provided
 `;
 
 /**

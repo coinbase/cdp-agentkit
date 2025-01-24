@@ -13,22 +13,16 @@ This tool checks the reputation of an address on a given network. It takes:
 - address: The Ethereum address to check
 
 Important notes:
-- This tool will not currently work on base-sepolia
+- This tool will not work on base-sepolia, you can default to using base-mainnet instead
+- The wallet's default address and its network may be used if not provided
 """
 
 
 class AddressReputationInput(BaseModel):
     """Input argument schema for checking address reputation."""
 
-    address: str = Field(
-        ...,
-        description="The Ethereum address to check",
-    )
-
-    network: str = Field(
-        ...,
-        description="The network to check the address on",
-    )
+    address: str = Field(..., description="The Ethereum address to check")
+    network: str = Field(..., description="The network to check the address on")
 
     @field_validator("address")
     @classmethod
