@@ -77,7 +77,7 @@ See [CDP Langchain](./cdp-langchain/README.md) to get started!
 ### twitter-langchain
 
 Langchain Toolkit extension for Twitter. Enables agentic workflows to interact with Twitter, such as to post a tweet.
-See [Twitter Langchain](./twitter-langchain/README.md) to get started!
+See [Twitter Langchain](././agentkit/blob/master/README.md) to get started!
 
 ## Contributing
 
