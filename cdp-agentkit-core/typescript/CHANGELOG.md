@@ -4,6 +4,7 @@
 
 - Added `farcaster_account_details` action.
 - Added `publish_cast` action.
+- Added `deploy_contract` action to deploy a contract using the Solidity compiler
 
 ## [0.0.13] - 2025-01-22
 
