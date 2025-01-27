@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Added gas configuration parameters (`gas_limit_multiplier`, `fee_per_gas_multiplier`) to `CdpWalletProvider` and `EthAccountWalletProvider`.
+- Added `compound_action_provider` to interact with Compound protocol on Base.
 
 ## [0.1.1] - 2025-02-13
 
