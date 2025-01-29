@@ -8,6 +8,7 @@ This guide covers Python-specific setup and development for AgentKit.
 - [Adding an Agentic Action](#adding-an-agentic-action)
 - [Adding an Agentic Action to Langchain Toolkit](#adding-an-agentic-action-to-langchain-toolkit)
 - [Adding an Agentic Action to the Twitter Toolkit](#adding-an-agentic-action-to-the-twitter-toolkit)
+- [Integrating into an AI Agent Framework](#integrating-into-an-ai-agent-framework)
 - [Testing](#testing)
 - [Code Style](#code-style)
 
@@ -197,6 +198,14 @@ The action will be included automatically, all you need to do is add the action 
 5. Update `TwitterToolkit` documentation
     - Add the action to the list of tools
     - Add any additional ENV requirements
+
+## Integrating into an AI Agent Framework
+
+Actions are necessary building blocks powering onchain AI applications, but they're just one piece of the puzzle. To make them truly useful, they must be integrated into an AI Agent framework such as [LangChain](https://www.langchain.com/) or [Eliza](https://elizaos.github.io/eliza/), among others.
+
+Integrations into AI Agent frameworks are specific to the framework itself, so we can't go into specific implementation details here, but we can offer up some examples and tips.
+- To automatically get access to new actions as they are released, make sure to import the `CDP_ACTIONS` constant from `cdp-agentkit-core`. This will make it so that all you / the framework authors have to do to get new actions is bump the version of AgentKit the framework is using.
+- Check out how [AgentKit Actions are mapped into LangChain Tools](https://github.com/coinbase/agentkit/blob/master/cdp-langchain/python/cdp_langchain/agent_toolkits/cdp_toolkit.py#L132-L141)
 
 ## Testing
 

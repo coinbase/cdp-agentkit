@@ -7,6 +7,7 @@ This guide covers TypeScript-specific setup and development for AgentKit.
 - [Development Setup](#development-setup)
 - [Adding an Agentic Action](#adding-an-agentic-action)
 - [Adding an Agentic Action to Langchain Toolkit](#adding-an-agentic-action-to-langchain-toolkit)
+- [Integrating into an AI Agent Framework](#integrating-into-an-ai-agent-framework)
 - [Testing](#testing)
 - [Code Style](#code-style)
 
@@ -139,6 +140,15 @@ Check out the [Testing](#testing) section to learn how to manually test your new
 ## Adding an Agentic Action to Langchain Toolkit
 
 The action will be included automatically, all you need to do is add the action to the list of tools in the `CdpToolkit` class documentation in `cdp-langchain/typescript/src/toolkits/cdp_toolkit.ts`.
+
+## Integrating into an AI Agent Framework
+
+Actions are necessary building blocks powering onchain AI applications, but they're just one piece of the puzzle. To make them truly useful, they must be integrated into an AI Agent framework such as [LangChain](https://www.langchain.com/) or [Eliza](https://elizaos.github.io/eliza/), among others.
+
+Integrations into AI Agent frameworks are specific to the framework itself, so we can't go into specific implementation details here, but we can offer up some examples and tips.
+- To automatically get access to new actions as they are released, make sure to import the `CDP_ACTIONS` constant from `@coinbase/cdp-agentkit-core`. This will make it so that all you / the framework authors have to do to get new actions is bump the version of AgentKit the framework is using.
+- Check out how [AgentKit actions are mapped into LangChain Tools](https://github.com/coinbase/agentkit/blob/master/cdp-langchain/typescript/src/toolkits/cdp_toolkit.ts#L59)
+- Check out how [AgentKit Actions are mapped into Eliza Actions](https://github.com/elizaOS/eliza/blob/develop/packages/plugin-agentkit/src/actions.ts#L31)
 
 ## Testing
 
