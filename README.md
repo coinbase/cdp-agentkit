@@ -26,6 +26,7 @@
 - **Framework-agnostic**: Common AI Agent primitives that can be used with any AI framework.
 - **Python and Node.js Support**
 - **LangChain integration**: Seamless integration with [LangChain](https://python.langchain.com/docs/introduction/) for easy agentic workflows. More frameworks coming soon!
+- **Farcaster integration**: Seamless integration of Langchain with [Farcaster](https://docs.farcaster.xyz/) via [Neynar](https://docs.neynar.com) for easy agentic workflows.
 - **Twitter integration**: Seamless integration of Langchain with [Twitter](https://developer.twitter.com/en/docs/twitter-api) for easy agentic workflows.
 - **Support for various onchain actions**:
 
@@ -60,6 +61,9 @@ AgentKit is organized as a [monorepo](https://en.wikipedia.org/wiki/Monorepo) th
 │   ├── python/
 │   ├── typescript/
 │   └── examples/
+└── farcaster-langchain/
+    ├── typescript/
+    └── examples/
 └── twitter-langchain/
     ├── python/
     ├── typescript/
@@ -76,6 +80,11 @@ See [CDP Agentkit Core](./cdp-agentkit-core/README.md) to get started!
 Langchain Toolkit extension of AgentKit. Enables agentic workflows to interact with onchain actions.
 See [CDP Langchain](./cdp-langchain/README.md) to get started!
 
+### farcaster-langchain
+
+Langchain Toolkit extension for Farcaster. Enables agentic workflows to interact with Farcaster, such as to post a tweet.
+See [Farcaster Langchain](./farcaster-langchain/typescript/README.md) to get started!
+
 ### twitter-langchain
 
 Langchain Toolkit extension for Twitter. Enables agentic workflows to interact with Twitter, such as to post a tweet.
@@ -84,7 +93,7 @@ See [Twitter Langchain](./twitter-langchain/README.md) to get started!
 ## Contributing
 
 AgentKit welcomes community contributions.
-See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
+See [CONTRIBUTING.md](./.github/CONTRIBUTING.md) for more information.
 
 ## Documentation
 
@@ -97,7 +106,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 ## Security and bug reports
 
 The AgentKit team takes security seriously.
-See [SECURITY.md](../SECURITY.md) for more information.
+See [SECURITY.md](SECURITY.md) for more information.
 
 ## License
 

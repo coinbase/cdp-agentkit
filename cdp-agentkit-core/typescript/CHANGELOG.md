@@ -2,6 +2,22 @@
 
 ## Unreleased
 
+## [0.0.14] - 2025-01-24
+
+### Added
+
+- Added `address_reputation` to retrieve the reputation score for an address
+- Added `deploy_contract` action to deploy a contract using the Solidity compiler
+- Added `farcaster_account_details` to retrieve farcaster account details
+- Added `farcaster_post_cast` to post a cast to farcaster
+
+## [0.0.13] - 2025-01-22
+
+### Added
+
+- Added `morpho_deposit` action to deposit to Morpho Vault.
+- Added `morpho_withdrawal` action to withdraw from Morpho Vault.
+
 ## [0.0.12] - 2025-01-17
 
 ### Added
@@ -10,7 +26,6 @@
 - Added `transfer_nft` action.
 - Added `pyth_fetch_price_feed_id` action to fetch the price feed ID for a given token symbol from Pyth.
 - Added `pyth_fetch_price` action to fetch the price of a given price feed from Pyth.
-- Bump dependency `coinbase-sdk-nodejs` to version `0.14.1`.
 
 ### Fixed
 
@@ -25,13 +40,13 @@
 ## [0.0.10] - 2025-01-09
 
 ### Removed
+
 - rogue console.log
 
 ## [0.0.9] - 2025-01-08
 
 ### Added
 
-- Bump dependency `coinbase-sdk-nodejs` to version `0.13.0`.
 - Supporting mnemonic phrase wallet import
 
 ### Refactored
