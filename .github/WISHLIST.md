@@ -24,6 +24,9 @@ Below is a list of actions and frameworks we'd love to see open-source contribut
 - [ ] Pond model integrations
 - [ ] Agent communication (potentially via XMTP)
 - [ ] Aave integration
+- [ ] Farcaster - get other account details
+- [ ] Farcaster - Handle replies. If someone mentions the agent it's ignored
+- [ ] Farcaster - Get feed context. Give agent context on previous casts
 - [ ] Actions on other networks
 
 ## Frameworks
