@@ -14,7 +14,7 @@ Below is a list of actions and frameworks we'd love to see open-source contribut
 - [ ] Cross-chain interactions
 - [ ] Integrations with OpenSea 2
 - [ ] MagicEden create collection
-- [ ] Uniswap swaps on testnet
+- [ ] Uniswap integrations (particularly swaps on testnet)
 - [ ] Data from DexScreener/DefiLlama
 - [ ] Generate image, deploy NFT collection E2E
 - [ ] Stake/restake with Lido/Ether.fi
@@ -23,6 +23,7 @@ Below is a list of actions and frameworks we'd love to see open-source contribut
 - [ ] Pendle interactions (LP, PT, YT)
 - [ ] Pond model integrations
 - [ ] Agent communication (potentially via XMTP)
+- [ ] Aave integration
 - [ ] Actions on other networks
 
 ## Frameworks
