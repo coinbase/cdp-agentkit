@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { WalletProvider } from "./wallet_provider";
+import { TransactionRequest } from "viem";
 
 /**
  * EvmWalletProvider is the abstract base class for all EVM wallet providers.
@@ -31,7 +32,7 @@ export abstract class EvmWalletProvider extends WalletProvider {
    * @param transaction - The transaction to sign.
    * @returns The signed transaction.
    */
-  abstract signTransaction(transaction: any): Promise<`0x${string}`>;
+  abstract signTransaction(transaction: TransactionRequest): Promise<`0x${string}`>;
 
   /**
    * Send a transaction.
@@ -39,7 +40,7 @@ export abstract class EvmWalletProvider extends WalletProvider {
    * @param transaction - The transaction to send.
    * @returns The transaction hash.
    */
-  abstract sendTransaction(transaction: any): Promise<`0x${string}`>;
+  abstract sendTransaction(transaction: TransactionRequest): Promise<`0x${string}`>;
 
   /**
    * Wait for a transaction receipt.

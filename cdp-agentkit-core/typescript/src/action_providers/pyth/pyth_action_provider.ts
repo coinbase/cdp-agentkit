@@ -75,7 +75,7 @@ Important notes:
 - If you are asked to fetch the price from Pyth for a ticker symbol such as BTC, you must first use the pyth_fetch_price_feed_id
 action to retrieve the price feed ID before invoking the pyth_Fetch_price action
 `,
-    schema: PythFetchPriceSchema
+    schema: PythFetchPriceSchema,
   })
   async fetchPrice(args: z.infer<typeof PythFetchPriceSchema>): Promise<string> {
     const url = `https://hermes.pyth.network/v2/updates/price/latest?ids[]=${args.priceFeedID}`;
