@@ -2,9 +2,9 @@ import { z } from "zod";
 import { ActionProvider } from "../action_provider";
 import { Network, EvmWalletProvider } from "../../wallet_providers";
 import { CreateAction } from "../action_decorator";
-import { MintSchema, TransferSchema } from "./schemas";
+import { GetBalanceSchema, MintSchema, TransferSchema } from "./schemas";
 import { ERC721_ABI } from "./constants";
-import { encodeFunctionData } from "viem";
+import { encodeFunctionData, Hex } from "viem";
 
 /**
  * Erc721ActionProvider is an action provider for Erc721 contract interactions.
@@ -38,7 +38,7 @@ Do not use the contract address as the destination address. If you are unsure of
       const data = encodeFunctionData({
         abi: ERC721_ABI,
         functionName: "mint",
-        args: [args.destination, 1],
+        args: [args.destination as Hex, 1n],
       });
 
       const hash = await walletProvider.sendTransaction({
@@ -86,7 +86,7 @@ Important notes:
       const data = encodeFunctionData({
         abi: ERC721_ABI,
         functionName: "transferFrom",
-        args: [args.fromAddress, args.destination, args.tokenId],
+        args: [args.fromAddress as Hex, args.destination as Hex, BigInt(args.tokenId)],
       });
 
       const hash = await walletProvider.sendTransaction({
@@ -99,6 +99,44 @@ Important notes:
       return `Successfully transferred NFT ${args.contractAddress} with tokenId ${args.tokenId} to ${args.destination}`;
     } catch (error) {
       return `Error transferring NFT ${args.contractAddress} with tokenId ${args.tokenId} to ${args.destination}: ${error}`;
+    }
+  }
+
+  /**
+   * Gets the NFT balance for a given address and contract.
+   *
+   * @param walletProvider - The wallet provider to check the balance with.
+   * @param args - The input arguments for the action.
+   * @returns A message containing the NFT balance details.
+   */
+  @CreateAction({
+    name: "get_balance",
+    description: `
+This tool will check the NFT (ERC721 token) balance for a given address.
+
+It takes the following inputs:
+- contractAddress: The NFT contract address to check balance for
+- address: (Optional) The address to check NFT balance for. If not provided, uses the wallet's address
+`,
+    schema: GetBalanceSchema,
+  })
+  async getBalance(
+    walletProvider: EvmWalletProvider,
+    args: z.infer<typeof GetBalanceSchema>,
+  ): Promise<string> {
+    try {
+      const address = args.address || walletProvider.getAddress();
+
+      const balance = await walletProvider.readContract({
+        address: args.contractAddress as Hex,
+        abi: ERC721_ABI,
+        functionName: "balanceOf",
+        args: [address],
+      });
+
+      return `Balance of NFTs for contract ${args.contractAddress} at address ${address} is ${balance}`;
+    } catch (error) {
+      return `Error getting NFT balance for contract ${args.contractAddress}: ${error}`;
     }
   }
 
