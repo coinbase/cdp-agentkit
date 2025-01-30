@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { ActionProvider } from "../action_provider";
-import { Network } from "../../wallet_providers/wallet_provider";
 import { CreateAction } from "../action_decorator";
 import { PythFetchPriceFeedIDSchema, PythFetchPriceSchema } from "./schemas";
 
@@ -8,17 +7,12 @@ import { PythFetchPriceFeedIDSchema, PythFetchPriceSchema } from "./schemas";
  * PythActionProvider is an action provider for Pyth.
  */
 export class PythActionProvider extends ActionProvider {
+  /**
+   * Constructs a new PythActionProvider.
+   */
   constructor() {
     super("pyth", []);
   }
-
-  /**
-   * Checks if the Pyth action provider supports the given network.
-   *
-   * @param network - The network to check.
-   * @returns True if the Pyth action provider supports the network, false otherwise.
-   */
-  supportsNetwork = (_: Network) => true;
 
   /**
    * Fetch the price feed ID for a given token symbol from Pyth.
@@ -46,6 +40,7 @@ export class PythActionProvider extends ActionProvider {
     }
 
     const filteredData = data.filter(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (item: any) => item.attributes.base.toLowerCase() === args.tokenSymbol.toLowerCase(),
     );
 
@@ -108,6 +103,13 @@ action to retrieve the price feed ID before invoking the pyth_Fetch_price action
     const scaledPrice = price / BigInt(10) ** BigInt(exponent);
     return scaledPrice.toString();
   }
+
+  /**
+   * Checks if the Pyth action provider supports the given network.
+   *
+   * @returns True if the Pyth action provider supports the network, false otherwise.
+   */
+  supportsNetwork = () => true;
 }
 
 export const pythActionProvider = () => new PythActionProvider();

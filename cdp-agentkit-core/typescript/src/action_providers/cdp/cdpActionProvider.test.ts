@@ -57,6 +57,7 @@ describe("CDP Action Provider Input Schemas", () => {
 
 describe("CDP Action Provider", () => {
   let actionProvider: CdpActionProvider;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let mockExternalAddressInstance: jest.Mocked<any>;
 
   beforeEach(() => {

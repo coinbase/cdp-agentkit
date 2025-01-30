@@ -32,6 +32,9 @@ export class AgentKit {
     this.actions = config.actions || [];
   }
 
+  /**
+   * Returns the actions available to the AgentKit.
+   */
   public getActions(): Action[] {
     // TODO: Implement
     throw Error("Unimplemented");

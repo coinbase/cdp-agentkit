@@ -76,7 +76,7 @@ export class TwitterTool<TActionSchema extends TwitterActionSchemaAny> extends S
         try {
           const validatedInput = this.schema.parse(input);
           args = validatedInput;
-        } catch (validationError) {
+        } catch {
           // If schema validation fails, fall back to instructions-only mode
           args = input;
         }

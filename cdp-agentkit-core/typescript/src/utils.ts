@@ -16,7 +16,7 @@ const ERC20_ABI = [
 
 /**
  * Approves a spender to spend tokens on behalf of the owner
- * 
+ *
  * @param wallet - The wallet provider
  * @param tokenAddress - The address of the token contract
  * @param spenderAddress - The address of the spender
@@ -47,4 +47,4 @@ export async function approve(
   } catch (error) {
     return `Error approving tokens: ${error}`;
   }
-} 
+}

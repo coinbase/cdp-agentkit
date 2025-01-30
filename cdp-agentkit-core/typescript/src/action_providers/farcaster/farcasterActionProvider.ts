@@ -32,6 +32,11 @@ export class FarcasterActionProvider extends ActionProvider {
   private readonly signerUuid: string;
   private readonly agentFid: string;
 
+  /**
+   * Constructor for the FarcasterActionProvider class.
+   *
+   * @param config - The configuration options for the FarcasterActionProvider.
+   */
   constructor(config: FarcasterActionProviderConfig = {}) {
     super("farcaster", []);
 
@@ -61,17 +66,9 @@ export class FarcasterActionProvider extends ActionProvider {
   }
 
   /**
-   * Checks if the Farcaster action provider supports the given network.
-   *
-   * @param network - The network to check.
-   * @returns True if the Farcaster action provider supports the network, false otherwise.
-   */
-  supportsNetwork = (_: Network) => true;
-
-  /**
    * Retrieves agent's Farcaster account details.
    *
-   * @param _ The input arguments for the action.
+   * @param _ - The input arguments for the action.
    * @returns A message containing account details for the agent's Farcaster account.
    */
   @CreateAction({
@@ -150,6 +147,14 @@ A failure response will return a message with the Farcaster API request error:
       return `Error posting to Farcaster:\n${error}`;
     }
   }
+
+  /**
+   * Checks if the Farcaster action provider supports the given network.
+   *
+   * @param _ - The network to check.
+   * @returns True if the Farcaster action provider supports the network, false otherwise.
+   */
+  supportsNetwork = (_: Network) => true;
 }
 
 export const farcasterActionProvider = () => new FarcasterActionProvider();
