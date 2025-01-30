@@ -122,15 +122,25 @@ describe("Morpho Action Provider", () => {
   });
 
   describe("supportsNetwork", () => {
-    it("should return true for EVM networks", () => {
-      const result = actionProvider.supportsNetwork({ protocolFamily: "evm", networkId: "1" });
+    it("should return true for Base Mainnet", () => {
+      const result = actionProvider.supportsNetwork({ protocolFamily: "evm", networkId: "base-mainnet" });
       expect(result).toBe(true);
+    });
+
+    it("should return true for Base Sepolia", () => {
+      const result = actionProvider.supportsNetwork({ protocolFamily: "evm", networkId: "base-sepolia" });
+      expect(result).toBe(true);
+    });
+
+    it("should return false for other EVM networks", () => {
+      const result = actionProvider.supportsNetwork({ protocolFamily: "evm", networkId: "ethereum" });
+      expect(result).toBe(false);
     });
 
     it("should return false for non-EVM networks", () => {
       const result = actionProvider.supportsNetwork({
         protocolFamily: "bitcoin",
-        networkId: "1",
+        networkId: "base-mainnet",
       });
       expect(result).toBe(false);
     });

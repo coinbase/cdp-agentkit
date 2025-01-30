@@ -9,6 +9,8 @@ import { approve } from "../../utils";
 import { METAMORPHO_ABI } from "./constants";
 import { DepositSchema, WithdrawSchema } from "./schemas";
 
+export const SUPPORTED_NETWORKS = ["base-mainnet", "base-sepolia"];
+
 /**
  * MorphoActionProvider is an action provider for Morpho Vault interactions.
  */
@@ -23,7 +25,9 @@ export class MorphoActionProvider extends ActionProvider {
    * @param network - The network to check.
    * @returns True if the Morpho action provider supports the network, false otherwise.
    */
-  supportsNetwork = (network: Network) => network.protocolFamily === "evm";
+  supportsNetwork = (network: Network) =>
+    network.protocolFamily === "evm" &&
+    SUPPORTED_NETWORKS.includes(network.networkId!);
 
   /**
    * Deposits assets into a Morpho Vault
