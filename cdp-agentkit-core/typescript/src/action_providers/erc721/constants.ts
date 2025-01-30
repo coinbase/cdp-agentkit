@@ -295,4 +295,4 @@ export const ERC721_ABI = [
     stateMutability: "view",
     type: "function",
   },
-];
+] as const;

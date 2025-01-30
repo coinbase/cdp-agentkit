@@ -18,6 +18,7 @@ describe("ERC721 Action Provider", () => {
       getNetwork: jest.fn().mockReturnValue({ protocolFamily: "evm" }),
       sendTransaction: jest.fn(),
       waitForTransactionReceipt: jest.fn(),
+      readContract: jest.fn(),
       call: jest.fn(),
     } as unknown as jest.Mocked<EvmWalletProvider>;
 
@@ -39,7 +40,7 @@ describe("ERC721 Action Provider", () => {
         data: encodeFunctionData({
           abi: ERC721_ABI,
           functionName: "mint",
-          args: [MOCK_DESTINATION, 1],
+          args: [MOCK_DESTINATION, 1n],
         }),
       });
 
@@ -102,6 +103,52 @@ describe("ERC721 Action Provider", () => {
       expect(response).toBe(
         `Error transferring NFT ${MOCK_CONTRACT} with tokenId ${MOCK_TOKEN_ID} to ${MOCK_DESTINATION}: ${error}`,
       );
+    });
+  });
+
+  describe("getBalance", () => {
+    const MOCK_BALANCE = 1;
+
+    beforeEach(() => {
+      mockWallet.readContract.mockResolvedValue(MOCK_BALANCE);
+      mockWallet.getAddress.mockReturnValue(MOCK_ADDRESS);
+    });
+
+    it("should successfully get the NFT balance", async () => {
+      const args = {
+        contractAddress: MOCK_CONTRACT,
+        address: MOCK_ADDRESS,
+      };
+
+      const response = await actionProvider.getBalance(mockWallet, args);
+      expect(mockWallet.readContract).toHaveBeenCalledWith({
+        address: MOCK_CONTRACT,
+        abi: ERC721_ABI,
+        functionName: "balanceOf",
+        args: [MOCK_ADDRESS],
+      });
+      expect(response).toBe(
+        `Balance of NFTs for contract ${MOCK_CONTRACT} at address ${MOCK_ADDRESS} is 1`,
+      );
+    });
+
+    it("should handle get balance errors", async () => {
+      const error = new Error("Get balance failed");
+      mockWallet.readContract.mockRejectedValue(error);
+
+      const args = {
+        contractAddress: MOCK_CONTRACT,
+        address: MOCK_ADDRESS,
+      };
+
+      const response = await actionProvider.getBalance(mockWallet, args);
+      expect(mockWallet.readContract).toHaveBeenCalledWith({
+        address: MOCK_CONTRACT,
+        abi: ERC721_ABI,
+        functionName: "balanceOf",
+        args: [MOCK_ADDRESS],
+      });
+      expect(response).toBe(`Error getting NFT balance for contract ${MOCK_CONTRACT}: ${error}`);
     });
   });
 
