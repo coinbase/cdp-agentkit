@@ -8,8 +8,8 @@
     AgentKit
   </h1>
 
-  <p style="max-width: 300px; margin: 0 auto 20px;">
-    <img src="./agent_k.webp" style="max-width: 300px;"/>
+  <p>
+    <img src="./agent_k.webp" width="300"/>
   </p>
 
   <p style="font-size: 1.2em; max-width: 600px; margin: 0 auto 20px;">
@@ -219,6 +219,6 @@ The AgentKit software is novel and experimental, and is therefore provided on an
  information provided in connection with the software. The risk of loss through use of the 
  software can be substantial, and you assume any and all risks of loss and liability. The 
  software may produce output that is inaccurate, incorrect, unpredictable or undesirable, and 
- it is the user’s exclusive responsibility to evaluate the output and the use-case and 
+ it is the user's exclusive responsibility to evaluate the output and the use-case and 
  determine whether it is appropriate. The right to use the software is contingent on your 
  agreement to the [CDP Terms of Service](https://www.coinbase.com/legal/developer-platform/terms-of-service) (except to the extent it conflicts with the Apache-2.0 license).
