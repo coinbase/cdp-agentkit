@@ -11,7 +11,7 @@ import { getHasGraduated, getUniswapQuote } from "./uniswap/utils";
  */
 export async function getCurrentSupply(
   wallet: EvmWalletProvider,
-  tokenAddress: string
+  tokenAddress: string,
 ): Promise<string> {
   const supply = await wallet.readContract({
     address: tokenAddress as `0x${string}`,
@@ -69,8 +69,7 @@ export async function getSellQuote(
 
   const tokenQuote = (
     hasGraduated
-      ? (await getUniswapQuote(wallet, tokenAddress, Number(amountTokensInWei), "sell"))
-          .amountOut
+      ? (await getUniswapQuote(wallet, tokenAddress, Number(amountTokensInWei), "sell")).amountOut
       : await wallet.readContract({
           address: tokenAddress as `0x${string}`,
           abi: WOW_ABI,

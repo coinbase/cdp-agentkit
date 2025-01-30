@@ -1,4 +1,4 @@
-import { encodeFunctionData, parseEther } from "viem";
+import { encodeFunctionData } from "viem";
 import { EvmWalletProvider } from "../../wallet_providers";
 import { WowActionProvider } from "./wowActionProvider";
 import { WOW_ABI, WOW_FACTORY_ABI, GENERIC_TOKEN_METADATA_URI } from "./constants";
@@ -160,13 +160,21 @@ describe("WowActionProvider", () => {
 
   describe("supportsNetwork", () => {
     it("should return true for supported networks", () => {
-      expect(provider.supportsNetwork({ protocolFamily: "evm", networkId: "base-sepolia" })).toBe(true);
-      expect(provider.supportsNetwork({ protocolFamily: "evm", networkId: "base-mainnet" })).toBe(true);
+      expect(provider.supportsNetwork({ protocolFamily: "evm", networkId: "base-sepolia" })).toBe(
+        true,
+      );
+      expect(provider.supportsNetwork({ protocolFamily: "evm", networkId: "base-mainnet" })).toBe(
+        true,
+      );
     });
 
     it("should return false for unsupported networks", () => {
-      expect(provider.supportsNetwork({ protocolFamily: "evm", networkId: "ethereum" })).toBe(false);
-      expect(provider.supportsNetwork({ protocolFamily: "bitcoin", networkId: "base-sepolia" })).toBe(false);
+      expect(provider.supportsNetwork({ protocolFamily: "evm", networkId: "ethereum" })).toBe(
+        false,
+      );
+      expect(
+        provider.supportsNetwork({ protocolFamily: "bitcoin", networkId: "base-sepolia" }),
+      ).toBe(false);
     });
   });
 

@@ -2,7 +2,13 @@ import { z } from "zod";
 import { ActionProvider } from "../action_provider";
 import { Network, EvmWalletProvider } from "../../wallet_providers";
 import { CreateAction } from "../action_decorator";
-import { SUPPORTED_NETWORKS, WOW_ABI, WOW_FACTORY_ABI, GENERIC_TOKEN_METADATA_URI, getFactoryAddress } from "./constants";
+import {
+  SUPPORTED_NETWORKS,
+  WOW_ABI,
+  WOW_FACTORY_ABI,
+  GENERIC_TOKEN_METADATA_URI,
+  getFactoryAddress,
+} from "./constants";
 import { getBuyQuote, getSellQuote } from "./utils";
 import { getHasGraduated } from "./uniswap/utils";
 import { encodeFunctionData } from "viem";
@@ -12,18 +18,12 @@ import { WowBuyTokenInput, WowCreateTokenInput, WowSellTokenInput } from "./sche
  * WowActionProvider is an action provider for Wow protocol interactions.
  */
 export class WowActionProvider extends ActionProvider {
+  /**
+   * Constructor for the WowActionProvider class.
+   */
   constructor() {
     super("wow", []);
   }
-
-  /**
-   * Checks if the Wow action provider supports the given network.
-   *
-   * @param network - The network to check.
-   * @returns True if the Wow action provider supports the network, false otherwise.
-   */
-  supportsNetwork = (network: Network) =>
-    network.protocolFamily === "evm" && SUPPORTED_NETWORKS.includes(network.networkId!);
 
   /**
    * Buys a Zora Wow ERC20 memecoin with ETH.
@@ -53,13 +53,12 @@ Important notes:
   - Base Mainnet (ie, 'base', 'base-mainnet')`,
     schema: WowBuyTokenInput,
   })
-  async buyToken(wallet: EvmWalletProvider, args: z.infer<typeof WowBuyTokenInput>): Promise<string> {
+  async buyToken(
+    wallet: EvmWalletProvider,
+    args: z.infer<typeof WowBuyTokenInput>,
+  ): Promise<string> {
     try {
-      const tokenQuote = await getBuyQuote(
-        wallet,
-        args.contractAddress,
-        args.amountEthInWei,
-      );
+      const tokenQuote = await getBuyQuote(wallet, args.contractAddress, args.amountEthInWei);
 
       // Multiply by 99/100 and floor to get 99% of quote as minimum
       const minTokens = BigInt(Math.floor(Number(tokenQuote) * 99)) / BigInt(100);
@@ -88,7 +87,7 @@ Important notes:
 
       const receipt = await wallet.waitForTransactionReceipt(txHash);
 
-      return `Purchased WoW ERC20 memecoin with transaction hash: ${txHash}`;
+      return `Purchased WoW ERC20 memecoin with transaction hash: ${txHash}, and receipt:\n${JSON.stringify(receipt)}`;
     } catch (error) {
       return `Error buying Zora Wow ERC20 memecoin: ${error}`;
     }
@@ -119,7 +118,10 @@ Important notes:
   - Base Mainnet (ie, 'base', 'base-mainnet')`,
     schema: WowCreateTokenInput,
   })
-  async createToken(wallet: EvmWalletProvider, args: z.infer<typeof WowCreateTokenInput>): Promise<string> {
+  async createToken(
+    wallet: EvmWalletProvider,
+    args: z.infer<typeof WowCreateTokenInput>,
+  ): Promise<string> {
     const factoryAddress = getFactoryAddress(wallet.getNetwork().networkId!);
 
     try {
@@ -144,7 +146,7 @@ Important notes:
 
       return `Created WoW ERC20 memecoin ${args.name} with symbol ${
         args.symbol
-      } on network ${wallet.getNetwork().networkId}.\nTransaction hash for the token creation: ${txHash}`;
+      } on network ${wallet.getNetwork().networkId}.\nTransaction hash for the token creation: ${txHash}, and receipt:\n${JSON.stringify(receipt)}`;
     } catch (error) {
       return `Error creating Zora Wow ERC20 memecoin: ${error}`;
     }
@@ -177,13 +179,12 @@ Important notes:
   - Base Mainnet (ie, 'base', 'base-mainnet')`,
     schema: WowSellTokenInput,
   })
-  async sellToken(wallet: EvmWalletProvider, args: z.infer<typeof WowSellTokenInput>): Promise<string> {
+  async sellToken(
+    wallet: EvmWalletProvider,
+    args: z.infer<typeof WowSellTokenInput>,
+  ): Promise<string> {
     try {
-      const ethQuote = await getSellQuote(
-        wallet,
-        args.contractAddress,
-        args.amountTokensInWei,
-      );
+      const ethQuote = await getSellQuote(wallet, args.contractAddress, args.amountTokensInWei);
       const hasGraduated = await getHasGraduated(wallet, args.contractAddress);
 
       // Multiply by 98/100 and floor to get 98% of quote as minimum
@@ -210,11 +211,20 @@ Important notes:
 
       const receipt = await wallet.waitForTransactionReceipt(txHash);
 
-      return `Sold WoW ERC20 memecoin with transaction hash: ${txHash}`;
+      return `Sold WoW ERC20 memecoin with transaction hash: ${txHash}, and receipt:\n${JSON.stringify(receipt)}`;
     } catch (error) {
       return `Error selling Zora Wow ERC20 memecoin: ${error}`;
     }
   }
+
+  /**
+   * Checks if the Wow action provider supports the given network.
+   *
+   * @param network - The network to check.
+   * @returns True if the Wow action provider supports the network, false otherwise.
+   */
+  supportsNetwork = (network: Network) =>
+    network.protocolFamily === "evm" && SUPPORTED_NETWORKS.includes(network.networkId!);
 }
 
 export const wowActionProvider = () => new WowActionProvider();

@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { isAddress } from "viem";
 
-const ethereumAddress = z.custom<`0x${string}`>((val) => 
-  typeof val === "string" && isAddress(val),
-  "Invalid address"
+const ethereumAddress = z.custom<`0x${string}`>(
+  val => typeof val === "string" && isAddress(val),
+  "Invalid address",
 );
 
 /**
@@ -12,7 +12,10 @@ const ethereumAddress = z.custom<`0x${string}`>((val) =>
 export const WowBuyTokenInput = z
   .object({
     contractAddress: ethereumAddress.describe("The WOW token contract address"),
-    amountEthInWei: z.string().regex(/^\d+$/, "Must be a valid wei amount").describe("Amount of ETH to spend (in wei)"),
+    amountEthInWei: z
+      .string()
+      .regex(/^\d+$/, "Must be a valid wei amount")
+      .describe("Amount of ETH to spend (in wei)"),
   })
   .strip()
   .describe("Instructions for buying WOW tokens");
@@ -43,9 +46,12 @@ export const WowSellTokenInput = z
     contractAddress: ethereumAddress.describe(
       "The WOW token contract address, such as `0x036CbD53842c5426634e7929541eC2318f3dCF7e`",
     ),
-    amountTokensInWei: z.string().regex(/^\d+$/, "Must be a valid wei amount").describe(
-      "Amount of tokens to sell (in wei), meaning 1 is 1 wei or 0.000000000000000001 of the token",
-    ),
+    amountTokensInWei: z
+      .string()
+      .regex(/^\d+$/, "Must be a valid wei amount")
+      .describe(
+        "Amount of tokens to sell (in wei), meaning 1 is 1 wei or 0.000000000000000001 of the token",
+      ),
   })
   .strip()
   .describe("Instructions for selling WOW tokens");

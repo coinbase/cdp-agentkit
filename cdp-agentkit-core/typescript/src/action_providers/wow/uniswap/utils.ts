@@ -61,7 +61,7 @@ export function createPriceInfo(weiAmount: string, ethPriceInUsd: number): Price
  */
 export async function getPoolInfo(
   wallet: EvmWalletProvider,
-  poolAddress: string
+  poolAddress: string,
 ): Promise<PoolInfo> {
   try {
     const results = await Promise.all([
@@ -150,13 +150,15 @@ export async function exactInputSingle(
     const amount = await wallet.readContract({
       address: ADDRESSES[networkId].UniswapQuoter as `0x${string}`,
       functionName: "quoteExactInputSingle",
-      args: [{
-        tokenIn: getAddress(tokenIn),
-        tokenOut: getAddress(tokenOut),
-        fee,
-        amountIn,
-        sqrtPriceLimitX96: 0,
-      }],
+      args: [
+        {
+          tokenIn: getAddress(tokenIn),
+          tokenOut: getAddress(tokenOut),
+          fee,
+          amountIn,
+          sqrtPriceLimitX96: 0,
+        },
+      ],
       abi: UNISWAP_QUOTER_ABI,
     });
 
@@ -208,13 +210,7 @@ export async function getUniswapQuote(
     const isInsufficientLiquidity = quoteType === "buy" && amount > balanceOut;
 
     if (!isInsufficientLiquidity) {
-      quoteResult = await exactInputSingle(
-        wallet,
-        tokenIn,
-        tokenOut,
-        String(amount),
-        String(fee),
-      );
+      quoteResult = await exactInputSingle(wallet, tokenIn, tokenOut, String(amount), String(fee));
     }
   } catch (error) {
     console.error("Error fetching quote:", error);
@@ -263,7 +259,7 @@ export async function getUniswapQuote(
  */
 export async function getHasGraduated(
   wallet: EvmWalletProvider,
-  tokenAddress: string
+  tokenAddress: string,
 ): Promise<boolean> {
   const marketType = await wallet.readContract({
     address: tokenAddress as `0x${string}`,
@@ -283,7 +279,7 @@ export async function getHasGraduated(
  */
 export async function getPoolAddress(
   wallet: EvmWalletProvider,
-  tokenAddress: string
+  tokenAddress: string,
 ): Promise<string> {
   const poolAddress = await wallet.readContract({
     address: tokenAddress as `0x${string}`,
