@@ -16,7 +16,7 @@ interface AgentKitOptions {
 export class AgentKit {
   private walletProvider: WalletProvider;
   private actionProviders?: ActionProvider[];
-  private actions: Action[];
+  private actions?: Action[];
 
   /**
    * Initializes a new AgentKit instance
@@ -28,15 +28,26 @@ export class AgentKit {
    */
   public constructor(config: AgentKitOptions = {}) {
     this.walletProvider = config.walletProvider || new CdpWalletProvider();
-    this.actionProviders = config.actionProviders;
+    this.actionProviders = config.actionProviders || [];
     this.actions = config.actions || [];
   }
 
   /**
    * Returns the actions available to the AgentKit.
+   *
+   * @returns An array of actions
    */
   public getActions(): Action[] {
-    // TODO: Implement
-    throw Error("Unimplemented");
+    let actions: Action[] = this.actions || [];
+
+    if (this.actionProviders) {
+      for (const actionProvider of this.actionProviders) {
+        if (actionProvider.supportsNetwork(this.walletProvider.getNetwork())) {
+          actions = actions.concat(actionProvider.getActions(this.walletProvider));
+        }
+      }
+    }
+
+    return actions;
   }
 }

@@ -2,7 +2,9 @@
   "name": "cdp-agentkit-monorepo",
   "private": true,
   "workspaces": [
-    "cdp-agentkit-core/typescript"
+    "cdp-agentkit-core/typescript",
+    "cdp-langchain/typescript",
+    "cdp-langchain/examples/chatbot-typescript"
   ],
   "packageManager": "npm@8.9.0",
   "scripts": {
