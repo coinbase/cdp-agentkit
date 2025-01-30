@@ -41,14 +41,6 @@ export abstract class ActionProvider<TWalletProvider extends WalletProvider = Wa
   }
 
   /**
-   * Checks if the action provider supports the given network.
-   *
-   * @param network - The network to check.
-   * @returns True if the action provider supports the network, false otherwise.
-   */
-  abstract supportsNetwork(network: Network): boolean;
-
-  /**
    * Gets the actions of the action provider bound to the given wallet provider.
    *
    * @param walletProvider - The wallet provider.
@@ -81,7 +73,7 @@ export abstract class ActionProvider<TWalletProvider extends WalletProvider = Wa
           description: actionMetadata.description,
           schema: actionMetadata.schema,
           invoke: schemaArgs => {
-            const args: any[] = [];
+            const args: unknown[] = [];
             if (actionMetadata.walletProvider) {
               args[0] = walletProvider;
             }
@@ -96,4 +88,12 @@ export abstract class ActionProvider<TWalletProvider extends WalletProvider = Wa
 
     return actions;
   }
+
+  /**
+   * Checks if the action provider supports the given network.
+   *
+   * @param network - The network to check.
+   * @returns True if the action provider supports the network, false otherwise.
+   */
+  abstract supportsNetwork(network: Network): boolean;
 }

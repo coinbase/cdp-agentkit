@@ -1,3 +1,6 @@
+// TODO: Improve type safety
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { WalletProvider } from "./wallet_provider";
 
 /**
@@ -8,6 +11,7 @@ import { WalletProvider } from "./wallet_provider";
 export abstract class EvmWalletProvider extends WalletProvider {
   /**
    * Sign a message.
+   *
    * @param message - The message to sign.
    * @returns The signed message.
    */

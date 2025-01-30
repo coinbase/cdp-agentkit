@@ -50,7 +50,8 @@ export interface ActionMetadata {
   /**
    * The function to invoke the action
    */
-  invoke: Function;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  invoke: (...args: any[]) => any;
 
   /**
    * The wallet provider to use for the action
@@ -80,7 +81,7 @@ export type StoredActionMetadata = Map<string, ActionMetadata>;
  * ```
  */
 export function CreateAction(params: CreateActionDecoratorParams) {
-  return (target: Object, propertyKey: string, descriptor: PropertyDescriptor) => {
+  return (target: object, propertyKey: string, descriptor: PropertyDescriptor) => {
     const existingMetadata: StoredActionMetadata =
       Reflect.getMetadata(ACTION_DECORATOR_KEY, target.constructor) || new Map();
 
@@ -102,8 +103,15 @@ export function CreateAction(params: CreateActionDecoratorParams) {
   };
 }
 
+/**
+ * Validates the arguments of an action method
+ *
+ * @param target - The target object
+ * @param propertyKey - The property key
+ * @returns An object containing the wallet provider flag
+ */
 function validateActionMethodArguments(
-  target: Object,
+  target: object,
   propertyKey: string,
 ): {
   isWalletProvider: boolean;
