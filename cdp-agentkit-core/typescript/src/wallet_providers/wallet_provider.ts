@@ -44,4 +44,11 @@ export abstract class WalletProvider {
    * @returns The name of the wallet provider.
    */
   abstract getName(): string;
+
+  /**
+   * Get the balance of the native asset of the network.
+   *
+   * @returns The balance of the native asset of the network.
+   */
+  abstract getBalance(): Promise<bigint>;
 }

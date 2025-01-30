@@ -6,6 +6,9 @@ import {
   createPublicClient,
   http,
   TransactionRequest,
+  PublicClient as ViemPublicClient,
+  ReadContractParameters,
+  ReadContractReturnType,
 } from "viem";
 import { EvmWalletProvider } from "./evm_wallet_provider";
 import { Network } from "./wallet_provider";
@@ -15,6 +18,7 @@ import { Network } from "./wallet_provider";
  */
 export class ViemWalletProvider extends EvmWalletProvider {
   #walletClient: ViemWalletClient;
+  #publicClient: ViemPublicClient;
 
   /**
    * Constructs a new ViemWalletProvider.
@@ -24,6 +28,10 @@ export class ViemWalletProvider extends EvmWalletProvider {
   constructor(walletClient: ViemWalletClient) {
     super();
     this.#walletClient = walletClient;
+    this.#publicClient = createPublicClient({
+      chain: walletClient.chain,
+      transport: http(),
+    });
   }
 
   /**
@@ -124,6 +132,20 @@ export class ViemWalletProvider extends EvmWalletProvider {
   }
 
   /**
+   * Gets the balance of the wallet.
+   *
+   * @returns The balance of the wallet.
+   */
+  async getBalance(): Promise<bigint> {
+    const account = this.#walletClient.account;
+    if (!account) {
+      throw new Error("Account not found");
+    }
+
+    return this.#publicClient.getBalance({ address: account.address });
+  }
+
+  /**
    * Waits for a transaction receipt.
    *
    * @param txHash - The hash of the transaction to wait for.
@@ -136,5 +158,15 @@ export class ViemWalletProvider extends EvmWalletProvider {
     });
 
     return await publicClient.waitForTransactionReceipt({ hash: txHash });
+  }
+
+  /**
+   * Reads a contract.
+   *
+   * @param params - The parameters to read the contract.
+   * @returns The response from the contract.
+   */
+  async readContract(params: ReadContractParameters): Promise<ReadContractReturnType> {
+    return this.#publicClient.readContract(params);
   }
 }

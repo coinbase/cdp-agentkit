@@ -1,7 +1,7 @@
 // TODO: Remove this once we have a real implementation
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { TransactionRequest } from "viem";
+import { ReadContractParameters, ReadContractReturnType, TransactionRequest } from "viem";
 import { EvmWalletProvider } from "./evm_wallet_provider";
 import { Network } from "./wallet_provider";
 
@@ -87,6 +87,16 @@ export class CdpWalletProvider extends EvmWalletProvider {
   }
 
   /**
+   * Gets the balance of the wallet.
+   *
+   * @returns The balance of the wallet.
+   */
+  async getBalance(): Promise<bigint> {
+    // TODO: Implement
+    throw Error("Unimplemented");
+  }
+
+  /**
    * Waits for a transaction receipt.
    *
    * @param txHash - The hash of the transaction to wait for.
@@ -94,6 +104,17 @@ export class CdpWalletProvider extends EvmWalletProvider {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async waitForTransactionReceipt(txHash: `0x${string}`): Promise<any> {
+    // TODO: Implement
+    throw Error("Unimplemented");
+  }
+
+  /**
+   * Reads a contract.
+   *
+   * @param params - The parameters to read the contract.
+   * @returns The response from the contract.
+   */
+  async readContract(params: ReadContractParameters): Promise<ReadContractReturnType> {
     // TODO: Implement
     throw Error("Unimplemented");
   }

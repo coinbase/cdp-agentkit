@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { WalletProvider } from "./wallet_provider";
-import { TransactionRequest } from "viem";
+import { TransactionRequest, ReadContractParameters, ReadContractReturnType } from "viem";
 
 /**
  * EvmWalletProvider is the abstract base class for all EVM wallet providers.
@@ -49,4 +49,12 @@ export abstract class EvmWalletProvider extends WalletProvider {
    * @returns The transaction receipt.
    */
   abstract waitForTransactionReceipt(txHash: `0x${string}`): Promise<any>;
+
+  /**
+   * Read a contract.
+   *
+   * @param params - The parameters to read the contract.
+   * @returns The response from the contract.
+   */
+  abstract readContract(params: ReadContractParameters): Promise<ReadContractReturnType>;
 }
