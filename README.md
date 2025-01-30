@@ -47,7 +47,8 @@ git clone https://github.com/coinbase/agentkit.git
 # Navigate to the chatbot-python example
 cd agentkit/cdp-langchain/python/examples/chatbot-python
 
-# At this point, fill in your CDP API key name, private key, and OpenAI API key in the .env.example file.
+# At this point, fill in your CDP API key name, private key, and OpenAI API key in the
+# .env.example file.
 # Then, rename the .env.example file to .env
 mv .env.example .env
 
@@ -88,7 +89,8 @@ git clone https://github.com/coinbase/agentkit.git
 # Navigate to the chatbot-typescript example
 cd agentkit/cdp-langchain/typescript/examples/chatbot-typescript
 
-# At this point, fill in your CDP API key name, private key, and OpenAI API key in the .env.example file.
+# At this point, fill in your CDP API key name, private key, and OpenAI API key in
+# the .env.example file.
 # Then, rename the .env.example file to .env
 mv .env.example .env
 
