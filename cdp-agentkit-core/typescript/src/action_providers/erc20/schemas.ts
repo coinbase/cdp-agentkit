@@ -11,3 +11,15 @@ export const TransferSchema = z
   })
   .strip()
   .describe("Instructions for transferring assets");
+
+/**
+ * Input schema for get balance action.
+ */
+export const GetBalanceSchema = z
+  .object({
+    contractAddress: z
+      .string()
+      .describe("The contract address of the token to get the balance for"),
+  })
+  .strip()
+  .describe("Instructions for getting wallet balance");

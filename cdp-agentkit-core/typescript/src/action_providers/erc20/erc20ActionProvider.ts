@@ -2,7 +2,7 @@ import { z } from "zod";
 import { ActionProvider } from "../action_provider";
 import { Network } from "../../wallet_providers/wallet_provider";
 import { CreateAction } from "../action_decorator";
-import { TransferSchema } from "./schemas";
+import { GetBalanceSchema, TransferSchema } from "./schemas";
 import { abi } from "./constants";
 import { encodeFunctionData, Hex } from "viem";
 import { EvmWalletProvider } from "../../wallet_providers";
@@ -16,6 +16,38 @@ export class ERC20ActionProvider extends ActionProvider {
    */
   constructor() {
     super("erc20", []);
+  }
+
+  /**
+   * Gets the balance of an ERC20 token.
+   *
+   * @param walletProvider - The wallet provider to get the balance from.
+   * @param args - The input arguments for the action.
+   * @returns A message containing the balance.
+   */
+  @CreateAction({
+    name: "get_balance",
+    description: `
+    This tool will get the balance of an ERC20 asset in the wallet. It takes the contract address as input.
+    `,
+    schema: GetBalanceSchema,
+  })
+  async getBalance(
+    walletProvider: EvmWalletProvider,
+    args: z.infer<typeof GetBalanceSchema>,
+  ): Promise<string> {
+    try {
+      const balance = await walletProvider.readContract({
+        address: args.contractAddress as Hex,
+        abi,
+        functionName: "balanceOf",
+        args: [walletProvider.getAddress()],
+      });
+
+      return `Balance of ${args.contractAddress} is ${balance}`;
+    } catch (error) {
+      return `Error getting balance: ${error}`;
+    }
   }
 
   /**

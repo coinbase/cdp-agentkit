@@ -7,6 +7,7 @@ import { abi } from "./constants";
 const MOCK_AMOUNT = 15;
 const MOCK_CONTRACT_ADDRESS = "0x1234567890123456789012345678901234567890";
 const MOCK_DESTINATION = "0x9876543210987654321098765432109876543210";
+const MOCK_ADDRESS = "0x1234567890123456789012345678901234567890";
 
 describe("Transfer Schema", () => {
   it("should successfully parse valid input", () => {
@@ -27,6 +28,56 @@ describe("Transfer Schema", () => {
     const result = TransferSchema.safeParse(emptyInput);
 
     expect(result.success).toBe(false);
+  });
+});
+
+describe("Get Balance Action", () => {
+  let mockWallet: jest.Mocked<EvmWalletProvider>;
+  const actionProvider = erc20ActionProvider();
+
+  beforeEach(async () => {
+    mockWallet = {
+      getAddress: jest.fn().mockReturnValue(MOCK_ADDRESS),
+      readContract: jest.fn(),
+    } as unknown as jest.Mocked<EvmWalletProvider>;
+
+    mockWallet.readContract.mockResolvedValue(MOCK_AMOUNT);
+  });
+
+  it("should successfully respond", async () => {
+    const args = {
+      contractAddress: MOCK_CONTRACT_ADDRESS,
+    };
+
+    const response = await actionProvider.getBalance(mockWallet, args);
+
+    expect(mockWallet.readContract).toHaveBeenCalledWith({
+      address: args.contractAddress as Hex,
+      abi,
+      functionName: "balanceOf",
+      args: [mockWallet.getAddress()],
+    });
+    expect(response).toContain(`Balance of ${MOCK_CONTRACT_ADDRESS} is ${MOCK_AMOUNT}`);
+  });
+
+  it("should fail with an error", async () => {
+    const args = {
+      contractAddress: MOCK_CONTRACT_ADDRESS,
+    };
+
+    const error = new Error("Failed to get balance");
+    mockWallet.readContract.mockRejectedValue(error);
+
+    const response = await actionProvider.getBalance(mockWallet, args);
+
+    expect(mockWallet.readContract).toHaveBeenCalledWith({
+      address: args.contractAddress as Hex,
+      abi,
+      functionName: "balanceOf",
+      args: [mockWallet.getAddress()],
+    });
+
+    expect(response).toContain(`Error getting balance: ${error}`);
   });
 });
 
