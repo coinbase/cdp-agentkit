@@ -45,7 +45,7 @@ AgentKit is [Coinbase Developer Platform's](https://docs.cdp.coinbase.com) frame
 git clone https://github.com/coinbase/agentkit.git
 
 # Navigate to the chatbot-python example
-cd agentkit/cdp-langchain/python/examples/chatbot-python
+cd agentkit/cdp-langchain/examples/chatbot-python
 
 # At this point, fill in your CDP API key name, private key, and OpenAI API key in the
 # .env.example file.
@@ -87,7 +87,7 @@ Your wallet has been successfully funded with testnet ETH. You can view the tran
 git clone https://github.com/coinbase/agentkit.git
 
 # Navigate to the chatbot-typescript example
-cd agentkit/cdp-langchain/typescript/examples/chatbot-typescript
+cd agentkit/cdp-langchain/examples/chatbot-typescript
 
 # At this point, fill in your CDP API key name, private key, and OpenAI API key in
 # the .env.example file.
