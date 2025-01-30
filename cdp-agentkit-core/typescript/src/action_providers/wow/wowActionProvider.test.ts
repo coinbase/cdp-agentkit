@@ -160,20 +160,20 @@ describe("WowActionProvider", () => {
 
   describe("supportsNetwork", () => {
     it("should return true for supported networks", () => {
-      expect(provider.supportsNetwork({ protocolFamily: "evm", networkId: "base-sepolia" })).toBe(
-        true,
-      );
       expect(provider.supportsNetwork({ protocolFamily: "evm", networkId: "base-mainnet" })).toBe(
         true,
       );
     });
 
     it("should return false for unsupported networks", () => {
+      expect(provider.supportsNetwork({ protocolFamily: "evm", networkId: "base-sepolia" })).toBe(
+        false,
+      );
       expect(provider.supportsNetwork({ protocolFamily: "evm", networkId: "ethereum" })).toBe(
         false,
       );
       expect(
-        provider.supportsNetwork({ protocolFamily: "bitcoin", networkId: "base-sepolia" }),
+        provider.supportsNetwork({ protocolFamily: "bitcoin", networkId: "base-mainnet" }),
       ).toBe(false);
     });
   });
