@@ -70,7 +70,7 @@ export class CdpTool<TActionSchema extends CdpActionSchemaAny> extends Structure
         try {
           const validatedInput = this.schema.parse(input);
           args = validatedInput;
-        } catch (validationError) {
+        } catch {
           // If schema validation fails, fall back to instructions-only mode
           args = input;
         }

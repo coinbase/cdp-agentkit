@@ -12,7 +12,9 @@ export const DepositSchema = z
     receiver: z
       .string()
       .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
-      .describe("The address that will own the position on the vault which will receive the shares"),
+      .describe(
+        "The address that will own the position on the vault which will receive the shares",
+      ),
     tokenAddress: z
       .string()
       .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")

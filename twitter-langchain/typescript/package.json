@@ -8,10 +8,10 @@
   "files": ["dist"],
   "scripts": {
     "build": "tsc",
-    "lint": "npx --yes eslint -c .eslintrc.json src/**/*.ts",
-    "lint:fix": "npx --yes eslint -c .eslintrc.json src/**/*.ts --fix",
-    "format": "npx --yes prettier -c .prettierrc --write \"**/*.{ts,js,cjs,json,md}\"",
-    "format-check": "npx --yes prettier -c .prettierrc --check \"**/*.{ts,js,cjs,json,md}\"",
+    "lint": "eslint -c .eslintrc.json \"src/**/*.ts\"",
+    "lint:fix": "eslint -c .eslintrc.json \"src/**/*.ts\" --fix",
+    "format": "prettier -c .prettierrc --write \"**/*.{ts,js,cjs,json,md}\"",
+    "format:check": "prettier -c .prettierrc --check \"**/*.{ts,js,cjs,json,md}\"",
     "check": "tsc --noEmit",
     "test": "npx jest --no-cache --testMatch='**/*_test.ts'",
     "test:dry-run": "npm install && npm ci && npm publish --dry-run",
@@ -19,7 +19,7 @@
     "test:types": "tsd --files src/tests/types.test-d.ts",
     "clean": "rm -rf dist/*",
     "prepack": "tsc",
-    "docs": "npx --yes typedoc --entryPoints ./src --entryPointStrategy expand --exclude ./src/tests/**/*.ts",
+    "docs": "typedoc --entryPoints ./src --entryPointStrategy expand --exclude ./src/tests/**/*.ts",
     "docs:serve": "http-server ./docs",
     "dev": "tsc --watch"
   },

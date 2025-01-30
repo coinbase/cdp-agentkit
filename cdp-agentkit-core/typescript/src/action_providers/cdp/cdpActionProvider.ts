@@ -24,6 +24,11 @@ export interface CdpActionProviderConfig {
  * CdpActionProvider is an action provider for Cdp.
  */
 export class CdpActionProvider extends ActionProvider {
+  /**
+   * Constructor for the CdpActionProvider class.
+   *
+   * @param config - The configuration options for the CdpActionProvider.
+   */
   constructor(config: CdpActionProviderConfig = {}) {
     if (config.apiKeyName && config.apiKeyPrivateKey) {
       Coinbase.configure({ apiKeyName: config.apiKeyName, privateKey: config.apiKeyPrivateKey });
@@ -33,15 +38,6 @@ export class CdpActionProvider extends ActionProvider {
 
     super("cdp", []);
   }
-
-  /**
-   * Checks if the Cdp action provider supports the given network.
-   *
-   * @param network - The network to check.
-   * @returns True if the Cdp action provider supports the network, false otherwise.
-   * TODO: Split out into sub providers so network support can be tighter scoped.
-   */
-  supportsNetwork = (network: Network) => true;
 
   /**
    * Check the reputation of an address.
@@ -72,6 +68,7 @@ This tool checks the reputation of an address on a given network. It takes:
   /**
    * Requests test tokens from the faucet for the default address in the wallet.
    *
+   * @param walletProvider - The wallet provider to request funds from.
    * @param args - The input arguments for the action.
    * @returns A confirmation message with transaction details.
    */
@@ -104,6 +101,15 @@ from another wallet and provide the user with your wallet details.`,
       return `Error requesting faucet funds: ${error}`;
     }
   }
+
+  /**
+   * Checks if the Cdp action provider supports the given network.
+   *
+   * @param _ - The network to check.
+   * @returns True if the Cdp action provider supports the network, false otherwise.
+   * TODO: Split out into sub providers so network support can be tighter scoped.
+   */
+  supportsNetwork = (_: Network) => true;
 }
 
 export const cdpActionProvider = () => new CdpActionProvider();

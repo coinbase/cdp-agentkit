@@ -10,22 +10,17 @@ import { encodeFunctionData } from "viem";
  * Erc721ActionProvider is an action provider for Erc721 contract interactions.
  */
 export class Erc721ActionProvider extends ActionProvider {
+  /**
+   * Constructor for the Erc721ActionProvider class.
+   */
   constructor() {
     super("erc721", []);
   }
 
   /**
-   * Checks if the Erc721 action provider supports the given network.
-   *
-   * @param network - The network to check.
-   * @returns True if the Erc721 action provider supports the network, false otherwise.
-   */
-  supportsNetwork = (network: Network) => network.protocolFamily === "evm";
-
-  /**
    * Mints an NFT (ERC-721) to a specified destination address onchain.
    *
-   * @param wallet - The wallet to mint the NFT from.
+   * @param walletProvider - The wallet provider to mint the NFT from.
    * @param args - The input arguments for the action.
    * @returns A message containing the NFT mint details.
    */
@@ -62,6 +57,7 @@ Do not use the contract address as the destination address. If you are unsure of
   /**
    * Transfers an NFT (ERC721 token) to a destination address.
    *
+   * @param walletProvider - The wallet provider to transfer the NFT from.
    * @param args - The input arguments for the action.
    * @returns A message containing the transfer details.
    */
@@ -87,8 +83,6 @@ Important notes:
     args: z.infer<typeof TransferSchema>,
   ): Promise<string> {
     try {
-      const fromAddress = args.fromAddress ?? walletProvider.getAddress();
-
       const data = encodeFunctionData({
         abi: ERC721_ABI,
         functionName: "transferFrom",
@@ -107,6 +101,14 @@ Important notes:
       return `Error transferring NFT ${args.contractAddress} with tokenId ${args.tokenId} to ${args.destination}: ${error}`;
     }
   }
+
+  /**
+   * Checks if the Erc721 action provider supports the given network.
+   *
+   * @param network - The network to check.
+   * @returns True if the Erc721 action provider supports the network, false otherwise.
+   */
+  supportsNetwork = (network: Network) => network.protocolFamily === "evm";
 }
 
 export const erc721ActionProvider = () => new Erc721ActionProvider();
