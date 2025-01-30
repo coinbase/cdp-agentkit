@@ -35,6 +35,7 @@ AgentKit is [Coinbase Developer Platform's](https://docs.cdp.coinbase.com) frame
 
 *Prerequisites*:
 - [Python 3.10+](https://www.python.org/downloads/)
+- [Poetry](https://python-poetry.org/docs/)
 - [CDP Secret API Key](https://docs.cdp.coinbase.com/get-started/docs/cdp-api-keys#creating-secret-api-keys)
 - [OpenAI API Key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-openai-api-key)
 
