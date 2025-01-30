@@ -27,6 +27,7 @@ Below is a list of actions and frameworks we'd love to see open-source contribut
 - [ ] Farcaster - get other account details
 - [ ] Farcaster - Handle replies. If someone mentions the agent it's ignored
 - [ ] Farcaster - Get feed context. Give agent context on previous casts
+- [ ] Hyperlane cross-chain transfers
 - [ ] Actions on other networks
 
 ## Frameworks
