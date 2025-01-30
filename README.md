@@ -8,8 +8,10 @@
     AgentKit
   </h1>
 
+  <img src="./agent_k.webp" style="max-width: 300px;"/>
+
   <p style="font-size: 1.2em; max-width: 600px; margin: 0 auto 20px;">
-    Every agent deserves a wallet!
+    Every agent deserves a wallet.
   </p>
 
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/cdp-agentkit-core?style=flat-square)](https://pypistats.org/packages/cdp-agentkit-core)
@@ -19,9 +21,21 @@
 
 </div>
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Quickstart](#quickstart)
+- [Repository Structure](#repository-structure)
+- [Contributing](#contributing)
+- [Documentation](#documentation)
+- [Security and bug reports](#security-and-bug-reports)
+- [Contact](#contact)
+- [License](#license)
+- [Legal and Privacy](#legal-and-privacy)
+
 ## Overview
 
-AgentKit is [Coinbase Developer Platform's](https://docs.cdp.coinbase.com) framework for easily enabling AI agents to take actions onchain. It is designed to be framework-agnostic, so you can use it with any AI framework, and wallet-agnostic, so you can use it with any wallet. AgentKit is actively being built out, and welcomes community contributions!
+AgentKit is [Coinbase Developer Platform's](https://docs.cdp.coinbase.com) framework for easily enabling AI agents to take actions onchain. It is designed to be framework-agnostic, so you can use it with any AI framework, and wallet-agnostic, so you can use it with any wallet. AgentKit is actively being built out, and [welcomes community contributions!](#contributing)
 
 <div align="center">
   <a href="https://www.youtube.com/watch?v=-R_mKpdepRE">
@@ -118,7 +132,7 @@ Your wallet has been successfully funded with testnet ETH. You can view the tran
 
 ## Repository Structure
 
-AgentKit is organized as a [monorepo](https://en.wikipedia.org/wiki/Monorepo) that contains multiple packages.
+AgentKit is organized as a monorepo that contains multiple packages.
 
 ```
 ./
@@ -160,8 +174,10 @@ See [Twitter Langchain](./twitter-langchain/README.md) to get started!
 
 ## Contributing
 
-AgentKit welcomes community contributions.
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for more information.
+**AgentKit is actively looking for community contributions!**
+
+- To see a list of actions and frameworks we'd love to see open-source contributions for, see [WISHLIST.md](./WISHLIST.md).
+- To understand the process for contributing to AgentKit, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Documentation
 
@@ -171,10 +187,15 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for more information.
 - [API Reference: AgentKit Core Node.js](https://coinbase.github.io/agentkit/cdp-agentkit-core/typescript/index.html)
 - [API Reference: AgentKit LangChain Extension Node.js](https://coinbase.github.io/agentkit/cdp-langchain/typescript/index.html)
 
-## Security and bug reports
+## Security and Bug Reports
 
 The AgentKit team takes security seriously.
 See [SECURITY.md](SECURITY.md) for more information.
+
+## Contact
+
+For feature requests, feedback, or questions, please reach out to us via the 
+[Coinbase Developer Platform Discord](https://discord.com/channels/1220414409550336183/1304126107876069376).
 
 ## License
 
