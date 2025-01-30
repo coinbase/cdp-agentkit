@@ -35,7 +35,11 @@ export abstract class ActionProvider<TWalletProvider extends WalletProvider = Wa
    * @param name - The name of the action provider.
    * @param actionProviders - The action providers to combine.
    */
-  constructor(name: string, actionProviders: ActionProvider<TWalletProvider>[]) {
+  constructor(
+    name: string,
+    // Update parameter type to match property type
+    actionProviders: ActionProvider<TWalletProvider>[],
+  ) {
     this.name = name;
     this.actionProviders = actionProviders;
   }

@@ -32,9 +32,9 @@ export class CdpActionProvider extends ActionProvider {
   constructor(config: CdpActionProviderConfig = {}) {
     if (config.apiKeyName && config.apiKeyPrivateKey) {
       Coinbase.configure({ apiKeyName: config.apiKeyName, privateKey: config.apiKeyPrivateKey });
+    } else {
+      Coinbase.configureFromJson();
     }
-
-    Coinbase.configureFromJson();
 
     super("cdp", []);
   }
@@ -112,4 +112,5 @@ from another wallet and provide the user with your wallet details.`,
   supportsNetwork = (_: Network) => true;
 }
 
-export const cdpActionProvider = () => new CdpActionProvider();
+export const cdpActionProvider = (config: CdpActionProviderConfig = {}) =>
+  new CdpActionProvider(config);

@@ -157,4 +157,5 @@ A failure response will return a message with the Farcaster API request error:
   supportsNetwork = (_: Network) => true;
 }
 
-export const farcasterActionProvider = () => new FarcasterActionProvider();
+export const farcasterActionProvider = (config: FarcasterActionProviderConfig = {}) =>
+  new FarcasterActionProvider(config);
