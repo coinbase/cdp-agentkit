@@ -8,7 +8,9 @@
     AgentKit
   </h1>
 
-  <img src="./agent_k.webp" style="max-width: 300px;"/>
+  <p style="max-width: 300px; margin: 0 auto 20px;">
+    <img src="./agent_k.webp" style="max-width: 300px;"/>
+  </p>
 
   <p style="font-size: 1.2em; max-width: 600px; margin: 0 auto 20px;">
     Every agent deserves a wallet.
