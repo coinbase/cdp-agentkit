@@ -10,6 +10,7 @@ import { SolidityVersions } from "./constants";
 import {
   AddressReputationSchema,
   DeployContractSchema,
+  DeployNftSchema,
   DeployTokenSchema,
   RequestFaucetFundsSchema,
 } from "./schemas";
@@ -98,6 +99,48 @@ map where the key is the arg name and the value is the arg value. Encode uint/in
         .getTransactionLink()}`;
     } catch (error) {
       return `Error deploying contract: ${error}`;
+    }
+  }
+
+  /**
+   * Deploys an NFT (ERC-721) token collection onchain from the wallet.
+   *
+   * @param walletProvider - The wallet provider to deploy the NFT from.
+   * @param args - The input arguments for the action.
+   * @returns A message containing the NFT token deployment details.
+   */
+  @CreateAction({
+    name: "deploy_nft",
+    description: `This tool will deploy an NFT (ERC-721) contract onchain from the wallet. 
+  It takes the name of the NFT collection, the symbol of the NFT collection, and the base URI for the token metadata as inputs.`,
+    schema: DeployNftSchema,
+  })
+  async deployNFT(
+    walletProvider: CdpWalletProvider,
+    args: z.infer<typeof DeployNftSchema>,
+  ): Promise<string> {
+    try {
+      const nftContract = await walletProvider.deployNFT({
+        name: args.name,
+        symbol: args.symbol,
+        baseURI: args.baseURI,
+      });
+
+      const result = await nftContract.wait();
+
+      const transaction = result.getTransaction()!;
+      const networkId = walletProvider.getNetwork().networkId;
+      const contractAddress = result.getContractAddress();
+
+      return [
+        `Deployed NFT Collection ${args.name}:`,
+        `- to address ${contractAddress}`,
+        `- on network ${networkId}.`,
+        `Transaction hash: ${transaction.getTransactionHash()}`,
+        `Transaction link: ${transaction.getTransactionLink()}`,
+      ].join("\n");
+    } catch (error) {
+      return `Error deploying NFT: ${error}`;
     }
   }
 

@@ -34,6 +34,18 @@ export const DeployContractSchema = z
   .describe("Instructions for deploying an arbitrary contract");
 
 /**
+ * Input schema for deploy NFT action
+ */
+export const DeployNftSchema = z
+  .object({
+    name: z.string().describe("The name of the NFT collection"),
+    symbol: z.string().describe("The symbol of the NFT collection"),
+    baseURI: z.string().describe("The base URI for the token metadata"),
+  })
+  .strip()
+  .describe("Instructions for deploying an NFT collection");
+
+/**
  * Input schema for deploy token action.
  */
 export const DeployTokenSchema = z

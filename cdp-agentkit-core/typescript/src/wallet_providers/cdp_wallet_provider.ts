@@ -256,4 +256,28 @@ export class CdpWalletProvider extends EvmWalletProvider {
 
     return this.#cdpWallet.deployContract(options);
   }
+
+  /**
+   * Deploys a new NFT (ERC-721) smart contract.
+   *
+   * @param options - Configuration options for the NFT contract deployment
+   * @param options.name - The name of the collection
+   * @param options.symbol - The token symbol for the collection
+   * @param options.baseURI - The base URI for token metadata.
+   *
+   * @returns A Promise that resolves to the deployed SmartContract instance
+   * @throws Error if the wallet is not properly initialized
+   * @throws Error if the deployment fails for any reason (network issues, insufficient funds, etc.)
+   */
+  async deployNFT(options: {
+    name: string;
+    symbol: string;
+    baseURI: string;
+  }): Promise<SmartContract> {
+    if (!this.#cdpWallet) {
+      throw new Error("Wallet not initialized");
+    }
+
+    return this.#cdpWallet.deployNFT(options);
+  }
 }

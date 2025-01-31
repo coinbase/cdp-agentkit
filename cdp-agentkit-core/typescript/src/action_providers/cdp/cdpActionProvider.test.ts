@@ -1,6 +1,6 @@
 import { CdpWalletProvider } from "../../wallet_providers";
 import { CdpActionProvider } from "./cdpActionProvider";
-import { AddressReputationSchema, RequestFaucetFundsSchema } from "./schemas";
+import { AddressReputationSchema, DeployNftSchema, RequestFaucetFundsSchema } from "./schemas";
 import { SmartContract } from "@coinbase/coinbase-sdk";
 
 // Mock the entire module
@@ -29,6 +29,28 @@ describe("CDP Action Provider Input Schemas", () => {
         network: "base-mainnet",
       };
       const result = AddressReputationSchema.safeParse(invalidInput);
+
+      expect(result.success).toBe(false);
+    });
+  });
+
+  describe("Deploy NFT Schema", () => {
+    it("should successfully parse valid input", () => {
+      const validInput = {
+        baseURI: "https://www.test.xyz/metadata/",
+        name: "Test Token",
+        symbol: "TEST",
+      };
+
+      const result = DeployNftSchema.safeParse(validInput);
+
+      expect(result.success).toBe(true);
+      expect(result.data).toEqual(validInput);
+    });
+
+    it("should fail parsing empty input", () => {
+      const emptyInput = {};
+      const result = DeployNftSchema.safeParse(emptyInput);
 
       expect(result.success).toBe(false);
     });
@@ -117,6 +139,65 @@ describe("CDP Action Provider", () => {
       expect(mockExternalAddressInstance.reputation).toHaveBeenCalled();
       expect(mockExternalAddressInstance.reputation).toHaveBeenCalledTimes(1);
       expect(result).toBe(`Error checking address reputation: ${error}`);
+    });
+  });
+
+  describe("deployNft", () => {
+    let mockWallet: jest.Mocked<CdpWalletProvider>;
+    const MOCK_NFT_BASE_URI = "https://www.test.xyz/metadata/";
+    const MOCK_NFT_NAME = "Test Token";
+    const MOCK_NFT_SYMBOL = "TEST";
+    const CONTRACT_ADDRESS = "0x123456789abcdef";
+    const NETWORK_ID = "base-sepolia";
+    const TRANSACTION_HASH = "0xghijkl987654321";
+    const TRANSACTION_LINK = `https://etherscan.io/tx/${TRANSACTION_HASH}`;
+
+    beforeEach(() => {
+      mockWallet = {
+        deployNFT: jest.fn().mockResolvedValue({
+          wait: jest.fn().mockResolvedValue({
+            getContractAddress: jest.fn().mockReturnValue(CONTRACT_ADDRESS),
+            getTransaction: jest.fn().mockReturnValue({
+              getTransactionHash: jest.fn().mockReturnValue(TRANSACTION_HASH),
+              getTransactionLink: jest.fn().mockReturnValue(TRANSACTION_LINK),
+            }),
+          }),
+        }),
+        getNetwork: jest.fn().mockReturnValue({ networkId: NETWORK_ID }),
+      } as unknown as jest.Mocked<CdpWalletProvider>;
+    });
+
+    it("should successfully deploy an NFT", async () => {
+      const args = {
+        name: MOCK_NFT_NAME,
+        symbol: MOCK_NFT_SYMBOL,
+        baseURI: MOCK_NFT_BASE_URI,
+      };
+
+      const result = await actionProvider.deployNFT(mockWallet, args);
+
+      expect(mockWallet.deployNFT).toHaveBeenCalledWith(args);
+      expect(result).toContain(`Deployed NFT Collection ${MOCK_NFT_NAME}:`);
+      expect(result).toContain(`- to address ${CONTRACT_ADDRESS}`);
+      expect(result).toContain(`- on network ${NETWORK_ID}`);
+      expect(result).toContain(`Transaction hash: ${TRANSACTION_HASH}`);
+      expect(result).toContain(`Transaction link: ${TRANSACTION_LINK}`);
+    });
+
+    it("should handle deployment errors", async () => {
+      const args = {
+        name: MOCK_NFT_NAME,
+        symbol: MOCK_NFT_SYMBOL,
+        baseURI: MOCK_NFT_BASE_URI,
+      };
+
+      const error = new Error("An error has occurred");
+      mockWallet.deployNFT.mockRejectedValue(error);
+
+      const result = await actionProvider.deployNFT(mockWallet, args);
+
+      expect(mockWallet.deployNFT).toHaveBeenCalledWith(args);
+      expect(result).toBe(`Error deploying NFT: ${error}`);
     });
   });
 
