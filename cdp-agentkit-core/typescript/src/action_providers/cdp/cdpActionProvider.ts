@@ -1,10 +1,18 @@
-import { z } from "zod";
-import { ActionProvider } from "../action_provider";
-import { CdpWalletProvider } from "../../wallet_providers";
-import { CreateAction } from "../action_decorator";
 import { ExternalAddress } from "@coinbase/coinbase-sdk";
-import { AddressReputationSchema, DeployTokenSchema, RequestFaucetFundsSchema } from "./schemas";
+import { z } from "zod";
+
+import { CreateAction } from "../action_decorator";
+import { ActionProvider } from "../action_provider";
 import { Network } from "../../network";
+import { CdpWalletProvider } from "../../wallet_providers";
+
+import { SolidityVersions } from "./constants";
+import {
+  AddressReputationSchema,
+  DeployContractSchema,
+  DeployTokenSchema,
+  RequestFaucetFundsSchema,
+} from "./schemas";
 
 /**
  * CdpActionProvider is an action provider for Cdp.
@@ -40,6 +48,56 @@ This tool checks the reputation of an address on a given network. It takes:
       return reputation.toString();
     } catch (error) {
       return `Error checking address reputation: ${error}`;
+    }
+  }
+
+  /**
+   * Deploys a contract.
+   *
+   * @param walletProvider - The wallet provider to deploy the contract from
+   * @param args - The input arguments for the action
+   * @returns A message containing the deployed contract address and details
+   */
+  @CreateAction({
+    name: "deploy_contract",
+    description: `
+Deploys smart contract with required args: solidity version (string), solidity input json (string), contract name (string), and optional constructor args (Dict[str, Any])
+
+Input json structure:
+{"language":"Solidity","settings":{"remappings":[],"outputSelection":{"*":{"*":["abi","evm.bytecode"]}}},"sources":{}}
+
+You must set the outputSelection to {"*":{"*":["abi","evm.bytecode"]}} in the settings. The solidity version must be >= 0.8.0 and <= 0.8.28.
+
+Sources should contain one or more contracts with the following structure:
+{"contract_name.sol":{"content":"contract code"}}
+
+The contract code should be escaped. Contracts cannot import from external contracts but can import from one another.
+
+Constructor args are required if the contract has a constructor. They are a key-value
+map where the key is the arg name and the value is the arg value. Encode uint/int/bytes/string/address values as strings, boolean values as true/false. For arrays/tuples, encode based on contained type.`,
+    schema: DeployContractSchema,
+  })
+  async deployContract(
+    walletProvider: CdpWalletProvider,
+    args: z.infer<typeof DeployContractSchema>,
+  ): Promise<string> {
+    try {
+      const solidityVersion = SolidityVersions[args.solidityVersion];
+
+      const contract = await walletProvider.deployContract({
+        solidityVersion: solidityVersion,
+        solidityInputJson: args.solidityInputJson,
+        contractName: args.contractName,
+        constructorArgs: args.constructorArgs ?? {},
+      });
+
+      const result = await contract.wait();
+
+      return `Deployed contract ${args.contractName} at address ${result.getContractAddress()}. Transaction link: ${result
+        .getTransaction()!
+        .getTransactionLink()}`;
+    } catch (error) {
+      return `Error deploying contract: ${error}`;
     }
   }
 

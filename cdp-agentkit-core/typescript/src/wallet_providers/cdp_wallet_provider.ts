@@ -184,11 +184,15 @@ export class CdpWalletProvider extends EvmWalletProvider {
   /**
    * Gets the balance of the wallet.
    *
-   * @returns The balance of the wallet.
+   * @returns The balance of the wallet in wei
    */
   async getBalance(): Promise<bigint> {
-    // TODO: Implement
-    throw Error("Unimplemented");
+    if (!this.#cdpWallet) {
+      throw new Error("Wallet not initialized");
+    }
+
+    const balance = await this.#cdpWallet.getBalance('eth');
+    return BigInt(balance.mul(10 ** 18).toString());
   }
 
   /**
@@ -226,5 +230,24 @@ export class CdpWalletProvider extends EvmWalletProvider {
     }
 
     return this.#cdpWallet.deployToken(options);
+  }
+
+  /**
+   * Deploys a contract.
+   * 
+   * @param options - The options for contract deployment
+   * @returns The deployed contract
+   */
+  async deployContract(options: {
+    solidityVersion: string;
+    solidityInputJson: string;
+    contractName: string;
+    constructorArgs: Record<string, unknown>;
+  }): Promise<SmartContract> {
+    if (!this.#cdpWallet) {
+      throw new Error("Wallet not initialized");
+    }
+
+    return this.#cdpWallet.deployContract(options);
   }
 }
