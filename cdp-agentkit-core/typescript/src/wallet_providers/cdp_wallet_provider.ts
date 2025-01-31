@@ -269,15 +269,15 @@ export class CdpWalletProvider extends EvmWalletProvider {
    * @throws Error if the wallet is not properly initialized
    * @throws Error if the deployment fails for any reason (network issues, insufficient funds, etc.)
    */
-    async deployNFT(options: {
-      name: string;
-      symbol: string;
-      baseURI: string;
-    }): Promise<SmartContract> {
-      if (!this.#cdpWallet) {
-        throw new Error("Wallet not initialized");
-      }
-  
-      return this.#cdpWallet.deployNFT(options);
+  async deployNFT(options: {
+    name: string;
+    symbol: string;
+    baseURI: string;
+  }): Promise<SmartContract> {
+    if (!this.#cdpWallet) {
+      throw new Error("Wallet not initialized");
     }
+
+    return this.#cdpWallet.deployNFT(options);
+  }
 }
