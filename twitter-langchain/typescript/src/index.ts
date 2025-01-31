@@ -1,5 +1,5 @@
 // Export Twitter (X) tool
-export { TwitterTool } from "./twitter_tool";
+export { TwitterTool } from "./twitterTool";
 
 // Export Twitter (X) toolkit
-export { TwitterToolkit } from "./twitter_toolkit";
+export { TwitterToolkit } from "./twitterToolkit";

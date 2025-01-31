@@ -1,5 +1,5 @@
 import { encodeFunctionData } from "viem";
-import { EvmWalletProvider } from "./wallet_providers";
+import { EvmWalletProvider } from "./wallet-providers";
 
 const ERC20_ABI = [
   {
