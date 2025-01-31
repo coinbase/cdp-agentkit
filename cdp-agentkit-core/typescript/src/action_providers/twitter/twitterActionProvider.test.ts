@@ -17,27 +17,16 @@ const MOCK_TWEET_ID = "0123456789012345678";
 const MOCK_TWEET_REPLY = "Hello again!";
 
 describe("TwitterActionProvider", () => {
-  //   let mockApi: jest.Mocked<TwitterApi>;
   let mockClient: jest.Mocked<TwitterApiv2>;
   let provider: TwitterActionProvider;
 
   beforeEach(() => {
-    // Setup mock client
     mockClient = {
       me: jest.fn(),
       userMentionTimeline: jest.fn(),
       tweet: jest.fn(),
     } as unknown as jest.Mocked<TwitterApiv2>;
 
-    /*
-     * mockApi = {
-     *   get v2() {
-     *     return mockClient;
-     *   },
-     * } as unknown as jest.Mocked<TwitterApi>;
-     */
-
-    // Mock the TwitterApi constructor
     jest.spyOn(TwitterApi.prototype, "v2", "get").mockReturnValue(mockClient);
 
     provider = new TwitterActionProvider(MOCK_CONFIG);

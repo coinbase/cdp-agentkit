@@ -40,29 +40,23 @@ export class FarcasterActionProvider extends ActionProvider {
   constructor(config: FarcasterActionProviderConfig = {}) {
     super("farcaster", []);
 
-    if (config.neynarApiKey) {
-      this.neynarApiKey = config.neynarApiKey;
-    } else if (process.env.NEYNAR_API_KEY) {
-      this.neynarApiKey = process.env.NEYNAR_API_KEY;
-    } else {
+    const neynarApiKey = config.neynarApiKey || process.env.NEYNAR_API_KEY;
+    const signerUuid = config.signerUuid || process.env.NEYNAR_MANAGER_SIGNER;
+    const agentFid = config.agentFid || process.env.AGENT_FID;
+
+    if (!neynarApiKey) {
       throw new Error("NEYNAR_API_KEY is not configured.");
     }
-
-    if (config.signerUuid) {
-      this.signerUuid = config.signerUuid;
-    } else if (process.env.NEYNAR_MANAGER_SIGNER) {
-      this.signerUuid = process.env.NEYNAR_MANAGER_SIGNER;
-    } else {
+    if (!signerUuid) {
       throw new Error("NEYNAR_MANAGER_SIGNER is not configured.");
     }
-
-    if (config.agentFid) {
-      this.agentFid = config.agentFid;
-    } else if (process.env.AGENT_FID) {
-      this.agentFid = process.env.AGENT_FID;
-    } else {
+    if (!agentFid) {
       throw new Error("AGENT_FID is not configured.");
     }
+
+    this.neynarApiKey = neynarApiKey;
+    this.signerUuid = signerUuid;
+    this.agentFid = agentFid;
   }
 
   /**
