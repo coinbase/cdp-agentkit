@@ -83,7 +83,7 @@ describe("CDP Action Provider", () => {
 
       mockExternalAddressInstance.reputation.mockResolvedValue("Good reputation");
 
-      const result = await actionProvider.adderessReputation(args);
+      const result = await actionProvider.addressReputation(args);
 
       expect(ExternalAddress).toHaveBeenCalledWith(args.network, args.address);
       expect(ExternalAddress).toHaveBeenCalledTimes(1);
@@ -101,7 +101,7 @@ describe("CDP Action Provider", () => {
       const error = new Error("Reputation check failed");
       mockExternalAddressInstance.reputation.mockRejectedValue(error);
 
-      const result = await actionProvider.adderessReputation(args);
+      const result = await actionProvider.addressReputation(args);
 
       expect(ExternalAddress).toHaveBeenCalledWith(args.network, args.address);
       expect(ExternalAddress).toHaveBeenCalledTimes(1);
