@@ -40,7 +40,7 @@ describe("Wallet Action Provider", () => {
   * Network ID: ${MOCK_NETWORK.networkId}
   * Chain ID: ${MOCK_NETWORK.chainId}
 - ETH Balance: 1.000000 ETH
-- Native Balance: ${MOCK_BALANCE.toString()}`;
+- Native Balance: ${MOCK_BALANCE.toString()} WEI`;
 
       expect(response).toBe(expectedResponse);
     });
