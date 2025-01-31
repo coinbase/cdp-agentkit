@@ -9,7 +9,7 @@ import * as readline from "readline";
 import {
   AgentKit,
   ViemWalletProvider,
-  cdpActionProvider,
+  cdpApiActionProvider,
   erc721ActionProvider,
   pythActionProvider,
   walletActionProvider,
@@ -32,14 +32,15 @@ async function initializeAgent() {
       model: "gpt-4o-mini",
     });
 
-    const cdp = cdpActionProvider();
+    const cdp = cdpApiActionProvider({
+      apiKeyName: process.env.CDP_API_KEY_NAME,
+      apiKeyPrivateKey: process.env.CDP_API_KEY_PRIVATE_KEY,
+    });
     const erc721 = erc721ActionProvider();
     const pyth = pythActionProvider();
     const wallet = walletActionProvider();
 
     const agentKit = await AgentKit.from({
-      cdpApiKeyName: process.env.CDP_API_KEY_NAME,
-      cdpApiKeyPrivateKey: process.env.CDP_API_KEY_PRIVATE_KEY,
       walletProvider,
       actionProviders: [cdp, erc721, pyth, wallet],
     });
