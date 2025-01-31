@@ -75,7 +75,7 @@ export class WalletActionProvider extends ActionProvider {
   @CreateAction({
     name: "native_transfer",
     description: `
-This tool will transfer native tokensfrom the wallet to another onchain address.
+This tool will transfer native tokens from the wallet to another onchain address.
 
 It takes the following inputs:
 - amount: The amount to transfer in WEI
