@@ -1,5 +1,5 @@
 import { encodeFunctionData } from "viem";
-import { EvmWalletProvider } from "./wallet_providers";
+import { EvmWalletProvider } from "./wallet-providers";
 import { approve } from "./utils";
 
 const MOCK_TOKEN_ADDRESS = "0x1234567890123456789012345678901234567890";

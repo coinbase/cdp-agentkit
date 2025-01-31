@@ -1,5 +1,5 @@
 // Export Farcaster tool
-export { FarcasterTool } from "./farcaster_tool";
+export { FarcasterTool } from "./farcasterTool";
 
 // Export Farcaster toolkit
-export { FarcasterToolkit } from "./farcaster_toolkit";
+export { FarcasterToolkit } from "./farcasterToolkit";

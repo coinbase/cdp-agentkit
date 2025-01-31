@@ -1,5 +1,5 @@
-import { WalletProvider, CdpWalletProvider } from "./wallet_providers";
-import { Action, ActionProvider } from "./action_providers";
+import { WalletProvider, CdpWalletProvider } from "./wallet-providers";
+import { Action, ActionProvider } from "./action-providers";
 
 /**
  * Configuration options for AgentKit
