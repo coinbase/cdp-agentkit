@@ -26,8 +26,9 @@ async function initializeAgent() {
     });
     const erc721 = erc721ActionProvider();
     const pyth = pythActionProvider();
+    const wallet = walletActionProvider();
 
-    const agentKit = new AgentKit({ walletProvider, actionProviders: [pyth, cdp, erc721] });
+    const agentKit = new AgentKit({ walletProvider, actionProviders: [pyth, cdp, erc721, wallet] });
     const actions = agentKit.getActions();
     for (const action of actions) {
       console.log(action.name);
@@ -192,6 +193,7 @@ import {
   ViemWalletProvider,
   cdpActionProvider,
   erc721ActionProvider,
+  walletActionProvider,
 } from "@coinbase/cdp-agentkit-core";
 import { createWalletClient, http } from "viem";
 import { baseSepolia } from "viem/chains";
