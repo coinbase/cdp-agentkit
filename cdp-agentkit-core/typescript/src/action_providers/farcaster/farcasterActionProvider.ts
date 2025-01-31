@@ -72,7 +72,7 @@ export class FarcasterActionProvider extends ActionProvider {
    * @returns A message containing account details for the agent's Farcaster account.
    */
   @CreateAction({
-    name: "farcaster_account_details",
+    name: "account_details",
     description: `
 This tool will retrieve the account details for the agent's Farcaster account.
 The tool takes the FID of the agent's account.
@@ -114,7 +114,7 @@ A failure response will return a message with the Farcaster API request error:
    * @returns A message indicating the success or failure of the cast posting.
    */
   @CreateAction({
-    name: "farcaster_post_cast",
+    name: "post_cast",
     description: `
 This tool will post a cast to Farcaster. The tool takes the text of the cast as input. Casts can be maximum 280 characters.
 
