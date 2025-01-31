@@ -6,6 +6,18 @@ import { HumanMessage } from "@langchain/core/messages";
 import * as dotenv from "dotenv";
 import * as readline from "readline";
 
+import {
+  AgentKit,
+  ViemWalletProvider,
+  cdpActionProvider,
+  erc721ActionProvider,
+  pythActionProvider,
+  walletActionProvider,
+} from "@coinbase/cdp-agentkit-core";
+import { createWalletClient, http } from "viem";
+import { baseSepolia } from "viem/chains";
+import { privateKeyToAccount } from "viem/accounts";
+
 dotenv.config();
 
 /**
@@ -26,12 +38,11 @@ async function initializeAgent() {
     });
     const erc721 = erc721ActionProvider();
     const pyth = pythActionProvider();
-    const twitter = twitterActionProvider();
     const wallet = walletActionProvider();
 
     const agentKit = new AgentKit({
       walletProvider,
-      actionProviders: [cdp, erc721, pyth, twitter, wallet],
+      actionProviders: [cdp, erc721, pyth, wallet],
     });
     const actions = agentKit.getActions();
     for (const action of actions) {
@@ -190,19 +201,6 @@ async function chooseMode(): Promise<"chat" | "auto"> {
     console.log("Invalid choice. Please try again.");
   }
 }
-
-import {
-  AgentKit,
-  ViemWalletProvider,
-  cdpActionProvider,
-  erc721ActionProvider,
-  pythActionProvider,
-  twitterActionProvider,
-  walletActionProvider,
-} from "@coinbase/cdp-agentkit-core";
-import { createWalletClient, http } from "viem";
-import { baseSepolia } from "viem/chains";
-import { privateKeyToAccount } from "viem/accounts";
 
 const account = privateKeyToAccount(
   "0x4c0883a69102937d6231471b5dbb6208ffd70c02a813d7f2da1c54f2e3be9f38",
