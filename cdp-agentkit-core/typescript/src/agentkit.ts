@@ -1,5 +1,5 @@
 import { WalletProvider, CdpWalletProvider } from "./wallet-providers";
-import { Action, ActionProvider } from "./action-providers";
+import { Action, ActionProvider, walletActionProvider } from "./action-providers";
 
 /**
  * Configuration options for AgentKit
@@ -17,7 +17,7 @@ type AgentKitOptions = {
  */
 export class AgentKit {
   private walletProvider: WalletProvider;
-  private actionProviders?: ActionProvider[];
+  private actionProviders: ActionProvider[];
   private actions?: Action[];
 
   /**
@@ -30,7 +30,7 @@ export class AgentKit {
    */
   private constructor(config: AgentKitOptions & { walletProvider: WalletProvider }) {
     this.walletProvider = config.walletProvider;
-    this.actionProviders = config.actionProviders || [];
+    this.actionProviders = config.actionProviders || [walletActionProvider()];
     this.actions = config.actions || [];
   }
 
@@ -44,7 +44,9 @@ export class AgentKit {
    *
    * @returns A new AgentKit instance
    */
-  public static async from(config: AgentKitOptions = {}): Promise<AgentKit> {
+  public static async from(
+    config: AgentKitOptions = { actionProviders: [walletActionProvider()] },
+  ): Promise<AgentKit> {
     let walletProvider: WalletProvider | undefined = config.walletProvider;
 
     if (!config.walletProvider) {
@@ -71,11 +73,9 @@ export class AgentKit {
   public getActions(): Action[] {
     let actions: Action[] = this.actions || [];
 
-    if (this.actionProviders) {
-      for (const actionProvider of this.actionProviders) {
-        if (actionProvider.supportsNetwork(this.walletProvider.getNetwork())) {
-          actions = actions.concat(actionProvider.getActions(this.walletProvider));
-        }
+    for (const actionProvider of this.actionProviders) {
+      if (actionProvider.supportsNetwork(this.walletProvider.getNetwork())) {
+        actions = actions.concat(actionProvider.getActions(this.walletProvider));
       }
     }
 
