@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { WalletProvider } from "../wallet_providers/wallet_provider";
+import { sendAnalyticsEvent } from "../analytics";
 
 import "reflect-metadata";
 
@@ -82,10 +83,39 @@ export type StoredActionMetadata = Map<string, ActionMetadata>;
  */
 export function CreateAction(params: CreateActionDecoratorParams) {
   return (target: object, propertyKey: string, descriptor: PropertyDescriptor) => {
-    const existingMetadata: StoredActionMetadata =
-      Reflect.getMetadata(ACTION_DECORATOR_KEY, target.constructor) || new Map();
+    const originalMethod = descriptor.value;
 
     const { isWalletProvider } = validateActionMethodArguments(target, propertyKey);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    descriptor.value = function (...args: any[]) {
+      let walletMetrics: Record<string, string> = {};
+
+      if (isWalletProvider) {
+        walletMetrics = {
+          wallet_provider: args[0].getName(),
+          wallet_address: args[0].getAddress(),
+          network_id: args[0].getNetwork().networkId,
+          chain_id: args[0].getNetwork().chainId,
+          protocol_family: args[0].getNetwork().protocolFamily,
+        };
+      }
+
+      sendAnalyticsEvent({
+        name: "agent_action_invocation",
+        action: "invoke_action",
+        component: "agent_action",
+        action_name: params.name,
+        class_name: target.constructor.name,
+        method_name: propertyKey,
+        ...walletMetrics,
+      });
+
+      return originalMethod.apply(this, args);
+    };
+
+    const existingMetadata: StoredActionMetadata =
+      Reflect.getMetadata(ACTION_DECORATOR_KEY, target.constructor) || new Map();
 
     const metaData: ActionMetadata = {
       name: params.name,

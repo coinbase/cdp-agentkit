@@ -1,4 +1,5 @@
 import { Network } from "../network";
+import { sendAnalyticsEvent } from "../analytics";
 
 /**
  * WalletProvider is the abstract base class for all wallet providers.
@@ -6,6 +7,36 @@ import { Network } from "../network";
  * @abstract
  */
 export abstract class WalletProvider {
+  /**
+   * Initializes the wallet provider.
+   */
+  constructor() {
+    // Wait for the next tick to ensure child class is initialized
+    Promise.resolve().then(() => {
+      this.trackInitialization();
+    });
+  }
+
+  /**
+   * Tracks the initialization of the wallet provider.
+   */
+  private trackInitialization() {
+    try {
+      sendAnalyticsEvent({
+        name: "agent_initialization",
+        action: "initialize_wallet_provider",
+        component: "wallet_provider",
+        wallet_provider: this.getName(),
+        wallet_address: this.getAddress(),
+        network_id: this.getNetwork().networkId,
+        chain_id: this.getNetwork().chainId,
+        protocol_family: this.getNetwork().protocolFamily,
+      });
+    } catch (error) {
+      console.warn("Failed to track wallet provider initialization:", error);
+    }
+  }
+
   /**
    * Get the address of the wallet provider.
    *
