@@ -92,8 +92,10 @@ Important notes:
     args: z.infer<typeof NativeTransferSchema>,
   ): Promise<string> {
     try {
-      const amount = BigInt(new Decimal(args.amount).mul(new Decimal(10).pow(18)).toString());
-      const result = await walletProvider.nativeTransfer(amount, args.destination as `0x${string}`);
+      const result = await walletProvider.nativeTransfer(
+        args.amount,
+        args.destination as `0x${string}`,
+      );
 
       return `Transferred ${args.amount} ETH to ${args.destination}.\nTransaction hash: ${result}`;
     } catch (error) {

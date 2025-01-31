@@ -71,7 +71,6 @@ describe("Wallet Action Provider", () => {
   describe("Native Transfer", () => {
     const MOCK_AMOUNT = "1.5"; // 1.5 ETH
     const MOCK_DESTINATION = "0x321";
-    const MOCK_WEI_AMOUNT = "1500000000000000000"; // 1.5 ETH in WEI
 
     it("should successfully parse valid input", () => {
       const validInput = {
@@ -103,7 +102,7 @@ describe("Wallet Action Provider", () => {
       const response = await actionProvider.nativeTransfer(mockWallet, args);
 
       expect(mockWallet.nativeTransfer).toHaveBeenCalledWith(
-        BigInt(MOCK_WEI_AMOUNT),
+        MOCK_AMOUNT,
         MOCK_DESTINATION,
       );
       expect(response).toBe(
