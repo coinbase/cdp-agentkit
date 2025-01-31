@@ -32,18 +32,18 @@ async function initializeAgent() {
       model: "gpt-4o-mini",
     });
 
-    const cdp = cdpActionProvider({
-      apiKeyName: process.env.CDP_API_KEY_NAME,
-      apiKeyPrivateKey: process.env.CDP_API_KEY_PRIVATE_KEY,
-    });
+    const cdp = cdpActionProvider();
     const erc721 = erc721ActionProvider();
     const pyth = pythActionProvider();
     const wallet = walletActionProvider();
 
-    const agentKit = new AgentKit({
+    const agentKit = await AgentKit.from({
+      cdpApiKeyName: process.env.CDP_API_KEY_NAME,
+      cdpApiKeyPrivateKey: process.env.CDP_API_KEY_PRIVATE_KEY,
       walletProvider,
       actionProviders: [cdp, erc721, pyth, wallet],
     });
+
     const actions = agentKit.getActions();
     for (const action of actions) {
       console.log(action.name);

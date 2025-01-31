@@ -1,42 +1,19 @@
 import { z } from "zod";
 import { ActionProvider } from "../action_provider";
-import { EvmWalletProvider } from "../../wallet_providers";
+import { CdpWalletProvider } from "../../wallet_providers";
 import { CreateAction } from "../action_decorator";
-import { Coinbase, ExternalAddress } from "@coinbase/coinbase-sdk";
-import { AddressReputationSchema, RequestFaucetFundsSchema } from "./schemas";
+import { ExternalAddress } from "@coinbase/coinbase-sdk";
+import { AddressReputationSchema, DeployTokenSchema, RequestFaucetFundsSchema } from "./schemas";
 import { Network } from "../../network";
-
-/**
- * Configuration options for the CdpActionProvider.
- */
-export interface CdpActionProviderConfig {
-  /**
-   * CDP API Key Name.
-   */
-  apiKeyName?: string;
-
-  /**
-   * CDP API Key Private Key.
-   */
-  apiKeyPrivateKey?: string;
-}
 
 /**
  * CdpActionProvider is an action provider for Cdp.
  */
-export class CdpActionProvider extends ActionProvider {
+export class CdpActionProvider extends ActionProvider<CdpWalletProvider> {
   /**
    * Constructor for the CdpActionProvider class.
-   *
-   * @param config - The configuration options for the CdpActionProvider.
    */
-  constructor(config: CdpActionProviderConfig = {}) {
-    if (config.apiKeyName && config.apiKeyPrivateKey) {
-      Coinbase.configure({ apiKeyName: config.apiKeyName, privateKey: config.apiKeyPrivateKey });
-    } else {
-      Coinbase.configureFromJson();
-    }
-
+  constructor() {
     super("cdp", []);
   }
 
@@ -67,6 +44,39 @@ This tool checks the reputation of an address on a given network. It takes:
   }
 
   /**
+   * Deploys a token.
+   *
+   * @param walletProvider - The wallet provider to deploy the token.
+   * @param args - The arguments for the token deployment.
+   * @returns The deployed token.
+   */
+  @CreateAction({
+    name: "deploy_token",
+    description: `This tool will deploy an ERC20 token smart contract. It takes the token name, symbol, and total supply as input. 
+The token will be deployed using the wallet's default address as the owner and initial token holder.`,
+    schema: DeployTokenSchema,
+  })
+  async deployToken(walletProvider: CdpWalletProvider, args: z.infer<typeof DeployTokenSchema>) {
+    try {
+      const tokenContract = await walletProvider.deployToken({
+        name: args.name,
+        symbol: args.symbol,
+        totalSupply: args.totalSupply,
+      });
+
+      const result = await tokenContract.wait();
+
+      return `Deployed ERC20 token contract ${args.name} (${args.symbol}) with total supply of ${
+        args.totalSupply
+      } tokens at address ${result.getContractAddress()}. Transaction link: ${result
+        .getTransaction()!
+        .getTransactionLink()}`;
+    } catch (error) {
+      return `Error deploying token: ${error}`;
+    }
+  }
+
+  /**
    * Requests test tokens from the faucet for the default address in the wallet.
    *
    * @param walletProvider - The wallet provider to request funds from.
@@ -82,7 +92,7 @@ from another wallet and provide the user with your wallet details.`,
     schema: RequestFaucetFundsSchema,
   })
   async faucet(
-    walletProvider: EvmWalletProvider,
+    walletProvider: CdpWalletProvider,
     args: z.infer<typeof RequestFaucetFundsSchema>,
   ): Promise<string> {
     try {
@@ -113,5 +123,4 @@ from another wallet and provide the user with your wallet details.`,
   supportsNetwork = (_: Network) => true;
 }
 
-export const cdpActionProvider = (config: CdpActionProviderConfig = {}) =>
-  new CdpActionProvider(config);
+export const cdpActionProvider = () => new CdpActionProvider();

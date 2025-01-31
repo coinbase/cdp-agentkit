@@ -15,15 +15,17 @@ jest.mock("@coinbase/cdp-agentkit-core", () => {
   const originalModule = jest.requireActual("@coinbase/cdp-agentkit-core");
   return {
     ...originalModule,
-    AgentKit: jest.fn().mockImplementation(() => ({
-      getActions: jest.fn(() => [mockAction]),
-    })),
+    AgentKit: {
+      from: jest.fn().mockImplementation(() => ({
+        getActions: jest.fn(() => [mockAction]),
+      })),
+    },
   };
 });
 
 describe("getLangChainTools", () => {
   it("should return an array of tools with correct properties", async () => {
-    const mockAgentKit = new AgentKit();
+    const mockAgentKit = await AgentKit.from({});
     const tools = await getLangChainTools(mockAgentKit);
 
     expect(tools).toHaveLength(1);
