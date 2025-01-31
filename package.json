@@ -4,7 +4,8 @@
   "workspaces": [
     "cdp-agentkit-core/typescript",
     "cdp-langchain/typescript",
-    "cdp-langchain/examples/chatbot-typescript"
+    "cdp-langchain/examples/chatbot-typescript",
+    "cdp-langchain/examples/twitter-typescript"
   ],
   "packageManager": "npm@8.9.0",
   "scripts": {
