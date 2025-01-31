@@ -1,6 +1,7 @@
 // TODO: Remove this once we have a real implementation
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import { Decimal } from "decimal.js";
 import { ReadContractParameters, ReadContractReturnType, TransactionRequest } from "viem";
 import { EvmWalletProvider } from "./evmWalletProvider";
 import { Network } from "../network";
@@ -295,5 +296,35 @@ export class CdpWalletProvider extends EvmWalletProvider {
     }
 
     return this.#cdpWallet.deployNFT(options);
+  }
+
+  /**
+   * Transfer the native asset of the network.
+   *
+   * @param amount - The amount to transfer in Wei.
+   * @param destination - The destination address.
+   */
+  async nativeTransfer(amount: bigint, destination: `0x${string}`): Promise<`0x${string}`> {
+    if (!this.#cdpWallet) {
+      throw new Error("Wallet not initialized");
+    }
+
+    // Convert from Wei to ETH using Decimal for precision
+    const ethAmount = new Decimal(amount.toString()).div(new Decimal(10).pow(18))
+
+    const transferResult = await this.#cdpWallet.createTransfer({
+      amount: ethAmount,
+      assetId: Coinbase.assets.Eth,
+      destination: destination,
+      gasless: false,
+    });
+
+    const result = await transferResult.wait();
+
+    if (!result.getTransactionHash()) {
+      throw new Error("Transaction hash not found");
+    }
+
+    return result.getTransactionHash() as `0x${string}`;
   }
 }

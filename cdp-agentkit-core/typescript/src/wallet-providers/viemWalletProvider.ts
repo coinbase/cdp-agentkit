@@ -171,4 +171,29 @@ export class ViemWalletProvider extends EvmWalletProvider {
   async readContract(params: ReadContractParameters): Promise<ReadContractReturnType> {
     return this.#publicClient.readContract(params);
   }
+
+  /**
+   * Transfer the native asset of the network.
+   *
+   * @param amount - The amount to transfer.
+   * @param destination - The destination address.
+   */
+  async nativeTransfer(amount: bigint, destination: `0x${string}`): Promise<`0x${string}`> {
+    const account = this.#walletClient.account;
+    if (!account) {
+      throw new Error("Account not found");
+    }
+
+    const chain = this.#walletClient.chain;
+    if (!chain) {
+      throw new Error("Chain not found");
+    }
+
+    return this.#walletClient.sendTransaction({
+      account: account,
+      chain: chain,
+      to: destination,
+      value: amount,
+    });
+  }
 }

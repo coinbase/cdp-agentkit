@@ -64,4 +64,12 @@ export abstract class WalletProvider {
    * @returns The balance of the native asset of the network.
    */
   abstract getBalance(): Promise<bigint>;
+
+  /**
+   * Transfer the native asset of the network.
+   *
+   * @param amount - The amount to transfer.
+   * @param destination - The destination address.
+   */
+  abstract nativeTransfer(amount: bigint, destination: `0x${string}`): Promise<`0x${string}`>;
 }
