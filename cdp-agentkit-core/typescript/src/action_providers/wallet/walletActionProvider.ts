@@ -62,7 +62,7 @@ export class WalletActionProvider extends ActionProvider {
   * Network ID: ${network.networkId || "N/A"}
   * Chain ID: ${network.chainId || "N/A"}
 - ETH Balance: ${ethBalance.toFixed(6)} ETH
-- Native Balance: ${balance.toString()}`;
+- Native Balance: ${balance.toString()} WEI`;
     } catch (error) {
       return `Error getting wallet details: ${error}`;
     }
