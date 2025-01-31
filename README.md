@@ -25,17 +25,17 @@
 
 ## Table of Contents
 
-- [📖 Overview](#overview)
-- [🚀 Quickstart](#quickstart)
-  - [Python](#python)
-  - [Node.js](#nodejs)
-- [🗂 Repository Structure](#repository-structure)
-- [🤝 Contributing](#contributing)
-- [📜 Documentation](#documentation)
-- [🚨 Security and bug reports](#security-and-bug-reports)
-- [📧 Contact](#contact)
-- [📝 License](#license)
-- [🔒 Legal and Privacy](#legal-and-privacy)
+- [📖 Overview](#-overview)
+- [🚀 Quickstart](#-quickstart)
+  - [Python](#-python)
+  - [Node.js](#-nodejs)
+- [🗂 Repository Structure](#-repository-structure)
+- [🤝 Contributing](#-contributing)
+- [📜 Documentation](#-documentation)
+- [🚨 Security and bug reports](#-security-and-bug-reports)
+- [📧 Contact](#-contact)
+- [📝 License](#-license)
+- [🔒 Legal and Privacy](#-legal-and-privacy)
 
 ## 📖 Overview
 
@@ -186,10 +186,12 @@ See [Twitter Langchain](./twitter-langchain/README.md) to get started!
 ## 📜 Documentation
 
 - [AgentKit Documentation](https://docs.cdp.coinbase.com/agentkit/docs/welcome)
-- [API Reference: AgentKit Core Python](https://coinbase.github.io/agentkit/cdp-agentkit-core/python/index.html)
-- [API Reference: AgentKit LangChain Extension Python](https://coinbase.github.io/agentkit/cdp-langchain/python/index.html)
-- [API Reference: AgentKit Core Node.js](https://coinbase.github.io/agentkit/cdp-agentkit-core/typescript/index.html)
-- [API Reference: AgentKit LangChain Extension Node.js](https://coinbase.github.io/agentkit/cdp-langchain/typescript/index.html)
+- Python API References
+  - [AgentKit Core](https://coinbase.github.io/agentkit/cdp-agentkit-core/python/index.html)
+  - [AgentKit Langchain Extension](https://coinbase.github.io/agentkit/cdp-langchain/python/index.html)
+- Node.js API References
+  - [AgentKit Core](https://coinbase.github.io/agentkit/cdp-agentkit-core/typescript/index.html)
+  - [AgentKit Langchain Extension](https://coinbase.github.io/agentkit/cdp-langchain/typescript/index.html)
 
 ## 🚨 Security and Bug Reports
 
