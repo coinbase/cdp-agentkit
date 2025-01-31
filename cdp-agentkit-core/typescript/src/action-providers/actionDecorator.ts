@@ -83,6 +83,8 @@ export type StoredActionMetadata = Map<string, ActionMetadata>;
  */
 export function CreateAction(params: CreateActionDecoratorParams) {
   return (target: object, propertyKey: string, descriptor: PropertyDescriptor) => {
+    const prefixedActionName = `${target.constructor.name}.${params.name}`;
+
     const originalMethod = descriptor.value;
 
     const { isWalletProvider } = validateActionMethodArguments(target, propertyKey);
@@ -105,7 +107,7 @@ export function CreateAction(params: CreateActionDecoratorParams) {
         name: "agent_action_invocation",
         action: "invoke_action",
         component: "agent_action",
-        action_name: params.name,
+        action_name: prefixedActionName,
         class_name: target.constructor.name,
         method_name: propertyKey,
         ...walletMetrics,
@@ -118,7 +120,7 @@ export function CreateAction(params: CreateActionDecoratorParams) {
       Reflect.getMetadata(ACTION_DECORATOR_KEY, target.constructor) || new Map();
 
     const metaData: ActionMetadata = {
-      name: params.name,
+      name: prefixedActionName,
       description: params.description,
       schema: params.schema,
       invoke: descriptor.value,
