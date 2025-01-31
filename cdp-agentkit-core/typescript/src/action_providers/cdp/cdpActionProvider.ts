@@ -56,7 +56,7 @@ This tool checks the reputation of an address on a given network. It takes:
 `,
     schema: AddressReputationSchema,
   })
-  async adderessReputation(args: z.infer<typeof AddressReputationSchema>): Promise<string> {
+  async addressReputation(args: z.infer<typeof AddressReputationSchema>): Promise<string> {
     try {
       const address = new ExternalAddress(args.network, args.address);
       const reputation = await address.reputation();
