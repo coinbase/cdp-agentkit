@@ -2,7 +2,7 @@ import { z } from "zod";
 import { ActionProvider } from "../action_provider";
 import { CreateAction } from "../action_decorator";
 import { TwitterApi, TwitterApiTokens } from "twitter-api-v2";
-import { Network } from "../../wallet_providers/wallet_provider";
+import { Network } from "../../network";
 import {
   TwitterAccountDetailsSchema,
   TwitterAccountMentionsSchema,

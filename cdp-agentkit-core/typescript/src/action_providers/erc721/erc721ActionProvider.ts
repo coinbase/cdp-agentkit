@@ -1,10 +1,11 @@
 import { z } from "zod";
 import { ActionProvider } from "../action_provider";
-import { Network, EvmWalletProvider } from "../../wallet_providers";
+import { EvmWalletProvider } from "../../wallet_providers";
 import { CreateAction } from "../action_decorator";
 import { GetBalanceSchema, MintSchema, TransferSchema } from "./schemas";
 import { ERC721_ABI } from "./constants";
 import { encodeFunctionData, Hex } from "viem";
+import { Network } from "../../network";
 
 /**
  * Erc721ActionProvider is an action provider for Erc721 contract interactions.
