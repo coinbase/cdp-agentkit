@@ -6,10 +6,17 @@ import { HumanMessage } from "@langchain/core/messages";
 import * as dotenv from "dotenv";
 import * as readline from "readline";
 
-import { AgentKit, ViemWalletProvider, walletActionProvider } from "@coinbase/cdp-agentkit-core";
+import {
+  AgentKit,
+  ViemWalletProvider,
+  cdpActionProvider,
+  erc721ActionProvider,
+  pythActionProvider,
+  walletActionProvider,
+} from "@coinbase/cdp-agentkit-core";
 import { createWalletClient, http } from "viem";
 import { baseSepolia } from "viem/chains";
-import { mnemonicToAccount, privateKeyToAccount } from "viem/accounts";
+import { privateKeyToAccount } from "viem/accounts";
 
 dotenv.config();
 
@@ -25,13 +32,16 @@ async function initializeAgent() {
       model: "gpt-4o-mini",
     });
 
+    const cdp = cdpActionProvider();
+    const erc721 = erc721ActionProvider();
+    const pyth = pythActionProvider();
     const wallet = walletActionProvider();
 
     const agentKit = await AgentKit.from({
       cdpApiKeyName: process.env.CDP_API_KEY_NAME,
-      cdpApiKeyPrivateKey: process.env.CDP_API_KEY_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+      cdpApiKeyPrivateKey: process.env.CDP_API_KEY_PRIVATE_KEY,
       walletProvider,
-      actionProviders: [wallet],
+      actionProviders: [cdp, erc721, pyth, wallet],
     });
 
     const actions = agentKit.getActions();
@@ -192,13 +202,10 @@ async function chooseMode(): Promise<"chat" | "auto"> {
   }
 }
 
-/*
- * const account = privateKeyToAccount(
- *   "0x4c0883a69102937d6231471b5dbb6208ffd70c02a813d7f2da1c54f2e3be9f38",
- * );
- */
+const account = privateKeyToAccount(
+  "0x4c0883a69102937d6231471b5dbb6208ffd70c02a813d7f2da1c54f2e3be9f38",
+);
 
-const account = mnemonicToAccount(process.env.MNEMONIC_PHRASE!);
 const client = createWalletClient({
   account,
   chain: baseSepolia,
