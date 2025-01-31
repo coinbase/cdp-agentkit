@@ -9,6 +9,7 @@ import {
   PublicClient as ViemPublicClient,
   ReadContractParameters,
   ReadContractReturnType,
+  parseEther,
 } from "viem";
 import { EvmWalletProvider } from "./evmWalletProvider";
 import { Network } from "../network";
@@ -91,12 +92,22 @@ export class ViemWalletProvider extends EvmWalletProvider {
    * @returns The hash of the transaction.
    */
   async sendTransaction(transaction: TransactionRequest): Promise<`0x${string}`> {
+    const account = this.#walletClient.account;
+    if (!account) {
+      throw new Error("Account not found");
+    }
+
+    const chain = this.#walletClient.chain;
+    if (!chain) {
+      throw new Error("Chain not found");
+    }
+
     const txParams = {
-      account: this.#walletClient.account!,
+      account: account,
+      chain: chain,
+      data: transaction.data,
       to: transaction.to,
       value: transaction.value,
-      data: transaction.data,
-      chain: this.#walletClient.chain,
     };
 
     return this.#walletClient.sendTransaction(txParams);
@@ -170,5 +181,29 @@ export class ViemWalletProvider extends EvmWalletProvider {
    */
   async readContract(params: ReadContractParameters): Promise<ReadContractReturnType> {
     return this.#publicClient.readContract(params);
+  }
+
+  /**
+   * Transfer the native asset of the network.
+   *
+   * @param to - The destination address.
+   * @param value - The amount to transfer in whole units (e.g. ETH)
+   * @returns The transaction hash.
+   */
+  async nativeTransfer(to: `0x${string}`, value: string): Promise<`0x${string}`> {
+    const atomicAmount = parseEther(value);
+
+    const tx = await this.sendTransaction({
+      to: to,
+      value: atomicAmount,
+    });
+
+    const receipt = await this.waitForTransactionReceipt(tx);
+
+    if (!receipt) {
+      throw new Error("Transaction failed");
+    }
+
+    return receipt.transactionHash;
   }
 }

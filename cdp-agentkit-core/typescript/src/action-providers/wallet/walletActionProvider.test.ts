@@ -1,5 +1,6 @@
 import { WalletProvider } from "../../wallet-providers";
 import { walletActionProvider } from "./walletActionProvider";
+import { NativeTransferSchema } from "./schemas";
 
 describe("Wallet Action Provider", () => {
   const MOCK_ADDRESS = "0xe6b2af36b3bb8d47206a129ff11d5a2de2a63c83";
@@ -10,6 +11,7 @@ describe("Wallet Action Provider", () => {
     chainId: "123",
   };
   const MOCK_PROVIDER_NAME = "TestWallet";
+  const MOCK_TRANSACTION_HASH = "0xghijkl987654321";
 
   let mockWallet: jest.Mocked<WalletProvider>;
   const actionProvider = walletActionProvider();
@@ -20,6 +22,7 @@ describe("Wallet Action Provider", () => {
       getNetwork: jest.fn().mockReturnValue(MOCK_NETWORK),
       getBalance: jest.fn().mockResolvedValue(MOCK_BALANCE),
       getName: jest.fn().mockReturnValue(MOCK_PROVIDER_NAME),
+      nativeTransfer: jest.fn().mockResolvedValue(MOCK_TRANSACTION_HASH),
     } as unknown as jest.Mocked<WalletProvider>;
   });
 
@@ -62,6 +65,59 @@ describe("Wallet Action Provider", () => {
 
       const response = await actionProvider.getWalletDetails(mockWallet, {});
       expect(response).toBe(`Error getting wallet details: ${error}`);
+    });
+  });
+
+  describe("Native Transfer", () => {
+    const MOCK_AMOUNT = "1.5"; // 1.5 ETH
+    const MOCK_DESTINATION = "0x321";
+
+    it("should successfully parse valid input", () => {
+      const validInput = {
+        to: MOCK_DESTINATION,
+        value: MOCK_AMOUNT,
+      };
+
+      const result = NativeTransferSchema.safeParse(validInput);
+
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data).toEqual(validInput);
+      }
+    });
+
+    it("should fail parsing empty input", () => {
+      const emptyInput = {};
+      const result = NativeTransferSchema.safeParse(emptyInput);
+
+      expect(result.success).toBe(false);
+    });
+
+    it("should successfully transfer assets", async () => {
+      const args = {
+        to: MOCK_DESTINATION,
+        value: MOCK_AMOUNT,
+      };
+
+      const response = await actionProvider.nativeTransfer(mockWallet, args);
+
+      expect(mockWallet.nativeTransfer).toHaveBeenCalledWith(MOCK_DESTINATION, MOCK_AMOUNT);
+      expect(response).toBe(
+        `Transferred ${MOCK_AMOUNT} ETH to ${MOCK_DESTINATION}.\nTransaction hash: ${MOCK_TRANSACTION_HASH}`,
+      );
+    });
+
+    it("should handle transfer errors", async () => {
+      const args = {
+        to: MOCK_DESTINATION,
+        value: MOCK_AMOUNT,
+      };
+
+      const error = new Error("Failed to execute transfer");
+      mockWallet.nativeTransfer.mockRejectedValue(error);
+
+      const response = await actionProvider.nativeTransfer(mockWallet, args);
+      expect(response).toBe(`Error transferring the asset: ${error}`);
     });
   });
 

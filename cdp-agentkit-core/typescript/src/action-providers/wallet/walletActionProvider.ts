@@ -1,15 +1,12 @@
 import { Decimal } from "decimal.js";
 import { z } from "zod";
+
+import { CreateAction } from "../actionDecorator";
 import { ActionProvider } from "../actionProvider";
 import { WalletProvider } from "../../wallet-providers";
-import { CreateAction } from "../actionDecorator";
 import { Network } from "../../network";
 
-/**
- * Schema for the get_wallet_details action.
- * This action doesn't require any input parameters, so we use an empty object schema.
- */
-const GetWalletDetailsSchema = z.object({});
+import { NativeTransferSchema, GetWalletDetailsSchema } from "./schemas";
 
 /**
  * WalletActionProvider provides actions for getting basic wallet information.
@@ -65,6 +62,41 @@ export class WalletActionProvider extends ActionProvider {
 - Native Balance: ${balance.toString()} WEI`;
     } catch (error) {
       return `Error getting wallet details: ${error}`;
+    }
+  }
+
+  /**
+   * Transfers a specified amount of an asset to a destination onchain.
+   *
+   * @param walletProvider - The wallet provider to transfer from.
+   * @param args - The input arguments for the action.
+   * @returns A message containing the transfer details.
+   */
+  @CreateAction({
+    name: "native_transfer",
+    description: `
+This tool will transfer native tokens from the wallet to another onchain address.
+
+It takes the following inputs:
+- amount: The amount to transfer in whole units e.g. 1 ETH or 0.00001 ETH
+- destination: The address to receive the funds
+
+Important notes:
+- Ensure sufficient balance of the input asset before transferring
+- Ensure there is sufficient native token balance for gas fees
+`,
+    schema: NativeTransferSchema,
+  })
+  async nativeTransfer(
+    walletProvider: WalletProvider,
+    args: z.infer<typeof NativeTransferSchema>,
+  ): Promise<string> {
+    try {
+      const result = await walletProvider.nativeTransfer(args.to as `0x${string}`, args.value);
+
+      return `Transferred ${args.value} ETH to ${args.to}.\nTransaction hash: ${result}`;
+    } catch (error) {
+      return `Error transferring the asset: ${error}`;
     }
   }
 
