@@ -1,3 +1,4 @@
+import { Decimal } from "decimal.js";
 import { z } from "zod";
 import { ActionProvider } from "../action_provider";
 import { WalletProvider } from "../../wallet_providers/wallet_provider";
@@ -34,6 +35,7 @@ export class WalletActionProvider extends ActionProvider {
     This tool will return the details of the connected wallet including:
     - Wallet address
     - Network information (protocol family, network ID, chain ID)
+    - ETH token balance
     - Native token balance
     - Wallet provider name
     `,
@@ -49,6 +51,9 @@ export class WalletActionProvider extends ActionProvider {
       const balance = await walletProvider.getBalance();
       const name = walletProvider.getName();
 
+      // Convert balance from Wei to ETH using Decimal for precision
+      const ethBalance = new Decimal(balance.toString()).div(new Decimal(10).pow(18));
+
       return `Wallet Details:
 - Provider: ${name}
 - Address: ${address}
@@ -56,7 +61,8 @@ export class WalletActionProvider extends ActionProvider {
   * Protocol Family: ${network.protocolFamily}
   * Network ID: ${network.networkId || "N/A"}
   * Chain ID: ${network.chainId || "N/A"}
-- Native Balance: ${balance.toString()}`;
+- ETH Balance: ${ethBalance.toFixed(6)} ETH
+- Native Balance: ${balance.toString()} WEI`;
     } catch (error) {
       return `Error getting wallet details: ${error}`;
     }
