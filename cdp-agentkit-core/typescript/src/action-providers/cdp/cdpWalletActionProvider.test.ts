@@ -1,7 +1,7 @@
 import { CdpWalletProvider } from "../../wallet-providers";
 import { CdpWalletActionProvider } from "./cdpWalletActionProvider";
 import { DeployNftSchema, DeployTokenSchema, DeployContractSchema } from "./schemas";
-import { SmartContract } from "@coinbase/coinbase-sdk";
+import { SmartContract, Trade } from "@coinbase/coinbase-sdk";
 
 // Mock the entire module
 jest.mock("@coinbase/coinbase-sdk");
@@ -91,6 +91,7 @@ describe("CDP Wallet Action Provider", () => {
     (ExternalAddress as jest.Mock).mockImplementation(() => mockExternalAddressInstance);
 
     mockWallet = {
+      createTrade: jest.fn(),
       deployToken: jest.fn(),
       deployContract: jest.fn(),
       getAddress: jest.fn().mockReturnValue("0xe6b2af36b3bb8d47206a129ff11d5a2de2a63c83"),
@@ -264,6 +265,56 @@ describe("CDP Wallet Action Provider", () => {
         constructorArgs: MOCK_CONSTRUCTOR_ARGS,
       });
       expect(response).toBe(`Error deploying contract: ${error}`);
+    });
+  });
+
+  describe("trade", () => {
+    const TRANSACTION_HASH = "0xghijkl987654321";
+    const TRANSACTION_LINK = "https://etherscan.io/tx/0xghijkl987654321";
+    const TO_AMOUNT = "100";
+
+    beforeEach(() => {
+      mockWallet.createTrade.mockResolvedValue({
+        wait: jest.fn().mockResolvedValue({
+          getTransaction: jest.fn().mockReturnValue({
+            getTransactionHash: jest.fn().mockReturnValue(TRANSACTION_HASH),
+            getTransactionLink: jest.fn().mockReturnValue(TRANSACTION_LINK),
+          }),
+          getToAmount: jest.fn().mockReturnValue(TO_AMOUNT),
+        }),
+      } as unknown as Trade);
+    });
+
+    it("should successfully trade assets", async () => {
+      const args = {
+        amount: 1n,
+        fromAssetId: "eth",
+        toAssetId: "usdc",
+      };
+
+      const result = await actionProvider.trade(mockWallet, args);
+
+      expect(mockWallet.createTrade).toHaveBeenCalledWith(args);
+      expect(result).toContain(
+        `Traded ${args.amount} of ${args.fromAssetId} for ${TO_AMOUNT} of ${args.toAssetId}`,
+      );
+      expect(result).toContain(`Transaction hash for the trade: ${TRANSACTION_HASH}`);
+      expect(result).toContain(`Transaction link for the trade: ${TRANSACTION_LINK}`);
+    });
+
+    it("should handle trade errors", async () => {
+      const args = {
+        amount: 1000000000000000000n,
+        fromAssetId: "eth",
+        toAssetId: "usdc",
+      };
+
+      const error = new Error("An error has occurred");
+      mockWallet.createTrade.mockRejectedValue(error);
+
+      const result = await actionProvider.trade(mockWallet, args);
+
+      expect(result).toBe(`Error trading assets: ${error}`);
     });
   });
 });

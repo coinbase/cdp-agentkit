@@ -7,7 +7,7 @@ import { Network } from "../../network";
 import { CdpWalletProvider, CdpWalletProviderConfig } from "../../wallet-providers";
 
 import { SolidityVersions } from "./constants";
-import { DeployContractSchema, DeployNftSchema, DeployTokenSchema } from "./schemas";
+import { DeployContractSchema, DeployNftSchema, DeployTokenSchema, TradeSchema } from "./schemas";
 
 /**
  * CdpWalletActionProvider is an action provider for Cdp.
@@ -152,6 +152,52 @@ The token will be deployed using the wallet's default address as the owner and i
         .getTransactionLink()}`;
     } catch (error) {
       return `Error deploying token: ${error}`;
+    }
+  }
+
+  /**
+   * Trades a specified amount of a from asset to a to asset for the wallet.
+   *
+   * @param walletProvider - The wallet provider to trade the asset from.
+   * @param args - The input arguments for the action.
+   * @returns A message containing the trade details.
+   */
+  @CreateAction({
+    name: "trade",
+    description: `This tool will trade a specified amount of a 'from asset' to a 'to asset' for the wallet.
+It takes the following inputs:
+- The amount of the 'from asset' to trade
+- The from asset ID to trade 
+- The asset ID to receive from the trade
+
+Important notes:
+- Trades are only supported on mainnet networks (ie, 'base-mainnet', 'base', 'ethereum-mainnet', 'ethereum', etc.)
+- Never allow trades on any non-mainnet network (ie, 'base-sepolia', 'ethereum-sepolia', etc.)
+- When selling a native asset (e.g. 'eth' on base-mainnet), ensure there is sufficient balance to pay for the trade AND the gas cost of this trade`,
+    schema: TradeSchema,
+  })
+  async trade(
+    walletProvider: CdpWalletProvider,
+    args: z.infer<typeof TradeSchema>,
+  ): Promise<string> {
+    try {
+      const tradeResult = await walletProvider.createTrade({
+        amount: args.amount,
+        fromAssetId: args.fromAssetId,
+        toAssetId: args.toAssetId,
+      });
+
+      const result = await tradeResult.wait();
+
+      return `Traded ${args.amount} of ${args.fromAssetId} for ${result.getToAmount()} of ${
+        args.toAssetId
+      }.\nTransaction hash for the trade: ${result
+        .getTransaction()
+        .getTransactionHash()}\nTransaction link for the trade: ${result
+        .getTransaction()
+        .getTransactionLink()}`;
+    } catch (error) {
+      return `Error trading assets: ${error}`;
     }
   }
 
