@@ -6,7 +6,7 @@ import { ActionProvider } from "../actionProvider";
 import { WalletProvider } from "../../wallet-providers";
 import { Network } from "../../network";
 
-import { TransferSchema, GetWalletDetailsSchema } from "./schemas";
+import { NativeTransferSchema, GetWalletDetailsSchema } from "./schemas";
 
 /**
  * WalletActionProvider provides actions for getting basic wallet information.
@@ -75,29 +75,27 @@ export class WalletActionProvider extends ActionProvider {
   @CreateAction({
     name: "native_transfer",
     description: `
-This tool will transfer native tokens from the wallet to another onchain address.
+This tool will transfer native tokensfrom the wallet to another onchain address.
 
 It takes the following inputs:
-- amount: The amount to transfer in WEI
+- amount: The amount to transfer in whole units e.g. 1 ETH or 0.00001 ETH
 - destination: The address to receive the funds
 
 Important notes:
 - Ensure sufficient balance of the input asset before transferring
 - Ensure there is sufficient native token balance for gas fees
 `,
-    schema: TransferSchema,
+    schema: NativeTransferSchema,
   })
-  async transfer(
+  async nativeTransfer(
     walletProvider: WalletProvider,
-    args: z.infer<typeof TransferSchema>,
+    args: z.infer<typeof NativeTransferSchema>,
   ): Promise<string> {
     try {
-      const result = await walletProvider.nativeTransfer(
-        BigInt(args.amount),
-        args.destination as `0x${string}`,
-      );
+      const amount = BigInt(new Decimal(args.amount).mul(new Decimal(10).pow(18)).toString());
+      const result = await walletProvider.nativeTransfer(amount, args.destination as `0x${string}`);
 
-      return `Transferred ${args.amount} WEI to ${args.destination}.\nTransaction hash: ${result}`;
+      return `Transferred ${args.amount} ETH to ${args.destination}.\nTransaction hash: ${result}`;
     } catch (error) {
       return `Error transferring the asset: ${error}`;
     }
