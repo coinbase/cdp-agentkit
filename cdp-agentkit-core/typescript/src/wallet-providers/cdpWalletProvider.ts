@@ -303,6 +303,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
    *
    * @param amount - The amount to transfer in Wei.
    * @param destination - The destination address.
+   * @returns The transaction hash.
    */
   async nativeTransfer(amount: bigint, destination: `0x${string}`): Promise<`0x${string}`> {
     if (!this.#cdpWallet) {

@@ -177,6 +177,7 @@ export class ViemWalletProvider extends EvmWalletProvider {
    *
    * @param amount - The amount to transfer.
    * @param destination - The destination address.
+   * @returns The transaction hash.
    */
   async nativeTransfer(amount: bigint, destination: `0x${string}`): Promise<`0x${string}`> {
     const account = this.#walletClient.account;
