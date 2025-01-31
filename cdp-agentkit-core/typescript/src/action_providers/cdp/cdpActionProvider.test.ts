@@ -1,6 +1,7 @@
 import { CdpWalletProvider } from "../../wallet_providers";
 import { CdpActionProvider } from "./cdpActionProvider";
 import { AddressReputationSchema, RequestFaucetFundsSchema } from "./schemas";
+import { SmartContract } from "@coinbase/coinbase-sdk";
 
 // Mock the entire module
 jest.mock("@coinbase/coinbase-sdk");
@@ -59,6 +60,7 @@ describe("CDP Action Provider", () => {
   let actionProvider: CdpActionProvider;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let mockExternalAddressInstance: jest.Mocked<any>;
+  let mockWallet: jest.Mocked<CdpWalletProvider>;
 
   beforeEach(() => {
     // Reset all mocks before each test
@@ -72,6 +74,13 @@ describe("CDP Action Provider", () => {
 
     // Mock the constructor to return our mock instance
     (ExternalAddress as jest.Mock).mockImplementation(() => mockExternalAddressInstance);
+
+    mockWallet = {
+      deployToken: jest.fn(),
+      deployContract: jest.fn(),
+      getAddress: jest.fn().mockReturnValue("0xe6b2af36b3bb8d47206a129ff11d5a2de2a63c83"),
+      getNetwork: jest.fn().mockReturnValue({ networkId: "base-sepolia" }),
+    } as unknown as jest.Mocked<CdpWalletProvider>;
   });
 
   describe("addressReputation", () => {
@@ -112,8 +121,6 @@ describe("CDP Action Provider", () => {
   });
 
   describe("deployToken", () => {
-    let mockWallet: jest.Mocked<CdpWalletProvider>;
-
     beforeEach(() => {
       mockWallet = {
         deployToken: jest.fn().mockResolvedValue({
@@ -160,14 +167,7 @@ describe("CDP Action Provider", () => {
   });
 
   describe("faucet", () => {
-    let mockWallet: jest.Mocked<CdpWalletProvider>;
-
     beforeEach(() => {
-      mockWallet = {
-        getAddress: jest.fn().mockReturnValue("0xe6b2af36b3bb8d47206a129ff11d5a2de2a63c83"),
-        getNetwork: jest.fn().mockReturnValue({ networkId: "base-sepolia" }),
-      } as unknown as jest.Mocked<CdpWalletProvider>;
-
       mockExternalAddressInstance.faucet.mockResolvedValue({
         wait: jest.fn().mockResolvedValue({
           getTransactionLink: jest.fn().mockReturnValue("tx-link"),
@@ -210,6 +210,70 @@ describe("CDP Action Provider", () => {
       const result = await actionProvider.faucet(mockWallet, args);
 
       expect(result).toBe(`Error requesting faucet funds: ${error}`);
+    });
+  });
+
+  describe("deployContract", () => {
+    const CONTRACT_ADDRESS = "0x123456789abcdef";
+    const TRANSACTION_LINK = "https://etherscan.io/tx/0xghijkl987654321";
+    const MOCK_CONTRACT_NAME = "Test Contract";
+    const MOCK_SOLIDITY_VERSION = "0.8.0";
+    const MOCK_SOLIDITY_INPUT_JSON = "{}";
+    const MOCK_CONSTRUCTOR_ARGS = { arg1: "value1", arg2: "value2" };
+
+    beforeEach(() => {
+      mockWallet.deployContract.mockResolvedValue({
+        wait: jest.fn().mockResolvedValue({
+          getContractAddress: jest.fn().mockReturnValue(CONTRACT_ADDRESS),
+          getTransaction: jest.fn().mockReturnValue({
+            getTransactionLink: jest.fn().mockReturnValue(TRANSACTION_LINK),
+          }),
+        }),
+      } as unknown as SmartContract);
+    });
+
+    it("should successfully deploy a contract", async () => {
+      const args = {
+        solidityVersion: MOCK_SOLIDITY_VERSION,
+        solidityInputJson: MOCK_SOLIDITY_INPUT_JSON,
+        contractName: MOCK_CONTRACT_NAME,
+        constructorArgs: MOCK_CONSTRUCTOR_ARGS,
+      };
+
+      const response = await actionProvider.deployContract(mockWallet, args);
+
+      expect(mockWallet.deployContract).toHaveBeenCalledWith({
+        solidityVersion: "0.8.0+commit.c7dfd78e",
+        solidityInputJson: MOCK_SOLIDITY_INPUT_JSON,
+        contractName: MOCK_CONTRACT_NAME,
+        constructorArgs: MOCK_CONSTRUCTOR_ARGS,
+      });
+      expect(response).toContain(
+        `Deployed contract ${MOCK_CONTRACT_NAME} at address ${CONTRACT_ADDRESS}`,
+      );
+      expect(response).toContain(`Transaction link: ${TRANSACTION_LINK}`);
+    });
+
+    it("should handle deployment errors", async () => {
+      const args = {
+        solidityVersion: MOCK_SOLIDITY_VERSION,
+        solidityInputJson: MOCK_SOLIDITY_INPUT_JSON,
+        contractName: MOCK_CONTRACT_NAME,
+        constructorArgs: MOCK_CONSTRUCTOR_ARGS,
+      };
+
+      const error = new Error("An error has occurred");
+      mockWallet.deployContract.mockRejectedValue(error);
+
+      const response = await actionProvider.deployContract(mockWallet, args);
+
+      expect(mockWallet.deployContract).toHaveBeenCalledWith({
+        solidityVersion: "0.8.0+commit.c7dfd78e",
+        solidityInputJson: MOCK_SOLIDITY_INPUT_JSON,
+        contractName: MOCK_CONTRACT_NAME,
+        constructorArgs: MOCK_CONSTRUCTOR_ARGS,
+      });
+      expect(response).toBe(`Error deploying contract: ${error}`);
     });
   });
 });
