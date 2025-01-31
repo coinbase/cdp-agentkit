@@ -3,11 +3,12 @@ import { Decimal } from "decimal.js";
 import { encodeFunctionData, parseEther } from "viem";
 
 import { ActionProvider } from "../action_provider";
-import { Network, EvmWalletProvider } from "../../wallet_providers";
+import { EvmWalletProvider } from "../../wallet_providers";
 import { CreateAction } from "../action_decorator";
 import { approve } from "../../utils";
 import { METAMORPHO_ABI } from "./constants";
 import { DepositSchema, WithdrawSchema } from "./schemas";
+import { Network } from "../../network";
 
 export const SUPPORTED_NETWORKS = ["base-mainnet", "base-sepolia"];
 

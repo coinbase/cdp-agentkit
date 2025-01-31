@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { ActionProvider } from "../action_provider";
-import { Network } from "../../wallet_providers";
+import { Network } from "../../network";
 import { CreateAction } from "../action_decorator";
 import { FarcasterAccountDetailsSchema, FarcasterPostCastSchema } from "./schemas";
 

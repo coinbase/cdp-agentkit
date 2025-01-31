@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { WalletProvider } from "../wallet_providers/wallet_provider";
-import { Network } from "../wallet_providers/wallet_provider";
+import { Network } from "../network";
 import { StoredActionMetadata, ACTION_DECORATOR_KEY } from "./action_decorator";
 
 /**

@@ -3,7 +3,7 @@
 
 import { ReadContractParameters, ReadContractReturnType, TransactionRequest } from "viem";
 import { EvmWalletProvider } from "./evm_wallet_provider";
-import { Network } from "./wallet_provider";
+import { Network } from "../network";
 
 /**
  * A wallet provider that uses the Coinbase SDK.

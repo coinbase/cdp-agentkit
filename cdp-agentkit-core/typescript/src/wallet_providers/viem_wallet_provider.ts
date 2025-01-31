@@ -11,7 +11,8 @@ import {
   ReadContractReturnType,
 } from "viem";
 import { EvmWalletProvider } from "./evm_wallet_provider";
-import { Network } from "./wallet_provider";
+import { Network } from "../network";
+import { CHAIN_ID_TO_NETWORK_ID } from "../network/network";
 
 /**
  * A wallet provider that uses the Viem library.
@@ -119,6 +120,7 @@ export class ViemWalletProvider extends EvmWalletProvider {
     return {
       protocolFamily: "evm" as const,
       chainId: this.#walletClient.chain!.id! as any as string,
+      networkId: CHAIN_ID_TO_NETWORK_ID[this.#walletClient.chain!.id!],
     };
   }
 

@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { ActionProvider } from "../action_provider";
-import { Network, WalletProvider } from "../../wallet_providers/wallet_provider";
+import { WalletProvider } from "../../wallet_providers/wallet_provider";
 import { CreateAction } from "../action_decorator";
+import { Network } from "../../network";
 
 /**
  * Schema for the get_wallet_details action.

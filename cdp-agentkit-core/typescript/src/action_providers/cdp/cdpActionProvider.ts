@@ -1,9 +1,10 @@
 import { z } from "zod";
 import { ActionProvider } from "../action_provider";
-import { Network, EvmWalletProvider } from "../../wallet_providers";
+import { EvmWalletProvider } from "../../wallet_providers";
 import { CreateAction } from "../action_decorator";
 import { Coinbase, ExternalAddress } from "@coinbase/coinbase-sdk";
 import { AddressReputationSchema, RequestFaucetFundsSchema } from "./schemas";
+import { Network } from "../../network";
 
 /**
  * Configuration options for the CdpActionProvider.
