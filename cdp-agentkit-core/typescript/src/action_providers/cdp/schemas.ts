@@ -14,7 +14,7 @@ export const AddressReputationSchema = z
   })
   .strip()
   .describe("Input schema for address reputation check");
-  
+
 /**
  * Input schema for deploy contract action.
  */
@@ -44,7 +44,6 @@ export const DeployTokenSchema = z
   })
   .strip()
   .describe("Instructions for deploying a token");
-
 
 /**
  * Input schema for request faucet funds action.

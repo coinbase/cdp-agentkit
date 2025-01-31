@@ -191,7 +191,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
       throw new Error("Wallet not initialized");
     }
 
-    const balance = await this.#cdpWallet.getBalance('eth');
+    const balance = await this.#cdpWallet.getBalance("eth");
     return BigInt(balance.mul(10 ** 18).toString());
   }
 
@@ -234,9 +234,15 @@ export class CdpWalletProvider extends EvmWalletProvider {
 
   /**
    * Deploys a contract.
-   * 
+   *
    * @param options - The options for contract deployment
-   * @returns The deployed contract
+   * @param options.solidityVersion - The version of the Solidity compiler to use (e.g. "0.8.0+commit.c7dfd78e")
+   * @param options.solidityInputJson - The JSON input for the Solidity compiler containing contract source and settings
+   * @param options.contractName - The name of the contract to deploy
+   * @param options.constructorArgs - Key-value map of constructor args
+   *
+   * @returns A Promise that resolves to the deployed contract instance
+   * @throws Error if wallet is not initialized
    */
   async deployContract(options: {
     solidityVersion: string;
