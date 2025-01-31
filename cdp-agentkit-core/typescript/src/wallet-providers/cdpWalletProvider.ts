@@ -310,7 +310,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
     }
 
     // Convert from Wei to ETH using Decimal for precision
-    const ethAmount = new Decimal(amount.toString()).div(new Decimal(10).pow(18))
+    const ethAmount = new Decimal(amount.toString()).div(new Decimal(10).pow(18));
 
     const transferResult = await this.#cdpWallet.createTransfer({
       amount: ethAmount,

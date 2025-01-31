@@ -73,9 +73,9 @@ export class WalletActionProvider extends ActionProvider {
    * @returns A message containing the transfer details.
    */
   @CreateAction({
-    name: "transfer",
+    name: "native_transfer",
     description: `
-This tool will transfer an asset from the wallet to another onchain address.
+This tool will transfer native tokensfrom the wallet to another onchain address.
 
 It takes the following inputs:
 - amount: The amount to transfer in WEI
@@ -92,7 +92,10 @@ Important notes:
     args: z.infer<typeof TransferSchema>,
   ): Promise<string> {
     try {
-      const result = await walletProvider.nativeTransfer(args.amount, args.destination as `0x${string}`);
+      const result = await walletProvider.nativeTransfer(
+        BigInt(args.amount),
+        args.destination as `0x${string}`,
+      );
 
       return `Transferred ${args.amount} WEI to ${args.destination}.\nTransaction hash: ${result}`;
     } catch (error) {

@@ -11,7 +11,7 @@ export const GetWalletDetailsSchema = z.object({});
  */
 export const TransferSchema = z
   .object({
-    amount: z.bigint().describe("The amount to transfer in WEI"),
+    amount: z.string().describe("The amount to transfer in WEI"),
     destination: z.string().describe("The destination address to receive the funds"),
   })
   .strip()
