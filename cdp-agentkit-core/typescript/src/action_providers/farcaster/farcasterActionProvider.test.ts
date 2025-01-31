@@ -1,5 +1,5 @@
 import { FarcasterActionProvider } from "./farcasterActionProvider";
-import { AccountDetailsSchema, PostCastSchema } from "./schemas";
+import { FarcasterAccountDetailsSchema, FarcasterPostCastSchema } from "./schemas";
 
 // Mock fetch globally
 const mockFetch = jest.fn();
@@ -9,7 +9,7 @@ describe("Farcaster Action Provider Input Schemas", () => {
   describe("Account Details Schema", () => {
     it("should successfully parse empty input", () => {
       const validInput = {};
-      const result = AccountDetailsSchema.safeParse(validInput);
+      const result = FarcasterAccountDetailsSchema.safeParse(validInput);
 
       expect(result.success).toBe(true);
       expect(result.data).toEqual(validInput);
@@ -21,7 +21,7 @@ describe("Farcaster Action Provider Input Schemas", () => {
       const validInput = {
         castText: "Hello, Farcaster!",
       };
-      const result = PostCastSchema.safeParse(validInput);
+      const result = FarcasterPostCastSchema.safeParse(validInput);
 
       expect(result.success).toBe(true);
       expect(result.data).toEqual(validInput);
@@ -31,7 +31,7 @@ describe("Farcaster Action Provider Input Schemas", () => {
       const invalidInput = {
         castText: "a".repeat(281),
       };
-      const result = PostCastSchema.safeParse(invalidInput);
+      const result = FarcasterPostCastSchema.safeParse(invalidInput);
 
       expect(result.success).toBe(false);
     });

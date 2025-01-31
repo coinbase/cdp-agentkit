@@ -3,7 +3,7 @@ import { z } from "zod";
 /**
  * Input argument schema for the account_details action.
  */
-export const AccountDetailsSchema = z
+export const FarcasterAccountDetailsSchema = z
   .object({})
   .strip()
   .describe("Input schema for retrieving account details");
@@ -11,7 +11,7 @@ export const AccountDetailsSchema = z
 /**
  * Input argument schema for the post cast action.
  */
-export const PostCastSchema = z
+export const FarcasterPostCastSchema = z
   .object({
     castText: z.string().max(280, "Cast text must be a maximum of 280 characters."),
   })

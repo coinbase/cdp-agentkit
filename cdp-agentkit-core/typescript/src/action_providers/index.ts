@@ -7,4 +7,5 @@ export * from "./erc721";
 export * from "./morpho";
 export * from "./basename";
 export * from "./farcaster";
+export * from "./twitter";
 export * from "./wallet";

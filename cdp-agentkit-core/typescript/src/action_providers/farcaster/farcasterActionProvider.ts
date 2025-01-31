@@ -2,7 +2,7 @@ import { z } from "zod";
 import { ActionProvider } from "../action_provider";
 import { Network } from "../../wallet_providers";
 import { CreateAction } from "../action_decorator";
-import { AccountDetailsSchema, PostCastSchema } from "./schemas";
+import { FarcasterAccountDetailsSchema, FarcasterPostCastSchema } from "./schemas";
 
 /**
  * Configuration options for the FarcasterActionProvider.
@@ -40,29 +40,23 @@ export class FarcasterActionProvider extends ActionProvider {
   constructor(config: FarcasterActionProviderConfig = {}) {
     super("farcaster", []);
 
-    if (config.neynarApiKey) {
-      this.neynarApiKey = config.neynarApiKey;
-    } else if (process.env.NEYNAR_API_KEY) {
-      this.neynarApiKey = process.env.NEYNAR_API_KEY;
-    } else {
-      throw new Error("NEYNAR API Key is not configured.");
+    const neynarApiKey = config.neynarApiKey || process.env.NEYNAR_API_KEY;
+    const signerUuid = config.signerUuid || process.env.NEYNAR_MANAGER_SIGNER;
+    const agentFid = config.agentFid || process.env.AGENT_FID;
+
+    if (!neynarApiKey) {
+      throw new Error("NEYNAR_API_KEY is not configured.");
+    }
+    if (!signerUuid) {
+      throw new Error("NEYNAR_MANAGER_SIGNER is not configured.");
+    }
+    if (!agentFid) {
+      throw new Error("AGENT_FID is not configured.");
     }
 
-    if (config.signerUuid) {
-      this.signerUuid = config.signerUuid;
-    } else if (process.env.NEYNAR_MANAGER_SIGNER) {
-      this.signerUuid = process.env.NEYNAR_MANAGER_SIGNER;
-    } else {
-      throw new Error("NEYNAR Managed Signer UUID is not configured.");
-    }
-
-    if (config.agentFid) {
-      this.agentFid = config.agentFid;
-    } else if (process.env.AGENT_FID) {
-      this.agentFid = process.env.AGENT_FID;
-    } else {
-      throw new Error("Agent FID is not configured.");
-    }
+    this.neynarApiKey = neynarApiKey;
+    this.signerUuid = signerUuid;
+    this.agentFid = agentFid;
   }
 
   /**
@@ -83,9 +77,9 @@ A successful response will return a message with the API response as a JSON payl
 A failure response will return a message with the Farcaster API request error:
     Unable to retrieve account details.
 `,
-    schema: AccountDetailsSchema,
+    schema: FarcasterAccountDetailsSchema,
   })
-  async accountDetails(_: z.infer<typeof AccountDetailsSchema>): Promise<string> {
+  async accountDetails(_: z.infer<typeof FarcasterAccountDetailsSchema>): Promise<string> {
     try {
       const headers: HeadersInit = {
         accept: "application/json",
@@ -124,9 +118,9 @@ A successful response will return a message with the API response as a JSON payl
 A failure response will return a message with the Farcaster API request error:
     You are not allowed to post a cast with duplicate content.
 `,
-    schema: PostCastSchema,
+    schema: FarcasterPostCastSchema,
   })
-  async postCast(args: z.infer<typeof PostCastSchema>): Promise<string> {
+  async postCast(args: z.infer<typeof FarcasterPostCastSchema>): Promise<string> {
     try {
       const headers: HeadersInit = {
         api_key: this.neynarApiKey,

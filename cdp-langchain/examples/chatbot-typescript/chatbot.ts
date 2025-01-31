@@ -26,9 +26,13 @@ async function initializeAgent() {
     });
     const erc721 = erc721ActionProvider();
     const pyth = pythActionProvider();
+    const twitter = twitterActionProvider();
     const wallet = walletActionProvider();
 
-    const agentKit = new AgentKit({ walletProvider, actionProviders: [pyth, cdp, erc721, wallet] });
+    const agentKit = new AgentKit({
+      walletProvider,
+      actionProviders: [cdp, erc721, pyth, twitter, wallet],
+    });
     const actions = agentKit.getActions();
     for (const action of actions) {
       console.log(action.name);
@@ -189,10 +193,11 @@ async function chooseMode(): Promise<"chat" | "auto"> {
 
 import {
   AgentKit,
-  pythActionProvider,
   ViemWalletProvider,
   cdpActionProvider,
   erc721ActionProvider,
+  pythActionProvider,
+  twitterActionProvider,
   walletActionProvider,
 } from "@coinbase/cdp-agentkit-core";
 import { createWalletClient, http } from "viem";
