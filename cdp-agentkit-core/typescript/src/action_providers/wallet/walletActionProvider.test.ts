@@ -39,6 +39,7 @@ describe("Wallet Action Provider", () => {
   * Protocol Family: ${MOCK_NETWORK.protocolFamily}
   * Network ID: ${MOCK_NETWORK.networkId}
   * Chain ID: ${MOCK_NETWORK.chainId}
+- ETH Balance: 1.000000 ETH
 - Native Balance: ${MOCK_BALANCE.toString()}`;
 
       expect(response).toBe(expectedResponse);
