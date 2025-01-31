@@ -66,3 +66,15 @@ export const RequestFaucetFundsSchema = z
   })
   .strip()
   .describe("Instructions for requesting faucet funds");
+
+/**
+ * Input schema for trade action.
+ */
+export const TradeSchema = z
+  .object({
+    amount: z.custom<bigint>().describe("The amount of the from asset to trade"),
+    fromAssetId: z.string().describe("The from asset ID to trade"),
+    toAssetId: z.string().describe("The to asset ID to receive from the trade"),
+  })
+  .strip()
+  .describe("Instructions for trading assets");

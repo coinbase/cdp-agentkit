@@ -7,7 +7,9 @@ import { Network } from "../network";
 import {
   Coinbase,
   CreateERC20Options,
+  CreateTradeOptions,
   SmartContract,
+  Trade,
   Wallet,
   WalletData,
 } from "@coinbase/coinbase-sdk";
@@ -216,6 +218,20 @@ export class CdpWalletProvider extends EvmWalletProvider {
   async readContract(params: ReadContractParameters): Promise<ReadContractReturnType> {
     // TODO: Implement
     throw Error("Unimplemented");
+  }
+
+  /**
+   * Creates a trade.
+   *
+   * @param options - The options for the trade.
+   * @returns The trade.
+   */
+  async createTrade(options: CreateTradeOptions): Promise<Trade> {
+    if (!this.#cdpWallet) {
+      throw new Error("Wallet not initialized");
+    }
+
+    return this.#cdpWallet.createTrade(options);
   }
 
   /**
