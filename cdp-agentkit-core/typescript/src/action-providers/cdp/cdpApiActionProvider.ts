@@ -102,4 +102,5 @@ from another wallet and provide the user with your wallet details.`,
   supportsNetwork = (_: Network) => true;
 }
 
-export const cdpApiActionProvider = () => new CdpApiActionProvider();
+export const cdpApiActionProvider = (config: CdpWalletProviderConfig = {}) =>
+  new CdpApiActionProvider(config);

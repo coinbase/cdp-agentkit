@@ -211,4 +211,5 @@ Important notes:
   supportsNetwork = (_: Network) => true;
 }
 
-export const cdpWalletActionProvider = () => new CdpWalletActionProvider();
+export const cdpWalletActionProvider = (config: CdpWalletProviderConfig = {}) =>
+  new CdpWalletActionProvider(config);
