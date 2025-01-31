@@ -4,10 +4,10 @@ import { CreateAction } from "../action_decorator";
 import { TwitterApi, TwitterApiTokens } from "twitter-api-v2";
 import { Network } from "../../wallet_providers/wallet_provider";
 import {
-  AccountDetailsSchema,
-  AccountMentionsSchema,
-  PostTweetSchema,
-  PostTweetReplySchema,
+  TwitterAccountDetailsSchema,
+  TwitterAccountMentionsSchema,
+  TwitterPostTweetSchema,
+  TwitterPostTweetReplySchema,
 } from "./schemas";
 
 /**
@@ -96,7 +96,7 @@ export class TwitterActionProvider extends ActionProvider {
    * Get account details for the currently authenticated Twitter (X) user.
    */
   @CreateAction({
-    name: "account_details",
+    name: "twitter_account_details",
     description: `
 This tool will return account details for the currently authenticated Twitter (X) user context.
 
@@ -105,9 +105,9 @@ A successful response will return a message with the api response as a json payl
 
 A failure response will return a message with a Twitter API request error:
     Error retrieving authenticated user account: 429 Too Many Requests`,
-    schema: AccountDetailsSchema,
+    schema: TwitterAccountDetailsSchema,
   })
-  async accountDetails(_: z.infer<typeof AccountDetailsSchema>): Promise<string> {
+  async accountDetails(_: z.infer<typeof TwitterAccountDetailsSchema>): Promise<string> {
     try {
       const response = await this.client.v2.me();
       response.data.url = `https://x.com/${response.data.username}`;
@@ -123,7 +123,7 @@ A failure response will return a message with a Twitter API request error:
    * Get mentions for a specified Twitter (X) user.
    */
   @CreateAction({
-    name: "account_mentions",
+    name: "twitter_account_mentions",
     description: `
 This tool will return mentions for the specified Twitter (X) user id.
 
@@ -132,9 +132,9 @@ A successful response will return a message with the API response as a JSON payl
 
 A failure response will return a message with the Twitter API request error:
     Error retrieving user mentions: 429 Too Many Requests`,
-    schema: AccountMentionsSchema,
+    schema: TwitterAccountMentionsSchema,
   })
-  async accountMentions(args: z.infer<typeof AccountMentionsSchema>): Promise<string> {
+  async accountMentions(args: z.infer<typeof TwitterAccountMentionsSchema>): Promise<string> {
     try {
       const response = await this.client.v2.userMentionTimeline(args.userId);
       return `Successfully retrieved account mentions:\n${JSON.stringify(response)}`;
@@ -147,7 +147,7 @@ A failure response will return a message with the Twitter API request error:
    * Post a tweet on Twitter (X).
    */
   @CreateAction({
-    name: "post_tweet",
+    name: "twitter_post_tweet",
     description: `
 This tool will post a tweet on Twitter. The tool takes the text of the tweet as input. Tweets can be maximum 280 characters.
 
@@ -156,9 +156,9 @@ A successful response will return a message with the API response as a JSON payl
 
 A failure response will return a message with the Twitter API request error:
     You are not allowed to create a Tweet with duplicate content.`,
-    schema: PostTweetSchema,
+    schema: TwitterPostTweetSchema,
   })
-  async postTweet(args: z.infer<typeof PostTweetSchema>): Promise<string> {
+  async postTweet(args: z.infer<typeof TwitterPostTweetSchema>): Promise<string> {
     try {
       const response = await this.client.v2.tweet(args.tweet);
       return `Successfully posted to Twitter:\n${JSON.stringify(response)}`;
@@ -171,7 +171,7 @@ A failure response will return a message with the Twitter API request error:
    * Post a reply to a tweet on Twitter (X).
    */
   @CreateAction({
-    name: "post_tweet_reply",
+    name: "twitter_post_tweet_reply",
     description: `
 This tool will post a tweet on Twitter. The tool takes the text of the tweet as input. Tweets can be maximum 280 characters.
 
@@ -180,9 +180,9 @@ A successful response will return a message with the API response as a JSON payl
 
 A failure response will return a message with the Twitter API request error:
     You are not allowed to create a Tweet with duplicate content.`,
-    schema: PostTweetReplySchema,
+    schema: TwitterPostTweetReplySchema,
   })
-  async postTweetReply(args: z.infer<typeof PostTweetReplySchema>): Promise<string> {
+  async postTweetReply(args: z.infer<typeof TwitterPostTweetReplySchema>): Promise<string> {
     try {
       const response = await this.client.v2.tweet(args.tweetReply, {
         reply: { in_reply_to_tweet_id: args.tweetId },

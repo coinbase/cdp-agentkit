@@ -2,7 +2,7 @@ import { z } from "zod";
 import { ActionProvider } from "../action_provider";
 import { Network } from "../../wallet_providers";
 import { CreateAction } from "../action_decorator";
-import { AccountDetailsSchema, PostCastSchema } from "./schemas";
+import { FarcasterAccountDetailsSchema, FarcasterPostCastSchema } from "./schemas";
 
 /**
  * Configuration options for the FarcasterActionProvider.
@@ -45,7 +45,7 @@ export class FarcasterActionProvider extends ActionProvider {
     } else if (process.env.NEYNAR_API_KEY) {
       this.neynarApiKey = process.env.NEYNAR_API_KEY;
     } else {
-      throw new Error("NEYNAR API Key is not configured.");
+      throw new Error("NEYNAR_API_KEY is not configured.");
     }
 
     if (config.signerUuid) {
@@ -53,7 +53,7 @@ export class FarcasterActionProvider extends ActionProvider {
     } else if (process.env.NEYNAR_MANAGER_SIGNER) {
       this.signerUuid = process.env.NEYNAR_MANAGER_SIGNER;
     } else {
-      throw new Error("NEYNAR Managed Signer UUID is not configured.");
+      throw new Error("NEYNAR_MANAGER_SIGNER is not configured.");
     }
 
     if (config.agentFid) {
@@ -61,7 +61,7 @@ export class FarcasterActionProvider extends ActionProvider {
     } else if (process.env.AGENT_FID) {
       this.agentFid = process.env.AGENT_FID;
     } else {
-      throw new Error("Agent FID is not configured.");
+      throw new Error("AGENT_FID is not configured.");
     }
   }
 
@@ -72,7 +72,7 @@ export class FarcasterActionProvider extends ActionProvider {
    * @returns A message containing account details for the agent's Farcaster account.
    */
   @CreateAction({
-    name: "account_details",
+    name: "farcaster_account_details",
     description: `
 This tool will retrieve the account details for the agent's Farcaster account.
 The tool takes the FID of the agent's account.
@@ -83,9 +83,9 @@ A successful response will return a message with the API response as a JSON payl
 A failure response will return a message with the Farcaster API request error:
     Unable to retrieve account details.
 `,
-    schema: AccountDetailsSchema,
+    schema: FarcasterAccountDetailsSchema,
   })
-  async accountDetails(_: z.infer<typeof AccountDetailsSchema>): Promise<string> {
+  async accountDetails(_: z.infer<typeof FarcasterAccountDetailsSchema>): Promise<string> {
     try {
       const headers: HeadersInit = {
         accept: "application/json",
@@ -114,7 +114,7 @@ A failure response will return a message with the Farcaster API request error:
    * @returns A message indicating the success or failure of the cast posting.
    */
   @CreateAction({
-    name: "post_cast",
+    name: "farcaster_post_cast",
     description: `
 This tool will post a cast to Farcaster. The tool takes the text of the cast as input. Casts can be maximum 280 characters.
 
@@ -124,9 +124,9 @@ A successful response will return a message with the API response as a JSON payl
 A failure response will return a message with the Farcaster API request error:
     You are not allowed to post a cast with duplicate content.
 `,
-    schema: PostCastSchema,
+    schema: FarcasterPostCastSchema,
   })
-  async postCast(args: z.infer<typeof PostCastSchema>): Promise<string> {
+  async postCast(args: z.infer<typeof FarcasterPostCastSchema>): Promise<string> {
     try {
       const headers: HeadersInit = {
         api_key: this.neynarApiKey,

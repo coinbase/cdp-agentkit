@@ -3,7 +3,7 @@ import { z } from "zod";
 /**
  * Input schema for retrieving account details.
  */
-export const AccountDetailsSchema = z
+export const TwitterAccountDetailsSchema = z
   .object({})
   .strip()
   .describe("Input schema for retrieving account details");
@@ -11,7 +11,7 @@ export const AccountDetailsSchema = z
 /**
  * Input schema for retrieving account mentions.
  */
-export const AccountMentionsSchema = z
+export const TwitterAccountMentionsSchema = z
   .object({
     userId: z
       .string()
@@ -24,7 +24,7 @@ export const AccountMentionsSchema = z
 /**
  * Input schema for posting a tweet.
  */
-export const PostTweetSchema = z
+export const TwitterPostTweetSchema = z
   .object({
     tweet: z.string().max(280, "Tweet must be a maximum of 280 characters."),
   })
@@ -34,7 +34,7 @@ export const PostTweetSchema = z
 /**
  * Input schema for posting a tweet reply.
  */
-export const PostTweetReplySchema = z
+export const TwitterPostTweetReplySchema = z
   .object({
     tweetId: z.string().describe("The id of the tweet to reply to"),
     tweetReply: z
