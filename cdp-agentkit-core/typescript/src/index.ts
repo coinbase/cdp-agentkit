@@ -1,5 +1,5 @@
 // Export CDP AgentKit
 export { AgentKit } from "./agentkit";
 
-export * from "./wallet_providers";
-export * from "./action_providers";
+export * from "./wallet-providers";
+export * from "./action-providers";
