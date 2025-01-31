@@ -1,2 +1,3 @@
 export * from "./schemas";
-export * from "./cdpActionProvider";
+export * from "./cdpApiActionProvider";
+export * from "./cdpWalletActionProvider";

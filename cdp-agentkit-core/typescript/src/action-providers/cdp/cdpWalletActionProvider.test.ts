@@ -1,6 +1,6 @@
 import { CdpWalletProvider } from "../../wallet-providers";
-import { CdpActionProvider } from "./cdpActionProvider";
-import { AddressReputationSchema, DeployNftSchema, RequestFaucetFundsSchema } from "./schemas";
+import { CdpWalletActionProvider } from "./cdpWalletActionProvider";
+import { DeployNftSchema, DeployTokenSchema, DeployContractSchema } from "./schemas";
 import { SmartContract } from "@coinbase/coinbase-sdk";
 
 // Mock the entire module
@@ -9,31 +9,7 @@ jest.mock("@coinbase/coinbase-sdk");
 // Get the mocked constructor
 const { ExternalAddress } = jest.requireMock("@coinbase/coinbase-sdk");
 
-describe("CDP Action Provider Input Schemas", () => {
-  describe("Address Reputation Schema", () => {
-    it("should successfully parse valid input", () => {
-      const validInput = {
-        address: "0xe6b2af36b3bb8d47206a129ff11d5a2de2a63c83",
-        network: "base-mainnet",
-      };
-
-      const result = AddressReputationSchema.safeParse(validInput);
-
-      expect(result.success).toBe(true);
-      expect(result.data).toEqual(validInput);
-    });
-
-    it("should fail parsing invalid address", () => {
-      const invalidInput = {
-        address: "invalid-address",
-        network: "base-mainnet",
-      };
-      const result = AddressReputationSchema.safeParse(invalidInput);
-
-      expect(result.success).toBe(false);
-    });
-  });
-
+describe("CDP Wallet Action Provider Input Schemas", () => {
   describe("Deploy NFT Schema", () => {
     it("should successfully parse valid input", () => {
       const validInput = {
@@ -56,30 +32,47 @@ describe("CDP Action Provider Input Schemas", () => {
     });
   });
 
-  describe("Request Faucet Funds Schema", () => {
-    it("should successfully parse with optional assetId", () => {
+  describe("Deploy Token Schema", () => {
+    it("should successfully parse valid input", () => {
       const validInput = {
-        assetId: "eth",
+        name: "Test Token",
+        symbol: "TEST",
+        totalSupply: 1000000000000000000n,
       };
 
-      const result = RequestFaucetFundsSchema.safeParse(validInput);
-
-      expect(result.success).toBe(true);
-      expect(result.data).toEqual(validInput);
-    });
-
-    it("should successfully parse without assetId", () => {
-      const validInput = {};
-      const result = RequestFaucetFundsSchema.safeParse(validInput);
+      const result = DeployTokenSchema.safeParse(validInput);
 
       expect(result.success).toBe(true);
       expect(result.data).toEqual(validInput);
     });
   });
+
+  describe("Deploy Contract Schema", () => {
+    it("should successfully parse valid input", () => {
+      const validInput = {
+        solidityVersion: "0.8.0",
+        solidityInputJson: "{}",
+        contractName: "Test Contract",
+        constructorArgs: {},
+      };
+
+      const result = DeployContractSchema.safeParse(validInput);
+
+      expect(result.success).toBe(true);
+      expect(result.data).toEqual(validInput);
+    });
+
+    it("should fail parsing empty input", () => {
+      const emptyInput = {};
+      const result = DeployContractSchema.safeParse(emptyInput);
+
+      expect(result.success).toBe(false);
+    });
+  });
 });
 
-describe("CDP Action Provider", () => {
-  let actionProvider: CdpActionProvider;
+describe("CDP Wallet Action Provider", () => {
+  let actionProvider: CdpWalletActionProvider;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let mockExternalAddressInstance: jest.Mocked<any>;
   let mockWallet: jest.Mocked<CdpWalletProvider>;
@@ -88,7 +81,7 @@ describe("CDP Action Provider", () => {
     // Reset all mocks before each test
     jest.clearAllMocks();
 
-    actionProvider = new CdpActionProvider();
+    actionProvider = new CdpWalletActionProvider();
     mockExternalAddressInstance = {
       reputation: jest.fn(),
       faucet: jest.fn(),
@@ -103,43 +96,6 @@ describe("CDP Action Provider", () => {
       getAddress: jest.fn().mockReturnValue("0xe6b2af36b3bb8d47206a129ff11d5a2de2a63c83"),
       getNetwork: jest.fn().mockReturnValue({ networkId: "base-sepolia" }),
     } as unknown as jest.Mocked<CdpWalletProvider>;
-  });
-
-  describe("addressReputation", () => {
-    it("should successfully check address reputation", async () => {
-      const args = {
-        address: "0xe6b2af36b3bb8d47206a129ff11d5a2de2a63c83",
-        network: "base-mainnet",
-      };
-
-      mockExternalAddressInstance.reputation.mockResolvedValue("Good reputation");
-
-      const result = await actionProvider.addressReputation(args);
-
-      expect(ExternalAddress).toHaveBeenCalledWith(args.network, args.address);
-      expect(ExternalAddress).toHaveBeenCalledTimes(1);
-      expect(mockExternalAddressInstance.reputation).toHaveBeenCalled();
-      expect(mockExternalAddressInstance.reputation).toHaveBeenCalledTimes(1);
-      expect(result).toBe("Good reputation");
-    });
-
-    it("should handle errors when checking reputation", async () => {
-      const args = {
-        address: "0xe6b2af36b3bb8d47206a129ff11d5a2de2a63c83",
-        network: "base-mainnet",
-      };
-
-      const error = new Error("Reputation check failed");
-      mockExternalAddressInstance.reputation.mockRejectedValue(error);
-
-      const result = await actionProvider.addressReputation(args);
-
-      expect(ExternalAddress).toHaveBeenCalledWith(args.network, args.address);
-      expect(ExternalAddress).toHaveBeenCalledTimes(1);
-      expect(mockExternalAddressInstance.reputation).toHaveBeenCalled();
-      expect(mockExternalAddressInstance.reputation).toHaveBeenCalledTimes(1);
-      expect(result).toBe(`Error checking address reputation: ${error}`);
-    });
   });
 
   describe("deployNft", () => {
@@ -244,53 +200,6 @@ describe("CDP Action Provider", () => {
       const result = await actionProvider.deployToken(mockWallet, args);
 
       expect(result).toBe(`Error deploying token: ${error}`);
-    });
-  });
-
-  describe("faucet", () => {
-    beforeEach(() => {
-      mockExternalAddressInstance.faucet.mockResolvedValue({
-        wait: jest.fn().mockResolvedValue({
-          getTransactionLink: jest.fn().mockReturnValue("tx-link"),
-        }),
-      });
-    });
-
-    it("should successfully request faucet funds with assetId", async () => {
-      const args = {
-        assetId: "eth",
-      };
-
-      const result = await actionProvider.faucet(mockWallet, args);
-
-      expect(ExternalAddress).toHaveBeenCalledWith("base-sepolia", mockWallet.getAddress());
-      expect(ExternalAddress).toHaveBeenCalledTimes(1);
-      expect(mockExternalAddressInstance.faucet).toHaveBeenCalledWith("eth");
-      expect(mockExternalAddressInstance.faucet).toHaveBeenCalledTimes(1);
-      expect(result).toContain("Received eth from the faucet");
-      expect(result).toContain("tx-link");
-    });
-
-    it("should successfully request faucet funds without assetId", async () => {
-      const args = {};
-
-      const result = await actionProvider.faucet(mockWallet, args);
-
-      expect(ExternalAddress).toHaveBeenCalledWith("base-sepolia", mockWallet.getAddress());
-      expect(ExternalAddress).toHaveBeenCalledTimes(1);
-      expect(mockExternalAddressInstance.faucet).toHaveBeenCalledWith(undefined);
-      expect(mockExternalAddressInstance.faucet).toHaveBeenCalledTimes(1);
-      expect(result).toContain("Received ETH from the faucet");
-    });
-
-    it("should handle faucet errors", async () => {
-      const args = {};
-      const error = new Error("Faucet request failed");
-      mockExternalAddressInstance.faucet.mockRejectedValue(error);
-
-      const result = await actionProvider.faucet(mockWallet, args);
-
-      expect(result).toBe(`Error requesting faucet funds: ${error}`);
     });
   });
 

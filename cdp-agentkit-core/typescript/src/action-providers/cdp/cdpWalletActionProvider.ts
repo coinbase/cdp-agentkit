@@ -1,54 +1,32 @@
-import { ExternalAddress } from "@coinbase/coinbase-sdk";
+import { Coinbase } from "@coinbase/coinbase-sdk";
 import { z } from "zod";
 
 import { CreateAction } from "../actionDecorator";
 import { ActionProvider } from "../actionProvider";
 import { Network } from "../../network";
-import { CdpWalletProvider } from "../../wallet-providers";
+import { CdpWalletProvider, CdpWalletProviderConfig } from "../../wallet-providers";
 
 import { SolidityVersions } from "./constants";
-import {
-  AddressReputationSchema,
-  DeployContractSchema,
-  DeployNftSchema,
-  DeployTokenSchema,
-  RequestFaucetFundsSchema,
-} from "./schemas";
+import { DeployContractSchema, DeployNftSchema, DeployTokenSchema } from "./schemas";
 
 /**
- * CdpActionProvider is an action provider for Cdp.
+ * CdpWalletActionProvider is an action provider for Cdp.
+ *
+ * This provider is used for any action that requires a CDP Wallet.
  */
-export class CdpActionProvider extends ActionProvider<CdpWalletProvider> {
+export class CdpWalletActionProvider extends ActionProvider<CdpWalletProvider> {
   /**
-   * Constructor for the CdpActionProvider class.
-   */
-  constructor() {
-    super("cdp", []);
-  }
-
-  /**
-   * Check the reputation of an address.
+   * Constructor for the CdpWalletActionProvider class.
    *
-   * @param args - The input arguments for the action
-   * @returns A string containing reputation data or error message
+   * @param config - The configuration options for the CdpWalletActionProvider.
    */
-  @CreateAction({
-    name: "address_reputation",
-    description: `
-This tool checks the reputation of an address on a given network. It takes:
+  constructor(config: CdpWalletProviderConfig = {}) {
+    super("cdp_wallet", []);
 
-- network: The network to check the address on (e.g. "base-mainnet")
-- address: The Ethereum address to check
-`,
-    schema: AddressReputationSchema,
-  })
-  async addressReputation(args: z.infer<typeof AddressReputationSchema>): Promise<string> {
-    try {
-      const address = new ExternalAddress(args.network, args.address);
-      const reputation = await address.reputation();
-      return reputation.toString();
-    } catch (error) {
-      return `Error checking address reputation: ${error}`;
+    if (config.apiKeyName && config.apiKeyPrivateKey) {
+      Coinbase.configure({ apiKeyName: config.apiKeyName, privateKey: config.apiKeyPrivateKey });
+    } else {
+      Coinbase.configureFromJson();
     }
   }
 
@@ -178,43 +156,6 @@ The token will be deployed using the wallet's default address as the owner and i
   }
 
   /**
-   * Requests test tokens from the faucet for the default address in the wallet.
-   *
-   * @param walletProvider - The wallet provider to request funds from.
-   * @param args - The input arguments for the action.
-   * @returns A confirmation message with transaction details.
-   */
-  @CreateAction({
-    name: "request_faucet_funds",
-    description: `This tool will request test tokens from the faucet for the default address in the wallet. It takes the wallet and asset ID as input.
-If no asset ID is provided the faucet defaults to ETH. Faucet is only allowed on 'base-sepolia' and can only provide asset ID 'eth' or 'usdc'.
-You are not allowed to faucet with any other network or asset ID. If you are on another network, suggest that the user sends you some ETH
-from another wallet and provide the user with your wallet details.`,
-    schema: RequestFaucetFundsSchema,
-  })
-  async faucet(
-    walletProvider: CdpWalletProvider,
-    args: z.infer<typeof RequestFaucetFundsSchema>,
-  ): Promise<string> {
-    try {
-      const address = new ExternalAddress(
-        walletProvider.getNetwork().networkId!,
-        walletProvider.getAddress(),
-      );
-
-      const faucetTx = await address.faucet(args.assetId || undefined);
-
-      const result = await faucetTx.wait();
-
-      return `Received ${
-        args.assetId || "ETH"
-      } from the faucet. Transaction: ${result.getTransactionLink()}`;
-    } catch (error) {
-      return `Error requesting faucet funds: ${error}`;
-    }
-  }
-
-  /**
    * Checks if the Cdp action provider supports the given network.
    *
    * @param _ - The network to check.
@@ -224,4 +165,4 @@ from another wallet and provide the user with your wallet details.`,
   supportsNetwork = (_: Network) => true;
 }
 
-export const cdpActionProvider = () => new CdpActionProvider();
+export const cdpWalletActionProvider = () => new CdpWalletActionProvider();
