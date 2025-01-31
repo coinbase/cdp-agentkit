@@ -37,66 +37,54 @@ export interface TwitterActionProviderConfig {
 
 /**
  * TwitterActionProvider is an action provider for Twitter (X) interactions.
+ *
+ * @augments ActionProvider
  */
 export class TwitterActionProvider extends ActionProvider {
-  private readonly apiKey: string;
-  private readonly apiSecret: string;
-  private readonly accessToken: string;
-  private readonly accessTokenSecret: string;
   private readonly client: TwitterApi;
 
   /**
    * Constructor for the TwitterActionProvider class.
+   *
    * @param config - The configuration options for the TwitterActionProvider
    */
   constructor(config: TwitterActionProviderConfig = {}) {
     super("twitter", []);
 
-    if (config.apiKey) {
-      this.apiKey = config.apiKey;
-    } else if (process.env.TWITTER_API_KEY) {
-      this.apiKey = process.env.TWITTER_API_KEY;
-    } else {
-      throw new Error("Twitter API Key is not configured.");
-    }
+    config.apiKey ||= process.env.TWITTER_API_KEY;
+    config.apiSecret ||= process.env.TWITTER_API_SECRET;
+    config.accessToken ||= process.env.TWITTER_ACCESS_TOKEN;
+    config.accessTokenSecret ||= process.env.TWITTER_ACCESS_TOKEN_SECRET;
 
-    if (config.apiSecret) {
-      this.apiSecret = config.apiSecret;
-    } else if (process.env.TWITTER_API_SECRET) {
-      this.apiSecret = process.env.TWITTER_API_SECRET;
-    } else {
-      throw new Error("Twitter API Secret is not configured.");
+    if (!config.apiKey) {
+      throw new Error("TWITTER_API_KEY is not configured.");
     }
-
-    if (config.accessToken) {
-      this.accessToken = config.accessToken;
-    } else if (process.env.TWITTER_ACCESS_TOKEN) {
-      this.accessToken = process.env.TWITTER_ACCESS_TOKEN;
-    } else {
-      throw new Error("Twitter Access Token is not configured.");
+    if (!config.apiSecret) {
+      throw new Error("TWITTER_API_SECRET is not configured.");
     }
-
-    if (config.accessTokenSecret) {
-      this.accessTokenSecret = config.accessTokenSecret;
-    } else if (process.env.TWITTER_ACCESS_TOKEN_SECRET) {
-      this.accessTokenSecret = process.env.TWITTER_ACCESS_TOKEN_SECRET;
-    } else {
-      throw new Error("Twitter Access Token Secret is not configured.");
+    if (!config.accessToken) {
+      throw new Error("TWITTER_ACCESS_TOKEN is not configured.");
+    }
+    if (!config.accessTokenSecret) {
+      throw new Error("TWITTER_ACCESS_TOKEN_SECRET is not configured.");
     }
 
     this.client = new TwitterApi({
-      appKey: this.apiKey,
-      appSecret: this.apiSecret,
-      accessToken: this.accessToken,
-      accessSecret: this.accessTokenSecret,
+      appKey: config.apiKey,
+      appSecret: config.apiSecret,
+      accessToken: config.accessToken,
+      accessSecret: config.accessTokenSecret,
     } as TwitterApiTokens);
   }
 
   /**
    * Get account details for the currently authenticated Twitter (X) user.
+   *
+   * @param _ - Empty parameter object (not used)
+   * @returns A JSON string containing the account details or error message
    */
   @CreateAction({
-    name: "twitter_account_details",
+    name: "account_details",
     description: `
 This tool will return account details for the currently authenticated Twitter (X) user context.
 
@@ -121,9 +109,12 @@ A failure response will return a message with a Twitter API request error:
 
   /**
    * Get mentions for a specified Twitter (X) user.
+   *
+   * @param args - The arguments containing userId
+   * @returns A JSON string containing the mentions or error message
    */
   @CreateAction({
-    name: "twitter_account_mentions",
+    name: "account_mentions",
     description: `
 This tool will return mentions for the specified Twitter (X) user id.
 
@@ -145,9 +136,12 @@ A failure response will return a message with the Twitter API request error:
 
   /**
    * Post a tweet on Twitter (X).
+   *
+   * @param args - The arguments containing the tweet text
+   * @returns A JSON string containing the posted tweet details or error message
    */
   @CreateAction({
-    name: "twitter_post_tweet",
+    name: "post_tweet",
     description: `
 This tool will post a tweet on Twitter. The tool takes the text of the tweet as input. Tweets can be maximum 280 characters.
 
@@ -169,9 +163,12 @@ A failure response will return a message with the Twitter API request error:
 
   /**
    * Post a reply to a tweet on Twitter (X).
+   *
+   * @param args - The arguments containing the reply text and tweet ID
+   * @returns A JSON string containing the posted reply details or error message
    */
   @CreateAction({
-    name: "twitter_post_tweet_reply",
+    name: "post_tweet_reply",
     description: `
 This tool will post a tweet on Twitter. The tool takes the text of the tweet as input. Tweets can be maximum 280 characters.
 
@@ -197,11 +194,20 @@ A failure response will return a message with the Twitter API request error:
   /**
    * Checks if the Twitter action provider supports the given network.
    * Twitter actions don't depend on blockchain networks, so always return true.
+   *
+   * @param _ - The network to check (not used)
+   * @returns Always returns true as Twitter actions are network-independent
    */
   supportsNetwork(_: Network): boolean {
     return true;
   }
 }
 
+/**
+ * Factory function to create a new TwitterActionProvider instance.
+ *
+ * @param config - The configuration options for the TwitterActionProvider
+ * @returns A new instance of TwitterActionProvider
+ */
 export const twitterActionProvider = (config: TwitterActionProviderConfig = {}) =>
   new TwitterActionProvider(config);

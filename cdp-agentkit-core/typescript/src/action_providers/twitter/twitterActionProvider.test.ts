@@ -17,7 +17,7 @@ const MOCK_TWEET_ID = "0123456789012345678";
 const MOCK_TWEET_REPLY = "Hello again!";
 
 describe("TwitterActionProvider", () => {
-  let mockApi: jest.Mocked<TwitterApi>;
+  //   let mockApi: jest.Mocked<TwitterApi>;
   let mockClient: jest.Mocked<TwitterApiv2>;
   let provider: TwitterActionProvider;
 
@@ -29,14 +29,16 @@ describe("TwitterActionProvider", () => {
       tweet: jest.fn(),
     } as unknown as jest.Mocked<TwitterApiv2>;
 
-    mockApi = {
-      get v2() {
-        return mockClient;
-      },
-    } as unknown as jest.Mocked<TwitterApi>;
+    /*
+     * mockApi = {
+     *   get v2() {
+     *     return mockClient;
+     *   },
+     * } as unknown as jest.Mocked<TwitterApi>;
+     */
 
     // Mock the TwitterApi constructor
-    jest.spyOn(TwitterApi.prototype, 'v2', 'get').mockReturnValue(mockClient);
+    jest.spyOn(TwitterApi.prototype, "v2", "get").mockReturnValue(mockClient);
 
     provider = new TwitterActionProvider(MOCK_CONFIG);
   });
@@ -61,7 +63,7 @@ describe("TwitterActionProvider", () => {
       delete process.env.TWITTER_ACCESS_TOKEN;
       delete process.env.TWITTER_ACCESS_TOKEN_SECRET;
 
-      expect(() => new TwitterActionProvider()).toThrow("Twitter API Key is not configured.");
+      expect(() => new TwitterActionProvider()).toThrow("TWITTER_API_KEY is not configured.");
     });
   });
 
@@ -83,7 +85,12 @@ describe("TwitterActionProvider", () => {
 
       expect(mockClient.me).toHaveBeenCalled();
       expect(response).toContain("Successfully retrieved authenticated user account details");
-      expect(response).toContain(JSON.stringify({ ...mockResponse, data: { ...mockResponse.data, url: `https://x.com/${MOCK_USERNAME}` } }));
+      expect(response).toContain(
+        JSON.stringify({
+          ...mockResponse,
+          data: { ...mockResponse.data, url: `https://x.com/${MOCK_USERNAME}` },
+        }),
+      );
     });
 
     it("should handle errors when retrieving account details", async () => {

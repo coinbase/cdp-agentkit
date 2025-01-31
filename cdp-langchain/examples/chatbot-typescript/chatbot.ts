@@ -25,14 +25,13 @@ async function initializeAgent() {
       apiKeyPrivateKey: process.env.CDP_API_KEY_PRIVATE_KEY,
     });
     const erc721 = erc721ActionProvider();
-    const farcaster = farcasterActionProvider();
     const pyth = pythActionProvider();
     const twitter = twitterActionProvider();
     const wallet = walletActionProvider();
 
     const agentKit = new AgentKit({
       walletProvider,
-      actionProviders: [cdp, erc721, farcaster, pyth, twitter, wallet],
+      actionProviders: [cdp, erc721, pyth, twitter, wallet],
     });
     const actions = agentKit.getActions();
     for (const action of actions) {
@@ -197,7 +196,6 @@ import {
   ViemWalletProvider,
   cdpActionProvider,
   erc721ActionProvider,
-  farcasterActionProvider,
   pythActionProvider,
   twitterActionProvider,
   walletActionProvider,
