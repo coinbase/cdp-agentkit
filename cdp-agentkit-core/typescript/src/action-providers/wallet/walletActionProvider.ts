@@ -92,12 +92,9 @@ Important notes:
     args: z.infer<typeof NativeTransferSchema>,
   ): Promise<string> {
     try {
-      const result = await walletProvider.nativeTransfer(
-        args.amount,
-        args.destination as `0x${string}`,
-      );
+      const result = await walletProvider.nativeTransfer(args.to as `0x${string}`, args.value);
 
-      return `Transferred ${args.amount} ETH to ${args.destination}.\nTransaction hash: ${result}`;
+      return `Transferred ${args.value} ETH to ${args.to}.\nTransaction hash: ${result}`;
     } catch (error) {
       return `Error transferring the asset: ${error}`;
     }

@@ -306,19 +306,19 @@ export class CdpWalletProvider extends EvmWalletProvider {
   /**
    * Transfer the native asset of the network.
    *
-   * @param amount - The amount to transfer in Wei.
-   * @param destination - The destination address.
+   * @param to - The destination address.
+   * @param value - The amount to transfer in Wei.
    * @returns The transaction hash.
    */
-  async nativeTransfer(amount: string, destination: `0x${string}`): Promise<`0x${string}`> {
+  async nativeTransfer(to: `0x${string}`, value: string): Promise<`0x${string}`> {
     if (!this.#cdpWallet) {
       throw new Error("Wallet not initialized");
     }
 
     const transferResult = await this.#cdpWallet.createTransfer({
-      amount: new Decimal(amount),
+      amount: new Decimal(value),
       assetId: Coinbase.assets.Eth,
-      destination: destination,
+      destination: to,
       gasless: false,
     });
 

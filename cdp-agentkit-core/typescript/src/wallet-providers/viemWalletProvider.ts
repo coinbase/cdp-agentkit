@@ -186,18 +186,24 @@ export class ViemWalletProvider extends EvmWalletProvider {
   /**
    * Transfer the native asset of the network.
    *
-   * @param amount - The amount to transfer.
-   * @param destination - The destination address.
+   * @param to - The destination address.
+   * @param value - The amount to transfer in whole units (e.g. ETH)
    * @returns The transaction hash.
    */
-  async nativeTransfer(amount: string, destination: `0x${string}`): Promise<`0x${string}`> {
-    const atomicAmount = parseEther(amount);
+  async nativeTransfer(to: `0x${string}`, value: string): Promise<`0x${string}`> {
+    const atomicAmount = parseEther(value);
 
     const tx = await this.sendTransaction({
-      to: destination,
+      to: to,
       value: atomicAmount,
     });
 
-    return tx;
+    const receipt = await this.waitForTransactionReceipt(tx);
+
+    if (!receipt) {
+      throw new Error("Transaction failed");
+    }
+
+    return receipt.transactionHash;
   }
 }

@@ -74,8 +74,8 @@ describe("Wallet Action Provider", () => {
 
     it("should successfully parse valid input", () => {
       const validInput = {
-        amount: MOCK_AMOUNT,
-        destination: MOCK_DESTINATION,
+        to: MOCK_DESTINATION,
+        value: MOCK_AMOUNT,
       };
 
       const result = NativeTransferSchema.safeParse(validInput);
@@ -95,16 +95,13 @@ describe("Wallet Action Provider", () => {
 
     it("should successfully transfer assets", async () => {
       const args = {
-        amount: MOCK_AMOUNT,
-        destination: MOCK_DESTINATION,
+        to: MOCK_DESTINATION,
+        value: MOCK_AMOUNT,
       };
 
       const response = await actionProvider.nativeTransfer(mockWallet, args);
 
-      expect(mockWallet.nativeTransfer).toHaveBeenCalledWith(
-        MOCK_AMOUNT,
-        MOCK_DESTINATION,
-      );
+      expect(mockWallet.nativeTransfer).toHaveBeenCalledWith(MOCK_DESTINATION, MOCK_AMOUNT);
       expect(response).toBe(
         `Transferred ${MOCK_AMOUNT} ETH to ${MOCK_DESTINATION}.\nTransaction hash: ${MOCK_TRANSACTION_HASH}`,
       );
@@ -112,8 +109,8 @@ describe("Wallet Action Provider", () => {
 
     it("should handle transfer errors", async () => {
       const args = {
-        amount: MOCK_AMOUNT,
-        destination: MOCK_DESTINATION,
+        to: MOCK_DESTINATION,
+        value: MOCK_AMOUNT,
       };
 
       const error = new Error("Failed to execute transfer");

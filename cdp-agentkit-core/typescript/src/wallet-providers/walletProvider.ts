@@ -68,9 +68,9 @@ export abstract class WalletProvider {
   /**
    * Transfer the native asset of the network.
    *
-   * @param amount - The amount to transfer in decimal units (e.g. ETH)
-   * @param destination - The destination address.
+   * @param to - The destination address.
+   * @param value - The amount to transfer in whole units (e.g. ETH)
    * @returns The transaction hash.
    */
-  abstract nativeTransfer(amount: string, destination: `0x${string}`): Promise<`0x${string}`>;
+  abstract nativeTransfer(to: `0x${string}`, value: string): Promise<`0x${string}`>;
 }
