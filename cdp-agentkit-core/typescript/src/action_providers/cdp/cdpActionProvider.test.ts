@@ -1,6 +1,6 @@
+import { CdpWalletProvider } from "../../wallet_providers";
 import { CdpActionProvider } from "./cdpActionProvider";
 import { AddressReputationSchema, RequestFaucetFundsSchema } from "./schemas";
-import { EvmWalletProvider } from "../../wallet_providers";
 
 // Mock the entire module
 jest.mock("@coinbase/coinbase-sdk");
@@ -111,14 +111,62 @@ describe("CDP Action Provider", () => {
     });
   });
 
+  describe("deployToken", () => {
+    let mockWallet: jest.Mocked<CdpWalletProvider>;
+
+    beforeEach(() => {
+      mockWallet = {
+        deployToken: jest.fn().mockResolvedValue({
+          wait: jest.fn().mockResolvedValue({
+            getContractAddress: jest.fn().mockReturnValue("0x123"),
+            getTransaction: jest.fn().mockReturnValue({
+              getTransactionLink: jest.fn().mockReturnValue("tx-link"),
+            }),
+          }),
+        }),
+      } as unknown as jest.Mocked<CdpWalletProvider>;
+    });
+
+    it("should successfully deploy a token", async () => {
+      const args = {
+        name: "Test Token",
+        symbol: "TEST",
+        totalSupply: 1000000000000000000n,
+      };
+
+      const result = await actionProvider.deployToken(mockWallet, args);
+
+      expect(mockWallet.deployToken).toHaveBeenCalledWith(args);
+      expect(mockWallet.deployToken).toHaveBeenCalledTimes(1);
+      expect(result).toContain(
+        "Deployed ERC20 token contract Test Token (TEST) with total supply of 1000000000000000000 tokens at address 0x123. Transaction link: tx-link",
+      );
+    });
+
+    it("should handle errors when deploying a token", async () => {
+      const args = {
+        name: "Test Token",
+        symbol: "TEST",
+        totalSupply: 1000000000000000000n,
+      };
+
+      const error = new Error("Token deployment failed");
+      mockWallet.deployToken.mockRejectedValue(error);
+
+      const result = await actionProvider.deployToken(mockWallet, args);
+
+      expect(result).toBe(`Error deploying token: ${error}`);
+    });
+  });
+
   describe("faucet", () => {
-    let mockWallet: jest.Mocked<EvmWalletProvider>;
+    let mockWallet: jest.Mocked<CdpWalletProvider>;
 
     beforeEach(() => {
       mockWallet = {
         getAddress: jest.fn().mockReturnValue("0xe6b2af36b3bb8d47206a129ff11d5a2de2a63c83"),
         getNetwork: jest.fn().mockReturnValue({ networkId: "base-sepolia" }),
-      } as unknown as jest.Mocked<EvmWalletProvider>;
+      } as unknown as jest.Mocked<CdpWalletProvider>;
 
       mockExternalAddressInstance.faucet.mockResolvedValue({
         wait: jest.fn().mockResolvedValue({

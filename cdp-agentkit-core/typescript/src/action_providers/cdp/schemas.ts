@@ -23,3 +23,15 @@ export const RequestFaucetFundsSchema = z
   })
   .strip()
   .describe("Instructions for requesting faucet funds");
+
+/**
+ * Input schema for deploy token action.
+ */
+export const DeployTokenSchema = z
+  .object({
+    name: z.string().describe("The name of the token"),
+    symbol: z.string().describe("The token symbol"),
+    totalSupply: z.custom<bigint>().describe("The total supply of tokens to mint"),
+  })
+  .strip()
+  .describe("Instructions for deploying a token");

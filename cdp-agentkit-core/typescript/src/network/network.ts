@@ -13,3 +13,16 @@ export const CHAIN_ID_TO_NETWORK_ID: Record<number, string> = {
   10: "optimism-mainnet",
   11155420: "optimism-sepolia",
 };
+
+/**
+ * Maps Coinbase network IDs to EVM chain IDs
+ */
+export const NETWORK_ID_TO_CHAIN_ID: Record<string, string> = Object.entries(
+  CHAIN_ID_TO_NETWORK_ID,
+).reduce(
+  (acc, [chainId, networkId]) => {
+    acc[networkId] = String(chainId);
+    return acc;
+  },
+  {} as Record<string, string>,
+);
