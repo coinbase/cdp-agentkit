@@ -22,6 +22,7 @@ This example demonstrates an agent setup as a terminal style chatbot with access
 7. Follow the instructions to get a signer UUID by either creating an agent or logging into Farcaster with an existing account.
 8. Copy the signer UUID.
 9. Set the copied UUID value in .env as your `NEYNAR_MANAGED_SIGNER`.
+10. Set the AGENT_FID value, e.g. AGENT_FID=1
 
 ### Checking Node Version
 
