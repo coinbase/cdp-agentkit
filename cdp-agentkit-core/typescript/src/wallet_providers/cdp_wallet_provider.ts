@@ -184,11 +184,15 @@ export class CdpWalletProvider extends EvmWalletProvider {
   /**
    * Gets the balance of the wallet.
    *
-   * @returns The balance of the wallet.
+   * @returns The balance of the wallet in wei
    */
   async getBalance(): Promise<bigint> {
-    // TODO: Implement
-    throw Error("Unimplemented");
+    if (!this.#cdpWallet) {
+      throw new Error("Wallet not initialized");
+    }
+
+    const balance = await this.#cdpWallet.getBalance("eth");
+    return BigInt(balance.mul(10 ** 18).toString());
   }
 
   /**
@@ -226,5 +230,30 @@ export class CdpWalletProvider extends EvmWalletProvider {
     }
 
     return this.#cdpWallet.deployToken(options);
+  }
+
+  /**
+   * Deploys a contract.
+   *
+   * @param options - The options for contract deployment
+   * @param options.solidityVersion - The version of the Solidity compiler to use (e.g. "0.8.0+commit.c7dfd78e")
+   * @param options.solidityInputJson - The JSON input for the Solidity compiler containing contract source and settings
+   * @param options.contractName - The name of the contract to deploy
+   * @param options.constructorArgs - Key-value map of constructor args
+   *
+   * @returns A Promise that resolves to the deployed contract instance
+   * @throws Error if wallet is not initialized
+   */
+  async deployContract(options: {
+    solidityVersion: string;
+    solidityInputJson: string;
+    contractName: string;
+    constructorArgs: Record<string, unknown>;
+  }): Promise<SmartContract> {
+    if (!this.#cdpWallet) {
+      throw new Error("Wallet not initialized");
+    }
+
+    return this.#cdpWallet.deployContract(options);
   }
 }
