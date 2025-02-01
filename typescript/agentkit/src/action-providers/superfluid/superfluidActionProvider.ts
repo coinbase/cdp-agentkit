@@ -27,7 +27,7 @@ export class SuperfluidActionProvider extends ActionProvider {
   }
 
   /**
-   * Get account details for the currently authenticated Twitter (X) user.
+   * Creates a stream from the agent wallet to the recipient
    *
    * @param walletProvider - The wallet provider to start the stream from.
    * @param args - The input arguments for the action.
