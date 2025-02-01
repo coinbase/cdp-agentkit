@@ -35,13 +35,12 @@ export class SuperfluidPoolActionProvider extends ActionProvider {
     name: "create_pool",
     description: `
 This tool will create a Superfluid pool for a desired token on an EVM network.
-It takes the ERC20 token address, a recipient address, and a pool rate to create a Superfluid pool.
-Superfluid will then start streaming the token to the recipient at the specified rate.
+It takes the ERC20 token address to create a pool of the tokens to later be multi streamed to other wallets.
 Do not use the ERC20 address as the destination address. If you are unsure of the destination address, please ask the user before proceeding.
 `,
     schema: SuperfluidCreatePoolSchema,
   })
-  async createStream(
+  async createPool(
     walletProvider: EvmWalletProvider,
     args: z.infer<typeof SuperfluidCreatePoolSchema>
   ): Promise<string> {
