@@ -165,8 +165,8 @@ export class CdpWalletProvider extends EvmWalletProvider {
     }
 
     const serializedTx = serializeTransaction(transaction as TransactionSerializable);
-    const messageHash = keccak256(serializedTx);
-    const payload = await this.#cdpWallet.createPayloadSignature(messageHash);
+    const transactionHash = keccak256(serializedTx);
+    const payload = await this.#cdpWallet.createPayloadSignature(transactionHash);
 
     return payload.getSignature() as `0x${string}`;
   }
