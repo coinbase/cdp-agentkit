@@ -41,11 +41,11 @@ export const FlippandoAgentkitOptions = z
 const EnvSchema = z.object({
   CDP_API_KEY_NAME: z
     .string()
-    .url("CDP_API_KEY_NAME must be defined")
+    .min(1, "CDP_API_KEY_NAME must be defined")
     .describe("Cdp API key name"),
   CDP_API_KEY_PRIVATE_KEY: z
     .string()
-    .url("CDP_API_KEY_PRIVATE_KEY must be defined")
+    .min(1, "CDP_API_KEY_PRIVATE_KEY must be defined")
     .describe("Cdp API key private key"),
   FLIPPANDO_PROVIDER_URL: z
     .string()

@@ -23,7 +23,7 @@ export async function initializeGame(
   const signer = new ethers.Wallet(privateKey, provider)
   const flippandoGameMaster = new ethers.Contract(
     flippandoGameMasterAddress,
-    FlippandoGameMasterABI as unknown as ethers.ContractInterface,
+    FlippandoGameMasterABI.abi,
     signer,
   )
 

@@ -1,7 +1,6 @@
 import { z } from "zod"
-import { ethers } from "ethers"
+import { ContractInterface, ethers } from "ethers"
 import FlippandoGameMasterABI from "../../abis/FlippandoGameMaster.json"
-import type { FlippandoAgentkitOptions } from "../../flippando-agentkit"
 import { FlippandoAction } from "../flippando"
 
 const CREATE_GAME_PROMPT = `
@@ -26,7 +25,7 @@ export async function createGame(
     const signer = new ethers.Wallet(privateKey, provider)
     const flippandoGameMaster = new ethers.Contract(
       flippandoGameMasterAddress,
-      FlippandoGameMasterABI as unknown as ethers.ContractInterface,
+      FlippandoGameMasterABI.abi,
       signer,
     )
 

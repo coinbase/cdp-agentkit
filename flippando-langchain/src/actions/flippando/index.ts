@@ -9,7 +9,7 @@ import { FlippandoAction, FlippandoActionSchemaAny } from "../flippando"
 
 
 export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaAny>[] {
-    return [new CreateGameAction(), new InitializeGameAction()];
+    return [new CreateGameAction(), new InitializeGameAction(), new FlipTilesAction()];
   }
   
   /**
@@ -22,6 +22,7 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
     FlippandoActionSchemaAny,
     CreateGameAction,
     InitializeGameAction,
+    FlipTilesAction,
   }
 
 

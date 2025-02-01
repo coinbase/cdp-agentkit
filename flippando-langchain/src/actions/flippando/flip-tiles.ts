@@ -2,7 +2,6 @@ import { z } from "zod"
 import { FlippandoAction } from "../flippando"
 import { ethers } from "ethers"
 import FlippandoABI from "../../abis/Flippando.json"
-import type { FlippandoAgentkitOptions } from "../../flippando-agentkit"
 
 const FLIP_TILES_PROMPT = `
 This action flips tiles in a Flippando game. It takes the game ID and an array of tile positions to flip.
@@ -21,13 +20,13 @@ export async function flipTiles(args: z.infer<typeof FlipTilesSchema>): Promise<
 
     const provider = new ethers.providers.JsonRpcProvider(providerUrl)
     const signer = new ethers.Wallet(privateKey, provider)
-    const flippando = new ethers.Contract(flippandoAddress, FlippandoABI as unknown as ethers.ContractInterface, signer)
+    const flippando = new ethers.Contract(flippandoAddress, FlippandoABI.abi, signer)
 
     try {
       const tx = await flippando.flipTiles(args.gameId, args.positions)
       const receipt = await tx.wait()
-      const event = receipt.events?.find((e: any) => e.event === "TilesFlipped")
-      if (!event) throw new Error("TilesFlipped event not found")
+      const event = receipt.events?.find((e: any) => e.event === "GameState")
+      if (!event) throw new Error("GameState event not found")
       return `Tiles flipped successfully in game ${args.gameId}. Positions: ${args.positions.join(", ")}`
     } catch (error) {
       return `Error flipping tiles: ${error instanceof Error ? error.message : String(error)}`
@@ -39,6 +38,5 @@ export class FlipTilesAction implements FlippandoAction<typeof FlipTilesSchema> 
   description = FLIP_TILES_PROMPT
   argsSchema = FlipTilesSchema
   func = flipTiles
-
 }
 
