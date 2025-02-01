@@ -22,6 +22,8 @@ export interface FlippandoGameState {
   
   export interface FlippandoAgentConfig {
     chainIds: number[]
+    providerUrl: string
+    privateKey: string
     twitterEnabled: boolean
     gameAnalysisEnabled: boolean
     artSuggestionsEnabled: boolean
