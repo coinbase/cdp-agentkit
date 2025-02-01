@@ -178,7 +178,8 @@ export class CdpWalletProvider extends EvmWalletProvider {
    * @returns The hash of the transaction.
    */
   async sendTransaction(transaction: TransactionRequest): Promise<`0x${string}`> {
-    return "" as `0x${string}`;
+    // TODO: Implement
+    throw Error("Unimplemented");
   }
 
   /**
