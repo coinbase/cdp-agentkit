@@ -2,7 +2,6 @@ from cdp import Wallet
 
 from cdp_agentkit_core.actions.constants import ERC20_APPROVE_ABI
 
-
 def approve(wallet: Wallet, token_address: str, spender: str, amount: int) -> str:
     """Approve a spender to spend a specified amount of tokens.
 

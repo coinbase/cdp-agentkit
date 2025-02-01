@@ -1,3 +1,8 @@
+ifneq (,$(wildcard ./.env))
+	include .env
+	export
+endif
+
 .PHONY: format
 format:
 	poetry run ruff format .
@@ -21,3 +26,19 @@ local-docs: docs
 .PHONY: test
 test:
 	poetry run pytest
+
+.PHONY: test-utils
+test-utils:
+	poetry run pytest tests/actions/aerodrome/test_utils_e2e.py -s
+
+.PHONY: test-deposit
+test-deposit:
+	poetry run pytest tests/actions/aerodrome/test_deposit_e2e.py -s
+
+.PHONY: test-quote
+test-quote:
+	poetry run pytest tests/actions/aerodrome/test_quote_e2e.py -s
+
+.PHONY: test-withdraw
+test-withdraw:
+	poetry run pytest tests/actions/aerodrome/test_withdraw_e2e.py -s
