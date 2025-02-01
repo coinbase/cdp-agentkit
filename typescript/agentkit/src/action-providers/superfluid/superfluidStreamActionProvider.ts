@@ -6,20 +6,18 @@ import { Network } from "../../network";
 import { SuperfluidCreateStreamSchema } from "./schemas";
 import {
   CFAv1ForwarderAddress,
-  GDAv1ForwarderAddress,
   CFAv1ForwarderABI,
-  GDAv1ForwarderABI
 } from "./constants";
 import { encodeFunctionData, Hex } from "viem";
 
 
 /**
- * SuperfluidActionProvider is an action provider for Superfluid interactions.
+ * SuperfluidStreamActionProvider is an action provider for Superfluid interactions.
  */
-export class SuperfluidActionProvider extends ActionProvider {
+export class SuperfluidStreamActionProvider extends ActionProvider {
 
   /**
-   * Constructor for the SuperfluidActionProvider class.
+   * Constructor for the SuperfluidStreamActionProvider class.
    */
   constructor() {
     super("superfluid", []);
@@ -51,7 +49,7 @@ Do not use the ERC20 address as the destination address. If you are unsure of th
       const data = encodeFunctionData({
         abi: CFAv1ForwarderABI,
         functionName: "createFlow",
-        args: [args.erc20TokenAddress as Hex, walletProvider.getAddress() as Hex, args.recipientAddress as Hex, args.flowRate, "0x"],
+        args: [args.erc20TokenAddress as Hex, walletProvider.getAddress() as Hex, args.recipientAddress as Hex, BigInt(args.flowRate), "0x"],
       });
 
       const hash = await walletProvider.sendTransaction({
@@ -76,4 +74,4 @@ Do not use the ERC20 address as the destination address. If you are unsure of th
   supportsNetwork = (network: Network) => network.protocolFamily === "evm";
 }
 
-export const superfluidActionProvider = () => new SuperfluidActionProvider();
+export const superfluidStreamActionProvider = () => new SuperfluidStreamActionProvider();

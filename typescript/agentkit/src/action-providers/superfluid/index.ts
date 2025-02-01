@@ -1,2 +1,3 @@
 export * from "./schemas";
-export * from "./superfluidActionProvider";
+export * from "./superfluidStreamActionProvider";
+export * from "./superfluidPoolActionProvider";

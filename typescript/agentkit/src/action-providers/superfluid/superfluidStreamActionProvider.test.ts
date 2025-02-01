@@ -1,5 +1,5 @@
 import { encodeFunctionData } from "viem";
-import { superfluidActionProvider } from "./superfluidActionProvider";
+import { superfluidStreamActionProvider } from "./superfluidStreamActionProvider";
 import {
   CFAv1ForwarderAddress,
   GDAv1ForwarderAddress,
@@ -8,7 +8,7 @@ import {
 } from "./constants";
 import { EvmWalletProvider } from "../../wallet-providers";
 
-describe("SuperfluidActionProvider", () => {
+describe("SuperfluidStreamActionProvider", () => {
   const MOCK_ADDRESS = "0xe6b2af36b3bb8d47206a129ff11d5a2de2a63c83";
   const MOCK_ERC20_CONTRACT = "0x1234567890123456789012345678901234567890";
   const MOCK_RECIPIENT_ADDRESS = "0x9876543210987654321098765432109876543210";
@@ -16,7 +16,7 @@ describe("SuperfluidActionProvider", () => {
   const MOCK_CHAIN_ID = "8453";
 
   let mockWallet: jest.Mocked<EvmWalletProvider>;
-  const actionProvider = superfluidActionProvider();
+  const actionProvider = superfluidStreamActionProvider();
 
   beforeEach(() => {
     mockWallet = {
@@ -48,7 +48,7 @@ describe("SuperfluidActionProvider", () => {
         data: encodeFunctionData({
           abi: CFAv1ForwarderABI,
           functionName: "createFlow",
-          args: [MOCK_ERC20_CONTRACT, MOCK_ADDRESS, MOCK_RECIPIENT_ADDRESS, MOCK_FLOW_RATE, "0x"],
+          args: [MOCK_ERC20_CONTRACT, MOCK_ADDRESS, MOCK_RECIPIENT_ADDRESS, BigInt(MOCK_FLOW_RATE), "0x"],
         }),
       });
 
