@@ -12,18 +12,22 @@ See this section for tips on developing in our monorepo: [Monorepo Development T
 
 Here's a high-level overview of the repository structure:
 ```
-./agentkit
-├── cdp-agentkit-core/
-│   ├── python/
-│   └── typescript/
-├── cdp-langchain/
-│   ├── python/
-│   └── typescript/
-├── farcaster-langchain/
-│   └── typescript/
-└── twitter-langchain/
-    ├── python/
-    └── typescript/
+./
+├── typescript/
+│   ├── agentkit/
+│   ├── framework-extensions/
+│   |   └── langchain/
+│   └── examples/
+│       ├── langchain-cdp-chatbot/
+│       ├── langchain-farcaster-chatbot/
+│       └── langchain-twitter-chatbot/
+├── python/
+│   ├── cdp-agentkit-core/
+│   ├── cdp-langchain/
+│   ├── twitter-langchain/
+│   └── examples/
+│       ├── cdp-langchain-chatbot/
+│       └── twitter-langchain-chatbot/
 ```
 
 ## Language-Specific Guides
@@ -85,4 +89,4 @@ Here are some common issues you might run into when developing in our monorepo a
 
 | Issue | Resolution |
 | ----- | ---------- |
-| Python imports are not resolving in VSCode / Cursor | Try opening the package folder in a new window. For example, `cd cdp-agentkit-core/python` and then `code .` or `cursor .` |
+| Python imports are not resolving in VSCode / Cursor | Try opening the package folder in a new window. For example, `cd python/cdp-agentkit-core` and then `code .` or `cursor .` |
