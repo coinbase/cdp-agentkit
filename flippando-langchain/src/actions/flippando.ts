@@ -9,23 +9,23 @@ export type FlippandoActionSchemaAny = z.ZodObject<any>
 /**
  * Interface for Flippando actions
  */
-export interface FlippandoAction<TSchema extends FlippandoActionSchemaAny> {
+export interface FlippandoAction<TActionSchema extends FlippandoActionSchemaAny> {
   name: string
   description: string
-  argsSchema: TSchema
-  func(config: z.infer<typeof FlippandoAgentkitOptions>, args: z.infer<TSchema>): Promise<string>
+  argsSchema: TActionSchema
+  func(config: z.infer<typeof FlippandoAgentkitOptions>, args: z.infer<TActionSchema>): Promise<string>
 }
 
 /**
  * Base class for Flippando actions
  */
-export abstract class BaseFlippandoAction<TSchema extends FlippandoActionSchemaAny>
-  implements FlippandoAction<TSchema>
+export abstract class BaseFlippandoAction<TActionSchema extends FlippandoActionSchemaAny>
+  implements FlippandoAction<TActionSchema>
 {
   abstract name: string
   abstract description: string
-  abstract argsSchema: TSchema
-  abstract func(config: z.infer<typeof FlippandoAgentkitOptions>, args: z.infer<TSchema>): Promise<string>
+  abstract argsSchema: TActionSchema
+  abstract func(config: z.infer<typeof FlippandoAgentkitOptions>, args: z.infer<TActionSchema>): Promise<string>
 }
 
 /**
