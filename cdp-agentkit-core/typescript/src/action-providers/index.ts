@@ -9,3 +9,4 @@ export * from "./basename";
 export * from "./farcaster";
 export * from "./twitter";
 export * from "./wallet";
+export * from "./customActionProvider";

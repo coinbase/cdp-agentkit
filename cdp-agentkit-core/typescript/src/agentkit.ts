@@ -9,7 +9,6 @@ type AgentKitOptions = {
   cdpApiKeyPrivateKey?: string;
   walletProvider?: WalletProvider;
   actionProviders?: ActionProvider[];
-  actions?: Action[];
 };
 
 /**
@@ -18,7 +17,6 @@ type AgentKitOptions = {
 export class AgentKit {
   private walletProvider: WalletProvider;
   private actionProviders: ActionProvider[];
-  private actions?: Action[];
 
   /**
    * Initializes a new AgentKit instance
@@ -31,7 +29,6 @@ export class AgentKit {
   private constructor(config: AgentKitOptions & { walletProvider: WalletProvider }) {
     this.walletProvider = config.walletProvider;
     this.actionProviders = config.actionProviders || [walletActionProvider()];
-    this.actions = config.actions || [];
   }
 
   /**
@@ -71,11 +68,11 @@ export class AgentKit {
    * @returns An array of actions
    */
   public getActions(): Action[] {
-    let actions: Action[] = this.actions || [];
+    const actions: Action[] = [];
 
     for (const actionProvider of this.actionProviders) {
       if (actionProvider.supportsNetwork(this.walletProvider.getNetwork())) {
-        actions = actions.concat(actionProvider.getActions(this.walletProvider));
+        actions.push(...actionProvider.getActions(this.walletProvider));
       }
     }
 
