@@ -1,9 +1,8 @@
-import { BaseAgent, type AgentOptions } from "@coinbase/cdp-agentkit-core"
 import type { StructuredTool } from "@langchain/core/tools"
 import type { FlippandoAgentConfig, FlippandoGameState, FlippandoMemory, NFTMetadata, TokenSupplyData } from "./types"
 import { GamePlayerModule, ArtAdvisorModule, TokenTrackerModule, SocialPosterModule } from "./modules"
 
-export class FlippandoAgent extends BaseAgent {
+export class FlippandoAgent {
   private memory: FlippandoMemory
   private config: FlippandoAgentConfig
 
@@ -12,8 +11,7 @@ export class FlippandoAgent extends BaseAgent {
   private tokenTracker: TokenTrackerModule
   private socialPoster: SocialPosterModule
 
-  constructor(config: FlippandoAgentConfig, options?: AgentOptions) {
-    super(options)
+  constructor(config: FlippandoAgentConfig) {
     this.config = config
     this.memory = {
       gameStates: new Map(),
