@@ -4,7 +4,6 @@ import { HumanMessage } from "@langchain/core/messages"
 import { MemorySaver } from "@langchain/langgraph"
 import { createReactAgent } from "@langchain/langgraph/prebuilt"
 import { ChatOpenAI } from "@langchain/openai"
-import type { StructuredTool } from "@langchain/core/tools"
 import * as dotenv from "dotenv"
 import * as readline from "readline"
 
@@ -40,20 +39,20 @@ async function initialize() {
   const flippandoToolkit = new FlippandoToolkit(flippandoAgentkit)
 
   // Flippando tools
-  const tools = flippandoToolkit.tools
+  const tools = flippandoToolkit.getTools() as any
 
   // Store buffered conversation history in memory
   const memory = new MemorySaver()
 
   // React Agent options
-  const agentConfig = { configurable: { thread_id: "Flippando Agentkit Chatbot Example!" } }
+  const agentConfig = { configurable: { thread_id: "Flippando Agentkit" } }
 
   // Create React Agent using the LLM and Flippando tools
-  const agent = await createReactAgent({
-    llm,
-    tools,
-    checkpointSaver: memory,
-    messageModifier: modifier,
+  const agent = createReactAgent({
+      llm,
+      tools,
+      checkpointSaver: memory,
+      messageModifier: modifier,
   })
 
   return { agent, config: agentConfig }

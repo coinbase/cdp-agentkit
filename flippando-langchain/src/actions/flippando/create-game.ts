@@ -1,8 +1,8 @@
 import { z } from "zod"
-import { BaseFlippandoAction } from "../flippando"
 import { ethers } from "ethers"
 import FlippandoGameMasterABI from "../../abis/FlippandoGameMaster.json"
 import type { FlippandoAgentkitOptions } from "../../flippando-agentkit"
+import { FlippandoAction } from "../flippando"
 
 const CREATE_GAME_PROMPT = `
 This action creates a new Flippando game. It takes the board size, game type, and game tile type as inputs.
@@ -15,19 +15,17 @@ export const CreateGameSchema = z.object({
   gameTileType: z.number().int().nonnegative().describe("The type of tiles used in the game"),
 })
 
-export class CreateGameAction extends BaseFlippandoAction<typeof CreateGameSchema> {
-  name = "create_game"
-  description = CREATE_GAME_PROMPT
-  argsSchema = CreateGameSchema
-
-  async func(
-    config: z.infer<typeof FlippandoAgentkitOptions>,
+export async function createGame(
     args: z.infer<typeof CreateGameSchema>,
   ): Promise<string> {
-    const provider = new ethers.providers.JsonRpcProvider(config.providerUrl)
-    const signer = new ethers.Wallet(config.privateKey, provider)
+    const providerUrl = process.env.FLIPPANDO_PROVIDER_URL
+    const privateKey = process.env.FLIPPANDO_PRIVATE_KEY!
+    const flippandoGameMasterAddress = process.env.FLIPPANDO_GAMEMASTER_ADDRESS!
+
+    const provider = new ethers.providers.JsonRpcProvider(providerUrl)
+    const signer = new ethers.Wallet(privateKey, provider)
     const flippandoGameMaster = new ethers.Contract(
-      config.flippandoGameMasterAddress,
+      flippandoGameMasterAddress,
       FlippandoGameMasterABI as unknown as ethers.ContractInterface,
       signer,
     )
@@ -43,5 +41,11 @@ export class CreateGameAction extends BaseFlippandoAction<typeof CreateGameSchem
       return `Error creating game: ${error instanceof Error ? error.message : String(error)}`
     }
   }
+
+export class CreateGameAction implements FlippandoAction <typeof CreateGameSchema> {
+  public name = "create_game";
+  public description = CREATE_GAME_PROMPT;
+  public argsSchema = CreateGameSchema;
+  public func = createGame
 }
 

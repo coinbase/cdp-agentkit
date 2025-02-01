@@ -13,4 +13,3 @@ export class FlippandoToolkit extends Toolkit {
     this.tools = tools
   }
 }
-

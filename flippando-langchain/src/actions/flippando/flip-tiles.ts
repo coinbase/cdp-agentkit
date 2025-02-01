@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { BaseFlippandoAction } from "../flippando"
+import { FlippandoAction } from "../flippando"
 import { ethers } from "ethers"
 import FlippandoABI from "../../abis/Flippando.json"
 import type { FlippandoAgentkitOptions } from "../../flippando-agentkit"
@@ -14,15 +14,14 @@ export const FlipTilesSchema = z.object({
   positions: z.array(z.number().int().nonnegative()).describe("The positions of the tiles to flip"),
 })
 
-export class FlipTilesAction extends BaseFlippandoAction<typeof FlipTilesSchema> {
-  name = "flip_tiles"
-  description = FLIP_TILES_PROMPT
-  argsSchema = FlipTilesSchema
+export async function flipTiles(args: z.infer<typeof FlipTilesSchema>): Promise<string> {
+    const providerUrl = process.env.FLIPPANDO_PROVIDER_URL
+    const privateKey = process.env.FLIPPANDO_PRIVATE_KEY!
+    const flippandoAddress = process.env.FLIPPANDO_ADDRESS!
 
-  async func(config: z.infer<typeof FlippandoAgentkitOptions>, args: z.infer<typeof FlipTilesSchema>): Promise<string> {
-    const provider = new ethers.providers.JsonRpcProvider(config.providerUrl)
-    const signer = new ethers.Wallet(config.privateKey, provider)
-    const flippando = new ethers.Contract(config.flippandoAddress, FlippandoABI as unknown as ethers.ContractInterface, signer)
+    const provider = new ethers.providers.JsonRpcProvider(providerUrl)
+    const signer = new ethers.Wallet(privateKey, provider)
+    const flippando = new ethers.Contract(flippandoAddress, FlippandoABI as unknown as ethers.ContractInterface, signer)
 
     try {
       const tx = await flippando.flipTiles(args.gameId, args.positions)
@@ -34,5 +33,12 @@ export class FlipTilesAction extends BaseFlippandoAction<typeof FlipTilesSchema>
       return `Error flipping tiles: ${error instanceof Error ? error.message : String(error)}`
     }
   }
+
+export class FlipTilesAction implements FlippandoAction<typeof FlipTilesSchema> {
+  name = "flip_tiles"
+  description = FLIP_TILES_PROMPT
+  argsSchema = FlipTilesSchema
+  func = flipTiles
+
 }
 

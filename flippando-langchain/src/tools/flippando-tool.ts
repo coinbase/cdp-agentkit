@@ -4,20 +4,45 @@ import type { FlippandoAction, FlippandoActionSchemaAny } from "../actions/flipp
 import type { FlippandoAgentkit } from "../flippando-agentkit"
 
 export class FlippandoTool <TActionSchema extends FlippandoActionSchemaAny> extends StructuredTool {
+  /**
+   * Schema definition for the tool's input.
+   */
   public schema: TActionSchema;
-  public name: string
-  public description: string
-  private agentkit: FlippandoAgentkit
-  private action: FlippandoAction<TActionSchema>
 
+  /**
+   * The name of the tool.
+   */
+  public name: string;
+
+  /**
+   * The description of the tool.
+   */
+  public description: string;
+
+  /**
+   * The Farcaster Agentkit instance.
+   */
+  private agentkit: FlippandoAgentkit;
+
+  /**
+   * The Farcaster Action.
+   */
+  private action: FlippandoAction<TActionSchema>;
+
+  /**
+   * Constructor for the Flippando Tool class.
+   *
+   * @param action - The Flippando action to execute.
+   * @param agentkit - The Flippando wrapper to use.
+   */
   constructor(action: FlippandoAction<TActionSchema>, agentkit: FlippandoAgentkit) {
-    super()
+    super();
 
-    this.action = action
-    this.agentkit = agentkit
-    this.name = action.name
-    this.description = action.description
-    this.schema = action.argsSchema
+    this.action = action;
+    this.agentkit = agentkit;
+    this.name = action.name;
+    this.description = action.description;
+    this.schema = action.argsSchema;
   }
 
   protected async _call(
