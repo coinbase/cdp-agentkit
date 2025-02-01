@@ -10,11 +10,16 @@ import path from "path";
 
 import { AgentKit, CdpWalletProvider, farcasterActionProvider } from "@coinbase/cdp-agentkit-core";
 
-import { createWalletClient, http } from "viem";
-import { baseSepolia } from "viem/chains";
-import { privateKeyToAccount } from "viem/accounts";
+/*
+ * import { ViemWalletProvider } from "@coinbase/cdp-agentkit-core";
+ * import { createWalletClient, http } from "viem";
+ * import { baseSepolia } from "viem/chains";
+ * import { privateKeyToAccount } from "viem/accounts";
+ */
 
 dotenv.config();
+
+const WALLET_DATA_PATH = path.join(__dirname, "wallet-data.json");
 
 const modifier = `
   You are a helpful agent that can interact with the Farcaster API using the Coinbase Developer Platform Farcaster Agentkit.
@@ -27,6 +32,24 @@ const modifier = `
   Refrain from restating your tools' descriptions unless it is explicitly requested.
 `;
 
+/*
+ * const account = privateKeyToAccount(
+ * "0x4c0883a69102937d6231471b5dbb6208ffd70c02a813d7f2da1c54f2e3be9f38",
+ * );
+ */
+
+/*
+ * const client = createWalletClient({
+ * account,
+ * chain: baseSepolia,
+ * transport: http(),
+ * });
+ */
+
+/*
+ * const walletProvider = new ViemWalletProvider(client);
+ */
+
 /**
  * Initialize the agent with Farcaster Agentkit
  *
@@ -36,14 +59,19 @@ async function initialize() {
   // Initialize LLM
   const llm = new ChatOpenAI({ model: "gpt-4o-mini" });
 
+  // Load existing wallet data
+  const loadedWallet = await loadWalletData();
+
   // Define CDP Wallet options
   const walletOptions = {
+    apiKeyName: process.env.CDP_API_KEY_NAME,
+    apiKeyPrivateKey: process.env.CDP_API_KEY_PRIVATE_KEY?.replace(/\\n/g, "\n"),
     mnemonicPhrase: process.env.MNEMONIC_PHRASE,
-    walletData: process.env.WALLET_DATA,
+    walletData: loadedWallet || process.env.WALLET_DATA,
   };
 
   // Initialize CDP Wallet provider
-  const walletProvider = CdpWalletProvider.configureWithWallet(walletOptions);
+  const walletProvider = await CdpWalletProvider.configureWithWallet(walletOptions);
 
   // Initialize Farcaster action provider
   const farcaster = farcasterActionProvider();
@@ -77,7 +105,42 @@ async function initialize() {
     messageModifier: modifier,
   });
 
+  // Export and persist wallet data
+  const exportedWallet = await walletProvider.exportWallet();
+  await saveWalletData(exportedWallet);
+
   return { agent, config: agentConfig };
+}
+
+/**
+ * Load wallet data from file if it exists
+ *
+ * @returns Wallet data or undefined if file doesn't exist
+ */
+async function loadWalletData(): Promise<string | undefined> {
+  try {
+    const data = await fs.readFile(WALLET_DATA_PATH, "utf8");
+    return data;
+  } catch  {
+    // File doesn't exist or other error, return undefined
+    return undefined;
+  }
+}
+
+/**
+ * Save wallet data
+ *
+ * @param exportedWallet - Wallet data to save
+ * @returns void
+ */
+async function saveWalletData<T>(exportedWallet: T): Promise<void> {
+  const walletData = JSON.stringify(exportedWallet);
+
+  try {
+    await fs.writeFile(WALLET_DATA_PATH, walletData);
+  } catch (error) {
+    console.warn("Failed to persist wallet data:", error);
+  }
 }
 
 /**
