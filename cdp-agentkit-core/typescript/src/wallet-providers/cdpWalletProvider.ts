@@ -3,12 +3,12 @@
 
 import { Decimal } from "decimal.js";
 import {
-  parseEther,
   ReadContractParameters,
   ReadContractReturnType,
   serializeTransaction,
   TransactionRequest,
   TransactionSerializable,
+  keccak256,
 } from "viem";
 import { EvmWalletProvider } from "./evmWalletProvider";
 import { Network } from "../network";
@@ -165,7 +165,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
     }
 
     const serializedTx = serializeTransaction(transaction as TransactionSerializable);
-    const messageHash = hashMessage(serializedTx);
+    const messageHash = keccak256(serializedTx);
     const payload = await this.#cdpWallet.createPayloadSignature(messageHash);
 
     return payload.getSignature() as `0x${string}`;
