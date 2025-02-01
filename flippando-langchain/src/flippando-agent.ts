@@ -1,87 +1,80 @@
-import { FlippandoAgent } from "./agent"
-import { FlippandoToolkit } from "./tools/flippando_toolkit"
+import { FlippandoToolkit } from "./tools/flippando-toolkit"
+import { FlippandoAgentkit } from "./flippando-agentkit"
 import { HumanMessage } from "@langchain/core/messages"
 import { MemorySaver } from "@langchain/langgraph"
 import { createReactAgent } from "@langchain/langgraph/prebuilt"
 import { ChatOpenAI } from "@langchain/openai"
+import type { StructuredTool } from "@langchain/core/tools"
 import * as dotenv from "dotenv"
 import * as readline from "readline"
 
 dotenv.config()
 
-// Validate environment variables
-function validateEnvironment(): void {
-  const requiredVars = ["OPENAI_API_KEY", "PROVIDER_URL", "PRIVATE_KEY"]
-  const missingVars = requiredVars.filter((varName) => !process.env[varName])
+const modifier = `
+  You are a helpful agent that can interact with the Flippando game using the Flippando Agentkit.
+  You are empowered to interact with Flippando using your tools.
 
-  if (missingVars.length > 0) {
-    console.error("Error: Required environment variables are not set")
-    missingVars.forEach((varName) => {
-      console.error(`${varName}=your_${varName.toLowerCase()}_here`)
-    })
-    process.exit(1)
-  }
+  You can create games, initialize them, flip tiles, and perform various game-related actions.
+  Always use the appropriate tool for each action.
+
+  If someone asks you to do something you can't do with your currently available tools, you must say so, and encourage them to implement it themselves using the Flippando SDK.
+  Recommend they refer to the Flippando documentation for more information.
+
+  Be concise and helpful with your responses.
+  Refrain from restating your tools' descriptions unless it is explicitly requested.
+`
+
+/**
+ * Initialize the agent with Flippando Agentkit
+ *
+ * @returns Agent executor and config
+ */
+async function initialize() {
+  // Initialize LLM
+  const llm = new ChatOpenAI({ modelName: "gpt-4", temperature: 0 })
+
+  // Flippando Agentkit
+  const flippandoAgentkit = new FlippandoAgentkit()
+
+  // Flippando Toolkit
+  const flippandoToolkit = new FlippandoToolkit(flippandoAgentkit)
+
+  // Flippando tools
+  const tools = flippandoToolkit.tools
+
+  // Store buffered conversation history in memory
+  const memory = new MemorySaver()
+
+  // React Agent options
+  const agentConfig = { configurable: { thread_id: "Flippando Agentkit Chatbot Example!" } }
+
+  // Create React Agent using the LLM and Flippando tools
+  const agent = await createReactAgent({
+    llm,
+    tools,
+    checkpointSaver: memory,
+    messageModifier: modifier,
+  })
+
+  return { agent, config: agentConfig }
 }
 
-validateEnvironment()
-
-// Initialize the Flippando agent
-async function initializeAgent() {
-  try {
-    const llm = new ChatOpenAI({
-      modelName: "gpt-4",
-      temperature: 0.7,
-    })
-
-    const config = {
-      chainIds: [1], // Ethereum mainnet
-      twitterEnabled: false,
-      gameAnalysisEnabled: true,
-      artSuggestionsEnabled: true,
-      arbitrageTrackingEnabled: false,
-      providerUrl: process.env.PROVIDER_URL!,
-      privateKey: process.env.PRIVATE_KEY!,
-    }
-
-    const flippandoAgent = new FlippandoAgent(config)
-    const toolkit = new FlippandoToolkit(flippandoAgent)
-    const tools = toolkit.tools
-
-    const memory = new MemorySaver()
-    const agentConfig = { configurable: { thread_id: "Flippando Agent Example!" } }
-
-    const agent = createReactAgent({
-      llm,
-      tools,
-      checkpointSaver: memory,
-      messageModifier: `
-        You are a helpful agent that can interact with the Flippando game using various tools. 
-        You can create games, initialize them, flip tiles, create NFTs, and make art. 
-        You also have the ability to analyze games, suggest art combinations, track token supply, 
-        and post updates on social media. Always use the appropriate tool for each action. 
-        If someone asks you to do something you can't do with your currently available tools, 
-        explain your limitations and suggest they implement new features using the Flippando SDK. 
-        Be concise and helpful with your responses. 
-      `,
-    })
-
-    return { agent, config: agentConfig, flippandoAgent }
-  } catch (error) {
-    console.error("Failed to initialize agent:", error)
-    throw error
-  }
-}
-
-// Run the agent in autonomous mode
-async function runAutonomousMode(agent: any, config: any, flippandoAgent: FlippandoAgent, interval = 60) {
+/**
+ * Run the agent autonomously with specified intervals
+ *
+ * @param agent - The agent executor
+ * @param config - Agent configuration
+ * @param interval - Time interval between actions in seconds
+ */
+async function runAutonomousMode(agent: any, config: any, interval = 60) {
   console.log("Starting autonomous mode...")
 
   while (true) {
     try {
       const thought =
-        "Perform an interesting action in the Flippando game ecosystem. " +
-        "This could be creating a new game, analyzing existing games, " +
-        "suggesting art combinations, or tracking token supply."
+        "Be creative and do something interesting in the Flippando game. " +
+        "Choose an action or set of actions and execute it that highlights your abilities. " +
+        "This could be creating a new game, initializing an existing game, or flipping tiles in an ongoing game."
 
       const stream = await agent.stream({ messages: [new HumanMessage(thought)] }, config)
 
@@ -90,25 +83,27 @@ async function runAutonomousMode(agent: any, config: any, flippandoAgent: Flippa
           console.log(chunk.agent.messages[0].content)
         } else if ("tools" in chunk) {
           console.log(chunk.tools.messages[0].content)
-          // Handle game state updates or other Flippando-specific actions
-          if (chunk.tools.name === "create_game" || chunk.tools.name === "initialize_game") {
-            const gameState = JSON.parse(chunk.tools.messages[0].content)
-            await flippandoAgent.handleGameStateUpdate(gameState)
-          }
         }
         console.log("-------------------")
       }
 
       await new Promise((resolve) => setTimeout(resolve, interval * 1000))
     } catch (error) {
-      console.error("Error in autonomous mode:", error)
+      if (error instanceof Error) {
+        console.error("Error:", error.message)
+      }
       // Implement appropriate error handling and recovery
     }
   }
 }
 
-// Run the agent in chat mode
-async function runChatMode(agent: any, config: any, flippandoAgent: FlippandoAgent) {
+/**
+ * Run the agent interactively based on user input
+ *
+ * @param agent - The agent executor
+ * @param config - Agent configuration
+ */
+async function runChatMode(agent: any, config: any) {
   console.log("Starting chat mode... Type 'exit' to end.")
 
   const rl = readline.createInterface({
@@ -133,23 +128,24 @@ async function runChatMode(agent: any, config: any, flippandoAgent: FlippandoAge
           console.log(chunk.agent.messages[0].content)
         } else if ("tools" in chunk) {
           console.log(chunk.tools.messages[0].content)
-          // Handle game state updates or other Flippando-specific actions
-          if (chunk.tools.name === "create_game" || chunk.tools.name === "initialize_game") {
-            const gameState = JSON.parse(chunk.tools.messages[0].content)
-            await flippandoAgent.handleGameStateUpdate(gameState)
-          }
         }
         console.log("-------------------")
       }
     }
   } catch (error) {
-    console.error("Error in chat mode:", error)
+    if (error instanceof Error) {
+      console.error("Error:", error.message)
+    }
   } finally {
     rl.close()
   }
 }
 
-// Choose between autonomous and chat mode
+/**
+ * Choose whether to run in autonomous or chat mode based on user input
+ *
+ * @returns Selected mode
+ */
 async function chooseMode(): Promise<"chat" | "auto"> {
   const rl = readline.createInterface({
     input: process.stdin,
@@ -176,19 +172,23 @@ async function chooseMode(): Promise<"chat" | "auto"> {
   }
 }
 
-// Main function to start the Flippando agent
+/**
+ * Start the Flippando agent
+ */
 async function main() {
   try {
-    const { agent, config, flippandoAgent } = await initializeAgent()
+    const { agent, config } = await initialize()
     const mode = await chooseMode()
 
     if (mode === "chat") {
-      await runChatMode(agent, config, flippandoAgent)
+      await runChatMode(agent, config)
     } else {
-      await runAutonomousMode(agent, config, flippandoAgent)
+      await runAutonomousMode(agent, config)
     }
   } catch (error) {
-    console.error("Error:", error)
+    if (error instanceof Error) {
+      console.error("Error:", error.message)
+    }
     process.exit(1)
   }
 }
