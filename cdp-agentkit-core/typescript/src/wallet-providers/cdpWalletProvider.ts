@@ -6,7 +6,9 @@ import {
   parseEther,
   ReadContractParameters,
   ReadContractReturnType,
+  serializeTransaction,
   TransactionRequest,
+  TransactionSerializable,
 } from "viem";
 import { EvmWalletProvider } from "./evmWalletProvider";
 import { Network } from "../network";
@@ -18,6 +20,8 @@ import {
   Trade,
   Wallet,
   WalletData,
+  hashTypedDataMessage,
+  hashMessage,
 } from "@coinbase/coinbase-sdk";
 import { NETWORK_ID_TO_CHAIN_ID } from "../network/network";
 
@@ -116,8 +120,14 @@ export class CdpWalletProvider extends EvmWalletProvider {
    * @returns The signed message.
    */
   async signMessage(message: string): Promise<`0x${string}`> {
-    // TODO: Implement
-    throw Error("Unimplemented");
+    if (!this.#cdpWallet) {
+      throw new Error("Wallet not initialized");
+    }
+
+    const messageHash = hashMessage(message);
+    const payload = await this.#cdpWallet.createPayloadSignature(messageHash);
+
+    return payload.getSignature() as `0x${string}`;
   }
 
   /**
@@ -128,8 +138,19 @@ export class CdpWalletProvider extends EvmWalletProvider {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async signTypedData(typedData: any): Promise<`0x${string}`> {
-    // TODO: Implement
-    throw Error("Unimplemented");
+    if (!this.#cdpWallet) {
+      throw new Error("Wallet not initialized");
+    }
+
+    const messageHash = hashTypedDataMessage(
+      typedData.domain!,
+      typedData.types!,
+      typedData.message!,
+    );
+
+    const payload = await this.#cdpWallet.createPayloadSignature(messageHash);
+
+    return payload.getSignature() as `0x${string}`;
   }
 
   /**
@@ -139,8 +160,14 @@ export class CdpWalletProvider extends EvmWalletProvider {
    * @returns The signed transaction.
    */
   async signTransaction(transaction: TransactionRequest): Promise<`0x${string}`> {
-    // TODO: Implement
-    throw Error("Unimplemented");
+    if (!this.#cdpWallet) {
+      throw new Error("Wallet not initialized");
+    }
+
+    const serializedTx = serializeTransaction(transaction as TransactionSerializable);
+    const payload = await this.#cdpWallet.createPayloadSignature(serializedTx);
+
+    return payload.getSignature() as `0x${string}`;
   }
 
   /**
