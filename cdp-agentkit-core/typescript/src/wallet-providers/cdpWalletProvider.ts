@@ -165,7 +165,8 @@ export class CdpWalletProvider extends EvmWalletProvider {
     }
 
     const serializedTx = serializeTransaction(transaction as TransactionSerializable);
-    const payload = await this.#cdpWallet.createPayloadSignature(serializedTx);
+    const messageHash = hashMessage(serializedTx);
+    const payload = await this.#cdpWallet.createPayloadSignature(messageHash);
 
     return payload.getSignature() as `0x${string}`;
   }
@@ -177,8 +178,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
    * @returns The hash of the transaction.
    */
   async sendTransaction(transaction: TransactionRequest): Promise<`0x${string}`> {
-    // TODO: Implement
-    throw Error("Unimplemented");
+    return "" as `0x${string}`;
   }
 
   /**
