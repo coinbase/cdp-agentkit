@@ -28,9 +28,24 @@ import {
 import { NETWORK_ID_TO_CHAIN_ID, NETWORK_ID_TO_VIEM_CHAIN } from "../network/network";
 
 /**
+ * Configuration options for the CDP Providers.
+ */
+export interface CdpProviderConfig {
+  /**
+   * The CDP API Key Name.
+   */
+  apiKeyName?: string;
+
+  /**
+   * The CDP API Key Private Key.
+   */
+  apiKeyPrivateKey?: string;
+}
+
+/**
  * Configuration options for the CdpActionProvider.
  */
-export interface CdpWalletProviderConfig {
+export interface CdpWalletProviderConfig extends CdpProviderConfig {
   /**
    * The CDP Wallet.
    */
@@ -56,16 +71,6 @@ export interface CdpWalletProviderConfig {
  * Configuration options for the CDP Agentkit with a Wallet.
  */
 interface ConfigureCdpAgentkitWithWalletOptions extends CdpWalletProviderConfig {
-  /**
-   * The CDP API Key Name.
-   */
-  apiKeyName?: string;
-
-  /**
-   * The CDP API Key Private Key.
-   */
-  apiKeyPrivateKey?: string;
-
   /**
    * The data of the CDP Wallet as a JSON string.
    */

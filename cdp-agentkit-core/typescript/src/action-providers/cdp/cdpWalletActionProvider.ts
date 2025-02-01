@@ -4,7 +4,7 @@ import { z } from "zod";
 import { CreateAction } from "../actionDecorator";
 import { ActionProvider } from "../actionProvider";
 import { Network } from "../../network";
-import { CdpWalletProvider, CdpWalletProviderConfig } from "../../wallet-providers";
+import { CdpWalletProvider, CdpProviderConfig } from "../../wallet-providers";
 
 import { SolidityVersions } from "./constants";
 import { DeployContractSchema, DeployNftSchema, DeployTokenSchema, TradeSchema } from "./schemas";
@@ -20,7 +20,7 @@ export class CdpWalletActionProvider extends ActionProvider<CdpWalletProvider> {
    *
    * @param config - The configuration options for the CdpWalletActionProvider.
    */
-  constructor(config: CdpWalletProviderConfig = {}) {
+  constructor(config: CdpProviderConfig = {}) {
     super("cdp_wallet", []);
 
     if (config.apiKeyName && config.apiKeyPrivateKey) {
@@ -206,10 +206,9 @@ Important notes:
    *
    * @param _ - The network to check.
    * @returns True if the Cdp action provider supports the network, false otherwise.
-   * TODO: Split out into sub providers so network support can be tighter scoped.
    */
   supportsNetwork = (_: Network) => true;
 }
 
-export const cdpWalletActionProvider = (config: CdpWalletProviderConfig = {}) =>
+export const cdpWalletActionProvider = (config: CdpProviderConfig = {}) =>
   new CdpWalletActionProvider(config);

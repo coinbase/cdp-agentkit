@@ -10,9 +10,11 @@ import {
   AgentKit,
   ViemWalletProvider,
   cdpApiActionProvider,
+  basenameActionProvider,
   erc721ActionProvider,
   pythActionProvider,
   walletActionProvider,
+  wethActionProvider,
 } from "@coinbase/cdp-agentkit-core";
 import { createWalletClient, http } from "viem";
 import { baseSepolia } from "viem/chains";
@@ -34,15 +36,18 @@ async function initializeAgent() {
 
     const cdp = cdpApiActionProvider({
       apiKeyName: process.env.CDP_API_KEY_NAME,
-      apiKeyPrivateKey: process.env.CDP_API_KEY_PRIVATE_KEY,
+      apiKeyPrivateKey: process.env.CDP_API_KEY_PRIVATE_KEY!.replace(/\\n/g, "\n"),
     });
     const erc721 = erc721ActionProvider();
     const pyth = pythActionProvider();
     const wallet = walletActionProvider();
+    const basename = basenameActionProvider();
+    const weth = wethActionProvider();
 
     const agentKit = await AgentKit.from({
-      walletProvider,
-      actionProviders: [cdp, erc721, pyth, wallet],
+      cdpApiKeyName: process.env.CDP_API_KEY_NAME,
+      cdpApiKeyPrivateKey: process.env.CDP_API_KEY_PRIVATE_KEY!.replace(/\\n/g, "\n"),
+      actionProviders: [cdp, erc721, pyth, wallet, basename, weth],
     });
 
     const actions = agentKit.getActions();
@@ -203,17 +208,17 @@ async function chooseMode(): Promise<"chat" | "auto"> {
   }
 }
 
-const account = privateKeyToAccount(
-  "0x4c0883a69102937d6231471b5dbb6208ffd70c02a813d7f2da1c54f2e3be9f38",
-);
+// const account = privateKeyToAccount(
+//   "0x4c0883a69102937d6231471b5dbb6208ffd70c02a813d7f2da1c54f2e3be9f38",
+// );
 
-const client = createWalletClient({
-  account,
-  chain: baseSepolia,
-  transport: http(),
-});
+// const client = createWalletClient({
+//   account,
+//   chain: baseSepolia,
+//   transport: http(),
+// });
 
-const walletProvider = new ViemWalletProvider(client);
+// const walletProvider = new ViemWalletProvider(client);
 
 /**
  * Start the chatbot agent

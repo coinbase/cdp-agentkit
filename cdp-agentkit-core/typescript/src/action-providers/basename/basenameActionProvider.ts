@@ -34,7 +34,7 @@ export class BasenameActionProvider extends ActionProvider {
    * @returns A string indicating the success or failure of the registration.
    */
   @CreateAction({
-    name: "registerBasename",
+    name: "register_basename",
     description: `
 This tool will register a Basename for the agent. The agent should have a wallet associated to register a Basename.
 When your network ID is 'base-mainnet' (also sometimes known simply as 'base'), the name must end with .base.eth, and when your network ID is 'base-sepolia', it must ends with .basetest.eth.

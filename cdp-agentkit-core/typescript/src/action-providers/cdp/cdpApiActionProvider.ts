@@ -4,7 +4,7 @@ import { z } from "zod";
 import { CreateAction } from "../actionDecorator";
 import { ActionProvider } from "../actionProvider";
 import { Network } from "../../network";
-import { CdpWalletProviderConfig, EvmWalletProvider } from "../../wallet-providers";
+import { CdpProviderConfig, EvmWalletProvider } from "../../wallet-providers";
 
 import { AddressReputationSchema, RequestFaucetFundsSchema } from "./schemas";
 
@@ -19,7 +19,7 @@ export class CdpApiActionProvider extends ActionProvider<EvmWalletProvider> {
    *
    * @param config - The configuration options for the CdpApiActionProvider.
    */
-  constructor(config: CdpWalletProviderConfig = {}) {
+  constructor(config: CdpProviderConfig = {}) {
     super("cdp_api", []);
 
     if (config.apiKeyName && config.apiKeyPrivateKey) {
@@ -97,10 +97,9 @@ from another wallet and provide the user with your wallet details.`,
    *
    * @param _ - The network to check.
    * @returns True if the Cdp action provider supports the network, false otherwise.
-   * TODO: Split out into sub providers so network support can be tighter scoped.
    */
   supportsNetwork = (_: Network) => true;
 }
 
-export const cdpApiActionProvider = (config: CdpWalletProviderConfig = {}) =>
+export const cdpApiActionProvider = (config: CdpProviderConfig = {}) =>
   new CdpApiActionProvider(config);
