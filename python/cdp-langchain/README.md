@@ -1,6 +1,6 @@
-# CDP Agentkit Extension - Langchain Toolkit
+# CDP Agentkit Extension - LangChain Toolkit
 
-CDP integration with Langchain to enable agentic workflows using the core primitives defined in `cdp-agentkit-core`.
+CDP integration with LangChain to enable agentic workflows using the core primitives defined in `cdp-agentkit-core`.
 
 This toolkit contains tools that enable an LLM agent to interact with the [Coinbase Developer Platform](https://docs.cdp.coinbase.com/). The toolkit provides a wrapper around the CDP SDK, allowing agents to perform onchain operations like transfers, trades, and smart contract interactions.
 
@@ -122,7 +122,7 @@ cdp = CdpAgentkitWrapper(**values)
 
 ### Network Support
 
-The toolkit supports [multiple networks](https://docs.cdp.coinbase.com/cdp-sdk/docs/networks).
+The toolkit supports [multiple networks](https://docs.cdp.coinbase.com/cdp-apis/docs/networks).
 
 ### Gasless Transactions
 
@@ -133,8 +133,8 @@ The following operations support gasless transactions on Base Mainnet:
 
 ## Examples
 
-Check out [cdp-langchain/examples](../examples) for inspiration and help getting started!
-- [Chatbot Python](../examples/chatbot-python/README.md): Simple example of a Python Chatbot that can perform complex onchain interactions, using OpenAI.
+Check out [../examples](../examples) for inspiration and help getting started!
+- [Chatbot Python](../examples/cdp-langchain-chatbot/README.md): Simple example of a Python Chatbot that can perform complex onchain interactions, using OpenAI.
 
 ## Contributing
 

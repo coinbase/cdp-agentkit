@@ -40,7 +40,7 @@ npm install @coinbase/agentkit
 ```typescript
 const agentKit = await AgentKit.from({
   cdpApiKeyName: "CDP API KEY NAME",
-  cdpApiKeyPrivate: "CDP API KEY PRIVATE",
+  cdpApiKeyPrivate: "CDP API KEY PRIVATE KEY",
 });
 ```
 
@@ -51,7 +51,7 @@ import { CdpWalletProvider } from "@coinbase/agentkit";
 
 const walletProvider = await CdpWalletProvider.configureWithWallet({
     apiKeyName: "CDP API KEY NAME",
-    apiKeyPrivate: "CDP API KEY PRIVATE",
+    apiKeyPrivate: "CDP API KEY PRIVATE KEY",
     networkId: "base-mainnet",
 });
 
@@ -70,7 +70,7 @@ const agentKit = await AgentKit.from({
     actionProviders: [
         cdpApiActionProvider({
             apiKeyName: "CDP API KEY NAME",
-            apiKeyPrivate: "CDP API KEY PRIVATE",
+            apiKeyPrivate: "CDP API KEY PRIVATE KEY",
         }),
         pythActionProvider(),
     ],
@@ -184,12 +184,14 @@ class MyActionProvider extends ActionProvider<WalletProvider> {
 }
 ```
 
-### Adding an Action Provider to your AgentKit instance. This gives your agent access to the actions defined in the action provider.
+### Adding an Action Provider to your AgentKit instance. 
+
+This gives your agent access to the actions defined in the action provider.
 
 ```typescript
 const agentKit = new AgentKit({
   cdpApiKeyName: "CDP API KEY NAME",
-  cdpApiKeyPrivate: "CDP API KEY PRIVATE",
+  cdpApiKeyPrivate: "CDP API KEY PRIVATE KEY",
   actionProviders: [myActionProvider()],
 });
 ```
@@ -208,14 +210,14 @@ The `CdpWalletProvider` is a wallet provider that uses the Coinbase Developer Pl
 
 #### Network Configuration
 
-The `CdpWalletProvider` can be configured to use a specific network by passing the `networkId` parameter to the `configureWithWallet` method. The `networkId` is the ID of the network you want to use. You can find a list of network IDs [here](https://docs.cdp.coinbase.com/cdp-apis/docs/networks).
+The `CdpWalletProvider` can be configured to use a specific network by passing the `networkId` parameter to the `configureWithWallet` method. The `networkId` is the ID of the network you want to use. You can find a list of [supported networks on the CDP API docs](https://docs.cdp.coinbase.com/cdp-apis/docs/networks).
 
 ```typescript
 import { CdpWalletProvider } from "@coinbase/agentkit";
 
 const walletProvider = await CdpWalletProvider.configureWithWallet({
     apiKeyName: "CDP API KEY NAME",
-    apiKeyPrivate: "CDP API KEY PRIVATE",
+    apiKeyPrivate: "CDP API KEY PRIVATE KEY",
     networkId: "base-mainnet",
 });
 ```
@@ -230,7 +232,7 @@ import { Wallet } from "@coinbase/coinbase-sdk";
 const walletProvider = await CdpWalletProvider.configureWithWallet({
     wallet,
     apiKeyName: "CDP API KEY NAME",
-    apiKeyPrivate: "CDP API KEY PRIVATE",
+    apiKeyPrivate: "CDP API KEY PRIVATE KEY",
 });
 ```
 
@@ -244,6 +246,7 @@ import { CdpWalletProvider } from "@coinbase/agentkit";
 const walletProvider = await CdpWalletProvider.configureWithWallet({
     mnemonicPhrase: "MNEMONIC PHRASE",
 });
+```
 
 #### Exporting a wallet
 
@@ -269,7 +272,7 @@ import { CdpWalletProvider } from "@coinbase/agentkit";
 const walletProvider = await CdpWalletProvider.configureWithWallet({
     cdpWalletData: "WALLET DATA JSON STRING",
     apiKeyName: "CDP API KEY NAME",
-    apiKeyPrivate: "CDP API KEY PRIVATE",
+    apiKeyPrivate: "CDP API KEY PRIVATE KEY",
 });
 ```
 

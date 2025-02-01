@@ -1,5 +1,6 @@
-# Twitter (X) Langchain Toolkit
-Twitter integration with Langchain to enable agentic workflows using the core primitives defined in `cdp-agentkit-core`.
+# Twitter (X) LangChain Toolkit
+
+LangChain extension of AgentKit. Enables agentic workflows to interact with Twitter, such as to post a tweet.
 
 This toolkit contains tools that enable an LLM agent to interact with [Twitter](https://developer.x.com/en/docs/x-api). The toolkit provides a wrapper around the Twitter (X) API, allowing agents to perform social operations like posting text.
 
@@ -110,8 +111,8 @@ The message "hello, world! c4b8e3744c2e4345be9e0622b4c0a8aa" has been successful
 
 ## Examples
 
-Check out [twitter-langchain/examples](../examples) for inspiration and help getting started!
-- [Chatbot Python](../examples/chatbot-python/README.md): Simple example of a Python Chatbot that can interact on Twitter (X), using OpenAI.
+Check out [../examples](../examples) for inspiration and help getting started!
+- [Chatbot Python](../examples/twitter-langchain-chatbot/README.md): Simple example of a Python Chatbot that can interact on Twitter (X), using OpenAI.
 
 ## Contributing
 

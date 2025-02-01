@@ -157,26 +157,6 @@ AgentKit is organized as a monorepo that contains multiple packages.
 │       └── twitter-langchain-chatbot/
 ```
 
-### cdp-agentkit-core
-
-Core primitives and framework-agnostic tools that are meant to be composable and used via AgentKit framework extensions (ie, `cdp-langchain`).
-See [CDP Agentkit Core](./cdp-agentkit-core/README.md) to get started!
-
-### cdp-langchain
-
-Langchain Toolkit extension of AgentKit. Enables agentic workflows to interact with onchain actions.
-See [CDP Langchain](./cdp-langchain/README.md) to get started!
-
-### farcaster-langchain
-
-Langchain Toolkit extension for Farcaster. Enables agentic workflows to interact with Farcaster, such as to post a tweet.
-See [Farcaster Langchain](./farcaster-langchain/typescript/README.md) to get started!
-
-### twitter-langchain
-
-Langchain Toolkit extension for Twitter. Enables agentic workflows to interact with Twitter, such as to post a tweet.
-See [Twitter Langchain](./twitter-langchain/README.md) to get started!
-
 ## 🤝 Contributing
 
 **AgentKit is actively looking for community contributions!**

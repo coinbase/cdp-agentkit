@@ -6,7 +6,7 @@ This guide covers Python-specific setup and development for AgentKit.
 
 - [Development Setup](#development-setup)
 - [Adding an Agentic Action](#adding-an-agentic-action)
-- [Adding an Agentic Action to Langchain Toolkit](#adding-an-agentic-action-to-langchain-toolkit)
+- [Adding an Agentic Action to LangChain Toolkit](#adding-an-agentic-action-to-langchain-toolkit)
 - [Adding an Agentic Action to the Twitter Toolkit](#adding-an-agentic-action-to-the-twitter-toolkit)
 - [Integrating into an AI Agent Framework](#integrating-into-an-ai-agent-framework)
 - [Testing](#testing)
@@ -152,7 +152,7 @@ make test
 
 For instructions on manual end-to-end testing, see the [Testing](#testing) section.
 
-## Adding an Agentic Action to Langchain Toolkit
+## Adding an Agentic Action to LangChain Toolkit
 
 The action will be included automatically, all you need to do is add the action to the list of tools in the `CdpToolkit` class documentation in `python/cdp-langchain/cdp_langchain/agent_toolkits/cdp_toolkit.py`.
 
