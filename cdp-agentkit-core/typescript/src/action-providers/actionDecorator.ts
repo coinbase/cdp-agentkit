@@ -83,7 +83,7 @@ export type StoredActionMetadata = Map<string, ActionMetadata>;
  */
 export function CreateAction(params: CreateActionDecoratorParams) {
   return (target: object, propertyKey: string, descriptor: PropertyDescriptor) => {
-    const prefixedActionName = `${target.constructor.name}.${params.name}`;
+    const prefixedActionName = `${target.constructor.name}_${params.name}`;
 
     const originalMethod = descriptor.value;
 
