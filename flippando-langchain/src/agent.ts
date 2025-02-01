@@ -1,11 +1,9 @@
-import { type AgentExecutor, initializeAgentExecutorWithOptions } from "langchain/agents"
-import { ChatOpenAI } from "langchain/chat_models/openai"
-import type { Tool } from "@coinbase/cdp-agentkit-core/tools"
+import { BaseAgent, type AgentOptions } from "@coinbase/cdp-agentkit-core"
+import type { StructuredTool } from "@langchain/core/tools"
 import type { FlippandoAgentConfig, FlippandoGameState, FlippandoMemory, NFTMetadata, TokenSupplyData } from "./types"
 import { GamePlayerModule, ArtAdvisorModule, TokenTrackerModule, SocialPosterModule } from "./modules"
 
-export class FlippandoAgent {
-  private executor: AgentExecutor
+export class FlippandoAgent extends BaseAgent {
   private memory: FlippandoMemory
   private config: FlippandoAgentConfig
 
@@ -14,7 +12,8 @@ export class FlippandoAgent {
   private tokenTracker: TokenTrackerModule
   private socialPoster: SocialPosterModule
 
-  constructor(config: FlippandoAgentConfig) {
+  constructor(config: FlippandoAgentConfig, options?: AgentOptions) {
+    super(options)
     this.config = config
     this.memory = {
       gameStates: new Map(),
@@ -22,39 +21,27 @@ export class FlippandoAgent {
       tokenSupplyHistory: [],
     }
 
-    this.initializeModules()
-  }
-
-  private async initializeModules() {
-    // Initialize core modules
+    // Initialize all modules in the constructor
     this.gamePlayer = new GamePlayerModule(this.memory, this.config.providerUrl, this.config.privateKey)
     this.artAdvisor = new ArtAdvisorModule(this.memory)
     this.tokenTracker = new TokenTrackerModule(this.config.chainIds)
     this.socialPoster = new SocialPosterModule()
-
-    // Initialize LangChain agent with tools
-    const tools = this.getTools()
-    const model = new ChatOpenAI({
-      temperature: 0.7,
-      modelName: "gpt-4",
-    })
-
-    this.executor = await initializeAgentExecutorWithOptions(tools, model, {
-      agentType: "chat-conversational-react-description",
-      verbose: true,
-    })
   }
 
-  private getTools(): Tool[] {
+  protected async getTools(): Promise<StructuredTool[]> {
     return [
-      this.gamePlayer.getTools(),
-      this.artAdvisor.getTools(),
-      this.tokenTracker.getTools(),
-      this.socialPoster.getTools(),
-    ].flat()
+      ...this.gamePlayer.getTools(),
+      ...this.artAdvisor.getTools(),
+      ...this.tokenTracker.getTools(),
+      ...this.socialPoster.getTools(),
+    ]
   }
 
-  // Event handlers
+  // New public method to access tools
+  public async getAllTools(): Promise<StructuredTool[]> {
+    return this.getTools()
+  }
+
   public async handleGameStateUpdate(gameState: FlippandoGameState) {
     this.memory.gameStates.set(gameState.gameId, gameState)
     await this.gamePlayer.processGameState(gameState)
@@ -63,9 +50,11 @@ export class FlippandoAgent {
       if (this.config.twitterEnabled) {
         await this.socialPoster.announceGameCompletion(gameState)
       }
-      // Automatically create NFT for completed games
-      const tokenId = await this.gamePlayer.createNFT(gameState.gameId)
-      console.log(`NFT created for completed game ${gameState.gameId} with token ID ${tokenId}`)
+      const createNFTTool = (await this.getAllTools()).find((tool) => tool.name === "create_nft")
+      if (createNFTTool) {
+        const result = await createNFTTool.invoke({ gameId: gameState.gameId })
+        console.log(result)
+      }
     }
   }
 
