@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { getLangChainTools } from "./index";
-import { AgentKit, Action } from "@coinbase/cdp-agentkit-core";
+import { AgentKit, Action } from "@coinbase/agentkit";
 
 // Mocking the Action class
 const mockAction: Action = {

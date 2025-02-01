@@ -5,7 +5,6 @@
     "typescript/agentkit",
     "typescript/framework-extensions/langchain",
     "typescript/examples/langchain-cdp-chatbot",
-    "typescript/examples/langchain-viem-chatbot",
     "typescript/examples/langchain-twitter-chatbot",
     "typescript/examples/langchain-farcaster-chatbot"
   ],

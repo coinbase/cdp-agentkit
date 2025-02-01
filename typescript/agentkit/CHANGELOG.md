@@ -1,6 +1,15 @@
-# CDP AgentKit Core Changelog
+# AgentKit Changelog
 
 ## Unreleased
+
+## [0.1.0] - 2025-02-01
+
+### Added
+
+- Added Action Provider Paradigm
+- Added Wallet Provider Paradigm
+- Refactored directory structure
+- Updated package name to `@coinbase/agentkit`
 
 ## [0.0.14] - 2025-01-24
 

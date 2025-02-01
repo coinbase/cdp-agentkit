@@ -6,6 +6,18 @@
 
 ### Added
 
+- Added `getLangChainTools` helper
+- Refactored directory structure
+- Changed package name to `@coinbase/agentkit-langchain`
+
+### Removed
+
+- CDP Tool and Toolkit concepts
+
+## [0.0.15] - 2025-01-24
+
+### Added
+
 - Bump dependency `@coinbase/cdp-agentkit-core` to `0.0.14`.
 - Bump `@coinbase/coinbase-sdk` dependency to `0.15.0`
 

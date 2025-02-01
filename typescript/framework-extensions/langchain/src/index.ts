@@ -4,7 +4,7 @@
 
 import { z } from "zod";
 import { StructuredTool, tool } from "@langchain/core/tools";
-import { AgentKit, Action } from "@coinbase/cdp-agentkit-core";
+import { AgentKit, Action } from "@coinbase/agentkit";
 
 /**
  * Get Langchain tools from an AgentKit instance

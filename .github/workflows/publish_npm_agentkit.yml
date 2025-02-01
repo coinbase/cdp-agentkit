@@ -1,10 +1,10 @@
-name: Publish Twitter LangChain to NPM
+name: Release AgentKit to NPM
 
 on:
   workflow_dispatch:
 
 jobs:
-  deploy-npm-twitter-langchain:
+  deploy-npm-agentkit:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -15,10 +15,12 @@ jobs:
         with:
           node-version: "18"
           registry-url: "https://registry.npmjs.org"
-      - run: npm i && npm run build
-      - name: Install, build and publish @coinbase/twitter-langchain
-        working-directory: ./twitter-langchain/typescript
+      - run: npm ci
+      - name: Install, build and publish @coinbase/agentkit
+        working-directory: ./typescript/agentkit
         run: |
-          npm publish --ignore-scripts --provenance --access public
+          npm ci
+          npm run build
+          npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

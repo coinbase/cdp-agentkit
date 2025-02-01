@@ -24,12 +24,12 @@ jobs:
       - name: Build AgentKit JSDocs
         run: |
           mkdir -p docs/agentkit/typescript
-          cp -r agentkit/typescript/docs/* docs/agentkit/typescript
+          cp -r typescript/agentkit/docs/* docs/agentkit/typescript
 
       - name: Build AgentKit LangChain JSDocs
         run: |
           mkdir -p docs/agentkit-langchain/typescript
-          cp -r langchain/typescript/docs/* docs/agentkit-langchain/typescript
+          cp -r typescript/framework-extensions/langchain/docs/* docs/agentkit-langchain/typescript
 
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
