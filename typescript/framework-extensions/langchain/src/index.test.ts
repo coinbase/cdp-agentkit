@@ -11,8 +11,8 @@ const mockAction: Action = {
 };
 
 // Creating a mock for AgentKit
-jest.mock("@coinbase/cdp-agentkit-core", () => {
-  const originalModule = jest.requireActual("@coinbase/cdp-agentkit-core");
+jest.mock("@coinbase/agentkit", () => {
+  const originalModule = jest.requireActual("@coinbase/agentkit");
   return {
     ...originalModule,
     AgentKit: {
