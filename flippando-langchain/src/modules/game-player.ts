@@ -1,8 +1,104 @@
-import { Tool } from "langchain/tools"
+import { StructuredTool } from "@langchain/core/tools"
+import { z } from "zod"
 import { ethers } from "ethers"
 import type { FlippandoGameState, FlippandoMemory } from "../types"
 import FlippandoGameMasterABI from "../abis/FlippandoGameMaster.json"
 import FlippandoABI from "../abis/Flippando.json"
+
+class CreateGameTool extends StructuredTool {
+  name = "create_game"
+  description = "Create a new Flippando game"
+  schema = z.object({
+    boardSize: z.string().describe("The size of the game board"),
+    gameType: z.string().describe("The type of the game"),
+    gameTileType: z.string().describe("The type of tiles used in the game"),
+  })
+
+  constructor(private gamePlayer: GamePlayerModule) {
+    super()
+  }
+
+  async _call({ boardSize, gameType, gameTileType }: z.infer<typeof this.schema>) {
+    const gameId = await this.gamePlayer.createGame(
+      Number.parseInt(boardSize),
+      Number.parseInt(gameType),
+      Number.parseInt(gameTileType),
+    )
+    return `Game created with ID: ${gameId}`
+  }
+}
+
+class InitializeGameTool extends StructuredTool {
+  name = "initialize_game"
+  description = "Initialize a Flippando game"
+  schema = z.object({
+    gameId: z.string().describe("The ID of the game to initialize"),
+  })
+
+  constructor(private gamePlayer: GamePlayerModule) {
+    super()
+  }
+
+  async _call({ gameId }: z.infer<typeof this.schema>) {
+    const gameState = await this.gamePlayer.initializeGame(gameId)
+    return `Game ${gameId} initialized. Current state: ${JSON.stringify(gameState)}`
+  }
+}
+
+class FlipTilesTool extends StructuredTool {
+  name = "flip_tiles"
+  description = "Flip tiles in a Flippando game"
+  schema = z.object({
+    gameId: z.string().describe("The ID of the game"),
+    position1: z.string().describe("The first position to flip"),
+    position2: z.string().describe("The second position to flip"),
+  })
+
+  constructor(private gamePlayer: GamePlayerModule) {
+    super()
+  }
+
+  async _call({ gameId, position1, position2 }: z.infer<typeof this.schema>) {
+    const gameState = await this.gamePlayer.flipTiles(gameId, [Number.parseInt(position1), Number.parseInt(position2)])
+    return `Tiles flipped in game ${gameId}. New state: ${JSON.stringify(gameState)}`
+  }
+}
+
+class CreateNFTTool extends StructuredTool {
+  name = "create_nft"
+  description = "Create an NFT for a solved Flippando game"
+  schema = z.object({
+    gameId: z.string().describe("The ID of the solved game"),
+  })
+
+  constructor(private gamePlayer: GamePlayerModule) {
+    super()
+  }
+
+  async _call({ gameId }: z.infer<typeof this.schema>) {
+    const tokenId = await this.gamePlayer.createNFT(gameId)
+    return `NFT created for game ${gameId} with token ID: ${tokenId}`
+  }
+}
+
+class MakeArtTool extends StructuredTool {
+  name = "make_art"
+  description = "Generate art for a solved Flippando game using basic NFTs"
+  schema = z.object({
+    gameId: z.string().describe("The ID of the solved game"),
+    basicNFTs: z.string().describe("A JSON string array of basic NFT token IDs"),
+  })
+
+  constructor(private gamePlayer: GamePlayerModule) {
+    super()
+  }
+
+  async _call({ gameId, basicNFTs }: z.infer<typeof this.schema>) {
+    const parsedBasicNFTs = JSON.parse(basicNFTs).map(Number)
+    const artCID = await this.gamePlayer.makeArt(gameId, parsedBasicNFTs)
+    return `Art created for game ${gameId} with basic NFTs ${basicNFTs} and CID: ${artCID}`
+  }
+}
 
 export class GamePlayerModule {
   private memory: FlippandoMemory
@@ -26,6 +122,7 @@ export class GamePlayerModule {
   public async processGameState(gameState: FlippandoGameState) {
     console.log(`Processing game state for game ${gameState.gameId}`)
     // Implement game state processing logic here
+    // This could involve analyzing the board, suggesting moves, etc.
   }
 
   public async createGame(boardSize: number, gameType: number, gameTileType: number): Promise<string> {
@@ -120,53 +217,13 @@ export class GamePlayerModule {
     }
   }
 
-  public getTools(): Tool[] {
+  public getTools(): StructuredTool[] {
     return [
-      new Tool({
-        name: "create_game",
-        description: "Create a new Flippando game",
-        func: async ({ boardSize, gameType, gameTileType }) => {
-          const gameId = await this.createGame(
-            Number.parseInt(boardSize),
-            Number.parseInt(gameType),
-            Number.parseInt(gameTileType),
-          )
-          return `Game created with ID: ${gameId}`
-        },
-      }),
-      new Tool({
-        name: "initialize_game",
-        description: "Initialize a Flippando game",
-        func: async ({ gameId }) => {
-          const gameState = await this.initializeGame(gameId)
-          return `Game ${gameId} initialized. Current state: ${JSON.stringify(gameState)}`
-        },
-      }),
-      new Tool({
-        name: "flip_tiles",
-        description: "Flip tiles in a Flippando game",
-        func: async ({ gameId, position1, position2 }) => {
-          const gameState = await this.flipTiles(gameId, [Number.parseInt(position1), Number.parseInt(position2)])
-          return `Tiles flipped in game ${gameId}. New state: ${JSON.stringify(gameState)}`
-        },
-      }),
-      new Tool({
-        name: "create_nft",
-        description: "Create an NFT for a solved Flippando game",
-        func: async ({ gameId }) => {
-          const tokenId = await this.createNFT(gameId)
-          return `NFT created for game ${gameId} with token ID: ${tokenId}`
-        },
-      }),
-      new Tool({
-        name: "make_art",
-        description: "Generate art for a solved Flippando game using basic NFTs",
-        func: async ({ gameId, basicNFTs }) => {
-          const parsedBasicNFTs = JSON.parse(basicNFTs).map(Number)
-          const artCID = await this.makeArt(gameId, parsedBasicNFTs)
-          return `Art created for game ${gameId} with basic NFTs ${basicNFTs} and CID: ${artCID}`
-        },
-      }),
+      new CreateGameTool(this),
+      new InitializeGameTool(this),
+      new FlipTilesTool(this),
+      new CreateNFTTool(this),
+      new MakeArtTool(this),
     ]
   }
 }
