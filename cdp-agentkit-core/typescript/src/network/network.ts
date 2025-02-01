@@ -1,3 +1,17 @@
+import {
+  Chain,
+  mainnet,
+  sepolia,
+  baseSepolia,
+  arbitrumSepolia,
+  optimismSepolia,
+  base,
+  arbitrum,
+  optimism,
+  polygonMumbai,
+  polygon,
+} from "viem/chains";
+
 /**
  * Maps EVM chain IDs to Coinbase network IDs
  */
@@ -26,3 +40,19 @@ export const NETWORK_ID_TO_CHAIN_ID: Record<string, string> = Object.entries(
   },
   {} as Record<string, string>,
 );
+
+/**
+ * Maps Coinbase network IDs to Viem chain objects
+ */
+export const NETWORK_ID_TO_VIEM_CHAIN: Record<string, Chain> = {
+  "ethereum-mainnet": mainnet,
+  "ethereum-sepolia": sepolia,
+  "polygon-mainnet": polygon,
+  "polygon-mumbai": polygonMumbai,
+  "base-mainnet": base,
+  "base-sepolia": baseSepolia,
+  "arbitrum-mainnet": arbitrum,
+  "arbitrum-sepolia": arbitrumSepolia,
+  "optimism-mainnet": optimism,
+  "optimism-sepolia": optimismSepolia,
+};

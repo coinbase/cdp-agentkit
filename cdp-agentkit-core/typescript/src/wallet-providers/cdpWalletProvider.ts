@@ -1,14 +1,15 @@
-// TODO: Remove this once we have a real implementation
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { Decimal } from "decimal.js";
 import {
+  createPublicClient,
   ReadContractParameters,
   ReadContractReturnType,
   serializeTransaction,
   TransactionRequest,
   TransactionSerializable,
+  http,
   keccak256,
+  Signature,
+  PublicClient,
 } from "viem";
 import { EvmWalletProvider } from "./evmWalletProvider";
 import { Network } from "../network";
@@ -16,6 +17,7 @@ import {
   Coinbase,
   CreateERC20Options,
   CreateTradeOptions,
+  ExternalAddress,
   SmartContract,
   Trade,
   Wallet,
@@ -23,29 +25,55 @@ import {
   hashTypedDataMessage,
   hashMessage,
 } from "@coinbase/coinbase-sdk";
-import { NETWORK_ID_TO_CHAIN_ID } from "../network/network";
+import { NETWORK_ID_TO_CHAIN_ID, NETWORK_ID_TO_VIEM_CHAIN } from "../network/network";
 
 /**
  * Configuration options for the CdpActionProvider.
  */
 export interface CdpWalletProviderConfig {
   /**
-   * CDP API Key Name.
+   * The CDP Wallet.
    */
-  apiKeyName?: string;
+  wallet?: Wallet;
 
   /**
-   * CDP API Key Private Key.
+   * The address of the wallet.
    */
-  apiKeyPrivateKey?: string;
+  address?: string;
+
+  /**
+   * The network of the wallet.
+   */
+  network?: Network;
+
+  /**
+   * The network ID of the wallet.
+   */
+  networkId?: string;
 }
 
 /**
  * Configuration options for the CDP Agentkit with a Wallet.
  */
 interface ConfigureCdpAgentkitWithWalletOptions extends CdpWalletProviderConfig {
-  networkId?: string;
+  /**
+   * The CDP API Key Name.
+   */
+  apiKeyName?: string;
+
+  /**
+   * The CDP API Key Private Key.
+   */
+  apiKeyPrivateKey?: string;
+
+  /**
+   * The data of the CDP Wallet as a JSON string.
+   */
   cdpWalletData?: string;
+
+  /**
+   * The mnemonic phrase of the wallet.
+   */
   mnemonicPhrase?: string;
 }
 
@@ -56,6 +84,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
   #cdpWallet?: Wallet;
   #address?: string;
   #network?: Network;
+  #publicClient: PublicClient;
 
   /**
    * Constructs a new CdpWalletProvider.
@@ -65,24 +94,32 @@ export class CdpWalletProvider extends EvmWalletProvider {
   private constructor(config: CdpWalletProviderConfig) {
     super();
 
-    if (config.apiKeyName && config.apiKeyPrivateKey) {
-      Coinbase.configure({ apiKeyName: config.apiKeyName, privateKey: config.apiKeyPrivateKey });
-    } else {
-      Coinbase.configureFromJson();
-    }
+    this.#cdpWallet = config.wallet;
+    this.#address = config.address;
+    this.#network = config.network;
+    this.#publicClient = createPublicClient({
+      chain: NETWORK_ID_TO_VIEM_CHAIN[config.network!.networkId!],
+      transport: http(),
+    });
   }
 
   /**
    * Configures a new CdpWalletProvider with a wallet.
    *
    * @param config - Optional configuration parameters
-   * @returns A Promise that resolves to a new CdpAgentkit instance
+   * @returns A Promise that resolves to a new CdpWalletProvider instance
    * @throws Error if required environment variables are missing or wallet initialization fails
    */
   public static async configureWithWallet(
     config: ConfigureCdpAgentkitWithWalletOptions = {},
   ): Promise<CdpWalletProvider> {
-    const cdpWalletProvider = new CdpWalletProvider(config);
+    if (config.apiKeyName && config.apiKeyPrivateKey) {
+      Coinbase.configure({ apiKeyName: config.apiKeyName, privateKey: config.apiKeyPrivateKey });
+    } else {
+      Coinbase.configureFromJson();
+    }
+
+    let wallet: Wallet;
 
     const mnemonicPhrase = config.mnemonicPhrase || process.env.MNEMONIC_PHRASE;
     const networkId = config.networkId || process.env.NETWORK_ID || Coinbase.networks.BaseSepolia;
@@ -90,25 +127,29 @@ export class CdpWalletProvider extends EvmWalletProvider {
     try {
       if (config.cdpWalletData) {
         const walletData = JSON.parse(config.cdpWalletData) as WalletData;
-        cdpWalletProvider.#cdpWallet = await Wallet.import(walletData);
+        wallet = await Wallet.import(walletData);
       } else if (mnemonicPhrase) {
-        cdpWalletProvider.#cdpWallet = await Wallet.import(
-          { mnemonicPhrase: mnemonicPhrase },
-          networkId,
-        );
+        wallet = await Wallet.import({ mnemonicPhrase: mnemonicPhrase }, networkId);
       } else {
-        cdpWalletProvider.#cdpWallet = await Wallet.create({ networkId: networkId });
+        wallet = await Wallet.create({ networkId: networkId });
       }
     } catch (error) {
       throw new Error(`Failed to initialize wallet: ${error}`);
     }
 
-    cdpWalletProvider.#address = (await cdpWalletProvider.#cdpWallet?.getDefaultAddress())?.getId();
-    cdpWalletProvider.#network = {
+    const address = (await wallet.getDefaultAddress())?.getId();
+
+    const network = {
       protocolFamily: "evm" as const,
-      chainId: NETWORK_ID_TO_CHAIN_ID[cdpWalletProvider.#cdpWallet?.getNetworkId()],
-      networkId: cdpWalletProvider.#cdpWallet?.getNetworkId(),
+      chainId: NETWORK_ID_TO_CHAIN_ID[networkId],
+      networkId: networkId,
     };
+
+    const cdpWalletProvider = new CdpWalletProvider({
+      wallet,
+      address,
+      network,
+    });
 
     return cdpWalletProvider;
   }
@@ -166,6 +207,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
 
     const serializedTx = serializeTransaction(transaction as TransactionSerializable);
     const transactionHash = keccak256(serializedTx);
+
     const payload = await this.#cdpWallet.createPayloadSignature(transactionHash);
 
     return payload.getSignature() as `0x${string}`;
@@ -178,8 +220,92 @@ export class CdpWalletProvider extends EvmWalletProvider {
    * @returns The hash of the transaction.
    */
   async sendTransaction(transaction: TransactionRequest): Promise<`0x${string}`> {
-    // TODO: Implement
-    throw Error("Unimplemented");
+    if (!this.#cdpWallet) {
+      throw new Error("Wallet not initialized");
+    }
+
+    const preparedTransaction = await this.prepareTransaction(
+      transaction.to!,
+      transaction.value!,
+      transaction.data!,
+    );
+
+    const signature = await this.signTransaction({
+      ...preparedTransaction,
+    } as TransactionRequest);
+
+    const signedPayload = await this.addSignatureAndSerialize(preparedTransaction, signature);
+
+    const externalAddress = new ExternalAddress(this.#cdpWallet.getNetworkId(), this.#address!);
+
+    const tx = await externalAddress.broadcastExternalTransaction(signedPayload.slice(2));
+
+    return tx.transactionHash as `0x${string}`;
+  }
+
+  /**
+   * Prepares a transaction.
+   *
+   * @param to - The address to send the transaction to.
+   * @param value - The value of the transaction.
+   * @param data - The data of the transaction.
+   * @returns The prepared transaction.
+   */
+  async prepareTransaction(
+    to: `0x${string}`,
+    value: bigint,
+    data: `0x${string}`,
+  ): Promise<TransactionSerializable> {
+    if (!this.#cdpWallet) {
+      throw new Error("Wallet not initialized");
+    }
+
+    const nonce = await this.#publicClient!.getTransactionCount({
+      address: this.#address! as `0x${string}`,
+    });
+
+    const feeData = await this.#publicClient!.estimateFeesPerGas();
+
+    const gas = await this.#publicClient!.estimateGas({
+      to,
+      value,
+      data,
+      maxFeePerGas: feeData.maxFeePerGas,
+      maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
+    });
+
+    const chainId = parseInt(this.#network!.chainId!, 10);
+
+    return {
+      to,
+      value,
+      data,
+      nonce,
+      maxFeePerGas: feeData.maxFeePerGas,
+      maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
+      gas,
+      chainId,
+      type: "eip1559",
+    };
+  }
+
+  /**
+   * Adds signature to a transaction and serializes it for broadcast.
+   *
+   * @param transaction - The transaction to sign.
+   * @param signature - The signature to add to the transaction.
+   * @returns A serialized transaction.
+   */
+  async addSignatureAndSerialize(
+    transaction: TransactionSerializable,
+    signature: `0x${string}`,
+  ): Promise<string> {
+    // Decode the signature into its components
+    const r = `0x${signature.slice(2, 66)}`; // First 32 bytes
+    const s = `0x${signature.slice(66, 130)}`; // Next 32 bytes
+    const v = BigInt(parseInt(signature.slice(130, 132), 16)); // Last byte
+
+    return serializeTransaction(transaction, { r, s, v } as Signature);
   }
 
   /**
@@ -239,8 +365,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async waitForTransactionReceipt(txHash: `0x${string}`): Promise<any> {
-    // TODO: Implement
-    throw Error("Unimplemented");
+    return await this.#publicClient!.waitForTransactionReceipt({ hash: txHash });
   }
 
   /**
@@ -250,8 +375,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
    * @returns The response from the contract.
    */
   async readContract(params: ReadContractParameters): Promise<ReadContractReturnType> {
-    // TODO: Implement
-    throw Error("Unimplemented");
+    return this.#publicClient!.readContract(params);
   }
 
   /**

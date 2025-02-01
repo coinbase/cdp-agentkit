@@ -165,12 +165,7 @@ export class ViemWalletProvider extends EvmWalletProvider {
    * @returns The transaction receipt.
    */
   async waitForTransactionReceipt(txHash: `0x${string}`): Promise<any> {
-    const publicClient = createPublicClient({
-      chain: this.#walletClient.chain,
-      transport: http(),
-    });
-
-    return await publicClient.waitForTransactionReceipt({ hash: txHash });
+    return await this.#publicClient.waitForTransactionReceipt({ hash: txHash });
   }
 
   /**
