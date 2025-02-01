@@ -62,6 +62,7 @@ Do not use the ERC20 address as the destination address. If you are unsure of th
       const receipt = await walletProvider.waitForTransactionReceipt(hash);
       const [success, poolAddress] = receipt.events.find(e => e.event === 'PoolCreated').args;
 
+      // todo store this poolAddress is memory so we can manipulate it later (we don't trust the llm to remember...)
       return `Created pool of token ${args.erc20TokenAddress} at ${poolAddress}`;
     } catch (error) {
       return `Error creating Superfluid pool: ${error}`;
