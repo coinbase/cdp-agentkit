@@ -61,7 +61,7 @@ Do not use the ERC20 address as the destination address. If you are unsure of th
 
       await walletProvider.waitForTransactionReceipt(hash);
 
-      return `Created stream of token ${args.erc20TokenAddress} to ${args.recipientAddress} at a rate of ${args.streamRate}`;
+      return `Created stream of token ${args.erc20TokenAddress} to ${args.recipientAddress} at a rate of ${args.flowRate}`;
     } catch (error) {
       return `Error creating Superfluid stream: ${error}`;
     }
