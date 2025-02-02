@@ -39,12 +39,15 @@
     "typescript"
   ],
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.17.1",
     "@coinbase/coinbase-sdk": "^0.17.0",
+    "@types/md5": "^2.3.5",
+    "decimal.js": "^10.5.0",
     "md5": "^2.3.0",
     "reflect-metadata": "^0.2.2",
     "twitter-api-v2": "^1.18.2",
-    "viem": "^2.22.16",
-    "zod": "^3.23.8"
+    "viem": "^2.22.17",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",

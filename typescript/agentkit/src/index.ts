@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 // Export CDP AgentKit
 export { AgentKit } from "./agentkit";
 

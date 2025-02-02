@@ -141,7 +141,8 @@ export class CdpWalletProvider extends EvmWalletProvider {
         wallet = await Wallet.create({ networkId: networkId });
       }
     } catch (error) {
-      throw new Error(`Failed to initialize wallet: ${error}`);
+      console.error('Wallet initialization error:', error);
+      throw new Error(`Failed to initialize wallet: ${JSON.stringify(error)}`);
     }
 
     const address = (await wallet.getDefaultAddress())?.getId();

@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "agentkit": ["../../agentkit/src"]
+    }
+  },
+  "references": [
+    {
+      "path": "../../agentkit"
+    }
+  ]
+}
