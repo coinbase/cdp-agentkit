@@ -36,7 +36,7 @@ class CdpToolkit(BaseToolkit):
             export CDP_MODEL_PROVIDER="openai"         # Optional
             export OPENAI_API_KEY="your-api-key"       # Required for OpenAI
             export ANTHROPIC_API_KEY="your-api-key"    # Required for Anthropic  
-            export FIREWORKS_API_KEY="your-api-key"     # Required for Fireworks
+            export GROQ_API_KEY="your-api-key"     # Required for Groq
 
     Instantiate:
         .. code-block:: python
@@ -99,14 +99,14 @@ class CdpToolkit(BaseToolkit):
                     model=cdp_agentkit_wrapper.model_name,
                     anthropic_api_key=os.getenv("ANTHROPIC_API_KEY")
                 )
-            elif cdp_agentkit_wrapper.provider == "fireworks":
-                from langchain_fireworks import ChatFireworks
-                llm = ChatFireworks(
+            elif cdp_agentkit_wrapper.provider == "groq":
+                from langchain_groq import ChatGroq
+                llm = ChatGroq(
                     model=cdp_agentkit_wrapper.model_name,
-                    fireworks_api_key=os.getenv("FIREWORKS_API_KEY")
+                    groq_api_key=os.getenv("GROQ_API_KEY")
                 )
             else:
-                raise ValueError(f"Unsupported provider: {cdp_agentkit_wrapper.provider}. Supported providers: openai, anthropic, cerebras, fireworks")
+                raise ValueError(f"Unsupported provider: {cdp_agentkit_wrapper.provider}. Supported providers: openai, anthropic, cerebras, groq")
             agent_executor = create_react_agent(llm, tools)
 
             example_query = "Tell me about your wallet"
