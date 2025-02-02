@@ -1,12 +1,10 @@
 import { z } from "zod"
-export * from "./create-game"
-export * from "./initialize-game"
-export * from "./flip-tiles"
-
 import { CreateGameAction } from "./create-game"
 import { InitializeGameAction } from "./initialize-game"
 import { FlipTilesAction } from "./flip-tiles"
 import { MintNftAction } from "./mint-nft"
+import { GenerateImageForFlipAction } from "./generate_image_for_flip"
+import { GetNftMetadataAction } from "./get_flip_metadata"
 import { FlippandoAction, FlippandoActionSchemaAny } from "../flippando"
 
 
@@ -16,6 +14,8 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
         new InitializeGameAction(), 
         new FlipTilesAction(),
         new MintNftAction(),
+        new GenerateImageForFlipAction(),
+        new GetNftMetadataAction(),
     ];
   }
   
@@ -31,6 +31,8 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
     InitializeGameAction,
     FlipTilesAction,
     MintNftAction,
+    GenerateImageForFlipAction,
+    GetNftMetadataAction,
   }
 
 

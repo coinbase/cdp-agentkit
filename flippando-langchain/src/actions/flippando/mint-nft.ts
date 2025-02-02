@@ -4,9 +4,9 @@ import { ethers } from "ethers"
 import FlippandoABI from "../../abis/Flippando.json"
 
 const MINT_NFT_PROMPT = `
-This action flips tiles in a Flippando game. It takes the game ID and an array of tile positions to flip.
-The action will interact with the Flippando contract to flip the specified tiles.
-It returns the updated board state, solved board state, and a message indicating if the flipped tiles match or if the game is solved.
+This action mints a solved board as an NFT in a Flippando game. It takes the game ID as an argument.
+The action will interact with the Flippando contract to mint the solved board as a basic NFT.
+It returns the minted NFT token id, if successful. The game will be deleted from chain state.
 `
 
 export const MintNftSchema = z.object({
