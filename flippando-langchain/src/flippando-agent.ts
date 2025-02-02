@@ -30,7 +30,7 @@ const modifier = `
  */
 async function initialize() {
   // Initialize LLM
-  const llm = new ChatOpenAI({ modelName: "gpt-4", temperature: 0 })
+  const llm = new ChatOpenAI({ modelName: "gpt-4o-mini", temperature: 0 })
 
   // Flippando Agentkit
   const flippandoAgentkit = new FlippandoAgentkit()

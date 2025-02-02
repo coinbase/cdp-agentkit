@@ -3,7 +3,9 @@ import type { z } from "zod"
 import type { FlippandoAction, FlippandoActionSchemaAny } from "../actions/flippando"
 import type { FlippandoAgentkit } from "../flippando-agentkit"
 
-export class FlippandoTool <TActionSchema extends FlippandoActionSchemaAny> extends StructuredTool {
+export class FlippandoTool <
+TActionSchema extends FlippandoActionSchemaAny,
+TResponseSchema extends z.ZodType<any, any, any> = z.ZodString> extends StructuredTool {
   /**
    * Schema definition for the tool's input.
    */
@@ -27,7 +29,7 @@ export class FlippandoTool <TActionSchema extends FlippandoActionSchemaAny> exte
   /**
    * The Farcaster Action.
    */
-  private action: FlippandoAction<TActionSchema>;
+  private action: FlippandoAction<TActionSchema, TResponseSchema>;
 
   /**
    * Constructor for the Flippando Tool class.
@@ -35,7 +37,7 @@ export class FlippandoTool <TActionSchema extends FlippandoActionSchemaAny> exte
    * @param action - The Flippando action to execute.
    * @param agentkit - The Flippando wrapper to use.
    */
-  constructor(action: FlippandoAction<TActionSchema>, agentkit: FlippandoAgentkit) {
+  constructor(action: FlippandoAction<TActionSchema, TResponseSchema>, agentkit: FlippandoAgentkit) {
     super();
 
     this.action = action;
@@ -45,9 +47,7 @@ export class FlippandoTool <TActionSchema extends FlippandoActionSchemaAny> exte
     this.schema = action.argsSchema;
   }
 
-  protected async _call(
-    input: z.infer<typeof this.schema> & Record<string, unknown>,
-  ): Promise<string> {
+  protected async _call(input: z.infer<TActionSchema>): Promise<string> {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let args: any;
@@ -67,7 +67,14 @@ export class FlippandoTool <TActionSchema extends FlippandoActionSchemaAny> exte
         args = input;
       }
 
-      return await this.agentkit.run(this.action, args);
+      const result = await this.agentkit.run(this.action, args)
+
+      if (this.action.responseSchema) {
+        const validatedResult = this.action.responseSchema.parse(result)
+        return JSON.stringify(validatedResult)
+      }
+
+      return result;
     } catch (error: unknown) {
       if (error instanceof Error) {
         return `Error executing ${this.name}: ${error.message}`;
@@ -76,4 +83,3 @@ export class FlippandoTool <TActionSchema extends FlippandoActionSchemaAny> exte
     }
   }
 }
-

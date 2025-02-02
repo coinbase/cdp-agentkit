@@ -1,5 +1,5 @@
 import { z } from "zod"
-import type { FlippandoAction, FlippandoActionSchemaAny } from "./actions/flippando"
+import type { FlippandoAction, FlippandoActionSchemaAny, TResponseSchema } from "./actions/flippando"
 
 
 /**
@@ -113,7 +113,7 @@ export class FlippandoAgentkit {
    */
   
   async run<TActionSchema extends FlippandoActionSchemaAny>(
-    action: FlippandoAction<TActionSchema>,
+    action: FlippandoAction<TActionSchema, TResponseSchema>,
     args: TActionSchema,
   ): Promise<string> {
     return await action.func(args);

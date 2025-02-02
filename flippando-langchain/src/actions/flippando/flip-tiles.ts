@@ -41,17 +41,17 @@ export async function flipTiles(
     const tx = await flippando.flipTiles(args.gameId, args.positions)
     console.log(`Transaction sent: ${tx.hash}`)
     const receipt = await tx.wait()
-    console.log(`Transaction confirmed: ${receipt.transactionHash}`)
+    //console.log(`Transaction confirmed: ${receipt.transactionHash}`)
 
     const gameStateEvent = receipt.events?.find((e: any) => e.event === "GameState")
     const gameSolvedEvent = receipt.events?.find((e: any) => e.event === "GameSolved")
 
     if (!gameStateEvent) throw new Error("GameState event not found")
 
-    console.log("GameState event found:", JSON.stringify(gameStateEvent, null, 2))
+    //console.log("GameState event found:", JSON.stringify(gameStateEvent, null, 2))
 
     const gameStruct = gameStateEvent.args[1]
-    console.log("Game Struct:", JSON.stringify(gameStruct, null, 2))
+    //console.log("Game Struct:", JSON.stringify(gameStruct, null, 2))
 
     const board = gameStruct.board.map((tile: ethers.BigNumber | number) =>
       typeof tile === "number" ? tile : tile.toNumber(),
@@ -60,11 +60,11 @@ export async function flipTiles(
       typeof tile === "number" ? tile : tile.toNumber(),
     )
 
-    console.log("Parsed Board:", board)
-    console.log("Parsed Solved Board:", solvedBoard)
+    //console.log("Parsed Board:", board)
+    //console.log("Parsed Solved Board:", solvedBoard)
 
     const chainPositions = gameStateEvent.args[2]
-    console.log("Chain Positions:", chainPositions)
+    //console.log("Chain Positions:", chainPositions)
 
     let message: string
     let isGameSolved = false
@@ -75,7 +75,11 @@ export async function flipTiles(
     } else {
       const [pos1, pos2] = chainPositions
       const tilesMatch = board[pos1] === board[pos2] && board[pos1] !== 0
-      message = tilesMatch ? "Tiles flipped, hooray!" : "Tiles not matching, need to try harder"
+      const solvedTiles = solvedBoard.filter((tile: number) => tile !== 0).length
+      const totalTiles = solvedBoard.length
+      const solvedPercentage = Math.round((solvedTiles / totalTiles) * 100)
+      const baseMessage = tilesMatch ? "Tiles flipped, hooray!" : "Tiles not matching, need to try harder"
+      message = `${baseMessage} Game solved: ${solvedPercentage}%`
     }
 
     console.log("Final message:", message)
