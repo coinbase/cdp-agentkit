@@ -8,6 +8,11 @@ import {
   cdpWalletActionProvider,
   pythActionProvider,
 } from "@coinbase/agentkit";
+import {
+  superfluidStreamActionProvider,
+  superfluidPoolActionProvider,
+  superfluidQueryActionProvider,
+} from "../../agentkit/src/action-providers/superfluid";
 import { getLangChainTools } from "@coinbase/agentkit-langchain";
 import { HumanMessage } from "@langchain/core/messages";
 import { MemorySaver } from "@langchain/langgraph";
@@ -107,6 +112,8 @@ async function initializeAgent() {
           apiKeyName: process.env.CDP_API_KEY_NAME,
           apiKeyPrivateKey: process.env.CDP_API_KEY_PRIVATE_KEY?.replace(/\\n/g, "\n"),
         }),
+        superfluidPoolActionProvider(),
+        superfluidQueryActionProvider(),
       ],
     });
 
