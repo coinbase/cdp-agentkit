@@ -36,7 +36,6 @@ class CdpToolkit(BaseToolkit):
             export CDP_MODEL_PROVIDER="openai"         # Optional
             export OPENAI_API_KEY="your-api-key"       # Required for OpenAI
             export ANTHROPIC_API_KEY="your-api-key"    # Required for Anthropic  
-            export CEREBRAS_API_KEY="your-api-key"     # Required for Cerebras
             export FIREWORKS_API_KEY="your-api-key"     # Required for Fireworks
 
     Instantiate:
@@ -99,12 +98,6 @@ class CdpToolkit(BaseToolkit):
                 llm = ChatAnthropic(
                     model=cdp_agentkit_wrapper.model_name,
                     anthropic_api_key=os.getenv("ANTHROPIC_API_KEY")
-                )
-            elif cdp_agentkit_wrapper.provider == "cerebras":
-                from langchain_cerebras import ChatCerebras
-                llm = ChatCerebras(
-                    model=cdp_agentkit_wrapper.model_name,
-                    cerebras_api_key=os.getenv("CEREBRAS_API_KEY")
                 )
             elif cdp_agentkit_wrapper.provider == "fireworks":
                 from langchain_fireworks import ChatFireworks
