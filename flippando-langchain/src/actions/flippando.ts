@@ -4,11 +4,13 @@ import type { z } from "zod"
  * Type definition for any Flippando action schema
  */
 export type FlippandoActionSchemaAny = z.ZodObject<any, any, any, any>
+export type TResponseSchema = z.ZodType<any, any, any>
 
 /**
  * Interface for Flippando actions
  */
-export interface FlippandoAction<TActionSchema extends FlippandoActionSchemaAny> {
+export interface FlippandoAction<TActionSchema extends FlippandoActionSchemaAny,
+    TResponseSchema extends z.ZodType<any, any, any> = z.ZodString> {
   /**
    * The name of the action
    */
@@ -25,7 +27,12 @@ export interface FlippandoAction<TActionSchema extends FlippandoActionSchemaAny>
   argsSchema: TActionSchema;
 
   /**
+   * Optional schema for validating action response
+   */
+  responseSchema?: TResponseSchema;
+
+  /**
    * The function to execute for this action
    */
-  func: ((args: z.infer<TActionSchema>) => Promise<string>);
+  func: ((args: z.infer<TActionSchema>) => Promise<z.infer<TResponseSchema>>);
 }

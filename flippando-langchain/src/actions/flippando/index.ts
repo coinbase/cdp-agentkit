@@ -1,3 +1,4 @@
+import { z } from "zod"
 export * from "./create-game"
 export * from "./initialize-game"
 export * from "./flip-tiles"
@@ -8,7 +9,7 @@ import { FlipTilesAction } from "./flip-tiles"
 import { FlippandoAction, FlippandoActionSchemaAny } from "../flippando"
 
 
-export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaAny>[] {
+export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaAny, z.ZodType<any, any, any>>[] {
     return [new CreateGameAction(), new InitializeGameAction(), new FlipTilesAction()];
   }
   
