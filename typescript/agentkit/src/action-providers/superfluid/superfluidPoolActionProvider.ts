@@ -20,7 +20,7 @@ export class SuperfluidPoolActionProvider extends ActionProvider {
    * Constructor for the SuperfluidPoolActionProvider class.
    */
   constructor() {
-    super("superfluid", []);
+    super("superfluid-pool", []);
 
   }
 

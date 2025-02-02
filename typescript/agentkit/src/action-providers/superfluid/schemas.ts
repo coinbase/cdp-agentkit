@@ -35,3 +35,12 @@ export const SuperfluidCreatePoolSchema = z
   })
   .strip()
   .describe("Input schema for creating a Superfluid stream");
+
+/**
+* Empty input schema
+*/
+export const EmptySchema = z
+  .object({
+  })
+  .strip()
+  .describe("Empty input schema");

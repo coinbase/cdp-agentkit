@@ -23,7 +23,7 @@ export class SuperfluidStreamActionProvider extends ActionProvider {
    * Constructor for the SuperfluidStreamActionProvider class.
    */
   constructor() {
-    super("superfluid", []);
+    super("superfluid-stream", []);
 
   }
 
