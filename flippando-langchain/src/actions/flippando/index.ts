@@ -6,11 +6,17 @@ export * from "./flip-tiles"
 import { CreateGameAction } from "./create-game"
 import { InitializeGameAction } from "./initialize-game"
 import { FlipTilesAction } from "./flip-tiles"
+import { MintNftAction } from "./mint-nft"
 import { FlippandoAction, FlippandoActionSchemaAny } from "../flippando"
 
 
 export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaAny, z.ZodType<any, any, any>>[] {
-    return [new CreateGameAction(), new InitializeGameAction(), new FlipTilesAction()];
+    return [
+        new CreateGameAction(), 
+        new InitializeGameAction(), 
+        new FlipTilesAction(),
+        new MintNftAction(),
+    ];
   }
   
   /**
@@ -24,6 +30,7 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
     CreateGameAction,
     InitializeGameAction,
     FlipTilesAction,
+    MintNftAction,
   }
 
 
