@@ -37,7 +37,7 @@ export async function generateImageForFlip(args: z.infer<typeof GenerateImageFor
     const { game_tile_type, game_level, game_solved_board } = args.metadata
     const tileType = tileTypeMap[game_tile_type]
     const boardSize = Number.parseInt(game_level)
-    const tileSize = 100 // You can adjust this value to change the size of each tile
+    const tileSize = 25 // You can adjust this value to change the size of each tile
     const svgSize = Math.sqrt(boardSize) * tileSize
     const board = JSON.parse(game_solved_board)
 
