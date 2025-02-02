@@ -4,13 +4,13 @@
   "description": "Example of using Claude's tool calling capabilities through MCP",
   "main": "example.ts",
   "scripts": {
-    "start": "ts-node -r dotenv/config example.ts",
-    "server": "node server.js"
+    "start": "ts-node -r dotenv/config example.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.17.1",
     "@coinbase/agentkit": "file:../../agentkit",
     "dotenv": "^16.0.3",
-    "express": "^4.18.2"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "ts-node": "^10.9.2",

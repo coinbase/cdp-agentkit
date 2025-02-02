@@ -1,5 +1,81 @@
-import { AgentKit, claudeActionProvider, CdpWalletProvider } from "@coinbase/agentkit";
-import { Coinbase } from "@coinbase/coinbase-sdk";
+import { ActionProvider } from "../../agentkit/src/action-providers/actionProvider";
+import { CdpWalletProvider } from "../../agentkit/src/wallet-providers";
+import { Action } from "../../agentkit/src/types";
+import { erc20ActionProvider } from "../../agentkit/src/action-providers";
+import * as readline from "readline";
+import * as dotenv from "dotenv";
+import { z } from "zod";
+
+// Load environment variables from .env file
+dotenv.config();
+
+// Create readline interface for user input
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+// Promisify readline question
+const question = (prompt: string): Promise<string> =>
+  new Promise(resolve => rl.question(prompt, resolve));
+
+// WETH contract address on Base Sepolia
+const WETH_ADDRESS = "0x4200000000000000000000000000000000000006";
+
+class SimpleClaudeProvider extends ActionProvider<CdpWalletProvider> {
+  private apiKeyName: string;
+  private apiKeyPrivateKey: string;
+
+  constructor(apiKeyName: string, apiKeyPrivateKey: string) {
+    super("claude", []);
+    this.apiKeyName = apiKeyName;
+    this.apiKeyPrivateKey = apiKeyPrivateKey;
+  }
+
+  getActions(): Action[] {
+    return [
+      {
+        name: "ClaudeActionProvider_register_tool",
+        description: "Register a new tool with Claude",
+        schema: z.object({
+          name: z.string(),
+          description: z.string(),
+          parameters: z.object({
+            type: z.string(),
+            properties: z.record(z.object({
+              type: z.string(),
+              description: z.string().optional()
+            })),
+            required: z.array(z.string())
+          }),
+          function: z.string()
+        }),
+        invoke: async (params) => {
+          // Implementation would go here
+          console.log("Registering tool:", params.name);
+          return { success: true };
+        }
+      },
+      {
+        name: "ClaudeActionProvider_chat",
+        description: "Chat with Claude",
+        schema: z.object({
+          message: z.string(),
+          tools: z.array(z.string()),
+          temperature: z.number(),
+          systemPrompt: z.string()
+        }),
+        invoke: async (params) => {
+          // Implementation would go here
+          console.log("Chat message:", params.message);
+          return { response: "Simulated response from Claude" };
+        }
+      }
+    ];
+  }
+
+  supportsNetwork = () => true;
+}
 
 async function main() {
   // Check required environment variables
@@ -10,93 +86,109 @@ async function main() {
     throw new Error("CDP_API_KEY_NAME and CDP_API_KEY_PRIVATE_KEY environment variables are required");
   }
 
-  // Configure Coinbase SDK using JSON file
-  Coinbase.configureFromJson();
+  // Format private key
+  const formattedPrivateKey = process.env.CDP_API_KEY_PRIVATE_KEY.replace(/\\n/g, "\n");
 
-  // Initialize wallet provider with Base Sepolia testnet
+  // Create wallet provider
   const walletProvider = await CdpWalletProvider.configureWithWallet({
-    networkId: Coinbase.networks.BaseSepolia // Use Base Sepolia testnet
+    apiKeyName: process.env.CDP_API_KEY_NAME,
+    apiKeyPrivateKey: formattedPrivateKey,
+    networkId: "base-sepolia"
   });
 
-  // Initialize AgentKit with the wallet provider and Claude action provider
-  const agentKit = await AgentKit.from({
-    walletProvider,
-    actionProviders: [claudeActionProvider()]
-  });
+  // Initialize ERC20 action provider
+  const erc20Provider = erc20ActionProvider();
+  const erc20Actions = erc20Provider.getActions(walletProvider);
+  
+  // Create simple Claude provider
+  const claudeProvider = new SimpleClaudeProvider(
+    process.env.CDP_API_KEY_NAME,
+    formattedPrivateKey
+  );
 
-  // Get all available actions
-  const actions = agentKit.getActions();
+  // Get Claude actions
+  const claudeActions = claudeProvider.getActions();
+  
+  // Combine all actions
+  const actions = [...erc20Actions, ...claudeActions];
   console.log("Available actions:", actions.map(a => a.name));
 
   // Find the required actions
   const registerToolAction = actions.find(action => action.name === "ClaudeActionProvider_register_tool");
   const chatAction = actions.find(action => action.name === "ClaudeActionProvider_chat");
+  const getBalanceAction = actions.find(action => action.name === "ERC20ActionProvider_get_balance");
   
-  if (!registerToolAction || !chatAction) {
+  if (!registerToolAction || !chatAction || !getBalanceAction) {
     throw new Error("Required actions not found");
   }
 
-  // Register the calculator tool
-  console.log("Registering calculator tool...");
-  const registerResult = await registerToolAction.invoke({
-    name: 'calculator',
-    description: 'Perform basic arithmetic calculations',
+  // Register WETH balance checking tool
+  console.log("\nRegistering WETH balance tool...");
+  await registerToolAction.invoke({
+    name: 'check_weth_balance',
+    description: 'Check WETH balance for a given address',
     parameters: {
       type: 'object',
       properties: {
-        operation: {
+        address: {
           type: 'string',
-          enum: ['add', 'subtract', 'multiply', 'divide'],
-          description: 'The arithmetic operation to perform'
-        },
-        a: {
-          type: 'number',
-          description: 'First number'
-        },
-        b: {
-          type: 'number',
-          description: 'Second number'
+          description: 'The wallet address to check'
         }
       },
-      required: ['operation', 'a', 'b']
+      required: ['address']
     },
     function: `
-def calculator(operation, a, b):
-    if operation == "add":
-        return a + b
-    elif operation == "subtract":
-        return a - b
-    elif operation == "multiply":
-        return a * b
-    elif operation == "divide":
-        if b == 0:
-            raise ValueError("Cannot divide by zero")
-        return a / b
-    else:
-        raise ValueError(f"Unknown operation: {operation}")
+async def check_weth_balance(address):
+    result = await getBalanceAction.invoke({
+        "contractAddress": "${WETH_ADDRESS}",
+        "address": address
+    })
+    return result
 `
   });
 
-  console.log("Register result:", registerResult);
+  try {
+    while (true) {
+      // Get address from user input
+      const address = await question("\nEnter wallet address to check WETH balance (or 'exit' to quit): ");
+      
+      if (address.toLowerCase() === 'exit') {
+        break;
+      }
 
-  // Use the calculator tool through Claude's chat
-  console.log("\nTesting multiplication...");
-  const response = await chatAction.invoke({
-    message: "Can you help me calculate 15 multiplied by 7?",
-    tools: ['calculator']
-  });
+      // Validate address format
+      if (!address.match(/^0x[a-fA-F0-9]{40}$/)) {
+        console.log("Invalid wallet address format. Please enter a valid address.");
+        continue;
+      }
 
-  console.log("Claude's response:", response);
+      console.log(`\nChecking WETH balance for ${address}...`);
+      
+      // First get the balance directly
+      const balanceResult = await getBalanceAction.invoke({
+        contractAddress: WETH_ADDRESS,
+        address
+      });
+      console.log("Direct balance result:", balanceResult);
+      
+      // Then use it through Claude
+      const response = await chatAction.invoke({
+        message: `I need to check the WETH balance for address ${address}. Please use the check_weth_balance tool with this address.`,
+        tools: ['check_weth_balance'],
+        temperature: 0,
+        systemPrompt: `You are a helpful assistant that checks WETH balances. When asked to check a balance, you should immediately use the check_weth_balance tool with the provided address. Do not explain what you're going to do, just do it.`
+      });
 
-  // Try division
-  console.log("\nTesting division...");
-  const response2 = await chatAction.invoke({
-    message: "What is 42 divided by 6?",
-    tools: ['calculator']
-  });
-
-  console.log("Claude's second response:", response2);
+      console.log("Claude response:", response);
+    }
+  } finally {
+    rl.close();
+  }
 }
 
 // Run the example
-main().catch(console.error);
+main().catch(error => {
+  console.error(error);
+  rl.close();
+  process.exit(1);
+});
