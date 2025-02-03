@@ -2,7 +2,7 @@ import { z } from "zod"
 import { FlippandoAction } from "../flippando"
 import { ethers } from "ethers"
 import FlippandoGameMasterABI from "../../abis/FlippandoGameMaster.json"
-import type { FlippandoAgentkitOptions } from "../../flippando-agentkit"
+import { FlippandoAgentkit } from "../../flippando-agentkit"
 
 const INITIALIZE_GAME_PROMPT = `
 This action initializes a Flippando game. It takes the game ID as input.
@@ -14,18 +14,13 @@ export const InitializeGameSchema = z.object({
 })
 
 export async function initializeGame(
-  args: z.infer<typeof InitializeGameSchema>,
+  args: z.infer<typeof InitializeGameSchema>, agentkit: FlippandoAgentkit
 ): Promise<string> {
-  const providerUrl = process.env.FLIPPANDO_PROVIDER_URL
-  const privateKey = process.env.FLIPPANDO_PRIVATE_KEY!
-  const flippandoGameMasterAddress = process.env.FLIPPANDO_GAMEMASTER_ADDRESS!
-  const provider = new ethers.providers.JsonRpcProvider(providerUrl)
-  const signer = new ethers.Wallet(privateKey, provider)
   const flippandoGameMaster = new ethers.Contract(
-    flippandoGameMasterAddress,
+    agentkit.getFlippandoGameMasterAddress(),
     FlippandoGameMasterABI.abi,
-    signer,
-  )
+    agentkit.getSigner(),
+)
 
   try {
     const tx = await flippandoGameMaster.initializeGame(args.gameId)

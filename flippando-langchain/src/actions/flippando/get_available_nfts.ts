@@ -2,6 +2,7 @@ import { z } from "zod"
 import type { FlippandoAction } from "../flippando"
 import { ethers } from "ethers"
 import FlippandoABI from "../../abis/Flippando.json"
+import { FlippandoAgentkit } from "../../flippando-agentkit"
 
 const GET_AVAILABLE_NFTS_PROMPT = `
 This action gets the available art NFTs. 
@@ -18,19 +19,13 @@ export const GetAvailableNftsResponseSchema = z.object({
 })
 
 export async function getAvailableNfts(
-  args: z.infer<typeof GetAvailableNftsSchema>,
+  args: z.infer<typeof GetAvailableNftsSchema>, agentkit: FlippandoAgentkit
 ): Promise<z.infer<typeof GetAvailableNftsResponseSchema>> {
-  const providerUrl = process.env.FLIPPANDO_PROVIDER_URL
-  const privateKey = process.env.FLIPPANDO_PRIVATE_KEY!
-  const flippandoAddress = process.env.FLIPPANDO_ADDRESS!
-
-  if (!providerUrl || !privateKey || !flippandoAddress) {
-    throw new Error("Missing environment variables")
-  }
-
-  const provider = new ethers.providers.JsonRpcProvider(providerUrl)
-  const signer = new ethers.Wallet(privateKey, provider)
-  const flippando = new ethers.Contract(flippandoAddress, FlippandoABI.abi, signer)
+    const flippando = new ethers.Contract(
+        agentkit.getFlippandoAddress(),
+        FlippandoABI.abi,
+        agentkit.getSigner(),
+    )
 
   try {
     console.log(`Getting available Nft for player ${args.player}`)
