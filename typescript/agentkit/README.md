@@ -123,6 +123,19 @@ class MyActionProvider extends ActionProvider<WalletProvider> {
 }
 ```
 
+### Important Note
+
+If building within a new project, please ensure the following within `tsconfig.json`
+
+```json
+{
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
+    }
+} 
+```
+
 ### Adding Actions to your Action Provider
 
 Actions are defined as instance methods on the action provider class with the `@CreateAction` decorator. Actions can use a wallet provider or not and always return a Promise that resolves to a string.
