@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { ContractInterface, ethers } from "ethers"
+import { ethers } from "ethers"
 import FlippandoGameMasterABI from "../../abis/FlippandoGameMaster.json"
 import { FlippandoAction } from "../flippando"
 

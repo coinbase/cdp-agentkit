@@ -120,7 +120,7 @@ export class FlippandoAgentkit {
   }
 
   /**
-   * Validates the provided options for the FarcasterAgentkit.
+   * Validates the provided options for the FlippandoAgentkit.
    *
    * @param options - The options to validate.
    * @returns True if the options are valid, otherwise false.

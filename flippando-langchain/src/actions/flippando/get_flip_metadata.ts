@@ -37,13 +37,6 @@ export async function getNftMetadata(
     const tokenURI = await flippando.tokenURI(args.tokenId)
     console.log(`Token URI: ${tokenURI}`)
 
-    // Fetch metadata from the tokenURI
-    //const response = await fetch(tokenURI)
-    //if (!response.ok) {
-    //  throw new Error(`HTTP error! status: ${response.status}`)
-    //}
-    //const metadata = await tokenURI.json()
-
     const metadata = tokenURI.toString()
 
     const message = `NFT metadata retrieved for tokenId: ${args.tokenId}`
