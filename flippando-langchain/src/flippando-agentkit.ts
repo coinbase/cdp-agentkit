@@ -1,5 +1,5 @@
 import { z } from "zod"
-import type { FlippandoAction, FlippandoActionSchemaAny, TResponseSchema } from "./actions/flippando"
+import type { FlippandoAction, FlippandoActionSchemaAny } from "./actions/flippando"
 import { ethers } from "ethers"
 
 interface FlippandoAgentkitOptions {
@@ -10,6 +10,10 @@ interface FlippandoAgentkitOptions {
   flippandoGameMasterAddress?: string
   flippandoAddress?: string
   chainId?: number
+  twitterApiKey?: string
+  twitterApiSecret?: string
+  twitterAccessToken?: string
+  twitterAccessSecret?: string
 }
 
 export const FlippandoAgentkitOptions = z
@@ -27,6 +31,13 @@ export const FlippandoAgentkitOptions = z
       .min(1, "The Flippando contract address is required")
       .describe("The Flippando contract address"),
     chainId: z.number().int().positive().describe("The chain ID"),
+    twitterApiKey: z.string().min(1, "The Twitter API key is required").describe("The Twitter API key"),
+    twitterApiSecret: z.string().min(1, "The Twitter API secret is required").describe("The Twitter API secret"),
+    twitterAccessToken: z.string().min(1, "The Twitter access token is required").describe("The Twitter access token"),
+    twitterAccessSecret: z
+      .string()
+      .min(1, "The Twitter access secret is required")
+      .describe("The Twitter access secret"),
   })
   .strip()
   .describe("Options for initializing FlippandoAgentkit")
@@ -51,6 +62,10 @@ const EnvSchema = z.object({
     .describe("The FlippandoGameMaster contract address"),
   FLIPPANDO_ADDRESS: z.string().min(1, "FLIPPANDO_ADDRESS is required").describe("The Flippando contract address"),
   FLIPPANDO_CHAIN_ID: z.string().transform(Number).pipe(z.number().int().positive()).describe("The chain ID"),
+  TWITTER_API_KEY: z.string().min(1, "TWITTER_API_KEY is required").describe("The Twitter API key"),
+  TWITTER_API_SECRET: z.string().min(1, "TWITTER_API_SECRET is required").describe("The Twitter API secret"),
+  TWITTER_ACCESS_TOKEN: z.string().min(1, "TWITTER_ACCESS_TOKEN is required").describe("The Twitter access token"),
+  TWITTER_ACCESS_SECRET: z.string().min(1, "TWITTER_ACCESS_SECRET is required").describe("The Twitter access secret"),
 })
 
 export class FlippandoAgentkit {
@@ -70,6 +85,10 @@ export class FlippandoAgentkit {
         flippandoGameMasterAddress: options?.flippandoGameMasterAddress || env.FLIPPANDO_GAMEMASTER_ADDRESS,
         flippandoAddress: options?.flippandoAddress || env.FLIPPANDO_ADDRESS,
         chainId: options?.chainId || env.FLIPPANDO_CHAIN_ID,
+        twitterApiKey: options?.twitterApiKey || env.TWITTER_API_KEY,
+        twitterApiSecret: options?.twitterApiSecret || env.TWITTER_API_SECRET,
+        twitterAccessToken: options?.twitterAccessToken || env.TWITTER_ACCESS_TOKEN,
+        twitterAccessSecret: options?.twitterAccessSecret || env.TWITTER_ACCESS_SECRET,
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -87,10 +106,10 @@ export class FlippandoAgentkit {
     this.signer = new ethers.Wallet(this.config.privateKey!, this.provider)
   }
 
-  async run<TActionSchema extends FlippandoActionSchemaAny>(
+  async run<TActionSchema extends FlippandoActionSchemaAny, TResponseSchema extends z.ZodType<any, any>>(
     action: FlippandoAction<TActionSchema, TResponseSchema>,
-    args: TActionSchema,
-  ): Promise<string> {
+    args: z.infer<TActionSchema>,
+  ): Promise<z.infer<TResponseSchema>> {
     return await action.func(args, this)
   }
 
@@ -146,6 +165,22 @@ export class FlippandoAgentkit {
 
   getChainId(): number {
     return this.config.chainId!
+  }
+
+  getTwitterApiKey(): string {
+    return this.config.twitterApiKey!
+  }
+
+  getTwitterApiSecret(): string {
+    return this.config.twitterApiSecret!
+  }
+
+  getTwitterAccessToken(): string {
+    return this.config.twitterAccessToken!
+  }
+
+  getTwitterAccessSecret(): string {
+    return this.config.twitterAccessSecret!
   }
 }
 

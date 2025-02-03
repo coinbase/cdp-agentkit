@@ -8,7 +8,8 @@ import { GetNftMetadataAction } from "./get_flip_metadata"
 import { GetAvaialbleNftsAction } from "./get_available_nfts"
 import { ChangeFlippingTerritoryAction } from "./change_flipping_territory"
 import { FlippandoAction, FlippandoActionSchemaAny } from "../flippando"
-import { MakeArtAction } from "./make_art"
+import { MakeArtAction } from "./make-art"
+import { PostToTwitterAction } from "./post-to-twitter"
 
 
 export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaAny, z.ZodType<any, any, any>>[] {
@@ -22,6 +23,7 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
         new GetAvaialbleNftsAction(),
         new ChangeFlippingTerritoryAction(),
         new MakeArtAction(),
+        new PostToTwitterAction(),
     ];
   }
   
@@ -42,6 +44,7 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
     GetAvaialbleNftsAction,
     ChangeFlippingTerritoryAction,
     MakeArtAction,
+    PostToTwitterAction,
   }
 
 
