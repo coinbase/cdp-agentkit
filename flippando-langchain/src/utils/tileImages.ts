@@ -1,7 +1,7 @@
 import fs from "fs"
 import path from "path"
 
-export const tileImages: { [key: string]: { [key: string]: string } } = {}
+const tileImages: { [key: string]: { [key: string]: string } } = {}
 
 // Load SVG files
 const tileTypes = ["squares", "dice", "hexagrams"]
@@ -45,7 +45,12 @@ export function getTileImage(index: number, tileType: string): string {
     throw new Error(`Invalid tile type: ${tileType}`)
   }
 
-  const keys = Object.keys(tileSet)
+  const keys = Object.keys(tileSet).sort((a, b) => {
+    const aNum = Number.parseInt(a.replace(/\D/g, ""))
+    const bNum = Number.parseInt(b.replace(/\D/g, ""))
+    return aNum - bNum
+  })
+
   if (index < 0 || index >= keys.length) {
     throw new Error(`Invalid tile index: ${index}`)
   }
