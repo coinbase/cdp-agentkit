@@ -67,7 +67,7 @@ export async function makeArt(
 }
 
 export class MakeArtAction implements FlippandoAction<typeof MakeArtSchema, typeof MakeArtResponseSchema> {
-  name = "make_nft"
+  name = "make_art"
   description = MAKE_ART_PROMPT
   argsSchema = MakeArtSchema
   responseSchema = MakeArtResponseSchema
