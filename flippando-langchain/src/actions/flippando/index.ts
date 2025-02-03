@@ -5,7 +5,7 @@ import { FlipTilesAction } from "./flip-tiles"
 import { MintNftAction } from "./mint-nft"
 import { GenerateImageForFlipAction } from "./generate_image_for_flip"
 import { GetNftMetadataAction } from "./get_flip_metadata"
-import { GetAvaialbelNftsAction } from "./get_available_nfts"
+import { GetAvaialbleNftsAction } from "./get_available_nfts"
 import { FlippandoAction, FlippandoActionSchemaAny } from "../flippando"
 
 
@@ -17,7 +17,7 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
         new MintNftAction(),
         new GenerateImageForFlipAction(),
         new GetNftMetadataAction(),
-        new GetAvaialbelNftsAction(),
+        new GetAvaialbleNftsAction(),
     ];
   }
   
@@ -35,7 +35,7 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
     MintNftAction,
     GenerateImageForFlipAction,
     GetNftMetadataAction,
-    GetAvaialbelNftsAction,
+    GetAvaialbleNftsAction,
   }
 
 

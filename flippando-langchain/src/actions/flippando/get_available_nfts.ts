@@ -9,11 +9,11 @@ It returns the an array of NFT tokenIds, which can be used to assmeble a complex
 `
 
 export const GetAvailableNftsSchema = z.object({
-    player: z.string().describe("The player for which we're calling the function"),
+    player: z.string().describe("The address of the player for which we're calling the function"),
 })
 
 export const GetAvailableNftsResponseSchema = z.object({
-    tokenIds: z.array(z.number()),
+    tokenIds: z.array(z.string()),
     message: z.string(),
 })
 
@@ -34,7 +34,9 @@ export async function getAvailableNfts(
 
   try {
     console.log(`Getting available Nft for player ${args.player}`)
-    const tokenIds = await flippando.getAllBasicTokensForPlayer(args.player)
+    const availableTokens = await flippando.getAllBasicTokensForPlayer(args.player)
+    // Convert BigNumber objects to strings
+    const tokenIds = availableTokens.map((token: ethers.BigNumber) => token.toString())
     console.log(`Token Ids: ${tokenIds}`)
 
 
@@ -51,10 +53,10 @@ export async function getAvailableNfts(
   }
 }
 
-export class GetAvaialbelNftsAction
+export class GetAvaialbleNftsAction
   implements FlippandoAction<typeof GetAvailableNftsSchema, typeof GetAvailableNftsResponseSchema>
 {
-  name = "get_nft_metadata"
+  name = "get_available_nfts"
   description = GET_AVAILABLE_NFTS_PROMPT
   argsSchema = GetAvailableNftsSchema
   responseSchema = GetAvailableNftsResponseSchema
