@@ -16,6 +16,17 @@ AgentKit is a framework for easily enabling AI agents to take actions onchain. I
   - [Adding Actions to your Action Provider](#adding-actions-to-your-action-provider)
   - [Adding Actions to your Action Provider that use a Wallet Provider](#adding-actions-to-your-action-provider-that-use-a-wallet-provider)
   - [Adding an Action Provider to your AgentKit instance](#adding-an-action-provider-to-your-agentkit-instance)
+- [Action Providers](#action-providers)
+  - [CDP Wallet](#cdp-wallet)
+  - [ERC20](#erc20)
+  - [ERC721](#erc721)
+  - [Farcaster](#farcaster)
+  - [Morpho](#morpho)
+  - [Pyth](#pyth)
+  - [Twitter](#twitter)
+  - [Wallet](#wallet)
+  - [WETH](#weth)
+  - [WOW](#wow)
 - [Wallet Providers](#wallet-providers)
   - [CdpWalletProvider](#cdpwalletprovider)
     - [Network Configuration](#network-configuration)
@@ -27,10 +38,6 @@ AgentKit is a framework for easily enabling AI agents to take actions onchain. I
 - [Contributing](#contributing)
 
 ## Getting Started
-
-*Prerequisites*:
-- [Node.js 18+](https://nodejs.org/en/download/)
-- [CDP Secret API Key](https://docs.cdp.coinbase.com/get-started/docs/cdp-api-keys#creating-secret-api-keys)
 
 ## Installation
 
@@ -215,6 +222,78 @@ const agentKit = new AgentKit({
   actionProviders: [myActionProvider()],
 });
 ```
+
+## Action Providers
+
+### Basename Provider
+| Action | Description |
+|--------|-------------|
+| `register_basename` | Registers a Basename for the agent. Must end with .base.eth on mainnet or .basetest.eth on testnet. |
+
+### CDP Wallet
+| Action | Description |
+|--------|-------------|
+| `deploy_contract` | Deploys smart contract with required args: solidity version, solidity input json, contract name, and optional constructor args. |
+| `deploy_nft` | Deploys an NFT (ERC-721) contract onchain with name, symbol, and base URI for token metadata. |
+| `deploy_token` | Deploys an ERC20 token smart contract with token name, symbol, and total supply. |
+| `trade` | Trades a specified amount of a 'from asset' to a 'to asset'. Only supported on mainnet networks. |
+
+### ERC20
+| Action | Description |
+|--------|-------------|
+| `get_balance` | Gets the token balance for a specified address and contract. |
+| `transfer` | Transfers ERC20 tokens to a specified address. |
+
+### ERC721
+| Action | Description |
+|--------|-------------|
+| `get_balance` | Gets the NFT balance for a specified address and contract. |
+| `mint` | Mints an NFT (ERC-721) to a specified destination address. |
+| `transfer` | Transfers an NFT to a specified destination address. |
+
+### Farcaster
+| Action | Description |
+|--------|-------------|
+| `account_details` | Retrieves account details for the agent's Farcaster account. |
+| `post_cast` | Posts a cast to Farcaster (max 280 characters). |
+
+### Morpho
+| Action | Description |
+|--------|-------------|
+| `deposit` | Deposits assets into a Morpho Vault. |
+| `withdraw` | Withdraws assets from a Morpho Vault. |
+
+### Pyth
+| Action | Description |
+|--------|-------------|
+| `fetch_price` | Fetches the current price for a given price feed from Pyth. |
+| `fetch_price_feed_id` | Fetches the price feed ID for a given token symbol from Pyth. |
+
+### Twitter
+| Action | Description |
+|--------|-------------|
+| `account_details` | Retrieves account details for the authenticated Twitter user. |
+| `account_mentions` | Retrieves recent mentions for the authenticated user. |
+| `post_tweet` | Posts a new tweet to Twitter. |
+| `post_tweet_reply` | Posts a reply to an existing tweet. |
+
+### Wallet
+| Action | Description |
+|--------|-------------|
+| `get_wallet_details` | Returns details of connected wallet including address, network info, ETH balance, native balance, and provider name. |
+| `native_transfer` | Transfers native tokens (e.g., ETH) to a specified address. |
+
+### WETH Provider
+| Action | Description |
+|--------|-------------|
+| `wrap_eth` | Wraps ETH to WETH. Only supported on Base Sepolia and Base Mainnet. |
+
+### WOW Provider
+| Action | Description |
+|--------|-------------|
+| `buy_token` | Purchases tokens from a WOW contract using ETH. |
+| `create_token` | Creates a Zora Wow ERC20 memecoin using the WoW factory with bonding curve functionality. |
+| `sell_token` | Sells WOW tokens for ETH. |
 
 ## Wallet Providers
 
