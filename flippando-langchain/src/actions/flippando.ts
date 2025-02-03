@@ -1,4 +1,5 @@
 import type { z } from "zod"
+import type { FlippandoAgentkit } from "../flippando-agentkit"
 
 /**
  * Type definition for any Flippando action schema
@@ -34,5 +35,5 @@ export interface FlippandoAction<TActionSchema extends FlippandoActionSchemaAny,
   /**
    * The function to execute for this action
    */
-  func: ((args: z.infer<TActionSchema>) => Promise<z.infer<TResponseSchema>>);
+  func: (args: z.infer<TActionSchema>, agentkit: FlippandoAgentkit) => Promise<z.infer<TResponseSchema>>
 }

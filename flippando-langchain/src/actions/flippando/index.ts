@@ -6,6 +6,7 @@ import { MintNftAction } from "./mint-nft"
 import { GenerateImageForFlipAction } from "./generate_image_for_flip"
 import { GetNftMetadataAction } from "./get_flip_metadata"
 import { GetAvaialbleNftsAction } from "./get_available_nfts"
+import { ChangeFlippingTerritoryAction } from "./change_flipping_territory"
 import { FlippandoAction, FlippandoActionSchemaAny } from "../flippando"
 
 
@@ -18,6 +19,7 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
         new GenerateImageForFlipAction(),
         new GetNftMetadataAction(),
         new GetAvaialbleNftsAction(),
+        new ChangeFlippingTerritoryAction(),
     ];
   }
   
@@ -36,6 +38,7 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
     GenerateImageForFlipAction,
     GetNftMetadataAction,
     GetAvaialbleNftsAction,
+    ChangeFlippingTerritoryAction,
   }
 
 
