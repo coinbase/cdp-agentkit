@@ -127,6 +127,21 @@ class MyActionProvider extends ActionProvider<WalletProvider> {
 
 Actions are defined as instance methods on the action provider class with the `@CreateAction` decorator. Actions can use a wallet provider or not and always return a Promise that resolves to a string.
 
+#### Required Typescript Compiler Options
+
+Creating actions with the `@CreateAction` decorator requires the following compilerOptions to be included in your project's `tsconfig.json`.
+
+```json
+{
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
+    }
+} 
+```
+
+#### Steps to create an action
+
 1. Define the action schema. Action schemas are defined using the `zod` library.
 
 ```typescript
@@ -184,20 +199,6 @@ class MyActionProvider extends ActionProvider<WalletProvider> {
     supportsNetwork = (network: Network) => true;
 }
 ```
-
-#### Required Typescript Compiler Options
-
-Creating actions with the `@CreateAction` decorator requires the following compilerOptions to be included in your project's `tsconfig.json`.
-
-```json
-{
-    "compilerOptions": {
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
-    }
-} 
-```
-
 
 ### Adding an Action Provider to your AgentKit instance. 
 
