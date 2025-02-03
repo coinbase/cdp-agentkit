@@ -15,7 +15,7 @@ AgentKit is a framework for easily enabling AI agents to take actions onchain. I
 - [Creating an Action Provider](#creating-an-action-provider)
   - [Adding Actions to your Action Provider](#adding-actions-to-your-action-provider)
   - [Adding Actions to your Action Provider that use a Wallet Provider](#adding-actions-to-your-action-provider-that-use-a-wallet-provider)
-- [Adding an Action Provider to your AgentKit instance](#adding-an-action-provider-to-your-agentkit-instance)
+  - [Adding an Action Provider to your AgentKit instance](#adding-an-action-provider-to-your-agentkit-instance)
 - [Wallet Providers](#wallet-providers)
   - [CdpWalletProvider](#cdpwalletprovider)
     - [Network Configuration](#network-configuration)
