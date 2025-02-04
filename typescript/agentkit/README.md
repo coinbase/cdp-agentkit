@@ -39,6 +39,10 @@ AgentKit is a framework for easily enabling AI agents to take actions onchain. I
 
 ## Getting Started
 
+*Prerequisites*:
+- [Node.js 18+](https://nodejs.org/en/download/)
+- [CDP Secret API Key](https://docs.cdp.coinbase.com/get-started/docs/cdp-api-keys#creating-secret-api-keys)
+
 ## Installation
 
 ```bash
