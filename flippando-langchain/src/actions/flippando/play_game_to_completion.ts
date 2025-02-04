@@ -3,11 +3,13 @@ import type { FlippandoAction } from "../flippando"
 import { ethers } from "ethers"
 import FlippandoABI from "../../abis/Flippando.json"
 import type { FlippandoAgentkit } from "../../flippando-agentkit"
+import { getNextPositions } from "../../utils/getNextPositions"
 
 const PLAY_GAME_TO_COMPLETION_PROMPT = `
 This action plays a Flippando game to completion. It takes the game ID as input and
-repeatedly calls the flipTiles function until the game is solved. The action keeps
-track of the total time spent solving the game and the total number of tries.
+repeatedly calls the flipTiles function until the game is solved. The action uses an
+intelligent strategy to select tiles to flip, keeping track of the total time spent
+solving the game and the total number of tries.
 `
 
 export const PlayGameToCompletionSchema = z.object({
@@ -23,84 +25,158 @@ export const PlayGameToCompletionResponseSchema = z.object({
   }),
 })
 
-function getTwoRandomPositions(boardSize: number): number[] {
-  const pos1 = Math.floor(Math.random() * boardSize)
-  let pos2
-  do {
-    pos2 = Math.floor(Math.random() * boardSize)
-  } while (pos2 === pos1)
-  return [pos1, pos2]
-}
-
-export async function playGameToCompletion(
-  args: z.infer<typeof PlayGameToCompletionSchema>,
-  agentkit: FlippandoAgentkit,
-): Promise<z.infer<typeof PlayGameToCompletionResponseSchema>> {
-  console.log("Starting playGameToCompletion with args:", args)
-  console.log("Flippando address:", agentkit.getFlippandoAddress())
-  const startTime = Date.now()
-  let tries = 0
-  let isGameSolved = false
-
-  const flippando = new ethers.Contract(agentkit.getFlippandoAddress(), FlippandoABI.abi, agentkit.getSigner())
-
-  let currentBoard: number[] = []
-  let currentSolvedBoard: number[] = []
-
-  while (!isGameSolved && tries < 100) {
-    // Limit to 100 tries to prevent infinite loops
-    try {
-      const positions = getTwoRandomPositions(currentBoard.length || 16) // Assume 4x4 board if length is unknown
-      console.log(`Flipping tiles for game ${args.gameId}, positions: ${positions.join(", ")}`)
-      const tx = await flippando.flipTiles(args.gameId, positions)
-      console.log(`Transaction sent: ${tx.hash}`)
-      const receipt = await tx.wait()
-
-      const gameStateEvent = receipt.events?.find((e: any) => e.event === "GameState")
-      const gameSolvedEvent = receipt.events?.find((e: any) => e.event === "GameSolved")
-
-      if (!gameStateEvent) throw new Error("GameState event not found")
-
-      const gameStruct = gameStateEvent.args[1]
-      currentBoard = gameStruct.board.map((tile: ethers.BigNumber | number) =>
-        typeof tile === "number" ? tile : tile.toNumber(),
-      )
-      currentSolvedBoard = gameStruct.solvedBoard.map((tile: ethers.BigNumber | number) =>
-        typeof tile === "number" ? tile : tile.toNumber(),
-      )
-
-      console.log("Current Board:", currentBoard)
-      console.log("Current Solved Board:", currentSolvedBoard)
-
-      if (gameSolvedEvent && gameSolvedEvent.args.id === args.gameId) {
-        isGameSolved = true
-        console.log("Game solved!")
-      } else {
-        const solvedTiles = currentSolvedBoard.filter((tile: number) => tile !== 0).length
-        const totalTiles = currentSolvedBoard.length
-        const solvedPercentage = Math.round((solvedTiles / totalTiles) * 100)
-        console.log(`Game progress: ${solvedPercentage}% solved`)
+function arraysEqual(a: number[], b: number[]): boolean {
+    if (a.length !== b.length) return false
+    for (let i = 0; i < a.length; i++) {
+      if (a[i] !== b[i]) return false
+    }
+    return true
+  }
+  
+  function findMatchingTiles(board: number[], solvedBoard: number[]): number[] | null {
+    const unsolvedPositions: number[] = []
+    for (let i = 0; i < board.length; i++) {
+      if (board[i] !== 0 && solvedBoard[i] === 0) {
+        unsolvedPositions.push(i)
       }
-
-      tries++
-    } catch (error) {
-      console.error("Error in playGameToCompletion:", error)
-      throw new Error(`Error playing game: ${error instanceof Error ? error.message : String(error)}`)
+    }
+  
+    for (let i = 0; i < unsolvedPositions.length; i++) {
+      for (let j = i + 1; j < unsolvedPositions.length; j++) {
+        if (board[unsolvedPositions[i]] === board[unsolvedPositions[j]]) {
+          return [unsolvedPositions[i], unsolvedPositions[j]]
+        }
+      }
+    }
+  
+    return null
+  }
+  
+  function getUnsolvedTiles(solvedBoard: number[]): number[] {
+    return solvedBoard.reduce((acc: number[], tile: number, index: number) => {
+      if (tile === 0) acc.push(index)
+      return acc
+    }, [])
+  }
+  
+  export async function playGameToCompletion(
+    args: z.infer<typeof PlayGameToCompletionSchema>,
+    agentkit: FlippandoAgentkit,
+  ): Promise<z.infer<typeof PlayGameToCompletionResponseSchema>> {
+    console.log("Starting playGameToCompletion with args:", args)
+    console.log("Flippando address:", agentkit.getFlippandoAddress())
+    const startTime = Date.now()
+    let tries = 0
+    let isGameSolved = false
+  
+    const flippando = new ethers.Contract(agentkit.getFlippandoAddress(), FlippandoABI.abi, agentkit.getSigner())
+  
+    let currentBoard: number[] = []
+    let currentSolvedBoard: number[] = []
+  
+    while (!isGameSolved && tries < 100) {
+      console.log(`Starting iteration ${tries + 1}`)
+      try {
+        console.log("Current Board before getNextPositions:", currentBoard)
+        console.log("Current Solved Board before getNextPositions:", currentSolvedBoard)
+        console.log("Remaining unsolved:", currentSolvedBoard.filter((tile) => tile === 0).length)
+        console.log("Board size:", currentBoard.length)
+  
+        let positions: number[] | null
+  
+        const boardSize = currentBoard.length
+        const sqrtBoardSize = Math.sqrt(boardSize)
+        const unsolvedTiles = getUnsolvedTiles(currentSolvedBoard)
+  
+        if (unsolvedTiles.length <= sqrtBoardSize && tries > 0) {
+          // Pick the first two unsolved tiles
+          positions = unsolvedTiles.slice(0, 2)
+          console.log("Final stage: picking unsolved tiles in order:", positions)
+        } else {
+          // First, try to find matching tiles
+          positions = findMatchingTiles(currentBoard, currentSolvedBoard)
+  
+          // If no matching tiles found, use getNextPositions
+          if (!positions) {
+            positions = tries === 0 ? [0, 1] : getNextPositions(currentBoard, currentSolvedBoard)
+          }
+        }
+  
+        if (!positions || positions.length !== 2) {
+          console.log("No valid positions to flip. Game might be in an invalid state.")
+          break
+        }
+  
+        console.log("Positions to flip:", positions)
+        console.log(`Flipping tiles for game ${args.gameId}, positions: ${positions.join(", ")}`)
+  
+        const tx = await flippando.flipTiles(args.gameId, positions)
+        console.log(`Transaction sent: ${tx.hash}`)
+        const receipt = await tx.wait()
+  
+        const gameStateEvent = receipt.events?.find((e: any) => e.event === "GameState")
+        const gameSolvedEvent = receipt.events?.find((e: any) => e.event === "GameSolved")
+  
+        if (!gameStateEvent) {
+          console.error("GameState event not found")
+          break // Exit the loop if GameState event is not found
+        }
+  
+        const gameStruct = gameStateEvent.args[1]
+        const previousBoard = [...currentBoard]
+        const previousSolvedBoard = [...currentSolvedBoard]
+        currentBoard = gameStruct.board
+        currentSolvedBoard = gameStruct.solvedBoard
+  
+        if (arraysEqual(currentBoard, previousBoard) && arraysEqual(currentSolvedBoard, previousSolvedBoard)) {
+          console.warn("Board state did not change after flip!")
+        }
+  
+        if (currentBoard.length === 0 || currentSolvedBoard.length === 0) {
+          console.error("Board or solvedBoard is empty!")
+          console.log("Full gameStruct:", gameStruct)
+        }
+  
+        console.log("Current Board after flip:", currentBoard)
+        console.log("Current Solved Board after flip:", currentSolvedBoard)
+  
+        if (gameSolvedEvent && gameSolvedEvent.args.id === args.gameId) {
+          isGameSolved = true
+          console.log("Game solved!")
+        } else {
+          const solvedTiles = currentSolvedBoard.filter((tile: number) => tile !== 0).length
+          const totalTiles = currentSolvedBoard.length
+          const solvedPercentage = Math.round((solvedTiles / totalTiles) * 100)
+          console.log(`Game progress: ${solvedPercentage}% solved`)
+        }
+      } catch (error) {
+        console.error(`Error in playGameToCompletion (try ${tries + 1}):`, error)
+        if (error instanceof Error) {
+          console.error("Error message:", error.message)
+          console.error("Error stack:", error.stack)
+        }
+        // Don't throw here, just log the error and continue the loop
+      } finally {
+        tries++
+        console.log(`Completed iteration ${tries}, isGameSolved: ${isGameSolved}`)
+      }
+    }
+  
+    const endTime = Date.now()
+    const totalTime = endTime - startTime
+  
+    console.log(`Game completion attempt finished. Total tries: ${tries}, isGameSolved: ${isGameSolved}`)
+  
+    return {
+      message: isGameSolved ? "Game completed successfully" : "Game could not be completed within the try limit",
+      finalState: {
+        totalTime,
+        totalTries: tries,
+        solvedBoard: currentSolvedBoard,
+      },
     }
   }
 
-  const endTime = Date.now()
-  const totalTime = endTime - startTime
-
-  return {
-    message: isGameSolved ? "Game completed successfully" : "Game could not be completed within the try limit",
-    finalState: {
-      totalTime,
-      totalTries: tries,
-      solvedBoard: currentSolvedBoard,
-    },
-  }
-}
 
 export class PlayGameToCompletionAction
   implements FlippandoAction<typeof PlayGameToCompletionSchema, typeof PlayGameToCompletionResponseSchema>
