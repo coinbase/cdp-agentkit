@@ -18,3 +18,14 @@ export const BidSchema = z
   })
   .strip()
   .describe("Input schema for NFT bid action");
+
+export const BuySchema = z
+  .object({
+    token: z
+      .string()
+      .min(1, "Token is required")
+      .describe("The NFT ID in the format 'collectionAddress:tokenId'"),
+    apiKey: z.string().min(1, "API key is required").describe("Magic Eden API key"),
+  })
+  .strip()
+  .describe("Input schema for NFT buy action");

@@ -2,7 +2,7 @@ import { z } from "zod";
 import { ActionProvider } from "../actionProvider";
 import { EvmWalletProvider } from "../../wallet-providers";
 import { CreateAction } from "../actionDecorator";
-import { BidSchema } from "./schemas";
+import { BidSchema, BuySchema } from "./schemas";
 import { Network } from "../../network";
 import { EVM_BASE_URL } from "./constants";
 import { submitTransaction, getWethAddress, toMagicEdenChain } from "./utils";
@@ -134,6 +134,111 @@ OR
       )}`;
     } catch (error) {
       return `Error placing bid: ${error}`;
+    }
+  }
+
+  /**
+   * Buys an NFT (ERC721) from the Magic Eden marketplace.
+   *
+   * @param walletProvider - The wallet provider for executing the buy.
+   * @param args - Input parameters conforming to the BuySchema.
+   * @returns A success message or error string.
+   */
+  @CreateAction({
+    name: "buy",
+    description: `
+This tool will buy an NFT (ERC-721) from the Magic Eden marketplace on the secondary market.
+This is for immediately purchasing a listed NFT.
+
+Requires:
+- token: The NFT ID in the format 'collectionAddress:tokenId'
+- apiKey: The Magic Eden API key
+    `,
+    schema: BuySchema,
+  })
+  public async buyMagicEden(
+    walletProvider: EvmWalletProvider,
+    args: z.infer<typeof BuySchema>,
+  ): Promise<string> {
+    console.log("args", args);
+
+    const address = walletProvider.getAddress();
+    const networkId = walletProvider.getNetwork().networkId!;
+    const chainName = toMagicEdenChain(networkId);
+
+    const requestBody = {
+      taker: address,
+      relayer: address,
+      source: "magiceden.io",
+      items: [
+        {
+          fillType: "trade",
+          token: args.token,
+        },
+      ],
+    };
+    console.log("Request Body:", JSON.stringify(requestBody, null, 2));
+
+    try {
+      const response = await fetch(`${EVM_BASE_URL}/${chainName}/execute/buy/v7`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${args.apiKey}`,
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        const errorMessage =
+          result?.errors && result.errors.length
+            ? result.errors.map((e: any) => e.message).join(", ")
+            : result?.message || `HTTP error! status: ${response.status}`;
+        throw new Error(`Magic Eden API error: ${errorMessage}`);
+      }
+
+      if (result.errors && result.errors.length > 0) {
+        throw new Error(`Magic Eden API errors: ${JSON.stringify(result.errors)}`);
+      }
+
+      // Process each step in the API response
+      for (const step of result.steps) {
+        if (!step.items || step.items.length === 0) continue;
+
+        // Process each item in the step
+        for (const [index, item] of step.items.entries()) {
+          if (item.status !== "incomplete") {
+            console.log(` - Item ${index} already complete.`);
+            continue;
+          }
+
+          if (step.kind === "transaction") {
+            await this.handleTransactionItem(walletProvider, step, item);
+          } else if (step.kind === "signature") {
+            const signatureResult = await this.handleSignatureItem(
+              walletProvider,
+              chainName,
+              step,
+              item,
+            );
+            if (signatureResult) {
+              return signatureResult;
+            }
+          } else {
+            console.log(
+              ` - Unsupported step kind "${step.kind}" for step "${step.action}" – skipping.`,
+            );
+          }
+        }
+      }
+
+      return `Successfully placed buy with the following response steps processed: ${JSON.stringify(
+        result,
+      )}`;
+    } catch (error) {
+      return `Error placing buy: ${error}`;
     }
   }
 
