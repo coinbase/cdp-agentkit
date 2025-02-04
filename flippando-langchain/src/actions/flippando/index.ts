@@ -10,6 +10,7 @@ import { ChangeFlippingTerritoryAction } from "./change_flipping_territory"
 import { FlippandoAction, FlippandoActionSchemaAny } from "../flippando"
 import { MakeArtAction } from "./make-art"
 import { PostToTwitterAction } from "./post-to-twitter"
+import { PlayGameToCompletionAction } from "./play_game_to_completion"
 
 
 export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaAny, z.ZodType<any, any, any>>[] {
@@ -24,6 +25,7 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
         new ChangeFlippingTerritoryAction(),
         new MakeArtAction(),
         new PostToTwitterAction(),
+        new PlayGameToCompletionAction(),
     ];
   }
   
@@ -45,6 +47,7 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
     ChangeFlippingTerritoryAction,
     MakeArtAction,
     PostToTwitterAction,
+    PlayGameToCompletionAction,
   }
 
 
