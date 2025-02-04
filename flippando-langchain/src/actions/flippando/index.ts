@@ -1,16 +1,16 @@
 import { z } from "zod"
+import { FlippandoAction, FlippandoActionSchemaAny } from "../flippando"
 import { CreateGameAction } from "./create-game"
 import { InitializeGameAction } from "./initialize-game"
 import { FlipTilesAction } from "./flip-tiles"
 import { MintNftAction } from "./mint-nft"
-import { GenerateImageForFlipAction } from "./generate_image_for_flip"
-import { GetNftMetadataAction } from "./get_flip_metadata"
-import { GetAvaialbleNftsAction } from "./get_available_nfts"
-import { ChangeFlippingTerritoryAction } from "./change_flipping_territory"
-import { FlippandoAction, FlippandoActionSchemaAny } from "../flippando"
+import { GenerateImageForFlipAction } from "./generate-image-for-flip"
+import { GetNftMetadataAction } from "./get-flip-metadata"
+import { GetAvaialbleNftsAction } from "./get-available-nfts"
+import { ChangeFlippingTerritoryAction } from "./change-flipping-territory"
 import { MakeArtAction } from "./make-art"
 import { PostToTwitterAction } from "./post-to-twitter"
-import { PlayGameToCompletionAction } from "./play_game_to_completion"
+import { PlayGameToCompletionAction } from "./play-game-to-completion"
 
 
 export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaAny, z.ZodType<any, any, any>>[] {
