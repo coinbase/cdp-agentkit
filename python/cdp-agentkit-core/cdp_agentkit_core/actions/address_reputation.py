@@ -45,6 +45,8 @@ class AddressReputationInput(BaseModel):
 
 
 def check_address_reputation(address: str, network: str) -> str:
+
+
     """Check the reputation of an address.
 
     Args:

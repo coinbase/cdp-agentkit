@@ -34,7 +34,7 @@ export interface CdpProviderConfig {
   /**
    * The CDP API Key Name.
    */
-  apiKeyName?: string;
+  apiKeyName?: string
 
   /**
    * The CDP API Key Private Key.
