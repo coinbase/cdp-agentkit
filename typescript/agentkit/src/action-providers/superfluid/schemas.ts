@@ -14,8 +14,8 @@ export const SuperfluidCreateStreamSchema = z
   .describe("Input schema for creating or updating a Superfluid stream");
 
 /**
-* Input schema for deleting a Superfluid stream
-*/
+ * Input schema for deleting a Superfluid stream
+ */
 export const SuperfluidDeleteStreamSchema = z
   .object({
     erc20TokenAddress: z.string().describe("The ERC20 token to start streaming"),
@@ -26,8 +26,8 @@ export const SuperfluidDeleteStreamSchema = z
   .describe("Input schema for creating a Superfluid stream");
 
 /**
-* Input schema for creating a Superfluid pool
-*/
+ * Input schema for creating a Superfluid pool
+ */
 export const SuperfluidCreatePoolSchema = z
   .object({
     erc20TokenAddress: z.string().describe("The ERC20 token for which to create a pool"),
@@ -37,8 +37,8 @@ export const SuperfluidCreatePoolSchema = z
   .describe("Input schema for creating a Superfluid pool");
 
 /**
-* Input schema for updating a Superfluid pool
-*/
+ * Input schema for updating a Superfluid pool
+ */
 export const SuperfluidUpdatePoolSchema = z
   .object({
     poolAddress: z.string().describe("The EVM address of the token pool"),
@@ -50,10 +50,6 @@ export const SuperfluidUpdatePoolSchema = z
   .describe("Input schema for updating a Superfluid pool");
 
 /**
-* Empty input schema
-*/
-export const EmptySchema = z
-  .object({
-  })
-  .strip()
-  .describe("Empty input schema");
+ * Empty input schema
+ */
+export const EmptySchema = z.object({}).strip().describe("Empty input schema");

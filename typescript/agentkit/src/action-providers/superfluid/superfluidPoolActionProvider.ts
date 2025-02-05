@@ -1,30 +1,21 @@
 import { z } from "zod";
-import { 
-  SuperfluidCreatePoolSchema,
-  SuperfluidUpdatePoolSchema
-} from "./schemas";
-import {
-  GDAv1ForwarderAddress,
-  GDAv1ForwarderABI
-} from "./constants";
+import { SuperfluidCreatePoolSchema, SuperfluidUpdatePoolSchema } from "./schemas";
+import { GDAv1ForwarderAddress, GDAv1ForwarderABI } from "./constants";
 import { encodeFunctionData, Hex } from "viem";
 import { ActionProvider } from "../actionProvider";
 import { Network } from "../../network";
 import { EvmWalletProvider } from "../../wallet-providers";
 import { CreateAction } from "../actionDecorator";
 
-
 /**
  * SuperfluidPoolActionProvider is an action provider for Superfluid interactions.
  */
 export class SuperfluidPoolActionProvider extends ActionProvider<EvmWalletProvider> {
-
   /**
    * Constructor for the SuperfluidPoolActionProvider class.
    */
   constructor() {
     super("superfluid-pool", []);
-
   }
 
   /**
@@ -45,16 +36,20 @@ Do not use the ERC20 address as the destination address. If you are unsure of th
   })
   async createPool(
     walletProvider: EvmWalletProvider,
-    args: z.infer<typeof SuperfluidCreatePoolSchema>
+    args: z.infer<typeof SuperfluidCreatePoolSchema>,
   ): Promise<string> {
     try {
       const data = encodeFunctionData({
         abi: GDAv1ForwarderABI,
         functionName: "createPool",
-        args: [args.erc20TokenAddress as Hex, walletProvider.getAddress() as Hex, {
-          transferabilityForUnitsOwner: false,
-          distributionFromAnyAddress: false,
-        }],
+        args: [
+          args.erc20TokenAddress as Hex,
+          walletProvider.getAddress() as Hex,
+          {
+            transferabilityForUnitsOwner: false,
+            distributionFromAnyAddress: false,
+          },
+        ],
       });
 
       const hash = await walletProvider.sendTransaction({
@@ -63,7 +58,9 @@ Do not use the ERC20 address as the destination address. If you are unsure of th
       });
 
       const receipt = await walletProvider.waitForTransactionReceipt(hash);
-      const [success, poolAddress] = receipt.events.find((e: { event: string; }) => e.event === 'PoolCreated').args;
+      const [success, poolAddress] = receipt.events.find(
+        (e: { event: string }) => e.event === "PoolCreated",
+      ).args;
 
       // todo store this poolAddress is memory so we can manipulate it later (we don't trust the llm to remember...)
       return `Created pool of token ${args.erc20TokenAddress} at ${poolAddress}`;
@@ -91,7 +88,7 @@ Do not use the ERC20 address as the destination address. If you are unsure of th
   })
   async updatePool(
     walletProvider: EvmWalletProvider,
-    args: z.infer<typeof SuperfluidUpdatePoolSchema>
+    args: z.infer<typeof SuperfluidUpdatePoolSchema>,
   ): Promise<string> {
     try {
       const data = encodeFunctionData({

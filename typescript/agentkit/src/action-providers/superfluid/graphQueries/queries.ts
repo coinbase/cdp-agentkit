@@ -1,34 +1,34 @@
-import { gql } from 'graphql-request';
+import { gql } from "graphql-request";
 
 export const getAccountOutflowQuery = gql`
   query GetAccountData($id: ID!) {
-  accounts(where: { id: $id }) {
-    isSuperApp
-    inflows {
-      currentFlowRate
-      token {
-        symbol
+    accounts(where: { id: $id }) {
+      isSuperApp
+      inflows {
+        currentFlowRate
+        token {
+          symbol
+        }
+        sender {
+          id
+        }
       }
-      sender {
-        id
+      outflows {
+        currentFlowRate
+        token {
+          symbol
+        }
+        receiver {
+          id
+        }
       }
-    }
-    outflows {
-      currentFlowRate
-      token {
-        symbol
+      accountTokenSnapshots {
+        token {
+          id
+        }
+        totalNumberOfActiveStreams
+        totalNetFlowRate
       }
-      receiver {
-        id
-      }
-    }
-    accountTokenSnapshots {
-      token {
-        id
-      }
-      totalNumberOfActiveStreams
-      totalNetFlowRate
     }
   }
-}
 `;

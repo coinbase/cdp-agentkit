@@ -1,8 +1,5 @@
 import { encodeFunctionData } from "viem";
-import {
-  GDAv1ForwarderAddress,
-  GDAv1ForwarderABI
-} from "./constants";
+import { GDAv1ForwarderAddress, GDAv1ForwarderABI } from "./constants";
 import { EvmWalletProvider } from "../../wallet-providers";
 import { superfluidPoolActionProvider } from "./superfluidPoolActionProvider";
 
@@ -42,7 +39,11 @@ describe("SuperfluidPoolActionProvider", () => {
         data: encodeFunctionData({
           abi: GDAv1ForwarderABI,
           functionName: "createPool",
-          args: [MOCK_ERC20_CONTRACT, MOCK_ADDRESS, { transferabilityForUnitsOwner: false, distributionFromAnyAddress: false }],
+          args: [
+            MOCK_ERC20_CONTRACT,
+            MOCK_ADDRESS,
+            { transferabilityForUnitsOwner: false, distributionFromAnyAddress: false },
+          ],
         }),
       });
 

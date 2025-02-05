@@ -1,9 +1,6 @@
 import { encodeFunctionData } from "viem";
 import { superfluidStreamActionProvider } from "./superfluidStreamActionProvider";
-import {
-  CFAv1ForwarderAddress,
-  CFAv1ForwarderABI,
-} from "./constants";
+import { CFAv1ForwarderAddress, CFAv1ForwarderABI } from "./constants";
 import { EvmWalletProvider } from "../../wallet-providers";
 
 describe("SuperfluidStreamActionProvider", () => {
@@ -46,7 +43,13 @@ describe("SuperfluidStreamActionProvider", () => {
         data: encodeFunctionData({
           abi: CFAv1ForwarderABI,
           functionName: "createFlow",
-          args: [MOCK_ERC20_CONTRACT, MOCK_ADDRESS, MOCK_RECIPIENT_ADDRESS, BigInt(MOCK_FLOW_RATE), "0x"],
+          args: [
+            MOCK_ERC20_CONTRACT,
+            MOCK_ADDRESS,
+            MOCK_RECIPIENT_ADDRESS,
+            BigInt(MOCK_FLOW_RATE),
+            "0x",
+          ],
         }),
       });
 

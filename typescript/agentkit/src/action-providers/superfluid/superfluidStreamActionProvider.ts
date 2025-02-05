@@ -1,38 +1,39 @@
 import { z } from "zod";
-import {
-  SuperfluidCreateStreamSchema,
-  SuperfluidDeleteStreamSchema
-} from "./schemas";
-import {
-  CFAv1ForwarderAddress,
-  CFAv1ForwarderABI,
-} from "./constants";
+import { SuperfluidCreateStreamSchema, SuperfluidDeleteStreamSchema } from "./schemas";
+import { CFAv1ForwarderAddress, CFAv1ForwarderABI } from "./constants";
 import { encodeFunctionData, Hex } from "viem";
 import { ActionProvider } from "../actionProvider";
 import { Network } from "../../network";
 import { EvmWalletProvider } from "../../wallet-providers";
 import { CreateAction } from "../actionDecorator";
 
-
 /**
  * SuperfluidStreamActionProvider is an action provider for Superfluid interactions.
  */
 export class SuperfluidStreamActionProvider extends ActionProvider<EvmWalletProvider> {
-
   /**
    * Constructor for the SuperfluidStreamActionProvider class.
    */
   constructor() {
     super("superfluid-stream", []);
-
   }
 
   /**
    * Gets the link to the Superfluid dashboard pertaining to the stream
+   *
+   * @param network
+   * @param tokenAddress
+   * @param senderAddress
+   * @param recipientAddress
    */
-  getStreamLink = (network: Network, tokenAddress: string, senderAddress: string, recipientAddress: string) => {
-    return `https://app.superfluid.finance/stream/${network.networkId}/${senderAddress}-${recipientAddress}-${tokenAddress}`
-  }
+  getStreamLink = (
+    network: Network,
+    tokenAddress: string,
+    senderAddress: string,
+    recipientAddress: string,
+  ) => {
+    return `https://app.superfluid.finance/stream/${network.networkId}/${senderAddress}-${recipientAddress}-${tokenAddress}`;
+  };
 
   /**
    * Creates a stream from the agent wallet to the recipient
@@ -53,20 +54,25 @@ Do not use the ERC20 address as the destination address. If you are unsure of th
   })
   async createStream(
     walletProvider: EvmWalletProvider,
-    args: z.infer<typeof SuperfluidCreateStreamSchema>
+    args: z.infer<typeof SuperfluidCreateStreamSchema>,
   ): Promise<string> {
     try {
       const data = encodeFunctionData({
         abi: CFAv1ForwarderABI,
         functionName: "createFlow",
-        args: [args.erc20TokenAddress as Hex, walletProvider.getAddress() as Hex, args.recipientAddress as Hex, BigInt(args.flowRate), "0x"],
+        args: [
+          args.erc20TokenAddress as Hex,
+          walletProvider.getAddress() as Hex,
+          args.recipientAddress as Hex,
+          BigInt(args.flowRate),
+          "0x",
+        ],
       });
 
       const hash = await walletProvider.sendTransaction({
         to: CFAv1ForwarderAddress as `0x${string}`,
         data,
       });
-
 
       await walletProvider.waitForTransactionReceipt(hash);
 
@@ -96,13 +102,19 @@ Do not use the ERC20 address as the destination address. If you are unsure of th
   })
   async updateStream(
     walletProvider: EvmWalletProvider,
-    args: z.infer<typeof SuperfluidCreateStreamSchema>
+    args: z.infer<typeof SuperfluidCreateStreamSchema>,
   ): Promise<string> {
     try {
       const data = encodeFunctionData({
         abi: CFAv1ForwarderABI,
         functionName: "updateFlow",
-        args: [args.erc20TokenAddress as Hex, walletProvider.getAddress() as Hex, args.recipientAddress as Hex, BigInt(args.flowRate), "0x"],
+        args: [
+          args.erc20TokenAddress as Hex,
+          walletProvider.getAddress() as Hex,
+          args.recipientAddress as Hex,
+          BigInt(args.flowRate),
+          "0x",
+        ],
       });
 
       const hash = await walletProvider.sendTransaction({
@@ -137,13 +149,18 @@ Do not use the ERC20 address as the destination address. If you are unsure of th
   })
   async deleteStream(
     walletProvider: EvmWalletProvider,
-    args: z.infer<typeof SuperfluidDeleteStreamSchema>
+    args: z.infer<typeof SuperfluidDeleteStreamSchema>,
   ): Promise<string> {
     try {
       const data = encodeFunctionData({
         abi: CFAv1ForwarderABI,
         functionName: "deleteFlow",
-        args: [args.erc20TokenAddress as Hex, walletProvider.getAddress() as Hex, args.recipientAddress as Hex, "0x"],
+        args: [
+          args.erc20TokenAddress as Hex,
+          walletProvider.getAddress() as Hex,
+          args.recipientAddress as Hex,
+          "0x",
+        ],
       });
 
       const hash = await walletProvider.sendTransaction({
