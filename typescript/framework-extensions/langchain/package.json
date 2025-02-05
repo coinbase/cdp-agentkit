@@ -40,7 +40,7 @@
     "langchain"
   ],
   "dependencies": {
-    "@coinbase/agentkit": "^0.1.0",
+    "@coinbase/agentkit": "workspace:*",
     "@coinbase/coinbase-sdk": "^0.15.0",
     "@langchain/core": "^0.3.19",
     "zod": "^3.22.4"

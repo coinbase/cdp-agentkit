@@ -8,7 +8,6 @@
     "typescript/examples/langchain-twitter-chatbot",
     "typescript/examples/langchain-farcaster-chatbot"
   ],
-  "packageManager": "npm@8.9.0",
   "scripts": {
     "build": "turbo run build",
     "test": "turbo run test",
@@ -21,6 +20,7 @@
     "lint:fix": "turbo run lint:fix",
     "test:types": "turbo run test:types"
   },
+  "packageManager": "pnpm@10.2.0",
   "author": "Coinbase Inc.",
   "license": "Apache-2.0",
   "repository": "https://github.com/coinbase/cdp-agentkit-nodejs",
