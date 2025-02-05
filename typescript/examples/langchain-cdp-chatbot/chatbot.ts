@@ -7,12 +7,10 @@ import {
   cdpApiActionProvider,
   cdpWalletActionProvider,
   pythActionProvider,
-} from "@coinbase/agentkit";
-import {
   superfluidStreamActionProvider,
   superfluidPoolActionProvider,
   superfluidQueryActionProvider,
-} from "../../agentkit/src/action-providers/superfluid";
+} from "@coinbase/agentkit";
 import { getLangChainTools } from "@coinbase/agentkit-langchain";
 import { HumanMessage } from "@langchain/core/messages";
 import { MemorySaver } from "@langchain/langgraph";
@@ -114,6 +112,7 @@ async function initializeAgent() {
         }),
         superfluidPoolActionProvider(),
         superfluidQueryActionProvider(),
+        superfluidStreamActionProvider(),
       ],
     });
 
