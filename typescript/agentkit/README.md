@@ -5,7 +5,6 @@ AgentKit is a framework for easily enabling AI agents to take actions onchain. I
 ## Table of Contents
 
 - [Agentkit](#agentkit)
-- [Supported Protocols](#supported-protocols)
 - [Getting Started](#getting-started)
 - [Installation](#installation)
 - [Usage](#usage)
