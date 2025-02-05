@@ -1,23 +1,24 @@
 import { z } from "zod";
-import { ActionProvider } from "../actionProvider";
-import { EvmWalletProvider } from "../../wallet-providers";
-import { CreateAction } from "../actionDecorator";
-import { Network } from "../../network";
 import {
   SuperfluidCreateStreamSchema,
   SuperfluidDeleteStreamSchema
- } from "./schemas";
+} from "./schemas";
 import {
   CFAv1ForwarderAddress,
   CFAv1ForwarderABI,
 } from "./constants";
 import { encodeFunctionData, Hex } from "viem";
+import {
+  ActionProvider,
+  CreateAction,
+  EvmWalletProvider,
+  Network } from "@coinbase/agentkit";
 
 
 /**
  * SuperfluidStreamActionProvider is an action provider for Superfluid interactions.
  */
-export class SuperfluidStreamActionProvider extends ActionProvider {
+export class SuperfluidStreamActionProvider extends ActionProvider<EvmWalletProvider> {
 
   /**
    * Constructor for the SuperfluidStreamActionProvider class.
@@ -25,6 +26,13 @@ export class SuperfluidStreamActionProvider extends ActionProvider {
   constructor() {
     super("superfluid-stream", []);
 
+  }
+
+  /**
+   * Gets the link to the Superfluid dashboard pertaining to the stream
+   */
+  getStreamLink = (network: Network, tokenAddress: string, senderAddress: string, recipientAddress: string) => {
+    return `https://app.superfluid.finance/stream/${network.networkId}/${senderAddress}-${recipientAddress}-${tokenAddress}`
   }
 
   /**
@@ -60,9 +68,10 @@ Do not use the ERC20 address as the destination address. If you are unsure of th
         data,
       });
 
+
       await walletProvider.waitForTransactionReceipt(hash);
 
-      return `Created stream of token ${args.erc20TokenAddress} to ${args.recipientAddress} at a rate of ${args.flowRate}`;
+      return `Created stream of token ${args.erc20TokenAddress} to ${args.recipientAddress} at a rate of ${args.flowRate}. The link to the stream is ${this.getStreamLink(walletProvider.getNetwork(), args.erc20TokenAddress, walletProvider.getAddress(), args.recipientAddress)}`;
     } catch (error) {
       return `Error creating Superfluid stream: ${error}`;
     }

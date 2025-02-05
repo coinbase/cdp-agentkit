@@ -1,20 +1,18 @@
 import { encodeFunctionData } from "viem";
-import { superfluidStreamActionProvider } from "./superfluidStreamActionProvider";
 import {
-  CFAv1ForwarderAddress,
-  CFAv1ForwarderABI,
+  GDAv1ForwarderAddress,
+  GDAv1ForwarderABI
 } from "./constants";
 import { EvmWalletProvider } from "@coinbase/agentkit";
+import { superfluidPoolActionProvider } from "./superfluidPoolActionProvider";
 
-describe("SuperfluidStreamActionProvider", () => {
+describe("SuperfluidPoolActionProvider", () => {
   const MOCK_ADDRESS = "0xe6b2af36b3bb8d47206a129ff11d5a2de2a63c83";
   const MOCK_ERC20_CONTRACT = "0x1234567890123456789012345678901234567890";
-  const MOCK_RECIPIENT_ADDRESS = "0x9876543210987654321098765432109876543210";
-  const MOCK_FLOW_RATE = "123";
   const MOCK_CHAIN_ID = "8453";
 
   let mockWallet: jest.Mocked<EvmWalletProvider>;
-  const actionProvider = superfluidStreamActionProvider();
+  const actionProvider = superfluidPoolActionProvider();
 
   beforeEach(() => {
     mockWallet = {
@@ -30,42 +28,38 @@ describe("SuperfluidStreamActionProvider", () => {
     mockWallet.waitForTransactionReceipt.mockResolvedValue({});
   });
 
-  describe("create stream", () => {
-    it("should successfully create a superfluid stream", async () => {
+  describe("create pool", () => {
+    it("should successfully create a superfluid pool", async () => {
       const args = {
         erc20TokenAddress: MOCK_ERC20_CONTRACT,
         chainId: MOCK_CHAIN_ID,
-        recipientAddress: MOCK_RECIPIENT_ADDRESS,
-        flowRate: MOCK_FLOW_RATE,
       };
 
-      const response = await actionProvider.createStream(mockWallet, args);
+      const response = await actionProvider.createPool(mockWallet, args);
 
       expect(mockWallet.sendTransaction).toHaveBeenCalledWith({
-        to: CFAv1ForwarderAddress,
+        to: GDAv1ForwarderAddress,
         data: encodeFunctionData({
-          abi: CFAv1ForwarderABI,
-          functionName: "createFlow",
-          args: [MOCK_ERC20_CONTRACT, MOCK_ADDRESS, MOCK_RECIPIENT_ADDRESS, BigInt(MOCK_FLOW_RATE), "0x"],
+          abi: GDAv1ForwarderABI,
+          functionName: "createPool",
+          args: [MOCK_ERC20_CONTRACT, MOCK_ADDRESS, { transferabilityForUnitsOwner: false, distributionFromAnyAddress: false }],
         }),
       });
 
       expect(mockWallet.waitForTransactionReceipt).toHaveBeenCalledWith("0xmockhash");
     });
 
-    it("should handle stream creation errors", async () => {
-      const error = new Error("Stream creation failed");
+    it("should handle pool creation errors", async () => {
+      const error = new Error("Pool creation failed");
       mockWallet.sendTransaction.mockRejectedValue(error);
 
       const args = {
         erc20TokenAddress: MOCK_ERC20_CONTRACT,
         chainId: MOCK_CHAIN_ID,
-        recipientAddress: MOCK_RECIPIENT_ADDRESS,
-        flowRate: MOCK_FLOW_RATE,
       };
 
-      const response = await actionProvider.createStream(mockWallet, args);
-      expect(response).toBe(`Error creating Superfluid stream: ${error}`);
+      const response = await actionProvider.createPool(mockWallet, args);
+      expect(response).toBe(`Error creating Superfluid pool: ${error}`);
     });
   });
 
