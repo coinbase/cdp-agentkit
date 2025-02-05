@@ -1,6 +1,3 @@
-// TODO: Improve type safety
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { WalletProvider } from "./walletProvider";
 import {
   TransactionRequest,
@@ -8,6 +5,7 @@ import {
   ReadContractReturnType,
   TransactionReceipt,
   Hex,
+  HashTypedDataParameters,
 } from "viem";
 
 /**
@@ -30,7 +28,7 @@ export abstract class EvmWalletProvider extends WalletProvider {
    * @param typedData - The typed data to sign.
    * @returns The signed typed data.
    */
-  abstract signTypedData(typedData: any): Promise<Hex>;
+  abstract signTypedData(typedData: HashTypedDataParameters): Promise<Hex>;
 
   /**
    * Sign a transaction.
