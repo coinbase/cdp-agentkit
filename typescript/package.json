@@ -2,11 +2,11 @@
   "name": "cdp-agentkit-monorepo",
   "private": true,
   "workspaces": [
-    "typescript/agentkit",
-    "typescript/framework-extensions/langchain",
-    "typescript/examples/langchain-cdp-chatbot",
-    "typescript/examples/langchain-twitter-chatbot",
-    "typescript/examples/langchain-farcaster-chatbot"
+    "agentkit",
+    "framework-extensions/langchain",
+    "examples/langchain-cdp-chatbot",
+    "examples/langchain-twitter-chatbot",
+    "examples/langchain-farcaster-chatbot"
   ],
   "packageManager": "npm@8.9.0",
   "scripts": {

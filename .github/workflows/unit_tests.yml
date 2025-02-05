@@ -9,8 +9,8 @@ jobs:
         working-directory: ./python/cdp-agentkit-core
     strategy:
       matrix:
-        python: ['3.10', '3.11', '3.12']
-    
+        python: ["3.10", "3.11", "3.12"]
+
     steps:
       - uses: actions/checkout@v3
 
@@ -47,8 +47,8 @@ jobs:
         working-directory: ./python/cdp-langchain
     strategy:
       matrix:
-        python: ['3.10', '3.11', '3.12']
-    
+        python: ["3.10", "3.11", "3.12"]
+
     steps:
       - uses: actions/checkout@v3
 
@@ -85,8 +85,8 @@ jobs:
         working-directory: ./python/twitter-langchain
     strategy:
       matrix:
-        python: ['3.10', '3.11', '3.12']
-    
+        python: ["3.10", "3.11", "3.12"]
+
     steps:
       - uses: actions/checkout@v3
 
@@ -121,12 +121,16 @@ jobs:
     strategy:
       matrix:
         node-version: ["18", "20"]
+    defaults:
+      run:
+        working-directory: ./typescript
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
+          cache-dependency-path: ./typescript/package-lock.json
       - name: Install and test AgentKit.js
         run: |
           npm i
