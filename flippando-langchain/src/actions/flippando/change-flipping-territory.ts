@@ -12,6 +12,8 @@ export const ChangeFlippingTerritorySchema = z.object({
   rpcUrl: z.string().url().describe("The new RPC URL for the chain"),
   flippandoGameMasterAddress: z.string().describe("The new FlippandoGameMaster contract address"),
   flippandoAddress: z.string().describe("The new Flippando contract address"),
+  flippandoBundlerAddress: z.string().describe("The new FlippandoBundler contract address"),
+  flipndAddress: z.string().describe("The new Flipnd contract address"),
 })
 
 export const ChangeFlippingTerritoryResponseSchema = z.object({
@@ -31,7 +33,13 @@ export class ChangeFlippingTerritoryAction
     agentkit: FlippandoAgentkit,
   ): Promise<z.infer<typeof ChangeFlippingTerritoryResponseSchema>> {
     try {
-      await agentkit.updateNetwork(args.chainId, args.rpcUrl, args.flippandoGameMasterAddress, args.flippandoAddress)
+      await agentkit.updateNetwork(
+        args.chainId, 
+        args.rpcUrl, 
+        args.flippandoGameMasterAddress, 
+        args.flippandoAddress,
+        args.flippandoBundlerAddress,
+        args.flipndAddress)
 
       return {
         message: `Successfully changed flipping territory to chain ${args.chainId} with new contract addresses.`,
