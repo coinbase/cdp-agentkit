@@ -1,4 +1,4 @@
-import { encodeFunctionData } from "viem";
+import { encodeFunctionData, Hex } from "viem";
 import { erc721ActionProvider } from "./erc721ActionProvider";
 import { ERC721_ABI } from "./constants";
 import { EvmWalletProvider } from "../../wallet-providers";
@@ -22,7 +22,7 @@ describe("ERC721 Action Provider", () => {
       call: jest.fn(),
     } as unknown as jest.Mocked<EvmWalletProvider>;
 
-    mockWallet.sendTransaction.mockResolvedValue("0xmockhash" as `0x${string}`);
+    mockWallet.sendTransaction.mockResolvedValue("0xmockhash" as Hex);
     mockWallet.waitForTransactionReceipt.mockResolvedValue({});
   });
 

@@ -1,4 +1,4 @@
-import { encodeFunctionData, parseEther } from "viem";
+import { encodeFunctionData, parseEther, Hex } from "viem";
 import { EvmWalletProvider } from "../../wallet-providers";
 import { approve } from "../../utils";
 import { MorphoActionProvider } from "./morphoActionProvider";
@@ -23,7 +23,7 @@ describe("Morpho Action Provider", () => {
     mockWallet = {
       getAddress: jest.fn().mockReturnValue(MOCK_RECEIVER_ID),
       getNetwork: jest.fn().mockReturnValue({ protocolFamily: "evm", networkId: "1" }),
-      sendTransaction: jest.fn().mockResolvedValue(MOCK_TX_HASH as `0x${string}`),
+      sendTransaction: jest.fn().mockResolvedValue(MOCK_TX_HASH as Hex),
       waitForTransactionReceipt: jest.fn().mockResolvedValue(MOCK_RECEIPT),
     } as unknown as jest.Mocked<EvmWalletProvider>;
 
@@ -51,7 +51,7 @@ describe("Morpho Action Provider", () => {
       );
 
       expect(mockWallet.sendTransaction).toHaveBeenCalledWith({
-        to: MOCK_VAULT_ADDRESS as `0x${string}`,
+        to: MOCK_VAULT_ADDRESS as Hex,
         data: encodeFunctionData({
           abi: METAMORPHO_ABI,
           functionName: "deposit",
@@ -92,7 +92,7 @@ describe("Morpho Action Provider", () => {
       const response = await actionProvider.withdraw(mockWallet, args);
 
       expect(mockWallet.sendTransaction).toHaveBeenCalledWith({
-        to: MOCK_VAULT_ADDRESS as `0x${string}`,
+        to: MOCK_VAULT_ADDRESS as Hex,
         data: encodeFunctionData({
           abi: METAMORPHO_ABI,
           functionName: "withdraw",

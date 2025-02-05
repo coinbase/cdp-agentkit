@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { Decimal } from "decimal.js";
-import { encodeFunctionData, parseEther } from "viem";
+import { encodeFunctionData, parseEther, Hex } from "viem";
 
 import { ActionProvider } from "../actionProvider";
 import { EvmWalletProvider } from "../../wallet-providers";
@@ -78,7 +78,7 @@ Important notes:
       });
 
       const txHash = await wallet.sendTransaction({
-        to: args.vaultAddress as `0x${string}`,
+        to: args.vaultAddress as Hex,
         data,
       });
 
@@ -121,7 +121,7 @@ This tool allows withdrawing assets from a Morpho Vault. It takes:
       });
 
       const txHash = await wallet.sendTransaction({
-        to: args.vaultAddress as `0x${string}`,
+        to: args.vaultAddress as Hex,
         data,
       });
 

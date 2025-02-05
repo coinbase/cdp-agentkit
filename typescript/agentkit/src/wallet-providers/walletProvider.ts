@@ -1,3 +1,5 @@
+import { Hex } from "viem";
+
 import { Network } from "../network";
 import { sendAnalyticsEvent } from "../analytics";
 
@@ -72,5 +74,5 @@ export abstract class WalletProvider {
    * @param value - The amount to transfer in whole units (e.g. ETH)
    * @returns The transaction hash.
    */
-  abstract nativeTransfer(to: `0x${string}`, value: string): Promise<`0x${string}`>;
+  abstract nativeTransfer(to: Hex, value: string): Promise<Hex>;
 }

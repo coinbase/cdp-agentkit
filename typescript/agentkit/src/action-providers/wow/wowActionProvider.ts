@@ -12,7 +12,7 @@ import {
 } from "./constants";
 import { getBuyQuote, getSellQuote } from "./utils";
 import { getHasGraduated } from "./uniswap/utils";
-import { encodeFunctionData } from "viem";
+import { encodeFunctionData, Hex } from "viem";
 import { WowBuyTokenInput, WowCreateTokenInput, WowSellTokenInput } from "./schemas";
 
 /**
@@ -81,7 +81,7 @@ Important notes:
       });
 
       const txHash = await wallet.sendTransaction({
-        to: args.contractAddress as `0x${string}`,
+        to: args.contractAddress as Hex,
         data,
         value: BigInt(args.amountEthInWei),
       });
@@ -139,7 +139,7 @@ Important notes:
       });
 
       const txHash = await wallet.sendTransaction({
-        to: factoryAddress as `0x${string}`,
+        to: factoryAddress as Hex,
         data,
       });
 
@@ -206,7 +206,7 @@ Important notes:
       });
 
       const txHash = await wallet.sendTransaction({
-        to: args.contractAddress as `0x${string}`,
+        to: args.contractAddress as Hex,
         data,
       });
 

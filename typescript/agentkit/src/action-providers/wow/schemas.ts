@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { isAddress } from "viem";
+import { isAddress, Hex } from "viem";
 
-const ethereumAddress = z.custom<`0x${string}`>(
+const ethereumAddress = z.custom<Hex>(
   val => typeof val === "string" && isAddress(val),
   "Invalid address",
 );
