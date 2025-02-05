@@ -39,6 +39,7 @@
         "@coinbase/cdp-agentkit-core": "^0.0.14",
         "@langchain/core": "^0.3.19",
         "ethers": "^5.7.2",
+        "sharp": "^0.33.5",
         "svgexport": "^0.4.2",
         "twitter-api-v2": "^1.14.2",
         "zod": "^3.22.4"
