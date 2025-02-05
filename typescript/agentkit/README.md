@@ -231,7 +231,7 @@ const agentKit = new AgentKit({
 ## Action Providers
 
 <details>
-<summary><strong>Basename Provider</strong></summary>
+<summary><strong>Basename</strong></summary>
 
 ### `register_basename`
 Registers a Basename for the agent. Must end with .base.eth on mainnet or .basetest.eth on testnet.
@@ -333,14 +333,14 @@ Transfers native tokens (e.g., ETH) to a specified address.
 </details>
 
 <details>
-<summary><strong>WETH Provider</strong></summary>
+<summary><strong>WETH</strong></summary>
 
 ### `wrap_eth`
 Wraps ETH to WETH. Only supported on Base Sepolia and Base Mainnet.
 </details>
 
 <details>
-<summary><strong>WOW Provider</strong></summary>
+<summary><strong>WOW</strong></summary>
 
 ### `buy_token`
 Purchases tokens from a WOW contract using ETH.
