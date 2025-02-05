@@ -8,11 +8,10 @@ import {
   CFAv1ForwarderABI,
 } from "./constants";
 import { encodeFunctionData, Hex } from "viem";
-import {
-  ActionProvider,
-  CreateAction,
-  EvmWalletProvider,
-  Network } from "@coinbase/agentkit";
+import { ActionProvider } from "../actionProvider";
+import { Network } from "../../network";
+import { EvmWalletProvider } from "../../wallet-providers";
+import { CreateAction } from "../actionDecorator";
 
 
 /**

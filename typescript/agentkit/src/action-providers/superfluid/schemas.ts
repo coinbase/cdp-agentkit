@@ -34,7 +34,20 @@ export const SuperfluidCreatePoolSchema = z
     chainId: z.string().describe("The EVM chain ID on which the ERC20 is deployed"),
   })
   .strip()
-  .describe("Input schema for creating a Superfluid stream");
+  .describe("Input schema for creating a Superfluid pool");
+
+/**
+* Input schema for updating a Superfluid pool
+*/
+export const SuperfluidUpdatePoolSchema = z
+  .object({
+    poolAddress: z.string().describe("The EVM address of the token pool"),
+    recipientAddress: z.string().describe("The EVM address to stream the token to, from the pool."),
+    chainId: z.string().describe("The EVM chain ID on which the pool is deployed"),
+    units: z.number().describe("The new units of the recipient in the pool."),
+  })
+  .strip()
+  .describe("Input schema for updating a Superfluid pool");
 
 /**
 * Empty input schema

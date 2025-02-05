@@ -3,7 +3,7 @@ import {
   GDAv1ForwarderAddress,
   GDAv1ForwarderABI
 } from "./constants";
-import { EvmWalletProvider } from "@coinbase/agentkit";
+import { EvmWalletProvider } from "../../wallet-providers";
 import { superfluidPoolActionProvider } from "./superfluidPoolActionProvider";
 
 describe("SuperfluidPoolActionProvider", () => {
