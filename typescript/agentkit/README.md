@@ -235,7 +235,7 @@ const agentKit = new AgentKit({
 <table width="100%">
 <tr>
     <td width="200"><code>register_basename</code></td>
-    <td>Registers a Basename for the agent. Must end with .base.eth on mainnet or .basetest.eth on testnet.</td>
+    <td width="768">Registers a Basename for the agent. Must end with .base.eth on mainnet or .basetest.eth on testnet.</td>
 </tr>
 </table>
 </details>
@@ -245,19 +245,19 @@ const agentKit = new AgentKit({
 <table width="100%">
 <tr>
     <td width="200"><code>deploy_contract</code></td>
-    <td>Deploys smart contract with required args: solidity version, solidity input json, contract name, and optional constructor args.</td>
+    <td width="768">Deploys smart contract with required args: solidity version, solidity input json, contract name, and optional constructor args.</td>
 </tr>
 <tr>
     <td width="200"><code>deploy_nft</code></td>
-    <td>Deploys an NFT (ERC-721) contract onchain with name, symbol, and base URI for token metadata.</td>
+    <td width="768">Deploys an NFT (ERC-721) contract onchain with name, symbol, and base URI for token metadata.</td>
 </tr>
 <tr>
     <td width="200"><code>deploy_token</code></td>
-    <td>Deploys an ERC20 token smart contract with token name, symbol, and total supply.</td>
+    <td width="768">Deploys an ERC20 token smart contract with token name, symbol, and total supply.</td>
 </tr>
 <tr>
     <td width="200"><code>trade</code></td>
-    <td>Trades a specified amount of a 'from asset' to a 'to asset'. Only supported on mainnet networks.</td>
+    <td width="768">Trades a specified amount of a 'from asset' to a 'to asset'. Only supported on mainnet networks.</td>
 </tr>
 </table>
 </details>
@@ -267,11 +267,11 @@ const agentKit = new AgentKit({
 <table width="100%">
 <tr>
     <td width="200"><code>get_balance</code></td>
-    <td>Gets the token balance for a specified address and contract.</td>
+    <td width="768">Gets the token balance for a specified address and contract.</td>
 </tr>
 <tr>
     <td width="200"><code>transfer</code></td>
-    <td>Transfers ERC20 tokens to a specified address.</td>
+    <td width="768">Transfers ERC20 tokens to a specified address.</td>
 </tr>
 </table>
 </details>
@@ -281,15 +281,15 @@ const agentKit = new AgentKit({
 <table width="100%">
 <tr>
     <td width="200"><code>get_balance</code></td>
-    <td>Gets the NFT balance for a specified address and contract.</td>
+    <td width="768">Gets the NFT balance for a specified address and contract.</td>
 </tr>
 <tr>
     <td width="200"><code>mint</code></td>
-    <td>Mints an NFT (ERC-721) to a specified destination address.</td>
+    <td width="768">Mints an NFT (ERC-721) to a specified destination address.</td>
 </tr>
 <tr>
     <td width="200"><code>transfer</code></td>
-    <td>Transfers an NFT to a specified destination address.</td>
+    <td width="768">Transfers an NFT to a specified destination address.</td>
 </tr>
 </table>
 </details>
@@ -299,11 +299,11 @@ const agentKit = new AgentKit({
 <table width="100%">
 <tr>
     <td width="200"><code>account_details</code></td>
-    <td>Retrieves account details for the agent's Farcaster account.</td>
+    <td width="768">Retrieves account details for the agent's Farcaster account.</td>
 </tr>
 <tr>
     <td width="200"><code>post_cast</code></td>
-    <td>Posts a cast to Farcaster (max 280 characters).</td>
+    <td width="768">Posts a cast to Farcaster (max 280 characters).</td>
 </tr>
 </table>
 </details>
@@ -313,11 +313,11 @@ const agentKit = new AgentKit({
 <table width="100%">
 <tr>
     <td width="200"><code>deposit</code></td>
-    <td>Deposits assets into a Morpho Vault.</td>
+    <td width="768">Deposits assets into a Morpho Vault.</td>
 </tr>
 <tr>
     <td width="200"><code>withdraw</code></td>
-    <td>Withdraws assets from a Morpho Vault.</td>
+    <td width="768">Withdraws assets from a Morpho Vault.</td>
 </tr>
 </table>
 </details>
@@ -327,11 +327,11 @@ const agentKit = new AgentKit({
 <table width="100%">
 <tr>
     <td width="200"><code>fetch_price</code></td>
-    <td>Fetches the current price for a given price feed from Pyth.</td>
+    <td width="768">Fetches the current price for a given price feed from Pyth.</td>
 </tr>
 <tr>
     <td width="200"><code>fetch_price_feed_id</code></td>
-    <td>Fetches the price feed ID for a given token symbol from Pyth.</td>
+    <td width="768">Fetches the price feed ID for a given token symbol from Pyth.</td>
 </tr>
 </table>
 </details>
@@ -341,19 +341,19 @@ const agentKit = new AgentKit({
 <table width="100%">
 <tr>
     <td width="200"><code>account_details</code></td>
-    <td>Retrieves account details for the authenticated Twitter user.</td>
+    <td width="768">Retrieves account details for the authenticated Twitter user.</td>
 </tr>
 <tr>
     <td width="200"><code>account_mentions</code></td>
-    <td>Retrieves recent mentions for the authenticated user.</td>
+    <td width="768">Retrieves recent mentions for the authenticated user.</td>
 </tr>
 <tr>
     <td width="200"><code>post_tweet</code></td>
-    <td>Posts a new tweet to Twitter.</td>
+    <td width="768">Posts a new tweet to Twitter.</td>
 </tr>
 <tr>
     <td width="200"><code>post_tweet_reply</code></td>
-    <td>Posts a reply to an existing tweet.</td>
+    <td width="768">Posts a reply to an existing tweet.</td>
 </tr>
 </table>
 </details>
@@ -363,11 +363,11 @@ const agentKit = new AgentKit({
 <table width="100%">
 <tr>
     <td width="200"><code>get_wallet_details</code></td>
-    <td>Returns details of connected wallet including address, network info, ETH balance, native balance, and provider name.</td>
+    <td width="768">Returns details of connected wallet including address, network info, ETH balance, native balance, and provider name.</td>
 </tr>
 <tr>
     <td width="200"><code>native_transfer</code></td>
-    <td>Transfers native tokens (e.g., ETH) to a specified address.</td>
+    <td width="768">Transfers native tokens (e.g., ETH) to a specified address.</td>
 </tr>
 </table>
 </details>
@@ -377,7 +377,7 @@ const agentKit = new AgentKit({
 <table width="100%">
 <tr>
     <td width="200"><code>wrap_eth</code></td>
-    <td>Wraps ETH to WETH. Only supported on Base Sepolia and Base Mainnet.</td>
+    <td width="768">Wraps ETH to WETH. Only supported on Base Sepolia and Base Mainnet.</td>
 </tr>
 </table>
 </details>
@@ -387,15 +387,15 @@ const agentKit = new AgentKit({
 <table width="100%">
 <tr>
     <td width="200"><code>buy_token</code></td>
-    <td>Purchases tokens from a WOW contract using ETH.</td>
+    <td width="768">Purchases tokens from a WOW contract using ETH.</td>
 </tr>
 <tr>
     <td width="200"><code>create_token</code></td>
-    <td>Creates a Zora Wow ERC20 memecoin using the WoW factory with bonding curve functionality.</td>
+    <td width="768">Creates a Zora Wow ERC20 memecoin using the WoW factory with bonding curve functionality.</td>
 </tr>
 <tr>
     <td width="200"><code>sell_token</code></td>
-    <td>Sells WOW tokens for ETH.</td>
+    <td width="768">Sells WOW tokens for ETH.</td>
 </tr>
 </table>
 </details>
