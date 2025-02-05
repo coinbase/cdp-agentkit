@@ -9,6 +9,8 @@ interface FlippandoAgentkitOptions {
   privateKey?: string
   flippandoGameMasterAddress?: string
   flippandoAddress?: string
+  flippandoBundlerAddress?: string
+  flipndAddress?: string
   chainId?: number
   twitterApiKey?: string
   twitterApiSecret?: string
@@ -30,6 +32,14 @@ export const FlippandoAgentkitOptions = z
       .string()
       .min(1, "The Flippando contract address is required")
       .describe("The Flippando contract address"),
+    flippandoBundlerAddress: z
+    .string()
+    .min(1, "The FlippandoBundler contract address is required")
+    .describe("The FlippandoBundler contract address"),
+    flipndAddress: z
+      .string()
+      .min(1, "The Flipnd contract address is required")
+      .describe("The Flipnd contract address"),
     chainId: z.number().int().positive().describe("The chain ID"),
     twitterApiKey: z.string().min(1, "The Twitter API key is required").describe("The Twitter API key"),
     twitterApiSecret: z.string().min(1, "The Twitter API secret is required").describe("The Twitter API secret"),
@@ -61,6 +71,8 @@ const EnvSchema = z.object({
     .min(1, "FLIPPANDO_GAMEMASTER_ADDRESS is required")
     .describe("The FlippandoGameMaster contract address"),
   FLIPPANDO_ADDRESS: z.string().min(1, "FLIPPANDO_ADDRESS is required").describe("The Flippando contract address"),
+  FLIPPANDO_BUNDLER_ADDRESS: z.string().min(1, "FLIPPANDO_BUNDLER_ADDRESS is required").describe("The FlippandoBundler contract address"),
+  FLIPND_ADDRESS: z.string().min(1, "FLIPND_ADDRESS is required").describe("The Flipnd contract address"),
   FLIPPANDO_CHAIN_ID: z.string().transform(Number).pipe(z.number().int().positive()).describe("The chain ID"),
   TWITTER_API_KEY: z.string().min(1, "TWITTER_API_KEY is required").describe("The Twitter API key"),
   TWITTER_API_SECRET: z.string().min(1, "TWITTER_API_SECRET is required").describe("The Twitter API secret"),
@@ -84,6 +96,8 @@ export class FlippandoAgentkit {
         privateKey: options?.privateKey || env.FLIPPANDO_PRIVATE_KEY,
         flippandoGameMasterAddress: options?.flippandoGameMasterAddress || env.FLIPPANDO_GAMEMASTER_ADDRESS,
         flippandoAddress: options?.flippandoAddress || env.FLIPPANDO_ADDRESS,
+        flippandoBundlerAddress: options?.flippandoBundlerAddress || env.FLIPPANDO_BUNDLER_ADDRESS,
+        flipndAddress: options?.flipndAddress || env.FLIPND_ADDRESS,
         chainId: options?.chainId || env.FLIPPANDO_CHAIN_ID,
         twitterApiKey: options?.twitterApiKey || env.TWITTER_API_KEY,
         twitterApiSecret: options?.twitterApiSecret || env.TWITTER_API_SECRET,
@@ -130,11 +144,15 @@ export class FlippandoAgentkit {
     rpcUrl: string,
     flippandoGameMasterAddress: string,
     flippandoAddress: string,
+    flippandoBundlerdAddress: string,
+    flipndAddress: string,
   ): Promise<void> {
     this.config.chainId = chainId
     this.config.providerUrl = rpcUrl
     this.config.flippandoGameMasterAddress = flippandoGameMasterAddress
     this.config.flippandoAddress = flippandoAddress
+    this.config.flippandoBundlerAddress = flippandoBundlerdAddress
+    this.config.flipndAddress = flipndAddress
 
     this.provider = new ethers.providers.JsonRpcProvider(rpcUrl)
     this.signer = new ethers.Wallet(this.config.privateKey!, this.provider)
@@ -161,6 +179,14 @@ export class FlippandoAgentkit {
 
   getFlippandoAddress(): string {
     return this.config.flippandoAddress!
+  }
+
+  getFlippandoBundlerAddress(): string {
+    return this.config.flippandoBundlerAddress!
+  }
+
+  getFlipndAddress(): string {
+    return this.config.flipndAddress!
   }
 
   getChainId(): number {
