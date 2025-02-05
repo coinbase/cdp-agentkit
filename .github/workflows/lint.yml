@@ -106,16 +106,23 @@ jobs:
 
   lint-typescript:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./typescript
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
       - uses: actions/setup-node@v4
         with:
           node-version: "18"
-          cache: "npm"
+          cache: "pnpm"
+          cache-dependency-path: ./typescript/pnpm-lock.yaml
       # Install dependencies in parent directory first
-      - run: npm install
+      - run: pnpm install
       # formatting/lint in working directory
       - name: Check formatting/lint
         run: |
-          npm run format:check
-          npm run lint
+          pnpm run format:check
+          pnpm run lint
