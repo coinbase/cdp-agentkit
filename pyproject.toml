@@ -1,0 +1,25 @@
+[project]
+name = "coinbase-agentkit"
+version = "0.1.0"
+description = "Coinbase AgentKit core primitives"
+authors = [
+    {name = "Coinbase Inc.", email = "developers@coinbase.com"}
+]
+dependencies = [
+    "pydantic>=2.0.0",
+    "web3>=6.0.0",
+    "coinbase-sdk>=0.17.0",
+]
+
+[project.optional-dependencies]
+langchain = [
+    "langchain>=0.1.0",
+    "langchain-core>=0.1.0",
+]
+all = [
+    "coinbase-agentkit[langchain]",
+]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api" 
