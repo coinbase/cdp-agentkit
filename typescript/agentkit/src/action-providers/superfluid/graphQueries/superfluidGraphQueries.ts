@@ -1,4 +1,4 @@
-import { GraphQLClient, gql } from "graphql-request";
+import { GraphQLClient } from "graphql-request";
 import { getAccountOutflowQuery } from "./queries";
 import { BASE_GRAPH_ENDPOINT } from "./endpoints";
 import { SuperfluidAccountResponse } from "./types";
@@ -6,8 +6,10 @@ import { SuperfluidAccountResponse } from "./types";
 const client = new GraphQLClient(BASE_GRAPH_ENDPOINT);
 
 /**
+ * Gets the current account outflows for the user
  *
- * @param userId
+ * @param userId - The user id of the account
+ * @returns The data on the current streams from the agent
  */
 export async function getAccountOutflow(
   userId: string,

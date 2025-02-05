@@ -32,7 +32,7 @@ describe("SuperfluidPoolActionProvider", () => {
         chainId: MOCK_CHAIN_ID,
       };
 
-      const response = await actionProvider.createPool(mockWallet, args);
+      await actionProvider.createPool(mockWallet, args);
 
       expect(mockWallet.sendTransaction).toHaveBeenCalledWith({
         to: GDAv1ForwarderAddress,

@@ -62,8 +62,11 @@ Do not use the ERC20 address as the destination address. If you are unsure of th
         (e: { event: string }) => e.event === "PoolCreated",
       ).args;
 
-      // todo store this poolAddress is memory so we can manipulate it later (we don't trust the llm to remember...)
-      return `Created pool of token ${args.erc20TokenAddress} at ${poolAddress}`;
+      if (success) {
+        return `Created pool of token ${args.erc20TokenAddress} at ${poolAddress}`;
+      } else {
+        return `Failed to create token pool.`;
+      }
     } catch (error) {
       return `Error creating Superfluid pool: ${error}`;
     }
@@ -102,7 +105,7 @@ Do not use the ERC20 address as the destination address. If you are unsure of th
         data,
       });
 
-      const receipt = await walletProvider.waitForTransactionReceipt(hash);
+      await walletProvider.waitForTransactionReceipt(hash);
 
       return `Updated member units of pool ${args.poolAddress} for member ${args.recipientAddress}, with new member units ${args.units}`;
     } catch (error) {

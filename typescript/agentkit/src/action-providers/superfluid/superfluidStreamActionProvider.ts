@@ -19,23 +19,6 @@ export class SuperfluidStreamActionProvider extends ActionProvider<EvmWalletProv
   }
 
   /**
-   * Gets the link to the Superfluid dashboard pertaining to the stream
-   *
-   * @param network
-   * @param tokenAddress
-   * @param senderAddress
-   * @param recipientAddress
-   */
-  getStreamLink = (
-    network: Network,
-    tokenAddress: string,
-    senderAddress: string,
-    recipientAddress: string,
-  ) => {
-    return `https://app.superfluid.finance/stream/${network.networkId}/${senderAddress}-${recipientAddress}-${tokenAddress}`;
-  };
-
-  /**
    * Creates a stream from the agent wallet to the recipient
    *
    * @param walletProvider - The wallet provider to start the stream from.
@@ -183,6 +166,24 @@ Do not use the ERC20 address as the destination address. If you are unsure of th
    * @returns True if the Superfluid action provider supports the network, false otherwise.
    */
   supportsNetwork = (network: Network) => network.protocolFamily === "evm";
+
+  /**
+   * Gets the link to the Superfluid dashboard pertaining to the stream
+   *
+   * @param network - The current network
+   * @param tokenAddress - The ERC20 token address of the underlying stream
+   * @param senderAddress - The sender of the stream (the agent)
+   * @param recipientAddress - The recipient of the stream
+   * @returns The view link to the new stream on Superfluid
+   */
+  getStreamLink = (
+    network: Network,
+    tokenAddress: string,
+    senderAddress: string,
+    recipientAddress: string,
+  ) => {
+    return `https://app.superfluid.finance/stream/${network.networkId}/${senderAddress}-${recipientAddress}-${tokenAddress}`;
+  };
 }
 
 export const superfluidStreamActionProvider = () => new SuperfluidStreamActionProvider();

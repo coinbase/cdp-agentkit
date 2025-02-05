@@ -36,7 +36,7 @@ describe("SuperfluidStreamActionProvider", () => {
         flowRate: MOCK_FLOW_RATE,
       };
 
-      const response = await actionProvider.createStream(mockWallet, args);
+      await actionProvider.createStream(mockWallet, args);
 
       expect(mockWallet.sendTransaction).toHaveBeenCalledWith({
         to: CFAv1ForwarderAddress,
