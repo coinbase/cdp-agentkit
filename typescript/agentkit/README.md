@@ -231,7 +231,7 @@ const agentKit = new AgentKit({
 ## Action Providers
 
 <details>
-<summary><strong>Basename Provider</strong></summary>
+<summary><strong>Basename</strong></summary>
 <table width="100%">
 <tr>
     <td width="200"><code>register_basename</code></td>
@@ -373,7 +373,7 @@ const agentKit = new AgentKit({
 </details>
 
 <details>
-<summary><strong>WETH Provider</strong></summary>
+<summary><strong>WETH</strong></summary>
 <table width="100%">
 <tr>
     <td width="200"><code>wrap_eth</code></td>
@@ -383,7 +383,7 @@ const agentKit = new AgentKit({
 </details>
 
 <details>
-<summary><strong>WOW Provider</strong></summary>
+<summary><strong>WOW</strong></summary>
 <table width="100%">
 <tr>
     <td width="200"><code>buy_token</code></td>
