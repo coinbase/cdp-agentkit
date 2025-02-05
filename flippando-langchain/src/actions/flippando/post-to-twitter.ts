@@ -17,7 +17,7 @@ and posts the tweet with the attached image.
 
 export const PostToTwitterSchema = z.object({
   message: z.string().max(280, "Tweet cannot exceed 280 characters").describe("The message to post on Twitter"),
-  svgString: z.string().describe("The SVG string to be converted and attached to the tweet"),
+  svgString: z.string().optional().describe("The optional SVG string to be converted and attached to the tweet"),
 })
 
 export const PostToTwitterResponseSchema = z.object({
@@ -45,35 +45,44 @@ export class PostToTwitterAction
         accessSecret: agentkit.getTwitterAccessSecret(),
       })
 
-      // Convert SVG to PNG
-      const tempDir = path.join(__dirname, "temp")
-      if (!fs.existsSync(tempDir)) {
-        fs.mkdirSync(tempDir)
+      let mediaId: string | undefined
+
+      if (args.svgString) {
+        // Convert SVG to PNG and upload it
+        const tempDir = path.join(__dirname, "temp")
+        if (!fs.existsSync(tempDir)) {
+          fs.mkdirSync(tempDir)
+        }
+        const svgPath = path.join(tempDir, "temp.svg")
+        const pngPath = path.join(tempDir, "temp.png")
+
+        fs.writeFileSync(svgPath, args.svgString)
+
+        await execAsync(`npx svgexport ${svgPath} ${pngPath} 2x`)
+
+        const pngBuffer = fs.readFileSync(pngPath)
+
+        // Clean up temporary files
+        fs.unlinkSync(svgPath)
+        fs.unlinkSync(pngPath)
+
+        // Upload the image to Twitter
+        mediaId = await twitterClient.v1.uploadMedia(pngBuffer, { mimeType: "image/png" })
       }
-      const svgPath = path.join(tempDir, "temp.svg")
-      const pngPath = path.join(tempDir, "temp.png")
 
-      fs.writeFileSync(svgPath, args.svgString)
-
-      await execAsync(`npx svgexport ${svgPath} ${pngPath} 2x`)
-
-      const pngBuffer = fs.readFileSync(pngPath)
-
-      // Clean up temporary files
-      fs.unlinkSync(svgPath)
-      fs.unlinkSync(pngPath)
-
-      // Upload the image to Twitter
-      const mediaId = await twitterClient.v1.uploadMedia(pngBuffer, { mimeType: "image/png" })
-
-      // Post the tweet with the uploaded image
-      const { data: createdTweet } = await twitterClient.v2.tweet(args.message, { media: { media_ids: [mediaId] } })
+      // Post the tweet with or without the uploaded image
+      const { data: createdTweet } = await twitterClient.v2.tweet(
+        args.message,
+        mediaId ? { media: { media_ids: [mediaId] } } : undefined,
+      )
 
       const tweetUrl = `https://twitter.com/user/status/${createdTweet.id}`
 
       return {
         tweetUrl,
-        message: `Successfully posted tweet with image: ${args.message}`,
+        message: mediaId
+          ? `Successfully posted tweet with image: ${args.message}`
+          : `Successfully posted tweet: ${args.message}`,
       }
     } catch (error) {
       console.error("Error posting to Twitter:", error)
