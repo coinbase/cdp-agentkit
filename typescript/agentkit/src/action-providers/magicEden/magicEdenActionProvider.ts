@@ -2,7 +2,7 @@ import { z } from "zod";
 import { ActionProvider } from "../actionProvider";
 import { EvmWalletProvider } from "../../wallet-providers";
 import { CreateAction } from "../actionDecorator";
-import { BidSchema, BuySchema, ListSchema } from "./schemas";
+import { BidSchema, BuySchema, ListSchema, SellSchema } from "./schemas";
 import { Network } from "../../network";
 import { EVM_BASE_URL } from "./constants";
 import { submitTransaction, getWethAddress, toMagicEdenChain } from "./utils";
@@ -200,6 +200,67 @@ OR
       walletProvider,
       chainName,
       "list",
+    );
+  }
+
+  /**
+   * Accepts an offer (sells an NFT) on the Magic Eden marketplace.
+   *
+   * You can either accept a bid that has been made directly on your NFT
+   * or sell into the highest collection bid. To proceed, provide the NFT token
+   * (in the format 'collectionAddress:tokenId') and your Magic Eden API key.
+   *
+   * Example input:
+   * - token: "0x423caa2c3882d17c351bcf0c5ce5efe4fb4b3498:5799"
+   * - apiKey: "<your API key>"
+   */
+  @CreateAction({
+    name: "sell",
+    description: `
+    This tool will accept an offer (sell your NFT) on the Magic Eden marketplace.
+    
+    You can either:
+      - Accept a bid made directly on your NFT,
+      - Or sell into the highest collection bid.
+    
+    **Required:**
+    - Provide the NFT token in the format 'collectionAddress:tokenId'.
+    - Provide your Magic Eden API key.
+    
+    No additional details (such as price or quantity) are required.
+        `,
+    schema: SellSchema,
+  })
+  public async sellMagicEden(
+    walletProvider: EvmWalletProvider,
+    args: z.infer<typeof SellSchema>,
+  ): Promise<string> {
+    console.log("args", args);
+    const address = walletProvider.getAddress();
+    const networkId = walletProvider.getNetwork().networkId!;
+    const chainName = toMagicEdenChain(networkId);
+
+    // Build the request payload for selling (accepting an offer)
+    const requestBody = {
+      taker: address,
+      relayer: address,
+      source: "magiceden.io",
+      items: [
+        {
+          token: args.token,
+        },
+      ],
+    };
+
+    console.log("Request Body:", JSON.stringify(requestBody, null, 2));
+
+    return this.executeMagicEdenRequest(
+      "execute/sell/v7",
+      requestBody,
+      args.apiKey,
+      walletProvider,
+      chainName,
+      "sell",
     );
   }
 

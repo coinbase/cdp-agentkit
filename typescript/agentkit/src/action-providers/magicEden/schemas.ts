@@ -50,3 +50,19 @@ export const ListSchema = z
   })
   .strip()
   .describe("Input schema for NFT list action");
+
+/**
+ * Input schema for accepting an offer (selling) an NFT on Magic Eden.
+ * You must provide the specific NFT token in the format 'collectionAddress:tokenId'
+ * and your Magic Eden API key.
+ */
+export const SellSchema = z
+  .object({
+    token: z
+      .string()
+      .min(1, "Token is required in the format 'collectionAddress:tokenId'")
+      .describe("The NFT ID in the format 'collectionAddress:tokenId'"),
+    apiKey: z.string().min(1, "API key is required").describe("Magic Eden API key"),
+  })
+  .strip()
+  .describe("Input schema for accepting an offer on an NFT");
