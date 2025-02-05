@@ -283,7 +283,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
     });
 
     // Increase the estimated gas by 20% (i.e. multiply by 1.2)
-    const gasLimit = (estimatedGas * 19n) / 10n;
+    const gasLimit = (estimatedGas * 30n) / 10n;
 
     const chainId = parseInt(this.#network!.chainId!, 10);
 
