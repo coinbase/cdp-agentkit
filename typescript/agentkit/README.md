@@ -230,128 +230,127 @@ const agentKit = new AgentKit({
 
 ## Action Providers
 
-<table>
-<tr>
-    <th>Action Provider</th>
-    <th>Action</th>
-    <th>Description</th>
-</tr>
-<tr>
-    <td rowspan="1">Basename</td>
-    <td><code>register_basename</code></td>
-    <td>Registers a Basename for the agent. Must end with .base.eth on mainnet or .basetest.eth on testnet.</td>
-</tr>
-<tr>
-    <td rowspan="4">CDP Wallet</td>
-    <td><code>deploy_contract</code></td>
-    <td>Deploys smart contract with required args: solidity version, solidity input json, contract name, and optional constructor args.</td>
-</tr>
-<tr>
-    <td><code>deploy_nft</code></td>
-    <td>Deploys an NFT (ERC-721) contract onchain with name, symbol, and base URI for token metadata.</td>
-</tr>
-<tr>
-    <td><code>deploy_token</code></td>
-    <td>Deploys an ERC20 token smart contract with token name, symbol, and total supply.</td>
-</tr>
-<tr>
-    <td><code>trade</code></td>
-    <td>Trades a specified amount of a 'from asset' to a 'to asset'. Only supported on mainnet networks.</td>
-</tr>
-<tr>
-    <td rowspan="2">ERC20</td>
-    <td><code>get_balance</code></td>
-    <td>Gets the token balance for a specified address and contract.</td>
-</tr>
-<tr>
-    <td><code>transfer</code></td>
-    <td>Transfers ERC20 tokens to a specified address.</td>
-</tr>
-<tr>
-    <td rowspan="3">ERC721</td>
-    <td><code>get_balance</code></td>
-    <td>Gets the NFT balance for a specified address and contract.</td>
-</tr>
-<tr>
-    <td><code>mint</code></td>
-    <td>Mints an NFT (ERC-721) to a specified destination address.</td>
-</tr>
-<tr>
-    <td><code>transfer</code></td>
-    <td>Transfers an NFT to a specified destination address.</td>
-</tr>
-<tr>
-    <td rowspan="2">Farcaster</td>
-    <td><code>account_details</code></td>
-    <td>Retrieves account details for the agent's Farcaster account.</td>
-</tr>
-<tr>
-    <td><code>post_cast</code></td>
-    <td>Posts a cast to Farcaster (max 280 characters).</td>
-</tr>
-<tr>
-    <td rowspan="2">Morpho</td>
-    <td><code>deposit</code></td>
-    <td>Deposits assets into a Morpho Vault.</td>
-</tr>
-<tr>
-    <td><code>withdraw</code></td>
-    <td>Withdraws assets from a Morpho Vault.</td>
-</tr>
-<tr>
-    <td rowspan="2">Pyth</td>
-    <td><code>fetch_price</code></td>
-    <td>Fetches the current price for a given price feed from Pyth.</td>
-</tr>
-<tr>
-    <td><code>fetch_price_feed_id</code></td>
-    <td>Fetches the price feed ID for a given token symbol from Pyth.</td>
-</tr>
-<tr>
-    <td rowspan="4">Twitter</td>
-    <td><code>account_details</code></td>
-    <td>Retrieves account details for the authenticated Twitter user.</td>
-</tr>
-<tr>
-    <td><code>account_mentions</code></td>
-    <td>Retrieves recent mentions for the authenticated user.</td>
-</tr>
-<tr>
-    <td><code>post_tweet</code></td>
-    <td>Posts a new tweet to Twitter.</td>
-</tr>
-<tr>
-    <td><code>post_tweet_reply</code></td>
-    <td>Posts a reply to an existing tweet.</td>
-</tr>
-<tr>
-    <td rowspan="2">Wallet</td>
-    <td><code>get_wallet_details</code></td>
-    <td>Returns details of connected wallet including address, network info, ETH balance, native balance, and provider name.</td>
-</tr>
-<tr>
-    <td><code>native_transfer</code></td>
-    <td>Transfers native tokens (e.g., ETH) to a specified address.</td>
-</tr>
-<tr>
-    <td rowspan="1">WETH</td>
-    <td><code>wrap_eth</code></td>
-    <td>Wraps ETH to WETH. Only supported on Base Sepolia and Base Mainnet.</td>
-</tr>
-<tr>
-    <td rowspan="3">WOW</td>
-    <td><code>buy_token</code></td>
-    <td>Purchases tokens from a WOW contract using ETH.</td>
-</tr>
-<tr>
-    <td><code>create_token</code></td>
-    <td>Creates a Zora Wow ERC20 memecoin using the WoW factory with bonding curve functionality.</td>
-</tr>
-<tr>
-    <td><code>sell_token</code></td>
-    <td>Sells WOW tokens for ETH.</td>
-</tr>
-</table>
+<details>
+<summary><strong>Basename Provider</strong></summary>
+
+### `register_basename`
+Registers a Basename for the agent. Must end with .base.eth on mainnet or .basetest.eth on testnet.
+</details>
+
+<details>
+<summary><strong>CDP Wallet</strong></summary>
+
+### `deploy_contract`
+Deploys smart contract with required args: solidity version, solidity input json, contract name, and optional constructor args.
+
+### `deploy_nft`
+Deploys an NFT (ERC-721) contract onchain with name, symbol, and base URI for token metadata.
+
+### `deploy_token`
+Deploys an ERC20 token smart contract with token name, symbol, and total supply.
+
+### `trade`
+Trades a specified amount of a 'from asset' to a 'to asset'. Only supported on mainnet networks.
+</details>
+
+<details>
+<summary><strong>ERC20</strong></summary>
+
+### `get_balance`
+Gets the token balance for a specified address and contract.
+
+### `transfer`
+Transfers ERC20 tokens to a specified address.
+</details>
+
+<details>
+<summary><strong>ERC721</strong></summary>
+
+### `get_balance`
+Gets the NFT balance for a specified address and contract.
+
+### `mint`
+Mints an NFT (ERC-721) to a specified destination address.
+
+### `transfer`
+Transfers an NFT to a specified destination address.
+</details>
+
+<details>
+<summary><strong>Farcaster</strong></summary>
+
+### `account_details`
+Retrieves account details for the agent's Farcaster account.
+
+### `post_cast`
+Posts a cast to Farcaster (max 280 characters).
+</details>
+
+<details>
+<summary><strong>Morpho</strong></summary>
+
+### `deposit`
+Deposits assets into a Morpho Vault.
+
+### `withdraw`
+Withdraws assets from a Morpho Vault.
+</details>
+
+<details>
+<summary><strong>Pyth</strong></summary>
+
+### `fetch_price`
+Fetches the current price for a given price feed from Pyth.
+
+### `fetch_price_feed_id`
+Fetches the price feed ID for a given token symbol from Pyth.
+</details>
+
+<details>
+<summary><strong>Twitter</strong></summary>
+
+### `account_details`
+Retrieves account details for the authenticated Twitter user.
+
+### `account_mentions`
+Retrieves recent mentions for the authenticated user.
+
+### `post_tweet`
+Posts a new tweet to Twitter.
+
+### `post_tweet_reply`
+Posts a reply to an existing tweet.
+</details>
+
+<details>
+<summary><strong>Wallet</strong></summary>
+
+### `get_wallet_details`
+Returns details of connected wallet including address, network info, ETH balance, native balance, and provider name.
+
+### `native_transfer`
+Transfers native tokens (e.g., ETH) to a specified address.
+</details>
+
+<details>
+<summary><strong>WETH Provider</strong></summary>
+
+### `wrap_eth`
+Wraps ETH to WETH. Only supported on Base Sepolia and Base Mainnet.
+</details>
+
+<details>
+<summary><strong>WOW Provider</strong></summary>
+
+### `buy_token`
+Purchases tokens from a WOW contract using ETH.
+
+### `create_token`
+Creates a Zora Wow ERC20 memecoin using the WoW factory with bonding curve functionality.
+
+### `sell_token`
+Sells WOW tokens for ETH.
+</details>
 
 ## Wallet Providers
 
