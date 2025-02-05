@@ -37,19 +37,7 @@ AgentKit is a framework for easily enabling AI agents to take actions onchain. I
     - [Importing a wallet from WalletData JSON string](#importing-a-wallet-from-walletdata-json-string)
   - [ViemWalletProvider](#viemwalletprovider)
 - [Contributing](#contributing)
-
-## Supported Protocols
-
-<a href="https://app.morpho.org" target="_blank"><img src="../../assets/protocols/morpho.svg" width="auto" height="auto" alt="Morpho"></a>
-<a href="https://aerodrome.finance" target="_blank"><img src="../../assets/protocols/aerodrome.svg" width="auto" height="auto" alt="aerodrome"></a>
-<a href="https://pyth.network" target="_blank"><img src="../../assets/protocols/pyth.svg" width="auto" height="auto" alt="Pyth"></a>
-<a href="https://turnkey.com" target="_blank"><img src="../../assets/protocols/turnkey.svg" width="auto" height="auto" alt="Turnkey"></a>
-<a href="https://www.alchemy.com/" target="_blank"><img src="../../assets/protocols/alchemy.svg" width="auto" height="auto"></a>
-<a href="https://base.org" target="_blank"><img src="../../assets/protocols/base.svg" width="auto" height="auto"></a>
-<a href="https://farcaster.xyz" target="_blank"><img src="../../assets/protocols/farcaster.svg" width="auto" height="auto"></a>
-<a href="https://compound.finance" target="_blank"><img src="../../assets/protocols/compound.svg" width="auto" height="auto"></a>
-<a href="https://moonwell.fi" target="_blank"><img src="../../assets/protocols/moonwell.svg" width="auto" height="auto"></a>
-<a href="https://hyperbolic.xyz" target="_blank"><img src="../../assets/protocols/hyperbolic.svg" width="auto" height="auto"></a>
+- [Supported Protocols](#supported-protocols)
 
 ## Getting Started
 
@@ -420,3 +408,18 @@ const walletProvider = new ViemWalletProvider(client);
 ## Contributing
 
 See [CONTRIBUTING.md](../../CONTRIBUTING.md) for more information.
+
+## Supported Protocols
+
+AgentKit is proud to have support for the following protocols, frameworks, and wallet providers:
+
+<a href="https://aerodrome.finance" target="_blank"><img src="../../assets/protocols/aerodrome.svg" width="auto" height="auto" alt="Aerodrome"></a>
+<a href="https://www.alchemy.com/" target="_blank"><img src="../../assets/protocols/alchemy.svg" width="auto" height="auto" alt="Alchemy"></a>
+<a href="https://base.org" target="_blank"><img src="../../assets/protocols/base.svg" width="auto" height="auto" alt="Base"></a>
+<a href="https://compound.finance" target="_blank"><img src="../../assets/protocols/compound.svg" width="auto" height="auto" alt="Compound"></a>
+<a href="https://farcaster.xyz" target="_blank"><img src="../../assets/protocols/farcaster.svg" width="auto" height="auto" alt="Farcaster"></a>
+<a href="https://hyperbolic.xyz" target="_blank"><img src="../../assets/protocols/hyperbolic.svg" width="auto" height="auto" alt="Hyperbolic"></a>
+<a href="https://moonwell.fi" target="_blank"><img src="../../assets/protocols/moonwell.svg" width="auto" height="auto" alt="Moonwell"></a>
+<a href="https://app.morpho.org" target="_blank"><img src="../../assets/protocols/morpho.svg" width="auto" height="auto" alt="Morpho"></a>
+<a href="https://pyth.network" target="_blank"><img src="../../assets/protocols/pyth.svg" width="auto" height="auto" alt="Pyth"></a>
+<a href="https://turnkey.com" target="_blank"><img src="../../assets/protocols/turnkey.svg" width="auto" height="auto" alt="Turnkey"></a>
