@@ -6,8 +6,7 @@ import { exec } from "child_process"
 import { promisify } from "util"
 import * as fs from "fs"
 import * as path from "path"
-
-const execAsync = promisify(exec)
+import sharp from "sharp"
 
 const POST_TO_TWITTER_PROMPT = `
 This action posts a message to Twitter using the Flippando agent's Twitter account.
@@ -48,7 +47,7 @@ export class PostToTwitterAction
       let mediaId: string | undefined
 
       if (args.svgString) {
-        // Convert SVG to PNG and upload it
+        // Convert SVG to PNG using sharp
         const tempDir = path.join(__dirname, "temp")
         if (!fs.existsSync(tempDir)) {
           fs.mkdirSync(tempDir)
@@ -58,7 +57,10 @@ export class PostToTwitterAction
 
         fs.writeFileSync(svgPath, args.svgString)
 
-        await execAsync(`npx svgexport ${svgPath} ${pngPath} 2x`)
+        await sharp(svgPath)
+          .resize(1024, 1024, { fit: "contain", background: { r: 255, g: 255, b: 255, alpha: 1 } })
+          .png()
+          .toFile(pngPath)
 
         const pngBuffer = fs.readFileSync(pngPath)
 
