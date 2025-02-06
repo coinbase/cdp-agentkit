@@ -1,7 +1,5 @@
 export type SuperfluidAccountResponse = {
-  data: {
-    accounts: Account[];
-  };
+  accounts: Account[];
 };
 
 type Account = {

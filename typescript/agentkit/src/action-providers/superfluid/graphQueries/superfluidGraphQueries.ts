@@ -11,15 +11,13 @@ const client = new GraphQLClient(BASE_GRAPH_ENDPOINT);
  * @param userId - The user id of the account
  * @returns The data on the current streams from the agent
  */
-export async function getAccountOutflow(
-  userId: string,
-): Promise<SuperfluidAccountResponse | undefined> {
+export async function getAccountOutflow(userId: string): Promise<SuperfluidAccountResponse | undefined> {
   try {
-    const variables = { id: userId };
-    const data = await client.request<SuperfluidAccountResponse>(getAccountOutflowQuery, variables);
-    return data;
+      const variables = { id: userId.toLowerCase() };
+      const data = await client.request<SuperfluidAccountResponse>(getAccountOutflowQuery, variables);
+      return data;
   } catch (error) {
-    console.error("Error fetching account data:", error);
-    return undefined;
+      console.error('Error fetching account data:', error);
+      return undefined;
   }
 }
