@@ -4,9 +4,9 @@ import { CreateGameAction } from "./create-game"
 import { InitializeGameAction } from "./initialize-game"
 import { FlipTilesAction } from "./flip-tiles"
 import { MintNftAction } from "./mint-nft"
-import { GetNftMetadataAction } from "./get-flip-metadata"
+import { GetFlipMetadataAction } from "./get-flip-metadata"
 import { GenerateImageForFlipAction } from "./generate-image-for-flip"
-import { GetAvaialbleNftsAction } from "./get-available-nfts"
+import { GetAvailableNftsAction } from "./get-available-nfts"
 import { GetArtMetadataAction } from "./get-art-metadata"
 import { GenerateImageForArtAction } from "./generate-image-for-art"
 import { ChangeFlippingTerritoryAction } from "./change-flipping-territory"
@@ -14,6 +14,9 @@ import { MakeArtAction } from "./make-art"
 import { PostFlipToTwitterAction } from "./post-flip-to-twitter"
 import { PostArtToTwitterAction } from "./post-art-to-twitter"
 import { PlayGameToCompletionAction } from "./play-game-to-completion"
+import { MakeArtSuggestionsAction } from "./make-art-suggestion"
+import { GenerateImageForArtSuggestionAction } from "./generate-image-for-art-suggestion"
+import { PostArtSuggestionToTwitterAction } from "./post-art-suggestion-to-twitter"
 
 
 export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaAny, z.ZodType<any, any, any>>[] {
@@ -23,8 +26,8 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
         new FlipTilesAction(),
         new MintNftAction(),
         new GenerateImageForFlipAction(),
-        new GetNftMetadataAction(),
-        new GetAvaialbleNftsAction(),
+        new GetFlipMetadataAction(),
+        new GetAvailableNftsAction(),
         new ChangeFlippingTerritoryAction(),
         new MakeArtAction(),
         new PostFlipToTwitterAction(),
@@ -32,6 +35,9 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
         new PlayGameToCompletionAction(),
         new GetArtMetadataAction(),
         new GenerateImageForArtAction(),
+        new MakeArtSuggestionsAction(),
+        new GenerateImageForArtSuggestionAction(),
+        new PostArtSuggestionToTwitterAction(),
     ];
   }
   
@@ -48,8 +54,8 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
     FlipTilesAction,
     MintNftAction,
     GenerateImageForFlipAction,
-    GetNftMetadataAction,
-    GetAvaialbleNftsAction,
+    GetFlipMetadataAction,
+    GetAvailableNftsAction,
     ChangeFlippingTerritoryAction,
     MakeArtAction,
     PostFlipToTwitterAction,
@@ -57,6 +63,9 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
     PlayGameToCompletionAction,
     GetArtMetadataAction,
     GenerateImageForArtAction,
+    MakeArtSuggestionsAction,
+    GenerateImageForArtSuggestionAction,
+    PostArtSuggestionToTwitterAction,
   }
 
 

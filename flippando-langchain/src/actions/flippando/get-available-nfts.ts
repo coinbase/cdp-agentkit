@@ -48,7 +48,7 @@ export async function getAvailableNfts(
   }
 }
 
-export class GetAvaialbleNftsAction
+export class GetAvailableNftsAction
   implements FlippandoAction<typeof GetAvailableNftsSchema, typeof GetAvailableNftsResponseSchema>
 {
   name = "get_available_nfts"

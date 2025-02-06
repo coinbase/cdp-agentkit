@@ -5,37 +5,37 @@ import { TwitterApi } from "twitter-api-v2"
 import * as fs from "fs"
 import * as path from "path"
 import sharp from "sharp"
-import { GetFlipMetadataAction } from "./get-flip-metadata"
-import { GenerateImageForFlipAction } from "./generate-image-for-flip"
+import { GenerateImageForArtSuggestionAction } from "./generate-image-for-art-suggestion"
+import { MakeArtSuggestionsAction } from "./make-art-suggestion"
 
-const POST_FLIP_TO_TWITTER_PROMPT = `
+const POST_ART_SUGGESTION_TO_TWITTER_PROMPT = `
 This action posts a message to Twitter using the Flippando agent's Twitter account.
-It takes a message and an NFT token ID as input, retrieves the metadata, generates the SVG image for the flip,
+It takes a message and a player address as input, generates an art suggestion,
 converts it to a PNG image, and posts the tweet with the attached image.
 `
 
-export const PostFlipToTwitterSchema = z.object({
+export const PostArtSuggestionToTwitterSchema = z.object({
   message: z.string().max(280, "Tweet cannot exceed 280 characters").describe("The message to post on Twitter"),
-  tokenId: z.string().describe("The NFT token ID to generate the image from"),
+  playerAddress: z.string().describe("The Ethereum address of the player"),
 })
 
-export const PostFlipToTwitterResponseSchema = z.object({
+export const PostArtSuggestionToTwitterResponseSchema = z.object({
   tweetUrl: z.string().url(),
   message: z.string(),
 })
 
-export class PostFlipToTwitterAction
-  implements FlippandoAction<typeof PostFlipToTwitterSchema, typeof PostFlipToTwitterResponseSchema>
+export class PostArtSuggestionToTwitterAction
+  implements FlippandoAction<typeof PostArtSuggestionToTwitterSchema, typeof PostArtSuggestionToTwitterResponseSchema>
 {
-  name = "post_flip_to_twitter"
-  description = POST_FLIP_TO_TWITTER_PROMPT
-  argsSchema = PostFlipToTwitterSchema
-  responseSchema = PostFlipToTwitterResponseSchema
+  name = "post_art_suggestion_to_twitter"
+  description = POST_ART_SUGGESTION_TO_TWITTER_PROMPT
+  argsSchema = PostArtSuggestionToTwitterSchema
+  responseSchema = PostArtSuggestionToTwitterResponseSchema
 
   async func(
-    args: z.infer<typeof PostFlipToTwitterSchema>,
+    args: z.infer<typeof PostArtSuggestionToTwitterSchema>,
     agentkit: FlippandoAgentkit,
-  ): Promise<z.infer<typeof PostFlipToTwitterResponseSchema>> {
+  ): Promise<z.infer<typeof PostArtSuggestionToTwitterResponseSchema>> {
     try {
       const twitterClient = new TwitterApi({
         appKey: agentkit.getTwitterApiKey(),
@@ -46,13 +46,17 @@ export class PostFlipToTwitterAction
 
       let mediaId: string | undefined
 
-      // Get NFT metadata
-      const getFlipMetadataAction = new GetFlipMetadataAction()
-      const { metadata } = await getFlipMetadataAction.func({ tokenId: args.tokenId }, agentkit)
+      // Get Art suggestions
+      const makeArtSuggestionsAction = new MakeArtSuggestionsAction()
+      const { suggestions } = await makeArtSuggestionsAction.func({ playerAddress: args.playerAddress }, agentkit)
 
-      // Generate SVG for the flip
-      const generateImageAction = new GenerateImageForFlipAction()
-      const svgString = await generateImageAction.func({ tokenId: args.tokenId, metadata })
+      if (suggestions.length === 0) {
+        throw new Error("No art suggestions available for the player")
+      }
+
+      // Generate SVG for the first suggestion
+      const generateImageAction = new GenerateImageForArtSuggestionAction()
+      const svgString = await generateImageAction.func({ metadata: suggestions[0] })
 
       console.log("SVG string length:", svgString.length)
       console.log("SVG string preview:", svgString.substring(0, 200) + "...")

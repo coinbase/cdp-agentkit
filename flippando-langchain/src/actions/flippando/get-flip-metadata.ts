@@ -9,11 +9,11 @@ This action gets a basic NFT and returns its metadata.
 It returns the NFT metadata, potentially to be used in the generate_image_for_flip.ts.
 `
 
-export const GetNftMetadataSchema = z.object({
+export const GetFlipMetadataSchema = z.object({
   tokenId: z.string().describe("The ID of the basic NFT"),
 })
 
-export const GetNftMetadataResponseSchema = z.object({
+export const GetFlipMetadataResponseSchema = z.object({
   metadata: z.object({
     name: z.string(),
     description: z.string(),
@@ -26,9 +26,9 @@ export const GetNftMetadataResponseSchema = z.object({
   message: z.string(),
 })
 
-export async function getNftMetadata(
-  args: z.infer<typeof GetNftMetadataSchema>, agentkit: FlippandoAgentkit
-): Promise<z.infer<typeof GetNftMetadataResponseSchema>> {
+export async function getFlipMetadata(
+  args: z.infer<typeof GetFlipMetadataSchema>, agentkit: FlippandoAgentkit
+): Promise<z.infer<typeof GetFlipMetadataResponseSchema>> {
     const flippando = new ethers.Contract(
         agentkit.getFlippandoAddress(),
         FlippandoABI.abi,
@@ -36,7 +36,7 @@ export async function getNftMetadata(
     )
 
   try {
-    console.log(`Getting NFT metadata for tokenId ${args.tokenId}`)
+    console.log(`Getting Flip metadata for tokenId ${args.tokenId}`)
     const tokenURI = await flippando.tokenURI(args.tokenId)
     console.log(`Token URI: ${tokenURI}`)
 
@@ -53,7 +53,7 @@ export async function getNftMetadata(
       game_solved_board: rawMetadata.game_solved_board,
     }
 
-    const message = `NFT metadata retrieved for tokenId: ${args.tokenId}`
+    const message = `Flip metadata retrieved for tokenId: ${args.tokenId}`
     console.log("Final message:", message)
 
     return {
@@ -61,18 +61,18 @@ export async function getNftMetadata(
       message,
     }
   } catch (error) {
-    console.error("Error in getting NFT Metadata:", error)
-    throw new Error(`Error getting NFT metadata: ${error instanceof Error ? error.message : String(error)}`)
+    console.error("Error in getting Flip Metadata:", error)
+    throw new Error(`Error getting Flip metadata: ${error instanceof Error ? error.message : String(error)}`)
   }
 }
 
-export class GetNftMetadataAction
-  implements FlippandoAction<typeof GetNftMetadataSchema, typeof GetNftMetadataResponseSchema>
+export class GetFlipMetadataAction
+  implements FlippandoAction<typeof GetFlipMetadataSchema, typeof GetFlipMetadataResponseSchema>
 {
-  name = "get_nft_metadata"
+  name = "get_flip_metadata"
   description = GET_FLIP_METADATA_PROMPT
-  argsSchema = GetNftMetadataSchema
-  responseSchema = GetNftMetadataResponseSchema
-  func = getNftMetadata
+  argsSchema = GetFlipMetadataSchema
+  responseSchema = GetFlipMetadataResponseSchema
+  func = getFlipMetadata
 }
 
