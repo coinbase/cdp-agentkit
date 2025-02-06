@@ -10,9 +10,9 @@ import { Network } from "../../network";
 import { ME_EVM_BASE_URL } from "./constants";
 import { submitTransaction, getWethAddress, toMagicEdenChain } from "./utils";
 import { mainnet, base, arbitrum, polygon } from "viem/chains";
+
 /**
  * MagicEdenActionProvider provides functionality to interact with Magic Eden's marketplace.
- * It supports both bidding and buying actions using shared request/response processing.
  */
 export class MagicEdenActionProvider extends ActionProvider {
   /**
