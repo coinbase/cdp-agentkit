@@ -1,4 +1,4 @@
-import { encodeFunctionData } from "viem";
+import { encodeFunctionData, Hex } from "viem";
 import { EvmWalletProvider } from "../../wallet-providers";
 import { WowActionProvider } from "./wowActionProvider";
 import { WOW_ABI, WOW_FACTORY_ABI, GENERIC_TOKEN_METADATA_URI } from "./constants";
@@ -16,8 +16,8 @@ jest.mock("./uniswap/utils", () => ({
 }));
 
 describe("WowActionProvider", () => {
-  const MOCK_CONTRACT_ADDRESS = "0x1234567890123456789012345678901234567890" as `0x${string}`;
-  const INVALID_ADDRESS = "0xinvalid" as `0x${string}`;
+  const MOCK_CONTRACT_ADDRESS = "0x1234567890123456789012345678901234567890" as Hex;
+  const INVALID_ADDRESS = "0xinvalid" as Hex;
   const MOCK_AMOUNT_ETH_IN_WEI = BigInt("100000000000000000");
   const INVALID_WEI = "1.5"; // Wei amounts can't have decimals
   const MOCK_AMOUNT_TOKENS_IN_WEI = BigInt("1000000000000000000");
@@ -26,7 +26,7 @@ describe("WowActionProvider", () => {
   const MOCK_URI = "ipfs://QmY1GqprFYvojCcUEKgqHeDj9uhZD9jmYGrQTfA9vAE78J";
   const INVALID_URI = "not-a-url";
   const MOCK_TX_HASH = "0xabcdef1234567890";
-  const MOCK_ADDRESS = "0x9876543210987654321098765432109876543210" as `0x${string}`;
+  const MOCK_ADDRESS = "0x9876543210987654321098765432109876543210" as Hex;
 
   let provider: WowActionProvider;
   let mockWallet: jest.Mocked<EvmWalletProvider>;
@@ -35,7 +35,7 @@ describe("WowActionProvider", () => {
     mockWallet = {
       getAddress: jest.fn().mockReturnValue(MOCK_ADDRESS),
       getNetwork: jest.fn().mockReturnValue({ protocolFamily: "evm", networkId: "base-sepolia" }),
-      sendTransaction: jest.fn().mockResolvedValue(MOCK_TX_HASH as `0x${string}`),
+      sendTransaction: jest.fn().mockResolvedValue(MOCK_TX_HASH as Hex),
       waitForTransactionReceipt: jest.fn().mockResolvedValue({}),
       readContract: jest.fn(),
     } as unknown as jest.Mocked<EvmWalletProvider>;

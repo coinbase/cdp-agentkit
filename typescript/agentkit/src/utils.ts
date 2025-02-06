@@ -1,4 +1,4 @@
-import { encodeFunctionData } from "viem";
+import { encodeFunctionData, Hex } from "viem";
 import { EvmWalletProvider } from "./wallet-providers";
 
 const ERC20_ABI = [
@@ -33,11 +33,11 @@ export async function approve(
     const data = encodeFunctionData({
       abi: ERC20_ABI,
       functionName: "approve",
-      args: [spenderAddress as `0x${string}`, amount],
+      args: [spenderAddress as Hex, amount],
     });
 
     const txHash = await wallet.sendTransaction({
-      to: tokenAddress as `0x${string}`,
+      to: tokenAddress as Hex,
       data,
     });
 

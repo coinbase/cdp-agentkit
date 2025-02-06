@@ -5,11 +5,13 @@ import {
   ReadContractReturnType,
   serializeTransaction,
   TransactionRequest,
+  TransactionReceipt,
   TransactionSerializable,
   http,
   keccak256,
   Signature,
   PublicClient,
+  Hex,
 } from "viem";
 import { EvmWalletProvider } from "./evmWalletProvider";
 import { Network } from "../network";
@@ -167,7 +169,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
    * @param message - The message to sign.
    * @returns The signed message.
    */
-  async signMessage(message: string): Promise<`0x${string}`> {
+  async signMessage(message: string): Promise<Hex> {
     if (!this.#cdpWallet) {
       throw new Error("Wallet not initialized");
     }
@@ -175,7 +177,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
     const messageHash = hashMessage(message);
     const payload = await this.#cdpWallet.createPayloadSignature(messageHash);
 
-    return payload.getSignature() as `0x${string}`;
+    return payload.getSignature() as Hex;
   }
 
   /**
@@ -185,7 +187,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
    * @returns The signed typed data object.
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async signTypedData(typedData: any): Promise<`0x${string}`> {
+  async signTypedData(typedData: any): Promise<Hex> {
     if (!this.#cdpWallet) {
       throw new Error("Wallet not initialized");
     }
@@ -198,7 +200,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
 
     const payload = await this.#cdpWallet.createPayloadSignature(messageHash);
 
-    return payload.getSignature() as `0x${string}`;
+    return payload.getSignature() as Hex;
   }
 
   /**
@@ -207,7 +209,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
    * @param transaction - The transaction to sign.
    * @returns The signed transaction.
    */
-  async signTransaction(transaction: TransactionRequest): Promise<`0x${string}`> {
+  async signTransaction(transaction: TransactionRequest): Promise<Hex> {
     if (!this.#cdpWallet) {
       throw new Error("Wallet not initialized");
     }
@@ -217,7 +219,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
 
     const payload = await this.#cdpWallet.createPayloadSignature(transactionHash);
 
-    return payload.getSignature() as `0x${string}`;
+    return payload.getSignature() as Hex;
   }
 
   /**
@@ -226,7 +228,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
    * @param transaction - The transaction to send.
    * @returns The hash of the transaction.
    */
-  async sendTransaction(transaction: TransactionRequest): Promise<`0x${string}`> {
+  async sendTransaction(transaction: TransactionRequest): Promise<Hex> {
     if (!this.#cdpWallet) {
       throw new Error("Wallet not initialized");
     }
@@ -247,7 +249,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
 
     const tx = await externalAddress.broadcastExternalTransaction(signedPayload.slice(2));
 
-    return tx.transactionHash as `0x${string}`;
+    return tx.transactionHash as Hex;
   }
 
   /**
@@ -258,17 +260,13 @@ export class CdpWalletProvider extends EvmWalletProvider {
    * @param data - The data of the transaction.
    * @returns The prepared transaction.
    */
-  async prepareTransaction(
-    to: `0x${string}`,
-    value: bigint,
-    data: `0x${string}`,
-  ): Promise<TransactionSerializable> {
+  async prepareTransaction(to: Hex, value: bigint, data: Hex): Promise<TransactionSerializable> {
     if (!this.#cdpWallet) {
       throw new Error("Wallet not initialized");
     }
 
     const nonce = await this.#publicClient!.getTransactionCount({
-      address: this.#address! as `0x${string}`,
+      address: this.#address! as Hex,
     });
 
     const feeData = await this.#publicClient!.estimateFeesPerGas();
@@ -306,7 +304,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
    */
   async addSignatureAndSerialize(
     transaction: TransactionSerializable,
-    signature: `0x${string}`,
+    signature: Hex,
   ): Promise<string> {
     // Decode the signature into its components
     const r = `0x${signature.slice(2, 66)}`; // First 32 bytes
@@ -371,8 +369,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
    * @param txHash - The hash of the transaction to wait for.
    * @returns The transaction receipt.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async waitForTransactionReceipt(txHash: `0x${string}`): Promise<any> {
+  async waitForTransactionReceipt(txHash: Hex): Promise<TransactionReceipt> {
     return await this.#publicClient!.waitForTransactionReceipt({ hash: txHash });
   }
 
@@ -470,7 +467,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
    * @param value - The amount to transfer in Wei.
    * @returns The transaction hash.
    */
-  async nativeTransfer(to: `0x${string}`, value: string): Promise<`0x${string}`> {
+  async nativeTransfer(to: Hex, value: string): Promise<Hex> {
     if (!this.#cdpWallet) {
       throw new Error("Wallet not initialized");
     }
@@ -488,7 +485,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
       throw new Error("Transaction hash not found");
     }
 
-    return result.getTransactionHash() as `0x${string}`;
+    return result.getTransactionHash() as Hex;
   }
 
   /**

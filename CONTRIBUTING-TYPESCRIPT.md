@@ -143,7 +143,7 @@ Do not use the contract address as the destination address. If you are unsure of
       });
 
       const hash = await walletProvider.sendTransaction({
-        to: args.contractAddress as `0x${string}`,
+        to: args.contractAddress as Hex,
         data,
       });
 

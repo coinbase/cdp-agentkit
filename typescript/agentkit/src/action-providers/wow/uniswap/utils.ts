@@ -1,4 +1,4 @@
-import { formatEther, getAddress } from "viem";
+import { formatEther, getAddress, Hex } from "viem";
 import { EvmWalletProvider } from "../../../wallet-providers";
 import { ADDRESSES, WOW_ABI } from "../constants";
 import { UNISWAP_QUOTER_ABI, UNISWAP_V3_ABI } from "./constants";
@@ -66,31 +66,31 @@ export async function getPoolInfo(
   try {
     const results = await Promise.all([
       wallet.readContract({
-        address: poolAddress as `0x${string}`,
+        address: poolAddress as Hex,
         functionName: "token0",
         args: [],
         abi: UNISWAP_V3_ABI,
       }),
       wallet.readContract({
-        address: poolAddress as `0x${string}`,
+        address: poolAddress as Hex,
         functionName: "token1",
         args: [],
         abi: UNISWAP_V3_ABI,
       }),
       wallet.readContract({
-        address: poolAddress as `0x${string}`,
+        address: poolAddress as Hex,
         functionName: "fee",
         args: [],
         abi: UNISWAP_V3_ABI,
       }),
       wallet.readContract({
-        address: poolAddress as `0x${string}`,
+        address: poolAddress as Hex,
         functionName: "liquidity",
         args: [],
         abi: UNISWAP_V3_ABI,
       }),
       wallet.readContract({
-        address: poolAddress as `0x${string}`,
+        address: poolAddress as Hex,
         functionName: "slot0",
         args: [],
         abi: UNISWAP_V3_ABI,
@@ -101,13 +101,13 @@ export async function getPoolInfo(
 
     const [balance0, balance1] = await Promise.all([
       wallet.readContract({
-        address: token0Result as `0x${string}`,
+        address: token0Result as Hex,
         functionName: "balanceOf",
         args: [poolAddress],
         abi: WOW_ABI,
       }),
       wallet.readContract({
-        address: token1Result as `0x${string}`,
+        address: token1Result as Hex,
         functionName: "balanceOf",
         args: [poolAddress],
         abi: WOW_ABI,
@@ -148,7 +148,7 @@ export async function exactInputSingle(
   try {
     const networkId = wallet.getNetwork().networkId!;
     const amount = await wallet.readContract({
-      address: ADDRESSES[networkId].UniswapQuoter as `0x${string}`,
+      address: ADDRESSES[networkId].UniswapQuoter as Hex,
       functionName: "quoteExactInputSingle",
       args: [
         {
@@ -262,7 +262,7 @@ export async function getHasGraduated(
   tokenAddress: string,
 ): Promise<boolean> {
   const marketType = await wallet.readContract({
-    address: tokenAddress as `0x${string}`,
+    address: tokenAddress as Hex,
     functionName: "marketType",
     args: [],
     abi: WOW_ABI,
@@ -282,7 +282,7 @@ export async function getPoolAddress(
   tokenAddress: string,
 ): Promise<string> {
   const poolAddress = await wallet.readContract({
-    address: tokenAddress as `0x${string}`,
+    address: tokenAddress as Hex,
     functionName: "poolAddress",
     args: [],
     abi: WOW_ABI,

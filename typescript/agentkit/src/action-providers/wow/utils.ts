@@ -1,3 +1,5 @@
+import { Hex } from "viem";
+
 import { EvmWalletProvider } from "../../wallet-providers";
 import { WOW_ABI } from "./constants";
 import { getHasGraduated, getUniswapQuote } from "./uniswap/utils";
@@ -14,7 +16,7 @@ export async function getCurrentSupply(
   tokenAddress: string,
 ): Promise<string> {
   const supply = await wallet.readContract({
-    address: tokenAddress as `0x${string}`,
+    address: tokenAddress as Hex,
     abi: WOW_ABI,
     functionName: "totalSupply",
     args: [],
@@ -42,7 +44,7 @@ export async function getBuyQuote(
     hasGraduated
       ? (await getUniswapQuote(wallet, tokenAddress, Number(amountEthInWei), "buy")).amountOut
       : await wallet.readContract({
-          address: tokenAddress as `0x${string}`,
+          address: tokenAddress as Hex,
           abi: WOW_ABI,
           functionName: "getEthBuyQuote",
           args: [amountEthInWei],
@@ -71,7 +73,7 @@ export async function getSellQuote(
     hasGraduated
       ? (await getUniswapQuote(wallet, tokenAddress, Number(amountTokensInWei), "sell")).amountOut
       : await wallet.readContract({
-          address: tokenAddress as `0x${string}`,
+          address: tokenAddress as Hex,
           abi: WOW_ABI,
           functionName: "getTokenSellQuote",
           args: [amountTokensInWei],

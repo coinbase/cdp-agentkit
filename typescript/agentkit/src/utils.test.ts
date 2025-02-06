@@ -1,4 +1,4 @@
-import { encodeFunctionData } from "viem";
+import { encodeFunctionData, Hex } from "viem";
 import { EvmWalletProvider } from "./wallet-providers";
 import { approve } from "./utils";
 
@@ -14,7 +14,7 @@ describe("utils", () => {
 
     beforeEach(() => {
       mockWallet = {
-        sendTransaction: jest.fn().mockResolvedValue(MOCK_TX_HASH as `0x${string}`),
+        sendTransaction: jest.fn().mockResolvedValue(MOCK_TX_HASH as Hex),
         waitForTransactionReceipt: jest.fn().mockResolvedValue(MOCK_RECEIPT),
       } as unknown as jest.Mocked<EvmWalletProvider>;
     });
@@ -28,7 +28,7 @@ describe("utils", () => {
       );
 
       expect(mockWallet.sendTransaction).toHaveBeenCalledWith({
-        to: MOCK_TOKEN_ADDRESS as `0x${string}`,
+        to: MOCK_TOKEN_ADDRESS as Hex,
         data: encodeFunctionData({
           abi: [
             {
@@ -43,7 +43,7 @@ describe("utils", () => {
             },
           ],
           functionName: "approve",
-          args: [MOCK_SPENDER_ADDRESS as `0x${string}`, MOCK_AMOUNT],
+          args: [MOCK_SPENDER_ADDRESS as Hex, MOCK_AMOUNT],
         }),
       });
 

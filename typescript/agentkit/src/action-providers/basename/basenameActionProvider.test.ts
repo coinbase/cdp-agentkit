@@ -1,4 +1,4 @@
-import { encodeFunctionData, namehash, parseEther } from "viem";
+import { encodeFunctionData, namehash, parseEther, Hex } from "viem";
 
 import { basenameActionProvider } from "./basenameActionProvider";
 import {
@@ -61,7 +61,7 @@ describe("Register Basename Action", () => {
       waitForTransactionReceipt: jest.fn(),
     } as unknown as jest.Mocked<EvmWalletProvider>;
 
-    mockWallet.sendTransaction.mockResolvedValue("some-hash" as `0x${string}`);
+    mockWallet.sendTransaction.mockResolvedValue("some-hash" as Hex);
     mockWallet.waitForTransactionReceipt.mockResolvedValue({});
   });
 

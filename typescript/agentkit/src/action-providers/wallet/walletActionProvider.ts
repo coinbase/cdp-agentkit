@@ -1,4 +1,5 @@
 import { Decimal } from "decimal.js";
+import { Hex } from "viem";
 import { z } from "zod";
 
 import { CreateAction } from "../actionDecorator";
@@ -92,7 +93,7 @@ Important notes:
     args: z.infer<typeof NativeTransferSchema>,
   ): Promise<string> {
     try {
-      const result = await walletProvider.nativeTransfer(args.to as `0x${string}`, args.value);
+      const result = await walletProvider.nativeTransfer(args.to as Hex, args.value);
 
       return `Transferred ${args.value} ETH to ${args.to}.\nTransaction hash: ${result}`;
     } catch (error) {
