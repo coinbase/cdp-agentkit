@@ -1,35 +1,38 @@
-from typing import Dict, Any
-import requests 
+from typing import Any
+
+import requests
 from pydantic import BaseModel, Field
 
-from ..action_provider import ActionProvider
-from ..action_decorator import CreateAction
-from ...wallet_providers import WalletProvider
 from ...network import Network
+from ...wallet_providers import WalletProvider
+from ..action_decorator import create_action
+from ..action_provider import ActionProvider
+
 
 class FetchPriceFeedIdSchema(BaseModel):
     """Input schema for fetching Pyth price feed ID."""
+
     token_symbol: str = Field(..., description="The token symbol to fetch the price feed ID for.")
+
 
 class FetchPriceSchema(BaseModel):
     """Input schema for fetching Pyth price."""
+
     price_feed_id: str = Field(..., description="The Pyth price feed ID to fetch the price for.")
-    
+
+
 class PythActionProvider(ActionProvider[WalletProvider]):
     """Provides actions for interacting with Pyth price feeds."""
-    
+
     def __init__(self):
         super().__init__("pyth", [])
 
-    @CreateAction(
+    @create_action(
         name="fetch_price_feed_id",
         description="Fetch the price feed ID for a given token symbol (e.g. BTC, ETH, etc.) from Pyth.",
-        schema=FetchPriceFeedIdSchema
+        schema=FetchPriceFeedIdSchema,
     )
-    def fetch_price_feed_id(
-        self,
-        args: Dict[str, Any]
-    ) -> str:
+    def fetch_price_feed_id(self, args: dict[str, Any]) -> str:
         """Fetch the price feed ID for a given token symbol from Pyth."""
         token_symbol = args["token_symbol"]
         url = f"https://hermes.pyth.network/v2/price_feeds?query={token_symbol}&asset_type=crypto"
@@ -48,7 +51,7 @@ class PythActionProvider(ActionProvider[WalletProvider]):
 
         return filtered_data[0]["id"]
 
-    @CreateAction(
+    @create_action(
         name="get_price",
         description="""
 Fetch the price of a given price feed from Pyth. First fetch the price feed ID using the fetch_price_feed_id action.
@@ -58,12 +61,9 @@ Important notes:
 - This action only fetches price inputs from Pyth price feeds. No other source.
 - If you are asked to fetch the price from Pyth for a ticker symbol such as BTC, you must first use the fetch_price_feed_id action.
 """,
-        schema=FetchPriceSchema
+        schema=FetchPriceSchema,
     )
-    def fetch_price(
-        self,
-        args: Dict[str, Any]
-    ) -> str:
+    def fetch_price(self, args: dict[str, Any]) -> str:
         """Fetch price from Pyth for the given Pyth price feed."""
         try:
             price_feed_id = args["price_feed_id"]
@@ -96,6 +96,7 @@ Important notes:
         """Check if network is supported by Pyth."""
         return True
 
+
 def pyth_action_provider() -> PythActionProvider:
     """Create a new PythActionProvider instance."""
-    return PythActionProvider() 
+    return PythActionProvider()
