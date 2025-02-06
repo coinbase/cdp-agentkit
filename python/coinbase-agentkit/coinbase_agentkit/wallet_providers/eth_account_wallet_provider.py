@@ -26,7 +26,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
     def __init__(self, config: EthAccountWalletProviderConfig):
         """Initialize the wallet provider with a private key and RPC URL."""
         self.config = config
-        self.web3 = Web3(Web3.http_provider(config.rpc_url))
+        self.web3 = Web3(Web3.HTTPProvider(config.rpc_url))
         self.account = Account.from_key(config.private_key)
 
     def get_address(self) -> str:
