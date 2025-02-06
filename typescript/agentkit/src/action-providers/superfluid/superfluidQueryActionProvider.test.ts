@@ -2,8 +2,6 @@ import { superfluidQueryActionProvider } from "./superfluidQueryActionProvider";
 import { EvmWalletProvider } from "../../wallet-providers";
 import { getAccountOutflow } from "./graphQueries/superfluidGraphQueries";
 
-globalThis.jest = require('jest-mock'); // Ensure Jest mock functions are available
-
 jest.mock("./graphQueries/superfluidGraphQueries", () => ({
   getAccountOutflow: jest.fn(async () => ({
     accounts: [{ outflows: [{ receiver: "0x123", token: "0xABC", currentFlowRate: "100" }] }],
@@ -30,13 +28,17 @@ describe("SuperfluidQueryActionProvider", () => {
     });
 
     it("should return an empty array when no active streams exist", async () => {
-      (getAccountOutflow as jest.Mock).mockImplementation(async () => ({ accounts: [{ outflows: [] }] }));
+      (getAccountOutflow as jest.Mock).mockImplementation(async () => ({
+        accounts: [{ outflows: [] }],
+      }));
       const response = await actionProvider.queryStreams(mockWallet);
       expect(response).toBe("Current outflows are []");
     });
 
     it("should handle query errors gracefully", async () => {
-      (getAccountOutflow as jest.Mock).mockImplementation(async () => { throw new Error("Query failed"); });
+      (getAccountOutflow as jest.Mock).mockImplementation(async () => {
+        throw new Error("Query failed");
+      });
       const response = await actionProvider.queryStreams(mockWallet);
       expect(response).toBe("Error creating Superfluid pool: Error: Query failed");
     });
@@ -49,7 +51,10 @@ describe("SuperfluidQueryActionProvider", () => {
     });
 
     it("should return false for non-EVM networks", () => {
-      const result = actionProvider.supportsNetwork({ protocolFamily: "bitcoin", networkId: "any" });
+      const result = actionProvider.supportsNetwork({
+        protocolFamily: "bitcoin",
+        networkId: "any",
+      });
       expect(result).toBe(false);
     });
   });
