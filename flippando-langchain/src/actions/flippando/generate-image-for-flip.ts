@@ -1,6 +1,7 @@
 import { z } from "zod"
 import type { FlippandoAction } from "../flippando"
 import { getTileImage } from "../../utils/tileImages"
+import { FlippandoAgentkit } from "../../flippando-agentkit"
 
 const GENERATE_IMAGE_FOR_FLIP_PROMPT = `
 This action generates an SVG image for a solved Flippando game board.

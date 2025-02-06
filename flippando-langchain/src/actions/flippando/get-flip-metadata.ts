@@ -14,7 +14,15 @@ export const GetNftMetadataSchema = z.object({
 })
 
 export const GetNftMetadataResponseSchema = z.object({
-  metadata: z.string(),
+  metadata: z.object({
+    name: z.string(),
+    description: z.string(),
+    game_version: z.string(),
+    game_id: z.string(),
+    game_tile_type: z.string(),
+    game_level: z.string(),
+    game_solved_board: z.string(),
+  }),
   message: z.string(),
 })
 
@@ -32,7 +40,18 @@ export async function getNftMetadata(
     const tokenURI = await flippando.tokenURI(args.tokenId)
     console.log(`Token URI: ${tokenURI}`)
 
-    const metadata = tokenURI.toString()
+    const rawMetadata = JSON.parse(tokenURI.toString())
+
+    // Transform the raw metadata to match our schema
+    const metadata = {
+      name: rawMetadata.name,
+      description: rawMetadata.description,
+      game_version: rawMetadata.game_version,
+      game_id: rawMetadata.game_id,
+      game_tile_type: rawMetadata.game_tile_type,
+      game_level: rawMetadata.game_level,
+      game_solved_board: rawMetadata.game_solved_board,
+    }
 
     const message = `NFT metadata retrieved for tokenId: ${args.tokenId}`
     console.log("Final message:", message)

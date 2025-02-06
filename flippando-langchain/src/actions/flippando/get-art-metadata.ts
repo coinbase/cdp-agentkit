@@ -14,7 +14,16 @@ export const GetArtMetadataSchema = z.object({
 })
 
 export const GetArtMetadataResponseSchema = z.object({
-  metadata: z.string(),
+    metadata: z
+    .object({
+      name: z.string(),
+      description: z.string(),
+      width: z.number().int().min(2).max(8),
+      height: z.number().int().min(2).max(8),
+      tileTypes: z.array(z.number().int().min(1).max(7)),
+      boards: z.array(z.array(z.array(z.number().int().min(0)))),
+    })
+    .describe("The metadata of the art piece"),
   message: z.string(),
 })
 
@@ -32,7 +41,17 @@ export async function getArtMetadata(
     const tokenURI = await flippandoBundler.tokenURI(args.tokenId)
     console.log(`Token URI: ${tokenURI}`)
 
-    const metadata = tokenURI.toString()
+    const rawMetadata = JSON.parse(tokenURI.toString())
+
+    // Transform the raw metadata to match our schema
+    const metadata = {
+      name: rawMetadata.name,
+      description: rawMetadata.description,
+      width: rawMetadata.width,
+      height: rawMetadata.height,
+      tileTypes: rawMetadata.tileTypes,
+      boards: rawMetadata.boards,
+    }
 
     const message = `Art metadata retrieved for tokenId: ${args.tokenId}`
     console.log("Final message:", message)

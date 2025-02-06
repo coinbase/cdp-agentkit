@@ -19,6 +19,7 @@ const tileTypeMap: { [key: string]: string } = {
 }
 
 export const GenerateImageForArtSchema = z.object({
+  tokenId: z.string().describe("The ID of the NFT token"),
   metadata: z
     .object({
       name: z.string(),
@@ -30,6 +31,10 @@ export const GenerateImageForArtSchema = z.object({
     })
     .describe("The metadata of the art piece"),
 })
+
+function normalizeHexColor(color: string): string {
+  return color.toLowerCase()
+}
 
 function extractSvgContent(svgString: string): string {
   const match = svgString.match(/<svg[^>]*>([\s\S]*)<\/svg>/)
@@ -51,7 +56,10 @@ function generateFlipSVG(board: number[], tileType: string, flipSize: number): s
     const row = Math.floor(index / boardDimension)
     const col = index % boardDimension
     const tileImage = getTileImage(tileIndex - 1, tileType)
-    const tileContent = extractSvgContent(tileImage)
+    let tileContent = extractSvgContent(tileImage)
+
+    // Normalize hex colors to lowercase
+    tileContent = tileContent.replace(/#[0-9A-F]{6}/gi, (match) => normalizeHexColor(match))
 
     svgContent += `
       <g transform="translate(${col * tileSize}, ${row * tileSize})">

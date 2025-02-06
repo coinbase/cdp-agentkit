@@ -11,7 +11,8 @@ import { GetArtMetadataAction } from "./get-art-metadata"
 import { GenerateImageForArtAction } from "./generate-image-for-art"
 import { ChangeFlippingTerritoryAction } from "./change-flipping-territory"
 import { MakeArtAction } from "./make-art"
-import { PostToTwitterAction } from "./post-to-twitter"
+import { PostFlipToTwitterAction } from "./post-flip-to-twitter"
+import { PostArtToTwitterAction } from "./post-art-to-twitter"
 import { PlayGameToCompletionAction } from "./play-game-to-completion"
 
 
@@ -26,7 +27,8 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
         new GetAvaialbleNftsAction(),
         new ChangeFlippingTerritoryAction(),
         new MakeArtAction(),
-        new PostToTwitterAction(),
+        new PostFlipToTwitterAction(),
+        new PostArtToTwitterAction(),
         new PlayGameToCompletionAction(),
         new GetArtMetadataAction(),
         new GenerateImageForArtAction(),
@@ -50,7 +52,8 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
     GetAvaialbleNftsAction,
     ChangeFlippingTerritoryAction,
     MakeArtAction,
-    PostToTwitterAction,
+    PostFlipToTwitterAction,
+    PostArtToTwitterAction,
     PlayGameToCompletionAction,
     GetArtMetadataAction,
     GenerateImageForArtAction,
