@@ -1,9 +1,7 @@
-import { z, ZodIssueCode } from "zod";
+import { z } from "zod";
 
 /**
- * Input schema for bidding on an NFT (ERC721) on Magic Eden.
- * Ensures that at least one of `token` or `collection` is provided,
- * and that `weiPrice` is a nonempty string.
+ * Input schema for bidding on an NFT (ERC721) or collection on Magic Eden.
  */
 export const BidSchema = z
   .object({
@@ -19,6 +17,10 @@ export const BidSchema = z
   .strip()
   .describe("Input schema for NFT bid action");
 
+/**
+ * Input schema for buying an NFT (ERC721) on Magic Eden.
+ * Users can either buy a specific NFT token or any number of tokens off the floor.
+ */
 export const BuySchema = z
   .object({
     token: z.string().optional().describe("The NFT ID in the format 'collectionAddress:tokenId'"),
@@ -31,9 +33,6 @@ export const BuySchema = z
 
 /**
  * Input schema for listing an NFT (ERC721) on Magic Eden.
- * Requires a specific NFT token in the format 'collectionAddress:tokenId',
- * a listing price in wei, and the Magic Eden API key.
- * The expiration time is optional.
  */
 export const ListSchema = z
   .object({
@@ -53,8 +52,6 @@ export const ListSchema = z
 
 /**
  * Input schema for accepting an offer (selling) an NFT on Magic Eden.
- * You must provide the specific NFT token in the format 'collectionAddress:tokenId'
- * and your Magic Eden API key.
  */
 export const SellSchema = z
   .object({

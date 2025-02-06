@@ -4,9 +4,9 @@ import { EvmWalletProvider } from "../../wallet-providers";
 import { CreateAction } from "../actionDecorator";
 import { BidSchema, BuySchema, ListSchema, SellSchema } from "./schemas";
 import { Network } from "../../network";
-import { EVM_BASE_URL } from "./constants";
+import { ME_EVM_BASE_URL, tokenRegex } from "./constants";
 import { submitTransaction, getWethAddress, toMagicEdenChain } from "./utils";
-
+import { mainnet, base, arbitrum, polygon } from "viem/chains";
 /**
  * MagicEdenActionProvider provides functionality to interact with Magic Eden's marketplace.
  * It supports both bidding and buying actions using shared request/response processing.
@@ -26,19 +26,22 @@ export class MagicEdenActionProvider extends ActionProvider {
   @CreateAction({
     name: "bid",
     description: `
-This tool will bid on an NFT (ERC-721) from the Magic Eden marketplace on the secondary market,
-or will bid on a collection from the Magic Eden marketplace on the secondary market.
-An NFT "offer" is the same as a bid.
-If a specific token is passed in, then the bid will be placed on that token.
-Otherwise, if a collection is passed in, then the bid will be placed on the collection.
+This tool places a bid (NFT offer) on an NFT (ERC721) on Magic Eden.
 
-Requires:
-- token: The NFT ID in the format 'collectionAddress:tokenId'. 
-OR
-- collection: The collection address
-- weiPrice: The bid amount in wei
-- expirationTime: The bid expiration time (epoch)
-- apiKey: The Magic Eden API key
+**Options:**
+1. **Specific NFT Bid:**  
+   - Provide the \`token\` in the format 'collectionAddress:tokenId'.  
+   - *Do not* provide a collection.
+2. **Collection Bid:**  
+   - Provide the \`collection\` address.
+
+**Required Inputs:**
+- \`weiPrice\`: Bid amount in wei.
+- \`expirationTime\`: Bid expiration time (epoch).
+- \`apiKey\`: Your Magic Eden API key.
+
+  **Note:** Tokens HAVE to be in the format 'collectionAddress:tokenId'. If you just get the collectionAddress, then assume it is not
+  a token.
     `,
     schema: BidSchema,
   })
@@ -46,10 +49,9 @@ OR
     walletProvider: EvmWalletProvider,
     args: z.infer<typeof BidSchema>,
   ): Promise<string> {
-    console.log("args", args);
     const address = walletProvider.getAddress();
-    const networkId = walletProvider.getNetwork().networkId!;
-    const chainName = toMagicEdenChain(networkId);
+    const chainId = walletProvider.getNetwork().chainId!;
+    const chainName = toMagicEdenChain(Number(chainId));
 
     const requestBody = {
       maker: address,
@@ -59,16 +61,17 @@ OR
           weiPrice: args.weiPrice,
           orderbook: "reservoir",
           orderKind: "payment-processor-v2",
-          currency: getWethAddress(networkId),
-          token: args.token,
-          collection: args.collection,
+          currency: getWethAddress(Number(chainId)),
+          ...(args.token && args.token.trim() !== "" ? { token: args.token } : {}),
+          ...(!args.token && args.collection && args.collection.trim() !== ""
+            ? { collection: args.collection }
+            : {}),
           expirationTime: args.expirationTime,
           options: {
             "payment-processor-v2": {
               useOffChainCancellation: true,
             },
           },
-          //   automatedRoyalties: true,
         },
       ],
     };
@@ -110,7 +113,9 @@ OR
   Also required is:
   - \`apiKey\`: The Magic Eden API key
   
-  **Note:** Do not supply both a token and a quantity. If a token is provided, the purchase is for that specific NFT.
+  **Note:** Do not supply both a token and a collection as arguments. You must deduce if it is a collection or token by the format.
+   Tokens HAVE to be in the format 'collectionAddress:tokenId'. Collections do not contain the semi colon. 
+   If a token is provided, the purchase is for that specific NFT.
     `,
     schema: BuySchema,
   })
@@ -118,19 +123,18 @@ OR
     walletProvider: EvmWalletProvider,
     args: z.infer<typeof BuySchema>,
   ): Promise<string> {
-    console.log("args", args);
+    console.log("args ", args);
     const address = walletProvider.getAddress();
-    const networkId = walletProvider.getNetwork().networkId!;
-    const chainName = toMagicEdenChain(networkId);
+    const chainId = walletProvider.getNetwork().chainId!;
+    const chainName = toMagicEdenChain(Number(chainId));
 
-    // Build the item payload conditionally.
     const itemPayload = {
       fillType: "trade",
       ...(args.token && args.token.trim() !== "" ? { token: args.token } : {}),
       ...(!args.token && args.collection && args.collection.trim() !== ""
         ? { collection: args.collection }
         : {}),
-      ...(!args.token && !args.collection && args.quantity ? { quantity: args.quantity } : {}),
+      ...(!args.token && args.collection && args.quantity ? { quantity: args.quantity } : {}),
     };
 
     const requestBody = {
@@ -139,7 +143,7 @@ OR
       source: "magiceden.io",
       items: [itemPayload],
     };
-    console.log("Request Body:", JSON.stringify(requestBody, null, 2));
+    console.log("requestBody ", requestBody);
 
     return this.executeMagicEdenRequest(
       "execute/buy/v7",
@@ -151,6 +155,13 @@ OR
     );
   }
 
+  /**
+   * Lists an NFT for sale on the Magic Eden marketplace.
+   *
+   * @param walletProvider - The wallet provider for executing the list.
+   * @param args - Input parameters conforming to the ListSchema.
+   * @returns A success message or error string.
+   */
   @CreateAction({
     name: "list",
     description: `
@@ -171,12 +182,10 @@ OR
     walletProvider: EvmWalletProvider,
     args: z.infer<typeof ListSchema>,
   ): Promise<string> {
-    console.log("args", args);
     const address = walletProvider.getAddress();
-    const networkId = walletProvider.getNetwork().networkId!;
-    const chainName = toMagicEdenChain(networkId);
+    const chainId = walletProvider.getNetwork().chainId!;
+    const chainName = toMagicEdenChain(Number(chainId));
 
-    // Build the params payload conditionally including expirationTime if provided.
     const paramsPayload = {
       token: args.token,
       weiPrice: args.weiPrice,
@@ -191,8 +200,6 @@ OR
       params: [paramsPayload],
     };
 
-    console.log("Request Body:", JSON.stringify(requestBody, null, 2));
-
     return this.executeMagicEdenRequest(
       "execute/list/v5",
       requestBody,
@@ -206,13 +213,9 @@ OR
   /**
    * Accepts an offer (sells an NFT) on the Magic Eden marketplace.
    *
-   * You can either accept a bid that has been made directly on your NFT
-   * or sell into the highest collection bid. To proceed, provide the NFT token
-   * (in the format 'collectionAddress:tokenId') and your Magic Eden API key.
-   *
-   * Example input:
-   * - token: "0x423caa2c3882d17c351bcf0c5ce5efe4fb4b3498:5799"
-   * - apiKey: "<your API key>"
+   * @param walletProvider - The wallet provider for executing the sell.
+   * @param args - Input parameters conforming to the SellSchema.
+   * @returns A success message or error string.
    */
   @CreateAction({
     name: "sell",
@@ -235,12 +238,10 @@ OR
     walletProvider: EvmWalletProvider,
     args: z.infer<typeof SellSchema>,
   ): Promise<string> {
-    console.log("args", args);
     const address = walletProvider.getAddress();
-    const networkId = walletProvider.getNetwork().networkId!;
-    const chainName = toMagicEdenChain(networkId);
+    const chainId = walletProvider.getNetwork().chainId!;
+    const chainName = toMagicEdenChain(Number(chainId));
 
-    // Build the request payload for selling (accepting an offer)
     const requestBody = {
       taker: address,
       relayer: address,
@@ -251,8 +252,6 @@ OR
         },
       ],
     };
-
-    console.log("Request Body:", JSON.stringify(requestBody, null, 2));
 
     return this.executeMagicEdenRequest(
       "execute/sell/v7",
@@ -286,10 +285,8 @@ OR
     chainName: string,
     actionLabel: string,
   ): Promise<string> {
-    console.log("Request Body:", JSON.stringify(requestBody, null, 2));
-
     try {
-      const response = await fetch(`${EVM_BASE_URL}/${chainName}/${endpoint}`, {
+      const response = await fetch(`${ME_EVM_BASE_URL}/${chainName}/${endpoint}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -373,7 +370,6 @@ OR
         txData.data,
         txData.value,
       );
-      console.log(`   -> Transaction sent, hash: ${txHash}`);
       await walletProvider.waitForTransactionReceipt(txHash);
     } catch (txError) {
       throw new Error(`Failed to execute transaction for "${step.action}": ${txError}`);
@@ -396,7 +392,6 @@ OR
     item: any,
   ): Promise<string | void> {
     if (!item.data.sign) {
-      console.log(` - No sign data provided for "${step.action}", skipping.`);
       return;
     }
 
@@ -411,15 +406,12 @@ OR
         message: signData.value,
         primaryType: signData.primaryType,
       });
-      console.log(`   -> Signature: ${JSON.stringify(signature)}`);
     } catch (signError) {
       throw new Error(`Failed to sign data for "${step.action}": ${signError}`);
     }
 
-    // Post the signed data to the Magic Eden API.
     if (item.data.post) {
-      const postEndpoint = `${EVM_BASE_URL}/${chainName}/${item.data.post.endpoint}?signature=${signature}`;
-      console.log(` - Posting to ${postEndpoint}`);
+      const postEndpoint = `${ME_EVM_BASE_URL}/${chainName}/${item.data.post.endpoint}?signature=${signature}`;
 
       try {
         const postResponse = await fetch(postEndpoint, {
@@ -433,7 +425,6 @@ OR
         }
 
         const postResult = await postResponse.json();
-        console.log(`   -> Post result: ${JSON.stringify(postResult)}`);
         return `Successfully placed bid: ${JSON.stringify(postResult)}`;
       } catch (postError) {
         throw new Error(`Failed to post signature for "${step.action}": ${postError}`);
@@ -448,7 +439,10 @@ OR
    * @returns True if supported, false otherwise.
    */
   public supportsNetwork = (network: Network): boolean =>
-    network.networkId === "base-mainnet" || network.networkId === "base-sepolia";
+    Number(network.chainId) === mainnet.id ||
+    Number(network.chainId) === base.id ||
+    Number(network.chainId) === arbitrum.id ||
+    Number(network.chainId) === polygon.id;
 }
 
 /**

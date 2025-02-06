@@ -1,6 +1,7 @@
-import { WETH_ADDRESS_BASE, WETH_ADDRESS_ETHEREUM } from "./constants";
+import { WETH_ADDRESSES } from "./constants";
 import { EvmWalletProvider } from "../../wallet-providers";
 import { Hex } from "viem";
+import { mainnet, base, arbitrum, polygon } from "viem/chains";
 
 /**
  * Retrieves the appropriate WETH contract address based on the chain.
@@ -8,28 +9,40 @@ import { Hex } from "viem";
  * @param chain - The chain identifier.
  * @returns The WETH contract address.
  */
-export const getWethAddress = (chain: string): string => {
-  if (chain === "ethereum" || chain === "ethereum-mainnet") {
-    return WETH_ADDRESS_ETHEREUM;
-  } else if (chain === "base" || chain === "base-mainnet") {
-    return WETH_ADDRESS_BASE;
+export const getWethAddress = (chainId: number): string => {
+  switch (chainId) {
+    case mainnet.id:
+      return WETH_ADDRESSES[mainnet.id];
+    case base.id:
+      return WETH_ADDRESSES[base.id];
+    case arbitrum.id:
+      return WETH_ADDRESSES[arbitrum.id];
+    case polygon.id:
+      return WETH_ADDRESSES[polygon.id];
+    default:
+      throw new Error(`Unsupported chain: ${chainId}`);
   }
-  throw new Error(`Unsupported chain: ${chain}`);
 };
 
 /**
  * Maps the chain identifier to Magic Eden's chain naming convention.
  *
- * @param chain - The chain identifier.
- * @returns The chain name used by Magic Eden.
+ * @param chainId - The chain identifier.
+ * @returns The chain name used by Magic Eden APIs.
  */
-export const toMagicEdenChain = (chain: string): string => {
-  if (chain === "ethereum" || chain === "ethereum-mainnet") {
-    return "ethereum";
-  } else if (chain === "base" || chain === "base-mainnet") {
-    return "base";
+export const toMagicEdenChain = (chainId: number): string => {
+  switch (chainId) {
+    case mainnet.id:
+      return "ethereum";
+    case base.id:
+      return "base";
+    case arbitrum.id:
+      return "arbitrum";
+    case polygon.id:
+      return "polygon";
+    default:
+      throw new Error(`Unsupported chain: ${chainId}`);
   }
-  throw new Error(`Unsupported chain for Magic Eden: ${chain}`);
 };
 
 /**
@@ -49,16 +62,12 @@ export const submitTransaction = async (
   data: Hex,
   value?: string,
 ): Promise<`0x${string}`> => {
-  console.log("Submitting transaction with parameters:", { to, from, data });
-
   const txHash = await walletProvider.sendTransaction({
     to,
     from,
     data,
-    // Only include the value property if defined.
     ...(value ? { value: BigInt(value) } : {}),
   });
 
-  console.log("Transaction hash:", txHash);
   return txHash;
 };
