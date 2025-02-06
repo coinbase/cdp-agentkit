@@ -1,7 +1,6 @@
 import { z } from "zod"
 import type { FlippandoAction } from "../flippando"
 import { getTileImage } from "../../utils/tileImages"
-import { FlippandoAgentkit } from "../../flippando-agentkit"
 
 const GENERATE_IMAGE_FOR_FLIP_PROMPT = `
 This action generates an SVG image for a solved Flippando game board.
@@ -33,26 +32,54 @@ const tileTypeMap: { [key: string]: string } = {
   "7": "hexagramTile",
 }
 
+function normalizeHexColor(color: string): string {
+  return color.toLowerCase()
+}
+
+function extractSvgContent(svgString: string): string {
+  const match = svgString.match(/<svg[^>]*>([\s\S]*)<\/svg>/)
+  return match ? match[1].trim() : ""
+}
+
 export async function generateImageForFlip(args: z.infer<typeof GenerateImageForFlipSchema>): Promise<string> {
   try {
     const { game_tile_type, game_level, game_solved_board } = args.metadata
     const tileType = tileTypeMap[game_tile_type]
     const boardSize = Number.parseInt(game_level)
-    const tileSize = 25 // You can adjust this value to change the size of each tile
-    const svgSize = Math.sqrt(boardSize) * tileSize
+    const boardDimension = Math.sqrt(boardSize)
+
+    if (!Number.isInteger(boardDimension)) {
+      throw new Error(`Invalid board size: ${boardSize}. Must be a perfect square.`)
+    }
+
+    const maxSize = 1000 // Maximum size for better quality
+    const flipSize = maxSize
+    const tileSize = flipSize / boardDimension
     const board = JSON.parse(game_solved_board)
 
-    let svgContent = `<svg width="${svgSize}" height="${svgSize}" viewBox="0 0 ${svgSize} ${svgSize}" xmlns="http://www.w3.org/2000/svg">`
+    let svgContent = `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="${flipSize}" height="${flipSize}" 
+     viewBox="0 0 ${flipSize} ${flipSize}" 
+     xmlns="http://www.w3.org/2000/svg" 
+     xmlns:xlink="http://www.w3.org/1999/xlink" 
+     shape-rendering="geometricPrecision" 
+     text-rendering="geometricPrecision">`
 
     board.forEach((tileIndex: number, index: number) => {
-      const row = Math.floor(index / Math.sqrt(boardSize))
-      const col = index % Math.sqrt(boardSize)
+      const row = Math.floor(index / boardDimension)
+      const col = index % boardDimension
       const tileImage = getTileImage(tileIndex - 1, tileType)
+      let tileContent = extractSvgContent(tileImage)
+
+      // Normalize hex colors to lowercase
+      tileContent = tileContent.replace(/#[0-9A-F]{6}/gi, (match) => normalizeHexColor(match))
 
       svgContent += `
-        <svg x="${col * tileSize}" y="${row * tileSize}" width="${tileSize}" height="${tileSize}">
-          ${tileImage}
-        </svg>
+        <g transform="translate(${col * tileSize}, ${row * tileSize})">
+          <svg width="${tileSize}" height="${tileSize}" viewBox="0 0 25 25">
+            ${tileContent}
+          </svg>
+        </g>
       `
     })
 
