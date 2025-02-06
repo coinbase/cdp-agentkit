@@ -273,19 +273,14 @@ export class CdpWalletProvider extends EvmWalletProvider {
 
     const feeData = await this.#publicClient!.estimateFeesPerGas();
 
-    // Estimate the gas needed for this transaction.
-    const estimatedGas = await this.#publicClient!.estimateGas({
+    const gas = await this.#publicClient!.estimateGas({
+      account: this.#publicClient.account,
       to,
       value,
       data,
       maxFeePerGas: feeData.maxFeePerGas,
       maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
     });
-
-    // Increase the estimated gas by 20% (i.e. multiply by 1.2)
-    const gasLimit = (estimatedGas * 50n) / 10n;
-    const maxFeePerGas = feeData.maxFeePerGas * 10n;
-    const maxPriorityFeePerGas = feeData.maxPriorityFeePerGas * 10n;
 
     const chainId = parseInt(this.#network!.chainId!, 10);
 
@@ -294,9 +289,9 @@ export class CdpWalletProvider extends EvmWalletProvider {
       value,
       data,
       nonce,
-      maxFeePerGas,
-      maxPriorityFeePerGas,
-      // gas: gasLimit,
+      maxFeePerGas: feeData.maxFeePerGas,
+      maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
+      gas,
       chainId,
       type: "eip1559",
     };

@@ -1,10 +1,13 @@
+// TODO: Improve type safety
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { z } from "zod";
 import { ActionProvider } from "../actionProvider";
 import { EvmWalletProvider } from "../../wallet-providers";
 import { CreateAction } from "../actionDecorator";
 import { BidSchema, BuySchema, ListSchema, SellSchema } from "./schemas";
 import { Network } from "../../network";
-import { ME_EVM_BASE_URL, tokenRegex } from "./constants";
+import { ME_EVM_BASE_URL } from "./constants";
 import { submitTransaction, getWethAddress, toMagicEdenChain } from "./utils";
 import { mainnet, base, arbitrum, polygon } from "viem/chains";
 /**
@@ -12,6 +15,9 @@ import { mainnet, base, arbitrum, polygon } from "viem/chains";
  * It supports both bidding and buying actions using shared request/response processing.
  */
 export class MagicEdenActionProvider extends ActionProvider {
+  /**
+   * Constructor for the MagicEdenActionProvider class.
+   */
   constructor() {
     super("magicEden", []);
   }
@@ -264,6 +270,18 @@ This tool places a bid (NFT offer) on an NFT (ERC721) on Magic Eden.
   }
 
   /**
+   * Determines if the provider supports the given network.
+   *
+   * @param network - The network to check.
+   * @returns True if supported, false otherwise.
+   */
+  public supportsNetwork = (network: Network): boolean =>
+    Number(network.chainId) === mainnet.id ||
+    Number(network.chainId) === base.id ||
+    Number(network.chainId) === arbitrum.id ||
+    Number(network.chainId) === polygon.id;
+
+  /**
    * Executes a Magic Eden API request by performing common steps:
    * - Logging and sending the HTTP request.
    * - Handling errors from the API.
@@ -431,21 +449,6 @@ This tool places a bid (NFT offer) on an NFT (ERC721) on Magic Eden.
       }
     }
   }
-
-  /**
-   * Determines if the provider supports the given network.
-   *
-   * @param network - The network to check.
-   * @returns True if supported, false otherwise.
-   */
-  public supportsNetwork = (network: Network): boolean =>
-    Number(network.chainId) === mainnet.id ||
-    Number(network.chainId) === base.id ||
-    Number(network.chainId) === arbitrum.id ||
-    Number(network.chainId) === polygon.id;
 }
 
-/**
- * Factory function to create a new instance of MagicEdenActionProvider.
- */
 export const magicEdenActionProvider = (): MagicEdenActionProvider => new MagicEdenActionProvider();

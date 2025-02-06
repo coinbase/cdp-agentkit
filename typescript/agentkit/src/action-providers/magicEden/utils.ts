@@ -6,7 +6,7 @@ import { mainnet, base, arbitrum, polygon } from "viem/chains";
 /**
  * Retrieves the appropriate WETH contract address based on the chain.
  *
- * @param chain - The chain identifier.
+ * @param chainId - The chain identifier.
  * @returns The WETH contract address.
  */
 export const getWethAddress = (chainId: number): string => {
