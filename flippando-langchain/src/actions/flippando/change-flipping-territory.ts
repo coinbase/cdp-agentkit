@@ -4,7 +4,7 @@ import type { FlippandoAgentkit } from "../../flippando-agentkit"
 
 const CHANGE_FLIPPING_TERRITORY_PROMPT = `
 This action changes the network (chain) and contract addresses for Flippando operations.
-It updates the chainId, rpcUrl, FlippandoGameMaster address, and Flippando address.
+It updates the chainId, rpcUrl, FlippandoGameMaster address, FlippandoBundler address, Flipnd (Erc20 token) address and Flippando address.
 `
 
 export const ChangeFlippingTerritorySchema = z.object({

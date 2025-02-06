@@ -17,6 +17,7 @@ import { PlayGameToCompletionAction } from "./play-game-to-completion"
 import { MakeArtSuggestionsAction } from "./make-art-suggestion"
 import { GenerateImageForArtSuggestionAction } from "./generate-image-for-art-suggestion"
 import { PostArtSuggestionToTwitterAction } from "./post-art-suggestion-to-twitter"
+import { GetAvailableFlippingTerritoriesAction } from "./get-available-networks"
 
 
 export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaAny, z.ZodType<any, any, any>>[] {
@@ -38,6 +39,7 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
         new MakeArtSuggestionsAction(),
         new GenerateImageForArtSuggestionAction(),
         new PostArtSuggestionToTwitterAction(),
+        new GetAvailableFlippingTerritoriesAction(),
     ];
   }
   
@@ -66,6 +68,7 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
     MakeArtSuggestionsAction,
     GenerateImageForArtSuggestionAction,
     PostArtSuggestionToTwitterAction,
+    GetAvailableFlippingTerritoriesAction,
   }
 
 
