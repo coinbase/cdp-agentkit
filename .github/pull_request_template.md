@@ -24,7 +24,7 @@
 
 ### Checklist
 - [ ] Changelog updated
-- [ ] Commits are signed
+- [ ] Commits are signed. See [instructions](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification)
 - [ ] Doc strings
 - [ ] Readme updates
 - [ ] Rebased against master
