@@ -44,6 +44,7 @@ function groupNftsByTileType(nfts: Array<{ tokenId: string; metadata: any }>): {
     }
     grouped[tileType].push(nft)
   }
+  console.log("Grouped NFTs:", JSON.stringify(grouped, null, 2))
   return grouped
 }
 
@@ -69,11 +70,17 @@ function generateArtSuggestions(groupedNfts: { [key: string]: Array<any> }): z.i
       boards: [[]],
     }
 
-    const availableTileTypes = Object.keys(groupedNfts).filter((type) => groupedNfts[type].length > 0)
+    let availableTileTypes = Object.keys(groupedNfts).filter((type) => groupedNfts[type].length > 0)
     let nftsUsed = 0
 
     for (let i = 0; i < size * size; i++) {
-      const tileType = availableTileTypes[i % availableTileTypes.length]
+      if (availableTileTypes.length === 0) {
+        // If we've run out of available types, break the loop
+        break
+      }
+
+      const tileTypeIndex = i % availableTileTypes.length
+      const tileType = availableTileTypes[tileTypeIndex]
       const nft = groupedNfts[tileType][0]
 
       const tileTypeNumber = tileTypeMap[tileType]
@@ -91,16 +98,11 @@ function generateArtSuggestions(groupedNfts: { [key: string]: Array<any> }): z.i
 
       // If we've used all NFTs of this type, remove it from available types
       if (groupedNfts[tileType].length === 0) {
-        availableTileTypes.splice(availableTileTypes.indexOf(tileType), 1)
-      }
-
-      // If we've used all available types, reset the list
-      if (availableTileTypes.length === 0) {
-        availableTileTypes.push(...Object.keys(groupedNfts).filter((type) => groupedNfts[type].length > 0))
+        availableTileTypes = availableTileTypes.filter((type) => type !== tileType)
       }
     }
 
-    // Only add the suggestion if it has valid tileTypes
+    // Only add the suggestion if it has valid tileTypes and we've used all slots
     if (suggestion.tileTypes.length === size * size) {
       suggestions.push(suggestion)
     }
