@@ -6,7 +6,7 @@
 - [ ] Other
 <!-- please specify -->
 
-### Why?
+### Why was this change implemented?
 <!-- please provide a summary of the changes -->
 
 ### Network support
@@ -32,7 +32,8 @@
 ### How has it been tested?
 - [ ] Agent tested
 - [ ] Unit tests
-<!-- please include the agent prompt -->
 <!-- please include the agent LLM -->
+<!-- please include the agent prompt -->
+<!-- please include the agent output -->
 
 ### Notes to reviewers
