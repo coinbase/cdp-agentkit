@@ -10,6 +10,7 @@ import FLIPNDABI from "../../abis/FLIPND.json"
 const GET_TOTAL_FLIPND_SUPPLY_PROMPT = `
 This action retrieves the total locked and unlocked supply of $FLIPND tokens across all chains where the game is deployed.
 It uses the get-available-networks action to retrieve connection and contract data, then calculates the supply for each chain.
+It also includes the price of FLIPND tokens on each chain.
 `
 
 export const GetTotalFlipndSupplySchema = z.object({})
@@ -21,12 +22,26 @@ export const GetTotalFlipndSupplyResponseSchema = z.object({
       humanReadableName: z.string(),
       lockedSupply: z.string(),
       unlockedSupply: z.string(),
+      price: z.number(),
     }),
   ),
   totalLockedSupply: z.string(),
   totalUnlockedSupply: z.string(),
   message: z.string(),
 })
+
+function getPriceForChain(chainId: number): number {
+  switch (chainId) {
+    case 84532: // Sepolia
+      return 0.03
+    case 2737273595554000: // Saga Mainnet
+      return 0.008
+    case 2712667629718000: // Saga Devnet
+      return 0.0003
+    default:
+      return 0 // Default price if chain is not recognized
+  }
+}
 
 export class GetTotalFlipndSupplyAction
   implements FlippandoAction<typeof GetTotalFlipndSupplySchema, typeof GetTotalFlipndSupplyResponseSchema>
@@ -61,11 +76,15 @@ export class GetTotalFlipndSupplyAction
         totalLockedSupply = totalLockedSupply.add(lockedSupply)
         totalUnlockedSupply = totalUnlockedSupply.add(unlockedSupply)
 
+        // Get price for the current chain
+        const price = getPriceForChain(territory.chainId)
+
         chainSupplies.push({
           chainId: territory.chainId,
           humanReadableName: territory.humanReadableName,
-          lockedSupply: lockedSupply.toString(),
-          unlockedSupply: unlockedSupply.toString(),
+          lockedSupply: ethers.utils.formatEther(lockedSupply),
+          unlockedSupply: ethers.utils.formatEther(unlockedSupply),
+          price: price,
         })
       }
 
@@ -75,8 +94,8 @@ export class GetTotalFlipndSupplyAction
 
       return {
         chainSupplies,
-        totalLockedSupply: totalLockedSupply.toString(),
-        totalUnlockedSupply: totalUnlockedSupply.toString(),
+        totalLockedSupply: ethers.utils.formatEther(totalLockedSupply),
+        totalUnlockedSupply: ethers.utils.formatEther(totalUnlockedSupply),
         message,
       }
     } catch (error) {
