@@ -88,7 +88,7 @@ function arraysEqual(a: number[], b: number[]): boolean {
         const sqrtBoardSize = Math.sqrt(boardSize)
         const unsolvedTiles = getUnsolvedTiles(currentSolvedBoard)
   
-        if (unsolvedTiles.length <= sqrtBoardSize && tries > 0) {
+        if (unsolvedTiles.length <= sqrtBoardSize && unsolvedTiles.length > 0) {
           // Pick the first two unsolved tiles
           positions = unsolvedTiles.slice(0, 2)
           console.log("Final stage: picking unsolved tiles in order:", positions)
