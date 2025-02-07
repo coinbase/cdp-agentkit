@@ -38,17 +38,17 @@ def get_balance(wallet: Wallet, asset_id: str, address_to_fund: Optional[str]) -
     """
     # for each address in the wallet, get the balance for the asset
     balances = {}
-    if address_to_fund:
-        balances[address_to_fund] = Cdp.api_clients.external_addresses.get_external_address_balance(
-            network_id=wallet.network_id, address_id=address_to_fund, asset_id=asset_id
-        )
-    else:
-        try:
+    try:
+        if address_to_fund:
+            balances[address_to_fund] = Cdp.api_clients.external_addresses.get_external_address_balance(
+                network_id=wallet.network_id, address_id=address_to_fund, asset_id=asset_id
+            )
+        else:
             for address in wallet.addresses:
                 balance = address.balance(asset_id)
                 balances[address.address_id] = balance
-        except Exception as e:
-            return f"Error getting balance for all addresses in the wallet {e!s}"
+    except Exception as e:
+        return f"Error getting balance for all addresses in the wallet {e!s}"
 
     # Format each balance entry on a new line
     balance_lines = [f"  {addr}: {balance}" for addr, balance in balances.items()]
