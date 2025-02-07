@@ -24,6 +24,7 @@
 
 ### Checklist
 - [ ] Changelog updated
+- [ ] Commits are signed
 - [ ] Doc strings
 - [ ] Readme updates
 - [ ] Rebased against master
@@ -31,7 +32,7 @@
 ### How has it been tested?
 - [ ] Agent tested
 - [ ] Unit tests
-
-### Which LLM used?
+<!-- please include the agent prompt -->
+<!-- please include the agent LLM -->
 
 ### Notes to reviewers
