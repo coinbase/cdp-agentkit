@@ -19,6 +19,7 @@ import { GenerateImageForArtSuggestionAction } from "./generate-image-for-art-su
 import { PostArtSuggestionToTwitterAction } from "./post-art-suggestion-to-twitter"
 import { GetAvailableFlippingTerritoriesAction } from "./get-available-networks"
 import { GetTotalFlipndSupplyAction } from "./get-total-flipnd-supply"
+import { GetArtworksAction } from "./get-artworks"
 
 
 export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaAny, z.ZodType<any, any, any>>[] {
@@ -42,6 +43,7 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
         new PostArtSuggestionToTwitterAction(),
         new GetAvailableFlippingTerritoriesAction(),
         new GetTotalFlipndSupplyAction(),
+        new GetArtworksAction(),
     ];
   }
   
@@ -72,6 +74,7 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
     PostArtSuggestionToTwitterAction,
     GetAvailableFlippingTerritoriesAction,
     GetTotalFlipndSupplyAction,
+    GetArtworksAction,
   }
 
 

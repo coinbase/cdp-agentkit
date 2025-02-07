@@ -5,8 +5,8 @@ import FlippandoABI from "../../abis/Flippando.json"
 import { FlippandoAgentkit } from "../../flippando-agentkit"
 
 const GET_AVAILABLE_NFTS_PROMPT = `
-This action gets the available art NFTs. 
-It returns the an array of NFT tokenIds, which can be used to assmeble a complex NFT.
+This action gets the available basic NFTs (flips), which can be used to create art. 
+It returns the an array of NFT tokenIds, not owned by the called, which can be used to assmeble a complex NFT.
 `
 
 export const GetAvailableNftsSchema = z.object({
