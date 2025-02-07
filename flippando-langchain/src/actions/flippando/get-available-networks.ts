@@ -67,15 +67,6 @@ export class GetAvailableFlippingTerritoriesAction
             flippandoBundlerAddress: "0x231282fdaD2874abbD518Be60802eD45E76dB10A",
             flipndAddress: "0x4d2617DE90452d05f3Bc6229fbC78a1870b41988",
         },
-        {
-        humanReadableName: "Arbitrum Sepolia (Testnet)",
-        chainId: 421614,
-        rpcUrl: "https://sepolia-rollup.arbitrum.io/rpc",
-        flippandoGameMasterAddress: "0x6B1c326677B3be4cc7C6E48Bc39F697effa4B77F",
-        flippandoAddress: "0x47Fec852745a6845380d9548a862A7b7C5291f80",
-        flippandoBundlerAddress: "0x99E3E0381d40464D0F9849D90ae9D0F9c6c3a69B",
-        flipndAddress: "0xe1D39a5D97Ec7935111a13D363FCCd38A4CD0D1a",
-        },
       ]
 
       return {
