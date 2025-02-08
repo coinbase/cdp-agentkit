@@ -12,6 +12,7 @@ AgentKit is a framework for easily enabling AI agents to take actions onchain. I
   - [Create an AgentKit instance with a specified wallet provider](#create-an-agentkit-instance-with-a-specified-wallet-provider)
   - [Create an AgentKit instance with a specified action providers](#create-an-agentkit-instance-with-a-specified-action-providers)
   - [Use the agent's actions with a framework extension. For example, using LangChain + OpenAI](#use-the-agents-actions-with-a-framework-extension-for-example-using-langchain--openai)
+- [Action Providers](#action-providers)
 - [Creating an Action Provider](#creating-an-action-provider)
   - [Adding Actions to your Action Provider](#adding-actions-to-your-action-provider)
   - [Adding Actions to your Action Provider that use a Wallet Provider](#adding-actions-to-your-action-provider-that-use-a-wallet-provider)
@@ -269,6 +270,7 @@ const agent = createReactAgent({
 </tr>
 </table>
 </details>
+
 ## Creating an Action Provider
 
 Action providers are used to define the actions that an agent can take. They are defined as a class that extends the `ActionProvider` abstract class.
