@@ -8,7 +8,7 @@ The primary goal of the Flippando Agent is to support Flippando players by:
 1. Automating gameplay for testing and demonstration purposes
 2. Providing intelligent assistance to players through a chat interface
 3. Facilitating complex interactions with blockchain-based game mechanics (from basic building blocks, like flipping specific tiles, to more complex workflows, like playing a game to completion, minting the resulting NFT and posting it on Twitter)
-4. Serve as a building tool for anyone willing to extend its fucntionality with new actions
+4. Serve as a building foundation for anyone willing to extend its fucntionality with new actions.
 
 ## Key Features
 
@@ -22,16 +22,18 @@ The primary goal of the Flippando Agent is to support Flippando players by:
 
 5. **Art Suggestions**: The agent can generate art suggestions, baseed on the available NFTs for a specific player.
 
-6. **Twitter Integration**: The agent can post basci flips, art creation and art suggestions on Twitter, fostering engagement.
+6. **Arbitrage Suggestions**: Flippando is an "app-first, chain second" project, and it's deployed identically on a variety of chains. The agent can analyze the game ecosystem on all the chain where it's deployed and make arbitrage suggestions, both for the available NFTs, and for the $FLIPND fungible token price.
+
+7. **Twitter Integration**: The agent can post basic flips, art creations and art suggestions on Twitter, fostering engagement.
 
 
 ## Core Components
 
 1. **FlippandoAgentkit**: The central component that manages interactions with Flippando game contracts. It provides a comprehensive set of methods for all game actions and handles blockchain connections.
 
-2. **FlippandoToolkit**: A collection of tools extending the Langchain library's BaseToolkit. This toolkit encapsulates all available Flippando actions, making them easily accessible to the agent.
+2. **FlippandoToolkit**: A collection of tools extending the Langchain library's BaseToolkit. This toolkit encapsulates all available Flippando actions.
 
-3. **Actions**: A set of individual game operations, each designed to perform specific tasks within the Flippando ecosystem. These include creating games, flipping tiles, minting NFTs, and creating art.
+3. **Actions**: A set of individual game operations, each designed to perform specific tasks within the Flippando ecosystem. These include creating games, flipping tiles, minting NFTs, and creating art, but also changing the current network (chain) or making arbitrage suggestions.
 
 ## Technical Stack
 
