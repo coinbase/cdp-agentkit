@@ -1,10 +1,10 @@
 import { z } from "zod";
+
 import { ActionProvider } from "../actionProvider";
 import { CreateAction } from "../actionDecorator";
 import { Network } from "../../network";
 import { DexScreenerSchemas } from "./schemas";
-import { DEXSCREENER_API } from "./constants"; // Import constants
-import { fetchTokenProfiles } from "./constants"; // Import the function for token profiles
+import { fetchLatestBoosts } from "./services";
 
 /**
  * DexScreenerActionProvider is an action provider for fetching DEX market data.
@@ -16,80 +16,30 @@ export class DexScreenerActionProvider extends ActionProvider<any> {
   }
 
   /**
-   * Fetches data for a given token pair.
+   * XXX
    *
    * @param _ - The wallet provider (not used for this action).
    * @param args - The input arguments for the action.
    * @returns A message containing pair data.
    */
   @CreateAction({
-    name: "get_pair_data",
-    description: "Fetches market data for a given token pair.",
-    schema: DexScreenerSchemas.GetPairSchema,
+    name: "get_boosted_tokens_dexscreener",
+    description: "This tool allows getting the latest boosted tokens from dexscreener.",
+    schema: DexScreenerSchemas.GetLatestBoostedTokens,
   })
-  async getPairData(
+  async getBoostedTokens(
     _: any,
-    args: z.infer<typeof DexScreenerSchemas.GetPairSchema>,
+    args: z.infer<typeof DexScreenerSchemas.GetLatestBoostedTokens>,
   ): Promise<string> {
     try {
-      const response = await fetch(`${DEXSCREENER_API}/pairs/${args.chainId}/${args.pairAddress}`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      return JSON.stringify(data, null, 2);
-    } catch (error) {
-      return this.handleError(error, "pair data");
-    }
-  }
+      const data = await fetchLatestBoosts();
 
-  /**
-   * Fetches trending pairs on DEXs.
-   *
-   * @param _ - The wallet provider (not used for this action).
-   * @param args - The input arguments for the action.
-   * @returns A message containing trending pairs data.
-   */
-  @CreateAction({
-    name: "get_trending_pairs",
-    description: "Fetches the trending token pairs from DexScreener.",
-    schema: DexScreenerSchemas.GetTrendingSchema,
-  })
-  async getTrendingPairs(
-    _: any,
-    args: z.infer<typeof DexScreenerSchemas.GetTrendingSchema>,
-  ): Promise<string> {
-    try {
-      const response = await fetch(`${DEXSCREENER_API}/trending`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      return JSON.stringify(data, null, 2);
+      const allTokenAddresses = data.map(
+        tokenProfile => `${tokenProfile.tokenAddress} [network: ${tokenProfile.chainId}]`,
+      );
+      return allTokenAddresses.join(", ");
     } catch (error) {
-      return this.handleError(error, "trending pairs");
-    }
-  }
-
-  /**
-   * Fetches the latest token profiles.
-   *
-   * @returns The token profile data or an error message.
-   */
-  @CreateAction({
-    name: "get_token_profiles",
-    description: "Fetches the latest token profiles from DexScreener.",
-    schema: DexScreenerSchemas.GetTrendingSchema, // You can change this schema as per your requirement
-  })
-  async getTokenProfiles(): Promise<string> {
-    try {
-      const data = await fetchTokenProfiles(); // Use the existing fetch function
-      if (!data) {
-        throw new Error("Failed to fetch token profiles.");
-      }
-      return JSON.stringify(data, null, 2);
-    } catch (error) {
-      return this.handleError(error, "token profiles");
+      return this.handleError(error, "boosted token dexscreener");
     }
   }
 

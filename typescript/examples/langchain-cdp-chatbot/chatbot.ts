@@ -195,7 +195,6 @@ async function runAutonomousMode(agent: any, config: any, interval = 10) {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function runChatMode(agent: any, config: any) {
   console.log("Starting chat mode... Type 'exit' to end.");
-  console.log("Hello cute gggg");
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
