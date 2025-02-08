@@ -1,5 +1,6 @@
 import { WalletProvider, CdpWalletProvider } from "./wallet-providers";
 import { Action, ActionProvider, walletActionProvider } from "./action-providers";
+import { dexScreenerActionProvider } from "./action-providers/dexscreener/dexScreenerActionProvider";
 
 /**
  * Configuration options for AgentKit
