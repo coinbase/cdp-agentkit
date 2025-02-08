@@ -109,6 +109,166 @@ const agent = createReactAgent({
 });
 ```
 
+## Action Providers
+<details>
+<summary><strong>Basename</strong></summary>
+<table width="100%">
+<tr>
+    <td width="200"><code>register_basename</code></td>
+    <td width="768">Registers a custom .base.eth or .basetest.eth domain name for the wallet address.</td>
+</tr>
+</table>
+</details>
+<details>
+<summary><strong>CDP Wallet</strong></summary>
+<table width="100%">
+<tr>
+    <td width="200"><code>deploy_contract</code></td>
+    <td width="768">Deploys a custom smart contract using specified Solidity version and constructor arguments.</td>
+</tr>
+<tr>
+    <td width="200"><code>deploy_nft</code></td>
+    <td width="768">Deploys a standard ERC-721 NFT contract with configurable name, symbol, and metadata URI.</td>
+</tr>
+<tr>
+    <td width="200"><code>deploy_token</code></td>
+    <td width="768">Deploys a standard ERC-20 token contract with configurable name, symbol, and initial supply.</td>
+</tr>
+<tr>
+    <td width="200"><code>trade</code></td>
+    <td width="768">Executes a token swap between two assets at current market rates on mainnet networks.</td>
+</tr>
+</table>
+</details>
+<details>
+<summary><strong>ERC20</strong></summary>
+<table width="100%">
+<tr>
+    <td width="200"><code>get_balance</code></td>
+    <td width="768">Retrieves the token balance for a specified address and ERC-20 contract.</td>
+</tr>
+<tr>
+    <td width="200"><code>transfer</code></td>
+    <td width="768">Transfers a specified amount of ERC-20 tokens to a destination address.</td>
+</tr>
+</table>
+</details>
+<details>
+<summary><strong>ERC721</strong></summary>
+<table width="100%">
+<tr>
+    <td width="200"><code>get_balance</code></td>
+    <td width="768">Retrieves the NFT balance for a specified address and ERC-721 contract.</td>
+</tr>
+<tr>
+    <td width="200"><code>mint</code></td>
+    <td width="768">Creates a new NFT token and assigns it to a specified destination address.</td>
+</tr>
+<tr>
+    <td width="200"><code>transfer</code></td>
+    <td width="768">Transfers ownership of a specific NFT token to a destination address.</td>
+</tr>
+</table>
+</details>
+<details>
+<summary><strong>Farcaster</strong></summary>
+<table width="100%">
+<tr>
+    <td width="200"><code>account_details</code></td>
+    <td width="768">Fetches profile information and metadata for the authenticated Farcaster account.</td>
+</tr>
+<tr>
+    <td width="200"><code>post_cast</code></td>
+    <td width="768">Creates a new cast (message) on Farcaster with up to 280 characters.</td>
+</tr>
+</table>
+</details>
+<details>
+<summary><strong>Morpho</strong></summary>
+<table width="100%">
+<tr>
+    <td width="200"><code>deposit</code></td>
+    <td width="768">Deposits a specified amount of assets into a designated Morpho Vault.</td>
+</tr>
+<tr>
+    <td width="200"><code>withdraw</code></td>
+    <td width="768">Withdraws a specified amount of assets from a designated Morpho Vault.</td>
+</tr>
+</table>
+</details>
+<details>
+<summary><strong>Pyth</strong></summary>
+<table width="100%">
+<tr>
+    <td width="200"><code>fetch_price</code></td>
+    <td width="768">Retrieves current price data from a specified Pyth price feed.</td>
+</tr>
+<tr>
+    <td width="200"><code>fetch_price_feed_id</code></td>
+    <td width="768">Retrieves the unique price feed identifier for a given token symbol.</td>
+</tr>
+</table>
+</details>
+<details>
+<summary><strong>Twitter</strong></summary>
+<table width="100%">
+<tr>
+    <td width="200"><code>account_details</code></td>
+    <td width="768">Fetches profile information and metadata for the authenticated Twitter account.</td>
+</tr>
+<tr>
+    <td width="200"><code>account_mentions</code></td>
+    <td width="768">Retrieves recent mentions and interactions for the authenticated account.</td>
+</tr>
+<tr>
+    <td width="200"><code>post_tweet</code></td>
+    <td width="768">Creates a new tweet on the authenticated Twitter account.</td>
+</tr>
+<tr>
+    <td width="200"><code>post_tweet_reply</code></td>
+    <td width="768">Creates a reply to an existing tweet using the tweet's unique identifier.</td>
+</tr>
+</table>
+</details>
+<details>
+<summary><strong>Wallet</strong></summary>
+<table width="100%">
+<tr>
+    <td width="200"><code>get_wallet_details</code></td>
+    <td width="768">Retrieves wallet address, network info, balances, and provider details.</td>
+</tr>
+<tr>
+    <td width="200"><code>native_transfer</code></td>
+    <td width="768">Transfers native blockchain tokens (e.g., ETH) to a destination address.</td>
+</tr>
+</table>
+</details>
+<details>
+<summary><strong>WETH</strong></summary>
+<table width="100%">
+<tr>
+    <td width="200"><code>wrap_eth</code></td>
+    <td width="768">Converts native ETH to Wrapped ETH (WETH) on Base Sepolia or Base Mainnet.</td>
+</tr>
+</table>
+</details>
+<details>
+<summary><strong>WOW</strong></summary>
+<table width="100%">
+<tr>
+    <td width="200"><code>buy_token</code></td>
+    <td width="768">Purchases WOW tokens from a contract using ETH based on bonding curve pricing.</td>
+</tr>
+<tr>
+    <td width="200"><code>create_token</code></td>
+    <td width="768">Creates a new WOW memecoin with bonding curve functionality via Zora factory.</td>
+</tr>
+<tr>
+    <td width="200"><code>sell_token</code></td>
+    <td width="768">Sells WOW tokens back to the contract for ETH based on bonding curve pricing.</td>
+</tr>
+</table>
+</details>
 ## Creating an Action Provider
 
 Action providers are used to define the actions that an agent can take. They are defined as a class that extends the `ActionProvider` abstract class.
