@@ -1,6 +1,7 @@
 from cdp_agentkit_core.actions.cdp_action import CdpAction  # noqa: I001
 
 from cdp_agentkit_core.actions.address_reputation import AddressReputationAction
+from cdp_agentkit_core.actions.dalle_nft import DalleNftAction
 from cdp_agentkit_core.actions.deploy_contract import DeployContractAction
 from cdp_agentkit_core.actions.deploy_nft import DeployNftAction
 from cdp_agentkit_core.actions.deploy_token import DeployTokenAction
@@ -42,6 +43,7 @@ __all__ = [
     "CDP_ACTIONS",
     "CdpAction",
     "AddressReputationAction",
+    "DalleNftAction",
     "DeployNftAction",
     "DeployTokenAction",
     "DeployContractAction",
