@@ -1,21 +1,17 @@
 """Util that calls CDP."""
 
+import inspect
 import json
 from collections.abc import Callable
-from typing import Any, Dict, List, Optional
-import inspect
+from typing import Any
 
 from langchain.utils import get_from_dict_or_env
 from pydantic import BaseModel, model_validator
 
-from cdp import Cdp, Wallet, WalletData
 from cdp import MnemonicSeedPhrase, Wallet
-from cdp_agentkit_core.actions import CDP_ACTIONS
-from cdp_crewai.constants import CDP_CREWAI_DEFAULT_SOURCE
 from cdp_crewai import __version__
+from cdp_crewai.constants import CDP_CREWAI_DEFAULT_SOURCE
 
-CDP_CREWAI_DEFAULT_SOURCE = "cdp-crewai"
-__version__ = "0.0.1"
 
 class CdpAgentkitWrapper(BaseModel):
     """Wrapper for CDP AgentKit to be used with CrewAI tools."""
@@ -24,7 +20,7 @@ class CdpAgentkitWrapper(BaseModel):
     cdp_api_key_name: str | None = None
     cdp_api_key_private_key: str | None = None
     network_id: str | None = None
-    
+
     @model_validator(mode="before")
     @classmethod
     def validate_environment(cls, values: dict) -> Any:
@@ -82,6 +78,7 @@ class CdpAgentkitWrapper(BaseModel):
 
         Returns:
             str: The json string of wallet data including the wallet_id and seed.
+
         """
         wallet_data_dict = self.wallet.export_data().to_dict()
         wallet_data_dict["default_address_id"] = self.wallet.default_address.address_id
@@ -99,4 +96,4 @@ class CdpAgentkitWrapper(BaseModel):
 
     # # Add all CDP actions dynamically
     # for action in CDP_ACTIONS:
-    #     locals()[action.name] = action.function 
+    #     locals()[action.name] = action.function

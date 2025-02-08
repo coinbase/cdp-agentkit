@@ -1,10 +1,13 @@
 """CDP Toolkit."""
 
-from typing import List
+
 from crewai.tools import BaseTool
+
 from cdp_agentkit_core.actions import CDP_ACTIONS
-from ..utils import CdpAgentkitWrapper
+
 from ..tools import CdpTool
+from ..utils import CdpAgentkitWrapper
+
 
 class CdpToolkit:
     """Coinbase Developer Platform (CDP) Toolkit.
@@ -17,9 +20,9 @@ class CdpToolkit:
         and smart contract invocations on CDP supported blockchains.
     """
 
-    tools: List[BaseTool] = []
+    tools: list[BaseTool] = []  # noqa: RUF012
 
-    def __init__(self, tools: List[BaseTool] = None):
+    def __init__(self, tools: list[BaseTool]| None = None):
         """Initialize the toolkit with tools."""
         self.tools = tools or []
 
@@ -32,6 +35,7 @@ class CdpToolkit:
 
         Returns:
             CdpToolkit. The CDP toolkit.
+
         """
         actions = CDP_ACTIONS
 
@@ -41,13 +45,13 @@ class CdpToolkit:
                 description=action.description,
                 cdp_agentkit_wrapper=cdp_agentkit_wrapper,
                 args_schema=action.args_schema,
-                func=action.func
+                func=action.func,
             )
             for action in actions
         ]
 
         return cls(tools=tools)
 
-    def get_tools(self) -> List[BaseTool]:
+    def get_tools(self) -> list[BaseTool]:
         """Get the tools in the toolkit."""
         return self.tools
