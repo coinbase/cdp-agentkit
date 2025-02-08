@@ -40,6 +40,9 @@
   ],
   "dependencies": {
     "@coinbase/coinbase-sdk": "^0.17.0",
+    "@safe-global/api-kit": "^2.5.8",
+    "@safe-global/protocol-kit": "^5.2.1",
+    "@safe-global/safe-core-sdk-types": "^5.1.0",
     "md5": "^2.3.0",
     "reflect-metadata": "^0.2.2",
     "twitter-api-v2": "^1.18.2",
