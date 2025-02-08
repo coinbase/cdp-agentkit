@@ -2,13 +2,15 @@
 
 ## Unreleased
 
-## [0.1.2] - 2025-02-06
+## [0.1.3] - 2025-02-13
 
 ### Added
 
 - Added `superfluidPoolActionProvider` to start, stop, and update superfluid pools
 - Added `superfluidStreamActionProvider` to start, stop, and update superfluid streams
 - Added `superfluidQueryActionProvider` to use The Graph to find active streams
+
+## [0.1.2] - 2025-02-07
 
 ### Added
 
