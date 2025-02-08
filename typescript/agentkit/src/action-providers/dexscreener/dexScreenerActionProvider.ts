@@ -4,7 +4,7 @@ import { ActionProvider } from "../actionProvider";
 import { CreateAction } from "../actionDecorator";
 import { Network } from "../../network";
 import { DexScreenerSchemas } from "./schemas";
-import { fetchLatestBoosts } from "./services";
+import { fetchLatestBoosts, fetchLatestTokenProfiles } from "./services";
 
 /**
  * DexScreenerActionProvider is an action provider for fetching DEX market data.
@@ -40,6 +40,28 @@ export class DexScreenerActionProvider extends ActionProvider<any> {
       return allTokenAddresses.join(", ");
     } catch (error) {
       return this.handleError(error, "boosted token dexscreener");
+    }
+  }
+
+  @CreateAction({
+    name: "get_latest_token_profiles_dexscreener",
+    description: "This tool allows getting the latest token profiles from DexScreener.",
+    schema: DexScreenerSchemas.GetLatestTokenProfiles,
+  })
+  async getLatestTokenProfiles(
+    _: any,
+    args: z.infer<typeof DexScreenerSchemas.GetLatestTokenProfiles>,
+  ): Promise<string> {
+    try {
+      const data = await fetchLatestTokenProfiles();
+
+      const tokenProfiles = data.map(
+        token =>
+          `${token.name} (${token.symbol}) - ${token.tokenAddress} [network: ${token.chainId}]`,
+      );
+      return tokenProfiles.join(", ");
+    } catch (error) {
+      return this.handleError(error, "latest token profiles from dexscreener");
     }
   }
 

@@ -1,5 +1,6 @@
 import { DEXSCREENER_BASE_URL } from "./constants";
 import { DexScreenerBoostedTokensResponse } from "./interfaces";
+import { DexScreenerTokenProfileResponse } from "./interfaces";
 
 // https://docs.dexscreener.com/api/reference#token-boosts-latest-v1
 export const fetchLatestBoosts = async () => {
@@ -15,6 +16,22 @@ export const fetchLatestBoosts = async () => {
   }
 
   const data = (await response.json()) as DexScreenerBoostedTokensResponse[];
+  return data;
+};
+
+export const fetchLatestTokenProfiles = async () => {
+  const response = await fetch(`${DEXSCREENER_BASE_URL}/token-profiles/latest/v1`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+
+  const data = (await response.json()) as DexScreenerTokenProfileResponse[];
   return data;
 };
 
