@@ -2,7 +2,7 @@ import { z } from "zod";
 import { ActionProvider } from "../actionProvider";
 import { Network } from "../../network";
 import { CreateAction } from "../actionDecorator";
-import { GetBalanceSchema, TransferSchema } from "./schemas";
+import { GetBalanceSchema, TransferSchema, ApproveSchema, AllowanceSchema } from "./schemas";
 import { abi } from "./constants";
 import { encodeFunctionData, Hex } from "viem";
 import { EvmWalletProvider } from "../../wallet-providers";
@@ -94,6 +94,80 @@ Important notes:
       }.\nTransaction hash for the transfer: ${hash}`;
     } catch (error) {
       return `Error transferring the asset: ${error}`;
+    }
+  }
+  /**
+   * Approves a spender to transfer a specified amount of tokens.
+   *
+   * @param walletProvider - The wallet provider to approve from.
+   * @param args - The input arguments for the action.
+   * @returns A message containing the approval details.
+   */
+  @CreateAction({
+    name: "approve",
+    description: `
+  This tool will approve a spender to transfer ERC20 tokens from the wallet.
+
+  It takes the following inputs:
+  - amount: The amount to approve
+  - contractAddress: The contract address of the token
+  - spender: The address to approve (can be a contract or wallet address)
+  
+  Important notes:
+  - This will overwrite any existing allowance
+  - Ensure you trust the spender address
+  `,
+    schema: ApproveSchema,
+  })
+  async approve(
+    walletProvider: EvmWalletProvider,
+    args: z.infer<typeof ApproveSchema>,
+  ): Promise<string> {
+    try {
+      const hash = await walletProvider.sendTransaction({
+        to: args.contractAddress as Hex,
+        data: encodeFunctionData({
+          abi,
+          functionName: "approve",
+          args: [args.spender as Hex, BigInt(args.amount)],
+        }),
+      });
+
+      await walletProvider.waitForTransactionReceipt(hash);
+
+      return `Approved ${args.amount} of ${args.contractAddress} for spender ${args.spender}.\nTransaction hash: ${hash}`;
+    } catch (error) {
+      return `Error approving tokens: ${error}`;
+    }
+  }
+  /**
+   * Checks the allowance for a spender of an ERC20 token.
+   *
+   * @param walletProvider - The wallet provider to check the allowance from.
+   * @param args - The input arguments containing contractAddress and spender.
+   * @returns A message containing the allowance amount for the spender.
+   * @throws Will return an error message if the contract call fails.
+   */
+  @CreateAction({
+    name: "get_allowance",
+    description: "Gets the amount of tokens the spender is allowed to spend on behalf of the owner",
+    schema: AllowanceSchema,
+  })
+  async getAllowance(
+    walletProvider: EvmWalletProvider,
+    args: z.infer<typeof AllowanceSchema>,
+  ): Promise<string> {
+    try {
+      const allowance = await walletProvider.readContract({
+        address: args.contractAddress as Hex,
+        abi,
+        functionName: "allowance",
+        args: [walletProvider.getAddress(), args.spender as Hex],
+      });
+
+      return `Allowance for ${args.spender} is ${allowance} tokens`;
+    } catch (error) {
+      return `Error checking allowance: ${error}`;
     }
   }
 

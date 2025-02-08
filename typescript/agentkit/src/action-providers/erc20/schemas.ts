@@ -23,3 +23,18 @@ export const GetBalanceSchema = z
   })
   .strip()
   .describe("Instructions for getting wallet balance");
+export const ApproveSchema = z
+  .object({
+    amount: z.custom<bigint>().describe("The amount to approve"),
+    contractAddress: z.string().describe("The contract address of the token"),
+    spender: z.string().describe("The address to approve spending for"),
+  })
+  .strip()
+  .describe("Instructions for approving token spending");
+export const AllowanceSchema = z
+  .object({
+    contractAddress: z.string().describe("The contract address of the token"),
+    spender: z.string().describe("The address to check allowance for"),
+  })
+  .strip()
+  .describe("Instructions for checking token allowance");
