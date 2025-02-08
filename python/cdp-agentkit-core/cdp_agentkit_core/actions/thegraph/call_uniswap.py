@@ -8,9 +8,11 @@ from requests import post
 
 from cdp_agentkit_core.actions import CdpAction
 
-DESCRIPTION_PROMPT = "Call the subgraph API using provided GraphQL query and variables."
-
-
+DESCRIPTION_PROMPT = (
+    "Call the Uniswap v3 subgraph API using a GraphQL query along with optional variables. "
+    "This function facilitates fetching data such as pools, transactions, and liquidity metrics "
+    "directly from the Uniswap protocol via The Graph API."
+)
 class GraphqlReq(BaseModel):
     query: str = Field(..., description="The GraphQL query string for uniswap v3. Example: 'query { ... }'")
     variables: Optional[Dict[str, object]] = Field(
