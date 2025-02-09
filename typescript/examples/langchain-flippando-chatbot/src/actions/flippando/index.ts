@@ -13,6 +13,7 @@ import { ChangeFlippingTerritoryAction } from "./change-flipping-territory"
 import { MakeArtAction } from "./make-art"
 import { PostFlipToTwitterAction } from "./post-flip-to-twitter"
 import { PostArtToTwitterAction } from "./post-art-to-twitter"
+import { PostFlipToFarcasterAction } from "./post-flip-to-farcaster"
 import { PlayGameToCompletionAction } from "./play-game-to-completion"
 import { MakeArtSuggestionsAction } from "./make-art-suggestion"
 import { GenerateImageForArtSuggestionAction } from "./generate-image-for-art-suggestion"
@@ -44,6 +45,7 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
         new GetAvailableFlippingTerritoriesAction(),
         new GetTotalFlipndSupplyAction(),
         new GetArtworksAction(),
+        new PostFlipToFarcasterAction(),
     ];
   }
   
@@ -75,6 +77,7 @@ export function getAllFlippandoActions(): FlippandoAction<FlippandoActionSchemaA
     GetAvailableFlippingTerritoriesAction,
     GetTotalFlipndSupplyAction,
     GetArtworksAction,
+    PostFlipToFarcasterAction,
   }
 
 

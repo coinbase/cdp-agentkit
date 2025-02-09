@@ -16,6 +16,8 @@ interface FlippandoAgentkitOptions {
   twitterApiSecret?: string
   twitterAccessToken?: string
   twitterAccessSecret?: string
+  neynarApiKey?: string
+  signerUUID?: string
 }
 
 export const FlippandoAgentkitOptions = z
@@ -48,6 +50,8 @@ export const FlippandoAgentkitOptions = z
       .string()
       .min(1, "The Twitter access secret is required")
       .describe("The Twitter access secret"),
+    neynarApiKey: z.string().min(1, "The Neynar API key is required").describe("The Neynar API key for posting to Farcaster"),
+    signerUUID: z.string().min(1, "The signer UUID is required").describe("The signer UUID fpor psting to Farcaster"),
   })
   .strip()
   .describe("Options for initializing FlippandoAgentkit")
@@ -78,6 +82,8 @@ const EnvSchema = z.object({
   TWITTER_API_SECRET: z.string().min(1, "TWITTER_API_SECRET is required").describe("The Twitter API secret"),
   TWITTER_ACCESS_TOKEN: z.string().min(1, "TWITTER_ACCESS_TOKEN is required").describe("The Twitter access token"),
   TWITTER_ACCESS_SECRET: z.string().min(1, "TWITTER_ACCESS_SECRET is required").describe("The Twitter access secret"),
+  NEYNAR_API_KEY: z.string().min(1, "NEYNAR_API_KEY is required").describe("The Neynar Api key"),
+  SIGNER_UUID: z.string().min(1, "SIGNER_UUID is required").describe("The signer UUID"),
 })
 
 export class FlippandoAgentkit {
@@ -103,6 +109,8 @@ export class FlippandoAgentkit {
         twitterApiSecret: options?.twitterApiSecret || env.TWITTER_API_SECRET,
         twitterAccessToken: options?.twitterAccessToken || env.TWITTER_ACCESS_TOKEN,
         twitterAccessSecret: options?.twitterAccessSecret || env.TWITTER_ACCESS_SECRET,
+        neynarApiKey: options?.neynarApiKey || env.NEYNAR_API_KEY,
+        signerUUID:  options?.signerUUID || env.SIGNER_UUID,
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -207,6 +215,14 @@ export class FlippandoAgentkit {
 
   getTwitterAccessSecret(): string {
     return this.config.twitterAccessSecret!
+  }
+
+  getNeynarApiKey(): string {
+    return this.config.neynarApiKey!
+  }
+
+  getSignerUUID(): string {
+    return this.config.signerUUID!
   }
 }
 

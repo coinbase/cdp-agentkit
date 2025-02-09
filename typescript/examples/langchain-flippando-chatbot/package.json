@@ -38,6 +38,7 @@
     "dependencies": {
         "@coinbase/cdp-agentkit-core": "^0.0.14",
         "@langchain/core": "^0.3.19",
+        "@neynar/nodejs-sdk": "^2.10.0",
         "ethers": "^5.7.2",
         "sharp": "^0.33.5",
         "svgexport": "^0.4.2",
