@@ -83,15 +83,35 @@ async function initialize() {
  * @param config - Agent configuration
  * @param interval - Time interval between actions in seconds
  */
-async function runAutonomousMode(agent: any, config: any, interval = 60) {
+async function runAutonomousMode(agent: any, config: any, interval = 3600) {
   console.log("Starting autonomous mode...")
 
   while (true) {
     try {
       const thought =
-        "Be creative and do something interesting in the Flippando game. " +
-        "Choose an action or set of actions and execute it that highlights your abilities. " +
-        "This could be creating a new game, initializing an existing game, or flipping tiles in an ongoing game."
+        "You can choose only one of these 7 actions. " +
+        "1. Start a new game with board size 16, game type 1 and game tile type 4. After receving confirmation, you will initialize the game." +
+        "After initializing the game, play it to completion, wait for game to be solved and then mint its nft. " +
+        "After minting its NFT post it on Twitter along with a witty message. After you get confirmation thaat is was posted, " +
+        "Take the imageUrl resulted, and used to post it on Farcaster, along with the same witty message." +
+        "2. Make an art suggestion for user 0xD37319CbBd1e13b26326622763d312C56B3936ee, and post it on Twitter, along with a description of what this is. " +
+        "3. See if there is any arbitrage for a builder, and then post that on Twitter, using post flip to Twitter, but without a message." +
+        "4. Start a new game with board size 16, game type 1 and game tile type 3. After receving confirmation, you will initialize the game." +
+        "After initializing the game, play it to completion, wait for game to be solved and then mint its nft. " +
+        "After minting its NFT post it on Twitter along with a witty message. After you get confirmation thaat is was posted, " +
+        "Take the imageUrl resulted, and used to post it on Farcaster, along with the same witty message." +
+        "5. Start a new game with board size 16, game type 1 and game tile type 6. After receving confirmation, you will initialize the game." +
+        "After initializing the game, play it to completion, wait for game to be solved and then mint its nft. " +
+        "After minting its NFT post it on Twitter along with a witty message. After you get confirmation thaat is was posted, " +
+        "Take the imageUrl resulted, and used to post it on Farcaster, along with the same witty message." +
+        "6. Start a new game with board size 16, game type 1 and game tile type 2. After receving confirmation, you will initialize the game." +
+        "After initializing the game, play it to completion, wait for game to be solved and then mint its nft. " +
+        "After minting its NFT post it on Twitter along with a witty message. After you get confirmation thaat is was posted, " +
+        "Take the imageUrl resulted, and used to post it on Farcaster, along with the same witty message." +
+        "7. Start a new game with board size 16, game type 1 and game tile type 5. After receving confirmation, you will initialize the game." +
+        "After initializing the game, play it to completion, wait for game to be solved and then mint its nft. " +
+        "After minting its NFT post it on Twitter along with a witty message. After you get confirmation thaat is was posted, " +
+        "Take the imageUrl resulted, and used to post it on Farcaster, along with the same witty message." 
 
       const stream = await agent.stream({ messages: [new HumanMessage(thought)] }, config)
 
