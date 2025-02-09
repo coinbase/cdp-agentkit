@@ -1,65 +1,85 @@
-# NextJs AgentKit LangChain Extension Examples - Chatbot Typescript
+# NextJS AgentKit LangChain Chatbot Example
 
-This example demonstrates an agent setup as a Nextjs react style chatbot with access to the full set of CDP AgentKit actions.
+A production-ready example demonstrating how to build an AI agent chatbot using NextJS, LangChain, and CDP AgentKit. The agent can perform complex onchain interactions through natural language conversations.
 
-## Ask the chatbot to engage in the Web3 ecosystem!
+## 🚀 Features
 
-- "Transfer a portion of your ETH to a random address"
-- "What is the price of BTC?"
-- "Deploy an NFT that will go super viral!"
-- "Deploy an ERC-20 token with total supply 1 billion"
-- "Teach you about Web3"
-- "Help you make money by implementing dollar-cost-averaging"
+- Full integration with CDP AgentKit actions and LangChain
+- Built with NextJS for optimal performance and SEO
+- Real-time chat interface with streaming responses
+- Support for complex onchain operations
+- Automatic wallet management and network detection
 
-## Prerequisites
+## 💬 Example Interactions
 
-### Checking Node Version
+Ask the chatbot to:
+- Transfer ETH between wallets
+- Check real-time crypto prices
+- Deploy and manage NFT collections
+- Create ERC-20 tokens
+- Learn about Web3 concepts
+- Set up DCA (Dollar-Cost Averaging) strategies
 
-Before using the example, ensure that you have the correct version of Node.js installed. The example requires Node.js 18 or higher. You can check your Node version by running:
+## 🔧 Prerequisites
 
+- Node.js 18 or higher
+- [CDP API Key](https://portal.cdp.coinbase.com/access/api) - For onchain interactions
+- [OpenAI API Key](https://platform.openai.com/docs/quickstart) - For AI capabilities
+
+### Version Check
 ```bash
-node --version
+node --version  # Must be v18.0.0 or higher
 ```
-
-If you don't have the correct version, you can install it using [nvm](https://github.com/nvm-sh/nvm):
+Need to upgrade? Use nvm:
 
 ```bash
 nvm install node
 ```
 
-This will automatically install and use the latest version of Node.
+🛠 Setup
 
-### API Keys
-
-You'll need the following API keys:
-- [CDP API Key](https://portal.cdp.coinbase.com/access/api)
-- [OpenAI API Key](https://platform.openai.com/docs/quickstart#create-and-export-an-api-key)
-
-Once you have them, rename the `.env-local` file to `.env` and make sure you set the API keys to their corresponding environment variables:
-
-- "CDP_API_KEY_NAME"
-- "CDP_API_KEY_PRIVATE_KEY"
-- "OPENAI_API_KEY"
-
-## Running the example
-
-From the root directory, run:
-
+1. Clone and install dependencies:
 ```bash
+git clone https://github.com/coinbase/agentkit.git
+cd agentkit
 npm install
 npm run build
 ```
 
-This will install the dependencies and build the packages locally. The chatbot example uses the local `@coinbase/agentkit-langchain` and `@coinbase/agentkit` packages. If you make changes to the packages, you can run `npm run build` from root again to rebuild the packages, and your changes will be reflected in the chatbot example.
+2. Configure environment:
+- Copy .env.local to .env
+- Set required API keys:
 
-Now from the `typescript/examples/langchain-nextjs-chatbot` directory, run:
 
 ```bash
+CDP_API_KEY_NAME=your_key_name
+CDP_API_KEY_PRIVATE_KEY=your_private_key
+OPENAI_API_KEY=your_openai_key
+```
+
+3. Start the development server:
+```bash
+cd typescript/examples/langchain-nextjs-chatbot
 npm run dev
 ```
 
-Select "1. chat mode" and start telling your Agent to do things onchain!
+# 📱 Usage
+1. Open your browser to http://localhost:3000
+2. Start chatting with your AI agent
+3. The agent will automatically:
+   - Initialize a CDP wallet
+   - Detect the current network
+   - Handle gas fees when needed
+   - Execute onchain transactions securely
 
-## License
 
+# 🔄 Development
+Making changes? Rebuild the packages from root:
+
+```bash
+npm run build
+```
+Your changes will automatically reflect in the chatbot. 🤝
+
+📄 License
 Apache-2.0
