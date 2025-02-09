@@ -2,10 +2,11 @@ import { z } from "zod";
 import { ActionProvider } from "../actionProvider";
 import { CreateAction } from "../actionDecorator";
 import { ListNftSchema } from "./schemas";
-import { OpenSeaSDK, Chain } from "opensea-js";
-import { Network } from "../../network";
-import { Wallet, JsonRpcProvider } from "ethers";
-
+import { OpenSeaSDK } from "opensea-js";
+import { Network, NETWORK_ID_TO_CHAIN_ID } from "../../network";
+import { Wallet, ethers } from "ethers";
+import { EvmWalletProvider } from "../../wallet-providers";
+import { chainIdToOpenseaChain, supportedChains } from "./utils";
 /**
  * Configuration options for the OpenseaActionProvider.
  */
@@ -27,22 +28,13 @@ export interface OpenseaActionProviderConfig {
 }
 
 /**
- * NetworkConfig is the configuration for network-specific settings.
- */
-interface NetworkConfig {
-  rpcUrl: string;
-  openseaUrl: string;
-  chain: Chain;
-}
-
-/**
  * OpenseaActionProvider is an action provider for OpenSea marketplace interactions.
  */
-export class OpenseaActionProvider extends ActionProvider {
+export class OpenseaActionProvider extends ActionProvider<EvmWalletProvider> {
   private readonly apiKey: string;
-  private openseaSDK: OpenSeaSDK;
   private walletWithProvider: Wallet;
-  private readonly networkConfig: NetworkConfig;
+  private openseaSDK: OpenSeaSDK;
+  private openseaBaseUrl: string;
 
   /**
    * Constructor for the OpenseaActionProvider class.
@@ -58,33 +50,17 @@ export class OpenseaActionProvider extends ActionProvider {
     }
     this.apiKey = apiKey;
 
-    this.networkConfig =
-      config.networkId === "base-sepolia"
-        ? {
-            rpcUrl: "https://sepolia.base.org",
-            openseaUrl: "https://testnets.opensea.io/assets/base_sepolia",
-            chain: Chain.BaseSepolia,
-          }
-        : {
-            rpcUrl: "https://main.base.org",
-            openseaUrl: "https://opensea.io/assets/base",
-            chain: Chain.Mainnet,
-          };
-
-    if (config.networkId !== "base-sepolia" && config.networkId !== "base-mainnet") {
-      throw new Error("Unsupported network. Only base-sepolia and base-mainnet are supported.");
-    }
-
-    // Initialize ethers signer required for OpenSea SDK
-    const provider = new JsonRpcProvider(this.networkConfig.rpcUrl);
+    const chainId = NETWORK_ID_TO_CHAIN_ID[config.networkId || "base-sepolia"];
+    const provider = ethers.getDefaultProvider(parseInt(chainId));
     const walletWithProvider = new Wallet(config.privateKey!, provider);
     this.walletWithProvider = walletWithProvider;
 
     const openseaSDK = new OpenSeaSDK(walletWithProvider, {
-      chain: this.networkConfig.chain,
+      chain: chainIdToOpenseaChain(chainId),
       apiKey: this.apiKey,
     });
     this.openseaSDK = openseaSDK;
+    this.openseaBaseUrl = this.openseaSDK.api.apiBaseUrl.replace("-api", "").replace("api", "");
   }
 
   /**
@@ -97,7 +73,7 @@ export class OpenseaActionProvider extends ActionProvider {
     name: "list_nft",
     description: `
 This tool will list an NFT for sale on the OpenSea marketplace. 
-Currently only base-sepolia and base-mainnet are supported.
+EVM networks are supported on mainnet and testnets.
 
 It takes the following inputs:
 - contractAddress: The NFT contract address to list
@@ -110,10 +86,8 @@ Important notes:
 - Price is in ETH (e.g., 1.5 for 1.5 ETH). This is the amount the seller will receive if the NFT is sold. It is not required to have this amount in the wallet.
 - Listing the NFT requires approval for OpenSea to manage the entire NFT collection:  
   - If the collection is not already approved, an onchain transaction is required, which will incur gas fees.  
-  - If already approved, listing is gasless and does not require any onchain transaction.  
-- Only the following networks are supported:
-  - Base Sepolia (base-sepolia)
-  - Base Mainnet (base, base-mainnet)
+  - If already approved, listing is gasless and does not require any onchain transaction. 
+  - EVM networks are supported on mainnet and testnets, for example: base-mainnet and base-sepolia.
   `,
     schema: ListNftSchema,
   })
@@ -127,13 +101,12 @@ Important notes:
         },
         startAmount: args.price,
         quantity: 1,
-        paymentTokenAddress: "0x0000000000000000000000000000000000000000",
+        paymentTokenAddress: "0x0000000000000000000000000000000000000000", // ETH
         expirationTime: expirationTime,
         accountAddress: this.walletWithProvider.address,
       });
 
-      const listingLink = `${this.networkConfig.openseaUrl}/${args.contractAddress}/${args.tokenId}`;
-
+      const listingLink = `${this.openseaBaseUrl}/assets/${this.openseaSDK.chain}/${args.contractAddress}/${args.tokenId}`;
       return `Successfully listed NFT ${args.contractAddress} token ${args.tokenId} for ${args.price} ETH, expiring in ${args.expirationDays} days. Listing on OpenSea: ${listingLink}.`;
     } catch (error) {
       return `Error listing NFT ${args.contractAddress} token ${args.tokenId} for ${args.price} ETH using account ${this.walletWithProvider.address}: ${error}`;
@@ -146,8 +119,7 @@ Important notes:
    * @param network - The network to check.
    * @returns True if the Opensea action provider supports the network, false otherwise.
    */
-  supportsNetwork = (network: Network) =>
-    network.networkId === "base-mainnet" || network.networkId === "base-sepolia";
+  supportsNetwork = (network: Network) => supportedChains[network!.chainId!] !== undefined;
 }
 
 export const openseaActionProvider = (config?: OpenseaActionProviderConfig) =>
