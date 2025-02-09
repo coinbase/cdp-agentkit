@@ -202,7 +202,7 @@ app.listen(PORT, () => {
 ```typescript
 export async function main() {
     try {
-        console.log("Starting AAVE-enabled Agent...");
+        console.log("Starting Agent...");
         validateEnvironment();
         const { agent, config } = await initializeAgent();
         return { agent, config };
