@@ -1,6 +1,9 @@
 import { DEXSCREENER_BASE_URL } from "./constants";
-import { DexScreenerBoostedTokensResponse } from "./interfaces";
-import { DexScreenerTokenProfileResponse } from "./interfaces";
+import {
+  DexScreenerBoostedTokensResponse,
+  DexScreenerTokenProfileResponse,
+  DexScreenerOrdersResponse,
+} from "./interfaces";
 
 // https://docs.dexscreener.com/api/reference#token-boosts-latest-v1
 export const fetchLatestBoosts = async () => {
@@ -35,71 +38,26 @@ export const fetchLatestTokenProfiles = async () => {
   return data;
 };
 
-// Fetch Token Pairs
-// export const fetchTokenPairs = async (chainId: string, tokenAddress: string): Promise<any> => {
-//   try {
-//     const response = await fetch(`${DEXSCREENER_BASE_URL}/${chainId}/${tokenAddress}`, {
-//       method: "GET",
-//       headers: {
-//         "Content-Type": "application/json", // Set content type for API requests
-//       },
-//     });
+// https://docs.dexscreener.com/api/reference#orders-v1-chainid-tokenaddress
+export const fetchTokenOrders = async (
+  chainId: string,
+  tokenAddress: string,
+): Promise<DexScreenerOrdersResponse[]> => {
+  // Log the URL being requested for fetching token orders
+  const url = `${DEXSCREENER_BASE_URL}/orders/v1/${chainId}/${tokenAddress}`;
+  console.log("Fetching token orders from URL:", url); // Log the full URL for verification
 
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! Status: ${response.status}`);
-//     }
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
-//     const data = await response.json();
-//     console.log("Fetched Token Pairs:", data); // Debugging log
-//     return data;
-//   } catch (error) {
-//     console.error("Error fetching token pairs:", error);
-//     return null;
-//   }
-// };
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
 
-// Fetch Orders
-// export const fetchOrders = async (chainId: string, tokenAddress: string): Promise<any> => {
-//   try {
-//     const response = await fetch(`${DEXSCREENER_BASE_URL}/${chainId}/${tokenAddress}`, {
-//       method: "GET",
-//       headers: {
-//         "Content-Type": "application/json", // Set content type for API requests
-//       },
-//     });
-
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! Status: ${response.status}`);
-//     }
-
-//     const data = await response.json();
-//     console.log("Fetched Orders:", data); // Debugging log
-//     return data;
-//   } catch (error) {
-//     console.error("Error fetching orders:", error);
-//     return null;
-//   }
-// };
-
-// Fetch Latest Pairs
-// export const fetchLatestPairs = async (chainId: string, pairId: string): Promise<any> => {
-//   try {
-//     const response = await fetch(`${DEXSCREENER_BASE_URL}/${chainId}/${pairId}`, {
-//       method: "GET",
-//       headers: {
-//         "Content-Type": "application/json", // Set content type for API requests
-//       },
-//     });
-
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! Status: ${response.status}`);
-//     }
-
-//     const data = await response.json();
-//     console.log("Fetched Latest Pairs:", data); // Debugging log
-//     return data;
-//   } catch (error) {
-//     console.error("Error fetching latest pairs:", error);
-//     return null;
-//   }
-// };
+  const data = (await response.json()) as DexScreenerOrdersResponse[];
+  return data;
+};

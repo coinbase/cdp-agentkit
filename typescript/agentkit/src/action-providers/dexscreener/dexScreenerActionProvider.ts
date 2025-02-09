@@ -4,7 +4,8 @@ import { ActionProvider } from "../actionProvider";
 import { CreateAction } from "../actionDecorator";
 import { Network } from "../../network";
 import { DexScreenerSchemas } from "./schemas";
-import { fetchLatestBoosts, fetchLatestTokenProfiles } from "./services";
+import { fetchLatestBoosts, fetchLatestTokenProfiles, fetchTokenOrders } from "./services";
+import { DEXSCREENER_BASE_URL } from "./constants";
 
 /**
  * DexScreenerActionProvider is an action provider for fetching DEX market data.
@@ -28,8 +29,7 @@ export class DexScreenerActionProvider extends ActionProvider<any> {
     schema: DexScreenerSchemas.GetLatestBoostedTokens,
   })
   async getBoostedTokens(
-    _: any,
-    args: z.infer<typeof DexScreenerSchemas.GetLatestBoostedTokens>,
+    _args: z.infer<typeof DexScreenerSchemas.GetLatestBoostedTokens>,
   ): Promise<string> {
     try {
       const data = await fetchLatestBoosts();
@@ -49,19 +49,42 @@ export class DexScreenerActionProvider extends ActionProvider<any> {
     schema: DexScreenerSchemas.GetLatestTokenProfiles,
   })
   async getLatestTokenProfiles(
-    _: any,
-    args: z.infer<typeof DexScreenerSchemas.GetLatestTokenProfiles>,
+    _args: z.infer<typeof DexScreenerSchemas.GetLatestTokenProfiles>,
   ): Promise<string> {
     try {
       const data = await fetchLatestTokenProfiles();
 
       const tokenProfiles = data.map(
-        token =>
-          `${token.name} (${token.symbol}) - ${token.tokenAddress} [network: ${token.chainId}]`,
+        token => `${token.name} - ${token.tokenAddress} [network: ${token.chainId}]`,
       );
       return tokenProfiles.join(", ");
     } catch (error) {
       return this.handleError(error, "latest token profiles from dexscreener");
+    }
+  }
+
+  @CreateAction({
+    name: "get_token_orders_dexscreener",
+    description: "This tool allows getting the latest token orders from DexScreener.",
+    schema: DexScreenerSchemas.GetTokenOrders,
+  })
+  async getTokenOrders(args: z.infer<typeof DexScreenerSchemas.GetTokenOrders>): Promise<string> {
+    // Check if arguments are missing or incomplete
+    if (!args || !args.chainId || !args.tokenAddress) {
+      return "Error: Please provide both chainId and tokenAddress.";
+    }
+
+    // Destructure the arguments for easier use
+    const { chainId, tokenAddress } = args;
+
+    try {
+      // Call the API to get the orders
+      const data = await fetchTokenOrders(chainId, tokenAddress);
+
+      return JSON.stringify(data);
+    } catch (error) {
+      // Handle any errors that occur and log them for troubleshooting
+      return this.handleError(error, "token orders from dexscreener");
     }
   }
 

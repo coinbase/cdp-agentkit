@@ -9,6 +9,14 @@ export interface DexScreenerBoostedTokensResponse {
   links: Link[];
 }
 
+export interface Link {
+  label?: string; // Some links use "label", while others use "type"
+  type?: string;
+  url: string;
+}
+
+// -----
+
 export interface DexScreenerTokenProfileResponse {
   url: string;
   chainId: string;
@@ -19,8 +27,8 @@ export interface DexScreenerTokenProfileResponse {
   logoURI?: string;
 }
 
-export interface Link {
-  label?: string; // Some links use "label", while others use "type"
-  type?: string;
-  url: string;
+export interface DexScreenerOrdersResponse {
+  type: "tokenProfile" | "communityTakeover" | "tokenAd" | "trendingBarAd";
+  status: "processing" | "cancelled" | "on-hold" | "approved" | "rejected";
+  paymentTimestamp: number;
 }
