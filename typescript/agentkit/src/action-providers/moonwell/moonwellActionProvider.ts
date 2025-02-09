@@ -23,7 +23,7 @@ export const SUPPORTED_NETWORKS = ["base-mainnet", "base-sepolia"];
 /**
  * MoonwellActionProvider is an action provider for Moonwell MToken interactions.
  */
-export class MoonwellActionProvider extends ActionProvider {
+export class MoonwellActionProvider extends ActionProvider<EvmWalletProvider> {
   /**
    * Constructor for the MoonwellActionProvider class.
    */
@@ -63,6 +63,7 @@ It takes:
 Important notes:
 - Make sure to use the exact amount provided. Do not convert units for assets for this action.
 - Please use a token address (example 0x4200000000000000000000000000000000000006) for the tokenAddress field.
+- This tool handles token approval. If requested to mint on Moonwell, do not use any other actions to approve tokens.
 `,
     schema: MintSchema,
   })
@@ -73,7 +74,7 @@ Important notes:
       return "Error: Assets amount must be greater than 0";
     }
 
-    const network = await wallet.getNetwork();
+    const network = wallet.getNetwork();
     const networkObject =
       network.networkId === "base-mainnet"
         ? MOONWELL_BASE_ADDRESSES
@@ -85,8 +86,8 @@ Important notes:
 
     try {
       // Handle different token decimals
-      let atomicAssets;
-      const userAddress = await wallet.getAddress();
+      let atomicAssets: bigint;
+      const userAddress = wallet.getAddress();
 
       if (
         network.networkId === "base-mainnet" &&
@@ -217,7 +218,7 @@ Important notes:
       return "Error: Assets amount must be greater than 0";
     }
 
-    const network = await wallet.getNetwork();
+    const network = wallet.getNetwork();
     const networkObject =
       network.networkId === "base-mainnet"
         ? MOONWELL_BASE_ADDRESSES
