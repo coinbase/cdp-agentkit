@@ -87,7 +87,7 @@ describe("CDP API Action Provider", () => {
       const args = {
         address: "0xe6b2af36b3bb8d47206a129ff11d5a2de2a63c83",
         network: "base-mainnet",
-      };
+      } as const;
 
       mockExternalAddressInstance.reputation.mockResolvedValue("Good reputation");
 
@@ -104,7 +104,7 @@ describe("CDP API Action Provider", () => {
       const args = {
         address: "0xe6b2af36b3bb8d47206a129ff11d5a2de2a63c83",
         network: "base-mainnet",
-      };
+      } as const;
 
       const error = new Error("Reputation check failed");
       mockExternalAddressInstance.reputation.mockRejectedValue(error);

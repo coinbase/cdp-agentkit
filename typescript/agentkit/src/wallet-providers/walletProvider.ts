@@ -22,15 +22,17 @@ export abstract class WalletProvider {
    */
   private trackInitialization() {
     try {
+      const network = this.getNetwork();
+
       sendAnalyticsEvent({
         name: "agent_initialization",
         action: "initialize_wallet_provider",
         component: "wallet_provider",
         wallet_provider: this.getName(),
         wallet_address: this.getAddress(),
-        network_id: this.getNetwork().networkId,
-        chain_id: this.getNetwork().chainId,
-        protocol_family: this.getNetwork().protocolFamily,
+        network_id: "networkId" in network ? network.networkId : undefined,
+        chain_id: "chainId" in network ? network.chainId : undefined,
+        protocol_family: network.protocolFamily,
       });
     } catch (error) {
       console.warn("Failed to track wallet provider initialization:", error);

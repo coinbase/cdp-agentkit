@@ -95,7 +95,22 @@ describe("Transfer Action", () => {
     } as unknown as jest.Mocked<EvmWalletProvider>;
 
     mockWallet.sendTransaction.mockResolvedValue(TRANSACTION_HASH);
-    mockWallet.waitForTransactionReceipt.mockResolvedValue({});
+    mockWallet.waitForTransactionReceipt.mockResolvedValue({
+      blockHash: "0x",
+      blockNumber: 0n,
+      contractAddress: "0x",
+      cumulativeGasUsed: 0n,
+      effectiveGasPrice: 0n,
+      from: "0x",
+      gasUsed: 0n,
+      logs: [],
+      logsBloom: "0x",
+      status: "success",
+      to: "0x",
+      transactionHash: "0x",
+      transactionIndex: 0,
+      type: "eip1559",
+    });
   });
 
   it("should successfully respond", async () => {

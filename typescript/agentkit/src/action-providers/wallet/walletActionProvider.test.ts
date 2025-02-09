@@ -1,6 +1,7 @@
 import { WalletProvider } from "../../wallet-providers";
 import { walletActionProvider } from "./walletActionProvider";
 import { NativeTransferSchema } from "./schemas";
+import { BitcoinNetwork, Network, NETWORK_ID_TO_CHAIN_ID, SolanaNetwork } from "../../network";
 
 describe("Wallet Action Provider", () => {
   const MOCK_ADDRESS = "0xe6b2af36b3bb8d47206a129ff11d5a2de2a63c83";
@@ -51,7 +52,7 @@ describe("Wallet Action Provider", () => {
     it("should handle missing network IDs gracefully", async () => {
       mockWallet.getNetwork.mockReturnValue({
         protocolFamily: "evm",
-      });
+      } as Network);
 
       const response = await actionProvider.getWalletDetails(mockWallet, {});
 
@@ -123,9 +124,13 @@ describe("Wallet Action Provider", () => {
 
   describe("supportsNetwork", () => {
     it("should return true for any network", () => {
-      const evmNetwork = { protocolFamily: "evm", networkId: "base-sepolia" };
-      const solanaNetwork = { protocolFamily: "solana", networkId: "mainnet" };
-      const bitcoinNetwork = { protocolFamily: "bitcoin", networkId: "mainnet" };
+      const evmNetwork: Network = {
+        protocolFamily: "evm",
+        networkId: "base-sepolia",
+        chainId: NETWORK_ID_TO_CHAIN_ID["base-sepolia"],
+      };
+      const solanaNetwork: SolanaNetwork = { protocolFamily: "solana", networkId: "mainnet" };
+      const bitcoinNetwork: BitcoinNetwork = { protocolFamily: "bitcoin", networkId: "mainnet" };
 
       expect(actionProvider.supportsNetwork(evmNetwork)).toBe(true);
       expect(actionProvider.supportsNetwork(solanaNetwork)).toBe(true);

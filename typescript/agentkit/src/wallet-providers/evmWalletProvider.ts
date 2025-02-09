@@ -1,8 +1,12 @@
-// TODO: Improve type safety
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
+import { EvmNetwork } from "../network";
 import { WalletProvider } from "./walletProvider";
-import { TransactionRequest, ReadContractParameters, ReadContractReturnType } from "viem";
+import {
+  TransactionRequest,
+  ReadContractParameters,
+  ReadContractReturnType,
+  Hex,
+  TransactionReceipt,
+} from "viem";
 
 /**
  * EvmWalletProvider is the abstract base class for all EVM wallet providers.
@@ -16,7 +20,7 @@ export abstract class EvmWalletProvider extends WalletProvider {
    * @param message - The message to sign.
    * @returns The signed message.
    */
-  abstract signMessage(message: string | Uint8Array): Promise<`0x${string}`>;
+  abstract signMessage(message: string | Uint8Array): Promise<Hex>;
 
   /**
    * Sign a typed data.
@@ -24,7 +28,7 @@ export abstract class EvmWalletProvider extends WalletProvider {
    * @param typedData - The typed data to sign.
    * @returns The signed typed data.
    */
-  abstract signTypedData(typedData: any): Promise<`0x${string}`>;
+  abstract signTypedData(typedData: unknown): Promise<Hex>;
 
   /**
    * Sign a transaction.
@@ -32,7 +36,7 @@ export abstract class EvmWalletProvider extends WalletProvider {
    * @param transaction - The transaction to sign.
    * @returns The signed transaction.
    */
-  abstract signTransaction(transaction: TransactionRequest): Promise<`0x${string}`>;
+  abstract signTransaction(transaction: TransactionRequest): Promise<Hex>;
 
   /**
    * Send a transaction.
@@ -40,7 +44,7 @@ export abstract class EvmWalletProvider extends WalletProvider {
    * @param transaction - The transaction to send.
    * @returns The transaction hash.
    */
-  abstract sendTransaction(transaction: TransactionRequest): Promise<`0x${string}`>;
+  abstract sendTransaction(transaction: TransactionRequest): Promise<Hex>;
 
   /**
    * Wait for a transaction receipt.
@@ -48,7 +52,7 @@ export abstract class EvmWalletProvider extends WalletProvider {
    * @param txHash - The transaction hash.
    * @returns The transaction receipt.
    */
-  abstract waitForTransactionReceipt(txHash: `0x${string}`): Promise<any>;
+  abstract waitForTransactionReceipt(txHash: Hex): Promise<TransactionReceipt>;
 
   /**
    * Read a contract.
@@ -57,4 +61,11 @@ export abstract class EvmWalletProvider extends WalletProvider {
    * @returns The response from the contract.
    */
   abstract readContract(params: ReadContractParameters): Promise<ReadContractReturnType>;
+
+  /**
+   * Get the network of the wallet provider.
+   *
+   * @returns The network of the wallet provider.
+   */
+  abstract getNetwork(): EvmNetwork;
 }

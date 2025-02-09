@@ -5,6 +5,7 @@ import { WOW_ABI, WOW_FACTORY_ABI, GENERIC_TOKEN_METADATA_URI } from "./constant
 import { getBuyQuote, getSellQuote } from "./utils";
 import { getHasGraduated } from "./uniswap/utils";
 import { WowBuyTokenInput, WowCreateTokenInput, WowSellTokenInput } from "./schemas";
+import { NETWORK_ID_TO_CHAIN_ID } from "../../network";
 
 jest.mock("./utils", () => ({
   getBuyQuote: jest.fn(),
@@ -160,21 +161,33 @@ describe("WowActionProvider", () => {
 
   describe("supportsNetwork", () => {
     it("should return true for supported networks", () => {
-      expect(provider.supportsNetwork({ protocolFamily: "evm", networkId: "base-mainnet" })).toBe(
-        true,
-      );
+      expect(
+        provider.supportsNetwork({
+          protocolFamily: "evm",
+          networkId: "base-mainnet",
+          chainId: NETWORK_ID_TO_CHAIN_ID["base-mainnet"],
+        }),
+      ).toBe(true);
     });
 
     it("should return false for unsupported networks", () => {
-      expect(provider.supportsNetwork({ protocolFamily: "evm", networkId: "base-sepolia" })).toBe(
-        false,
-      );
-      expect(provider.supportsNetwork({ protocolFamily: "evm", networkId: "ethereum" })).toBe(
-        false,
-      );
       expect(
-        provider.supportsNetwork({ protocolFamily: "bitcoin", networkId: "base-mainnet" }),
+        provider.supportsNetwork({
+          protocolFamily: "evm",
+          networkId: "base-sepolia",
+          chainId: NETWORK_ID_TO_CHAIN_ID["base-sepolia"],
+        }),
       ).toBe(false);
+      expect(
+        provider.supportsNetwork({
+          protocolFamily: "evm",
+          networkId: "ethereum-mainnet",
+          chainId: NETWORK_ID_TO_CHAIN_ID["ethereum-mainnet"],
+        }),
+      ).toBe(false);
+      expect(provider.supportsNetwork({ protocolFamily: "bitcoin", networkId: "mainnet" })).toBe(
+        false,
+      );
     });
   });
 

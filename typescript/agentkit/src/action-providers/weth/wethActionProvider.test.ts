@@ -3,6 +3,7 @@ import { EvmWalletProvider } from "../../wallet-providers";
 import { encodeFunctionData } from "viem";
 import { WETH_ABI, WETH_ADDRESS } from "./constants";
 import { wethActionProvider } from "./wethActionProvider";
+import { NETWORK_ID_TO_CHAIN_ID } from "../../network";
 
 const MOCK_AMOUNT = "15";
 const MOCK_ADDRESS = "0x1234567890123456789012345678901234543210";
@@ -90,6 +91,7 @@ describe("supportsNetwork", () => {
     const result = actionProvider.supportsNetwork({
       protocolFamily: "evm",
       networkId: "base-mainnet",
+      chainId: NETWORK_ID_TO_CHAIN_ID["base-mainnet"],
     });
     expect(result).toBe(true);
   });
@@ -98,6 +100,7 @@ describe("supportsNetwork", () => {
     const result = actionProvider.supportsNetwork({
       protocolFamily: "evm",
       networkId: "base-sepolia",
+      chainId: NETWORK_ID_TO_CHAIN_ID["base-sepolia"],
     });
     expect(result).toBe(true);
   });
@@ -106,6 +109,7 @@ describe("supportsNetwork", () => {
     const result = actionProvider.supportsNetwork({
       protocolFamily: "evm",
       networkId: "ethereum-mainnet",
+      chainId: NETWORK_ID_TO_CHAIN_ID["ethereum-mainnet"],
     });
     expect(result).toBe(false);
   });

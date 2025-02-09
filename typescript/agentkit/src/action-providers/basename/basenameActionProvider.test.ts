@@ -13,6 +13,7 @@ import {
 import { RegisterBasenameSchema } from "./schemas";
 import { EvmWalletProvider } from "../../wallet-providers";
 import { Coinbase } from "@coinbase/coinbase-sdk";
+import { NETWORK_ID_TO_CHAIN_ID } from "../../network";
 
 const MOCK_AMOUNT = "0.123";
 const MOCK_BASENAME = "test-basename";
@@ -62,7 +63,22 @@ describe("Register Basename Action", () => {
     } as unknown as jest.Mocked<EvmWalletProvider>;
 
     mockWallet.sendTransaction.mockResolvedValue("some-hash" as `0x${string}`);
-    mockWallet.waitForTransactionReceipt.mockResolvedValue({});
+    mockWallet.waitForTransactionReceipt.mockResolvedValue({
+      blockHash: "0x",
+      blockNumber: 0n,
+      contractAddress: "0x",
+      cumulativeGasUsed: 0n,
+      effectiveGasPrice: 0n,
+      from: "0x",
+      gasUsed: 0n,
+      logs: [],
+      logsBloom: "0x",
+      status: "success",
+      to: "0x",
+      transactionHash: "0x",
+      transactionIndex: 0,
+      type: "eip1559",
+    });
   });
 
   it(`should Successfully respond with ${MOCK_BASENAME}.base.eth for network: ${Coinbase.networks.BaseMainnet}`, async () => {
@@ -76,6 +92,7 @@ describe("Register Basename Action", () => {
     mockWallet.getNetwork.mockReturnValue({
       protocolFamily: "evm",
       networkId: Coinbase.networks.BaseMainnet,
+      chainId: NETWORK_ID_TO_CHAIN_ID[Coinbase.networks.BaseMainnet],
     });
 
     const response = await actionProvider.register(mockWallet, args);
@@ -124,7 +141,8 @@ describe("Register Basename Action", () => {
 
     mockWallet.getNetwork.mockReturnValue({
       protocolFamily: "evm",
-      networkId: "anything-else",
+      networkId: Coinbase.networks.EthereumMainnet,
+      chainId: NETWORK_ID_TO_CHAIN_ID[Coinbase.networks.EthereumMainnet],
     });
 
     const response = await actionProvider.register(mockWallet, args);

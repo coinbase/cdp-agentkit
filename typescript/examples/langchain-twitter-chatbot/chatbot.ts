@@ -54,6 +54,9 @@ async function initialize() {
   return { agent, config: agentConfig };
 }
 
+type Agent = Awaited<ReturnType<typeof initialize>>["agent"];
+type Config = Awaited<ReturnType<typeof initialize>>["config"];
+
 /**
  * Run the agent autonomously with specified intervals
  *
@@ -61,8 +64,7 @@ async function initialize() {
  * @param config - Agent configuration
  * @param interval - Time interval between actions in seconds
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function runAutonomousMode(agent: any, config: any, interval = 10) {
+async function runAutonomousMode(agent: Agent, config: Config, interval = 10) {
   console.log("Starting autonomous mode...");
 
   // eslint-disable-next-line no-constant-condition
@@ -99,8 +101,7 @@ async function runAutonomousMode(agent: any, config: any, interval = 10) {
  * @param agent - The agent executor
  * @param config - Agent configuration
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function runChatMode(agent: any, config: any) {
+async function runChatMode(agent: Agent, config: Config) {
   console.log("Starting chat mode... Type 'exit' to end.");
 
   const rl = readline.createInterface({

@@ -3,6 +3,7 @@ import { EvmWalletProvider } from "../../wallet-providers";
 import { approve } from "../../utils";
 import { MorphoActionProvider } from "./morphoActionProvider";
 import { METAMORPHO_ABI } from "./constants";
+import { NETWORK_ID_TO_CHAIN_ID } from "../../network";
 
 const MOCK_VAULT_ADDRESS = "0x1234567890123456789012345678901234567890";
 const MOCK_ATOMIC_ASSETS = "1000000000000000000";
@@ -37,7 +38,7 @@ describe("Morpho Action Provider", () => {
         assets: MOCK_WHOLE_ASSETS,
         receiver: MOCK_RECEIVER_ID,
         tokenAddress: MOCK_TOKEN_ADDRESS,
-      };
+      } as const;
 
       const atomicAssets = parseEther(MOCK_WHOLE_ASSETS);
 
@@ -71,7 +72,7 @@ describe("Morpho Action Provider", () => {
         assets: MOCK_WHOLE_ASSETS,
         receiver: MOCK_RECEIVER_ID,
         tokenAddress: MOCK_TOKEN_ADDRESS,
-      };
+      } as const;
 
       mockWallet.sendTransaction.mockRejectedValue(new Error("Failed to deposit"));
 
@@ -87,7 +88,7 @@ describe("Morpho Action Provider", () => {
         vaultAddress: MOCK_VAULT_ADDRESS,
         assets: MOCK_ATOMIC_ASSETS,
         receiver: MOCK_RECEIVER_ID,
-      };
+      } as const;
 
       const response = await actionProvider.withdraw(mockWallet, args);
 
@@ -111,7 +112,7 @@ describe("Morpho Action Provider", () => {
         vaultAddress: MOCK_VAULT_ADDRESS,
         assets: MOCK_ATOMIC_ASSETS,
         receiver: MOCK_RECEIVER_ID,
-      };
+      } as const;
 
       mockWallet.sendTransaction.mockRejectedValue(new Error("Failed to withdraw"));
 
@@ -126,6 +127,7 @@ describe("Morpho Action Provider", () => {
       const result = actionProvider.supportsNetwork({
         protocolFamily: "evm",
         networkId: "base-mainnet",
+        chainId: NETWORK_ID_TO_CHAIN_ID["base-mainnet"],
       });
       expect(result).toBe(true);
     });
@@ -134,6 +136,7 @@ describe("Morpho Action Provider", () => {
       const result = actionProvider.supportsNetwork({
         protocolFamily: "evm",
         networkId: "base-sepolia",
+        chainId: NETWORK_ID_TO_CHAIN_ID["base-sepolia"],
       });
       expect(result).toBe(true);
     });
@@ -141,7 +144,8 @@ describe("Morpho Action Provider", () => {
     it("should return false for other EVM networks", () => {
       const result = actionProvider.supportsNetwork({
         protocolFamily: "evm",
-        networkId: "ethereum",
+        networkId: "ethereum-mainnet",
+        chainId: NETWORK_ID_TO_CHAIN_ID["ethereum-mainnet"],
       });
       expect(result).toBe(false);
     });
@@ -149,7 +153,7 @@ describe("Morpho Action Provider", () => {
     it("should return false for non-EVM networks", () => {
       const result = actionProvider.supportsNetwork({
         protocolFamily: "bitcoin",
-        networkId: "base-mainnet",
+        networkId: "mainnet",
       });
       expect(result).toBe(false);
     });

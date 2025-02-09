@@ -107,7 +107,8 @@ Basename fails, you should prompt to try again with a more unique name.
    * @returns True if the Basename action provider supports the network, false otherwise.
    */
   supportsNetwork = (network: Network) =>
-    network.networkId === "base-mainnet" || network.networkId === "base-sepolia";
+    network.protocolFamily === "evm" &&
+    (network.networkId === "base-mainnet" || network.networkId === "base-sepolia");
 }
 
 export const basenameActionProvider = () => new BasenameActionProvider();
