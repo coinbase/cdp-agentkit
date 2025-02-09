@@ -39,7 +39,10 @@
     "typescript"
   ],
   "dependencies": {
+    "@aave/contract-helpers": "^1.30.5",
+    "@bgd-labs/aave-address-book": "^4.7.4",
     "@coinbase/coinbase-sdk": "^0.17.0",
+    "ethers": "^5.7.2",
     "md5": "^2.3.0",
     "reflect-metadata": "^0.2.2",
     "twitter-api-v2": "^1.18.2",
@@ -54,7 +57,8 @@
     "mock-fs": "^5.2.0",
     "ts-jest": "^29.2.5",
     "tsd": "^0.31.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.5"
   },
   "exports": {
     ".": {

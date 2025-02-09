@@ -10,6 +10,8 @@ import { TransactionRequest, ReadContractParameters, ReadContractReturnType } fr
  * @abstract
  */
 export abstract class EvmWalletProvider extends WalletProvider {
+  abstract getProvider(): Promise<unknown>;
+
   /**
    * Sign a message.
    *
