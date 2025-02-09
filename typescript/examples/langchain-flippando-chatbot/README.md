@@ -1,13 +1,13 @@
 # About
 
-Flippando Agent is an AI agent designed to interact with Flippando, a blockchain-based tile-flipping puzzle game. It serves as both an autonomous player and an interactive assistant, bridging the gap between complex blockchain mechanics and user-friendly gameplay.
+LordOfTheFlips Agent is an AI agent designed to interact with Flippando, a blockchain-based tile-flipping puzzle game. It serves as both an autonomous player and an interactive assistant, bridging the gap between complex blockchain mechanics and user-friendly gameplay.
 
 ## Project Purpose
 
 The primary goal of the Flippando Agent is to support Flippando players by:
 1. Automating gameplay for testing and demonstration purposes
 2. Providing intelligent assistance to players through a chat interface
-3. Facilitating complex interactions with blockchain-based game mechanics (from basic building blocks, like flipping specific tiles, to more complex workflows, like playing a game to completion, minting the resulting NFT and posting it on Twitter)
+3. Facilitating complex interactions with blockchain-based game mechanics (from basic building blocks, like flipping specific tiles, to more complex workflows, like playing a game to completion, minting the resulting NFT and posting it on Twitter and/or Farcaster)
 4. Serve as a building foundation for anyone willing to extend its fucntionality with new actions.
 
 ## Key Features
@@ -25,6 +25,8 @@ The primary goal of the Flippando Agent is to support Flippando players by:
 6. **Arbitrage Suggestions**: Flippando is an "app-first, chain second" project, and it's deployed identically on a variety of chains. The agent can analyze the game ecosystem on all the chain where it's deployed and make arbitrage suggestions, both for the available NFTs, and for the $FLIPND fungible token price.
 
 7. **Twitter Integration**: The agent can post basic flips, art creations and art suggestions on Twitter, fostering engagement.
+
+8. **Farcaster Integration**: The agent can post basic flips, art creations and art suggestions on Farcaster, fostering engagement.
 
 
 ## Core Components
