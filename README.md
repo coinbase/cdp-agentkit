@@ -140,6 +140,137 @@ Your wallet has been successfully funded with testnet ETH. You can view the tran
 -------------------
 ```
 
+# API Integration
+
+To integrate AgentKit with your frontend application, follow these steps:
+
+## Backend Setup
+
+1. Create an `index.ts` file in your project root:
+
+```typescript
+//@ts-nocheck
+import express from 'express';
+import cors from 'cors';
+import { main, runChatMode } from './src/chatbot';
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+let agent, config;
+
+// Initialize the agent and config
+(async () => {
+    try {
+        const result = await main();
+        agent = result.agent;
+        config = result.config;
+    } catch (error) {
+        console.error('Failed to initialize:', error);
+    }
+})();
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Post request route
+app.post('/api/data', async (req, res) => {
+    try {
+        const data = await req.body.message;
+        let obj = await runChatMode(agent, config, data);
+        res.status(200).json({
+            success: true,
+            message: 'Data received successfully',
+            data: obj
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error processing request',
+            error: error?.message
+        });
+    }
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+```
+
+2. Update your `chatbot.ts` file to export the required functions:
+
+```typescript
+export async function main() {
+    try {
+        console.log("Starting AAVE-enabled Agent...");
+        validateEnvironment();
+        const { agent, config } = await initializeAgent();
+        return { agent, config };
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error("Error:", error.message);
+        }
+        process.exit(1);
+    }
+}
+```
+
+## Frontend Integration
+
+You can interact with the AgentKit API using any frontend framework. Here's an example using fetch:
+
+```javascript
+async function sendMessage(message) {
+    try {
+        const response = await fetch('http://localhost:3000/api/data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ message: message })
+        });
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+// Usage example
+sendMessage("Fund my wallet with some testnet ETH")
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+```
+
+## API Endpoints
+
+### POST /api/data
+
+- **Endpoint**: `http://localhost:3000/api/data`
+- **Method**: `POST`
+- **Body**:
+```json
+{
+    "message": "YOUR_MESSAGE_HERE"
+}
+```
+
+- **Response**:
+```json
+{
+    "success": true,
+    "message": "Data received successfully",
+    "data": {
+        // Agent response data
+    }
+}
+```
+
 ## 🗂 Repository Structure
 
 AgentKit is organized as a monorepo that contains multiple packages.
