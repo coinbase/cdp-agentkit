@@ -9,9 +9,8 @@ from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
 
-# Import CDP Agentkit Langchain Extension.
-from cdp_langchain.agent_toolkits import CdpToolkit
-from cdp_langchain.utils import CdpAgentkitWrapper
+from coinbase_agentkit import AgentKit, AgentKitOptions, pyth_action_provider, morpho_action_provider, EthAccountWalletProvider, EthAccountWalletProviderConfig
+from coinbase_agentkit_langchain import get_langchain_tools
 
 # Configure a file to persist the agent's CDP MPC Wallet Data.
 wallet_data_file = "wallet_data.txt"
@@ -23,28 +22,28 @@ def initialize_agent():
     # Initialize LLM.
     llm = ChatOpenAI(model="gpt-4o-mini")
 
-    wallet_data = None
+    private_key = os.environ.get("PRIVATE_KEY")
+    assert private_key is not None, "You must set PRIVATE_KEY environment variable"
+    assert private_key.startswith("0x"), "Private key must start with 0x hex prefix"
 
-    if os.path.exists(wallet_data_file):
-        with open(wallet_data_file) as f:
-            wallet_data = f.read()
+    wallet_provider = EthAccountWalletProvider(
+        config=EthAccountWalletProviderConfig(
+            private_key=private_key,
+            rpc_url="https://mainnet.base.org",
+            chain_id=8453,
+        )
+    )
 
-    # Configure CDP Agentkit Langchain Extension.
-    values = {}
-    if wallet_data is not None:
-        # If there is a persisted agentic wallet, load it and pass to the CDP Agentkit Wrapper.
-        values = {"cdp_wallet_data": wallet_data}
+    agentkit = AgentKit.from_options(AgentKitOptions(
+        wallet_provider=wallet_provider,
+        action_providers=[
+            pyth_action_provider(),
+            morpho_action_provider(),
+        ]
+    ))
 
-    agentkit = CdpAgentkitWrapper(**values)
-
-    # persist the agent's CDP MPC Wallet Data.
-    wallet_data = agentkit.export_wallet()
-    with open(wallet_data_file, "w") as f:
-        f.write(wallet_data)
-
-    # Initialize CDP Agentkit Toolkit and get tools.
-    cdp_toolkit = CdpToolkit.from_cdp_agentkit_wrapper(agentkit)
-    tools = cdp_toolkit.get_tools()
+    # use get_langchain_tools
+    tools = get_langchain_tools(agentkit)
 
     # Store buffered conversation history in memory.
     memory = MemorySaver()
@@ -153,4 +152,4 @@ def main():
 
 if __name__ == "__main__":
     print("Starting Agent...")
-    main()
+    main() 
