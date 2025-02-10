@@ -75,10 +75,10 @@ def test_sell_token_success():
 
         # Create provider and call sell_token
         provider = WowActionProvider()
-        args = {
-            "contract_address": MOCK_CONTRACT_ADDRESS,
-            "amount_tokens_in_wei": MOCK_AMOUNT_TOKENS,
-        }
+        args = WowSellTokenInput(
+            contract_address=MOCK_CONTRACT_ADDRESS,
+            amount_tokens_in_wei=MOCK_AMOUNT_TOKENS,
+        )
         response = provider.sell_token(mock_wallet, args)
 
         expected_response = (
@@ -141,10 +141,10 @@ def test_sell_token_graduated_pool():
 
         # Create provider and call sell_token
         provider = WowActionProvider()
-        args = {
-            "contract_address": MOCK_CONTRACT_ADDRESS,
-            "amount_tokens_in_wei": MOCK_AMOUNT_TOKENS,
-        }
+        args = WowSellTokenInput(
+            contract_address=MOCK_CONTRACT_ADDRESS,
+            amount_tokens_in_wei=MOCK_AMOUNT_TOKENS,
+        )
         response = provider.sell_token(mock_wallet, args)
 
         expected_response = (
@@ -197,10 +197,10 @@ def test_sell_token_error():
 
         # Create provider and call sell_token
         provider = WowActionProvider()
-        args = {
-            "contract_address": MOCK_CONTRACT_ADDRESS,
-            "amount_tokens_in_wei": MOCK_AMOUNT_TOKENS,
-        }
+        args = WowSellTokenInput(
+            contract_address=MOCK_CONTRACT_ADDRESS,
+            amount_tokens_in_wei=MOCK_AMOUNT_TOKENS,
+        )
         response = provider.sell_token(mock_wallet, args)
 
         expected_response = "Error selling Zora Wow ERC20 memecoin: Transaction failed"

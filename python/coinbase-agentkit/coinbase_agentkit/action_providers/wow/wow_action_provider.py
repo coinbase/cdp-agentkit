@@ -1,6 +1,5 @@
 """WOW action provider implementation."""
 import json
-from typing import Any
 
 from web3 import Web3
 
@@ -50,19 +49,19 @@ Important notes:
   - Base Mainnet (ie, 'base', 'base-mainnet')""",
         schema=WowBuyTokenInput,
     )
-    def buy_token(self, wallet: EvmWalletProvider, args: dict[str, Any]) -> str:
+    def buy_token(self, wallet: EvmWalletProvider, args: WowBuyTokenInput) -> str:
         """Buy WOW tokens with ETH."""
         try:
             # Get quote and check graduation status
-            token_quote = get_buy_quote(wallet, args["contract_address"], args["amount_eth_in_wei"])
-            has_graduated = get_has_graduated(wallet, args["contract_address"])
+            token_quote = get_buy_quote(wallet, args.contract_address, args.amount_eth_in_wei)
+            has_graduated = get_has_graduated(wallet, args.contract_address)
 
             # Calculate minimum tokens (99% of quote for slippage protection)
             min_tokens = int(int(token_quote) * 99 / 100)
 
             # Create contract instance
             contract = Web3().eth.contract(
-                address=Web3.to_checksum_address(args["contract_address"]),
+                address=Web3.to_checksum_address(args.contract_address),
                 abi=WOW_ABI
             )
 
@@ -82,9 +81,9 @@ Important notes:
 
             # Send transaction
             tx_hash = wallet.send_transaction({
-                "to": Web3.to_checksum_address(args["contract_address"]),
+                "to": Web3.to_checksum_address(args.contract_address),
                 "data": encoded_data,
-                "value": int(args["amount_eth_in_wei"]),
+                "value": int(args.amount_eth_in_wei),
             })
             receipt = wallet.wait_for_transaction_receipt(tx_hash)
 
@@ -113,7 +112,7 @@ Important notes:
   - Base Mainnet (ie, 'base', 'base-mainnet')""",
         schema=WowCreateTokenInput,
     )
-    def create_token(self, wallet: EvmWalletProvider, args: dict[str, Any]) -> str:
+    def create_token(self, wallet: EvmWalletProvider, args: WowCreateTokenInput) -> str:
         """Create a new WOW token."""
         try:
             factory_address = get_factory_address(wallet.get_network().network_id)
@@ -130,9 +129,9 @@ Important notes:
                 args=[
                     wallet.get_address(),
                     "0x0000000000000000000000000000000000000000",
-                    args.get("token_uri", GENERIC_TOKEN_METADATA_URI),
-                    args["name"],
-                    args["symbol"],
+                    args.token_uri or GENERIC_TOKEN_METADATA_URI,
+                    args.name,
+                    args.symbol,
                 ]
             )
 
@@ -144,7 +143,7 @@ Important notes:
             receipt = wallet.wait_for_transaction_receipt(tx_hash)
 
             return (
-                f"Created WoW ERC20 memecoin {args['name']} with symbol {args['symbol']} "
+                f"Created WoW ERC20 memecoin {args.name} with symbol {args.symbol} "
                 f"on network {wallet.get_network().network_id}.\n"
                 f"Transaction hash for the token creation: {tx_hash}, "
                 f"and receipt:\n{json.dumps(receipt)}"
@@ -172,19 +171,19 @@ Important notes:
   - Base Mainnet (ie, 'base', 'base-mainnet')""",
         schema=WowSellTokenInput,
     )
-    def sell_token(self, wallet: EvmWalletProvider, args: dict[str, Any]) -> str:
+    def sell_token(self, wallet: EvmWalletProvider, args: WowSellTokenInput) -> str:
         """Sell WOW tokens for ETH."""
         try:
             # Get quote and check graduation status
-            eth_quote = get_sell_quote(wallet, args["contract_address"], args["amount_tokens_in_wei"])
-            has_graduated = get_has_graduated(wallet, args["contract_address"])
+            eth_quote = get_sell_quote(wallet, args.contract_address, args.amount_tokens_in_wei)
+            has_graduated = get_has_graduated(wallet, args.contract_address)
 
             # Calculate minimum ETH (98% of quote for slippage protection)
             min_eth = int(int(eth_quote) * 98 / 100)
 
             # Create contract instance
             contract = Web3().eth.contract(
-                address=Web3.to_checksum_address(args["contract_address"]),
+                address=Web3.to_checksum_address(args.contract_address),
                 abi=WOW_ABI
             )
 
@@ -192,7 +191,7 @@ Important notes:
             encoded_data = contract.encodeABI(
                 fn_name="sell",
                 args=[
-                    int(args["amount_tokens_in_wei"]),
+                    int(args.amount_tokens_in_wei),
                     wallet.get_address(),
                     "0x0000000000000000000000000000000000000000",
                     "",
@@ -204,7 +203,7 @@ Important notes:
 
             # Send transaction
             tx_hash = wallet.send_transaction({
-                "to": Web3.to_checksum_address(args["contract_address"]),
+                "to": Web3.to_checksum_address(args.contract_address),
                 "data": encoded_data,
             })
             receipt = wallet.wait_for_transaction_receipt(tx_hash)

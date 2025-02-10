@@ -60,10 +60,10 @@ def test_create_token_success():
 
         # Create provider and call create_token
         provider = WowActionProvider()
-        args = {
-            "name": MOCK_NAME,
-            "symbol": MOCK_SYMBOL,
-        }
+        args = WowCreateTokenInput(
+            name=MOCK_NAME,
+            symbol=MOCK_SYMBOL,
+        )
         response = provider.create_token(mock_wallet, args)
 
         expected_response = (
@@ -122,11 +122,11 @@ def test_create_token_with_custom_token_uri_success():
 
         # Create provider and call create_token
         provider = WowActionProvider()
-        args = {
-            "name": MOCK_NAME,
-            "symbol": MOCK_SYMBOL,
-            "token_uri": MOCK_TOKEN_URI,
-        }
+        args = WowCreateTokenInput(
+            name=MOCK_NAME,
+            symbol=MOCK_SYMBOL,
+            token_uri=MOCK_TOKEN_URI,
+        )
         response = provider.create_token(mock_wallet, args)
 
         expected_response = (
@@ -184,10 +184,10 @@ def test_create_token_error():
 
         # Create provider and call create_token
         provider = WowActionProvider()
-        args = {
-            "name": MOCK_NAME,
-            "symbol": MOCK_SYMBOL,
-        }
+        args = WowCreateTokenInput(
+            name=MOCK_NAME,
+            symbol=MOCK_SYMBOL,
+        )
         response = provider.create_token(mock_wallet, args)
 
         expected_response = "Error creating Zora Wow ERC20 memecoin: Transaction failed"
