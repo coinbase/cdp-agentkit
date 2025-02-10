@@ -6,6 +6,7 @@ from .action_providers import (
     create_action,
     morpho_action_provider,
     pyth_action_provider,
+    wallet_action_provider,
 )
 from .agentkit import AgentKit, AgentKitOptions
 from .wallet_providers import (
@@ -27,6 +28,7 @@ __all__ = [
     "EvmWalletProvider",
     "EthAccountWalletProvider",
     "EthAccountWalletProviderConfig",
-    "pyth_action_provider",
     "morpho_action_provider",
+    "pyth_action_provider",
+    "wallet_action_provider",
 ]
