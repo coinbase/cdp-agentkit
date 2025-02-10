@@ -26,7 +26,8 @@ def test_post_tweet_input_model_missing_params():
         PostTweetInput()
 
 
-def test_post_tweet_success(mock_env):
+@pytest.mark.usefixtures("mock_env")
+def test_post_tweet_success():
     """Test successful tweet post to the authenticated Twitter (X) account."""
     provider = twitter_action_provider()
 
@@ -50,7 +51,8 @@ def test_post_tweet_success(mock_env):
         mock_create_tweet.assert_called_once_with(text=MOCK_TWEET)
 
 
-def test_post_tweet_failure(mock_env):
+@pytest.mark.usefixtures("mock_env")
+def test_post_tweet_failure():
     """Test failure when an API error occurs."""
     provider = twitter_action_provider()
     error = tweepy.errors.TweepyException("Tweepy Error")

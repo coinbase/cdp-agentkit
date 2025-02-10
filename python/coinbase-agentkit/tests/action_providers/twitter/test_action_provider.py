@@ -6,7 +6,8 @@ from coinbase_agentkit.action_providers.twitter.twitter_action_provider import (
 )
 
 
-def test_provider_init_with_env_vars(mock_env):
+@pytest.mark.usefixtures("mock_env")
+def test_provider_init_with_env_vars():
     """Test provider initialization with environment variables."""
     provider = twitter_action_provider()
     assert provider.api_key == "mock_api_key"

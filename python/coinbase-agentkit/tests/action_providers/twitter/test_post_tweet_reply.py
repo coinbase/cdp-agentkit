@@ -3,7 +3,6 @@ from json import dumps
 from unittest.mock import Mock, patch
 
 import pytest
-from .fixtures.env import mock_env
 import tweepy
 
 from coinbase_agentkit.action_providers.twitter.schemas import PostTweetReplyInput
@@ -31,7 +30,8 @@ def test_post_tweet_reply_input_model_missing_params():
         PostTweetReplyInput()
 
 
-def test_post_tweet_reply_success(mock_env):
+@pytest.mark.usefixtures("mock_env")
+def test_post_tweet_reply_success():
     """Test successful reply to a Twitter (X) post."""
     provider = twitter_action_provider()
     mock_response = Mock()
@@ -56,7 +56,8 @@ def test_post_tweet_reply_success(mock_env):
         )
 
 
-def test_post_tweet_reply_failure(mock_env):
+@pytest.mark.usefixtures("mock_env")
+def test_post_tweet_reply_failure():
     """Test failure when an API error occurs."""
     provider = twitter_action_provider()
     error = tweepy.errors.TweepyException("Tweepy Error")
