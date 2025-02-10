@@ -10,7 +10,7 @@ class ActionMetadata(BaseModel):
 
     name: str
     description: str
-    _schema: type[BaseModel] | None
+    args_schema: type[BaseModel] | None
     invoke: Callable
     wallet_provider: bool = False
 
@@ -26,7 +26,7 @@ def create_action(name: str, description: str, schema: type[BaseModel] | None = 
         wrapper._action_metadata = ActionMetadata(
             name=name,
             description=description,
-            _schema=schema,
+            args_schema=schema,
             invoke=func,
             wallet_provider=len(func.__code__.co_varnames) > 1
             and func.__code__.co_varnames[1] == "wallet_provider",
