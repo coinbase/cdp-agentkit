@@ -1,4 +1,3 @@
-from typing import Any
 
 from ...network import Network
 from ...wallet_providers import WalletProvider
