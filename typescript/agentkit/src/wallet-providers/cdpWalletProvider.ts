@@ -250,7 +250,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
     }
 
     const preparedTransaction = await this.prepareTransaction(
-      transaction.to!,
+      transaction.to! as `0x${string}`,
       transaction.value!,
       transaction.data!,
     );
@@ -520,5 +520,26 @@ export class CdpWalletProvider extends EvmWalletProvider {
     }
 
     return this.#cdpWallet.export();
+  }
+
+  /**
+   * Gets the public client.
+   *
+   * @returns The public client.
+   */
+  getPublicClient(): PublicClient {
+    return this.#publicClient;
+  }
+
+  /**
+   * Gets the wallet.
+   *
+   * @returns The wallet.
+   */
+  getWallet(): Wallet {
+    if (!this.#cdpWallet) {
+      throw new Error("Wallet not initialized");
+    }
+    return this.#cdpWallet;
   }
 }
