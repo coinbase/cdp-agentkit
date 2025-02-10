@@ -1,49 +1,23 @@
-from decimal import Decimal
-from unittest.mock import Mock
-
-import pytest
-
 from coinbase_agentkit.action_providers.wallet.schemas import GetWalletDetailsSchema
-from coinbase_agentkit.action_providers.wallet.wallet_action_provider import (
-    WalletActionProvider,
-)
+from coinbase_agentkit.action_providers.wallet.wallet_action_provider import WalletActionProvider
 from coinbase_agentkit.network import Network
-from coinbase_agentkit.wallet_providers import WalletProvider
 
-MOCK_ADDRESS = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
-MOCK_BALANCE = Decimal("1000000000000000000")  # 1 ETH in wei
-MOCK_NETWORK = Network(
-    protocol_family="evm",
-    chain_id=1,
-    network_id="base-sepolia"
+from .conftest import (
+    MOCK_ADDRESS,
+    MOCK_BALANCE,
+    MOCK_NETWORK,
+    MOCK_PROVIDER_NAME,
 )
-MOCK_PROVIDER_NAME = "TestWallet"
 
-@pytest.fixture
-def mock_wallet_provider():
-    """Create a mock wallet provider for testing."""
-    mock = Mock(spec=WalletProvider)
-    mock.get_address.return_value = MOCK_ADDRESS
-    mock.get_network.return_value = MOCK_NETWORK
-    mock.get_balance.return_value = MOCK_BALANCE
-    mock.get_name.return_value = MOCK_PROVIDER_NAME
-    return mock
-
-@pytest.fixture
-def wallet_action_provider(mock_wallet_provider):
-    """Create a WalletActionProvider instance with a mock wallet provider."""
-    provider = WalletActionProvider()
-    provider.wallet_provider = mock_wallet_provider
-    return provider
 
 def test_get_wallet_details_schema_valid():
     """Test that GetWalletDetailsSchema accepts valid parameters."""
     schema = GetWalletDetailsSchema()
     assert isinstance(schema, GetWalletDetailsSchema)
 
-def test_get_wallet_details_success(wallet_action_provider):
+def test_get_wallet_details_success(wallet_action_provider, mock_wallet_provider):
     """Test successful get wallet details with valid parameters."""
-    result = wallet_action_provider.get_wallet_details({})
+    result = wallet_action_provider.get_wallet_details(mock_wallet_provider, GetWalletDetailsSchema())
 
     expected_response = f"""Wallet Details:
 - Provider: {MOCK_PROVIDER_NAME}
@@ -64,7 +38,7 @@ def test_get_wallet_details_missing_network_ids(wallet_action_provider, mock_wal
         network_id=None
     )
 
-    result = wallet_action_provider.get_wallet_details({})
+    result = wallet_action_provider.get_wallet_details(mock_wallet_provider, GetWalletDetailsSchema())
 
     assert "Network ID: N/A" in result
     assert "Chain ID: N/A" in result
@@ -74,7 +48,7 @@ def test_get_wallet_details_error(wallet_action_provider, mock_wallet_provider):
     error_message = "Failed to get wallet details"
     mock_wallet_provider.get_balance.side_effect = Exception(error_message)
 
-    result = wallet_action_provider.get_wallet_details({})
+    result = wallet_action_provider.get_wallet_details(mock_wallet_provider, GetWalletDetailsSchema())
     assert result == f"Error getting wallet details: {error_message}"
 
 def test_supports_network(wallet_action_provider):

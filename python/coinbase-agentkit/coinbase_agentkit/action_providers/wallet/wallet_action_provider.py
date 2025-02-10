@@ -1,4 +1,3 @@
-from typing import Any
 
 from ...network import Network
 from ...wallet_providers import WalletProvider
@@ -26,14 +25,15 @@ class WalletActionProvider(ActionProvider[WalletProvider]):
     )
     def get_wallet_details(
         self,
-        args: dict[str, Any]
+        wallet_provider: WalletProvider,
+        args: GetWalletDetailsSchema
     ) -> str:
         """Get details about the wallet."""
         try:
-            wallet_address = self.wallet_provider.get_address()
-            network = self.wallet_provider.get_network()
-            balance = self.wallet_provider.get_balance()
-            provider_name = self.wallet_provider.get_name()
+            wallet_address = wallet_provider.get_address()
+            network = wallet_provider.get_network()
+            balance = wallet_provider.get_balance()
+            provider_name = wallet_provider.get_name()
 
             return f"""Wallet Details:
 - Provider: {provider_name}
@@ -53,12 +53,13 @@ class WalletActionProvider(ActionProvider[WalletProvider]):
     )
     def get_balance(
         self,
-        args: dict[str, Any]
+        wallet_provider: WalletProvider,
+        args: GetBalanceSchema
     ) -> str:
         """Get native currency balance for the wallet."""
         try:
-            balance = self.wallet_provider.get_balance()
-            wallet_address = self.wallet_provider.get_address()
+            balance = wallet_provider.get_balance()
+            wallet_address = wallet_provider.get_address()
 
             return f"Native balance at address {wallet_address}: {balance}"
         except Exception as e:
