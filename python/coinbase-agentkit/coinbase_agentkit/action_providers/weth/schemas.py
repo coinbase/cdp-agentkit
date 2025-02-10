@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field, validator
 from .constants import MIN_WRAP_AMOUNT
 
 
-class WrapEthSchema(BaseModel):
+class WrapEthInput(BaseModel):
     """Input schema for wrapping ETH to WETH."""
 
     amount_to_wrap: str = Field(..., description="Amount of ETH to wrap in wei")

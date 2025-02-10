@@ -1,4 +1,3 @@
-from typing import Any
 
 from web3 import Web3
 
@@ -7,7 +6,7 @@ from ...wallet_providers import EvmWalletProvider
 from ..action_decorator import create_action
 from ..action_provider import ActionProvider
 from .constants import WETH_ABI, WETH_ADDRESS
-from .schemas import WrapEthSchema
+from .schemas import WrapEthInput
 
 SUPPORTED_NETWORKS = ["base-mainnet", "base-sepolia"]
 
@@ -35,12 +34,12 @@ Important notes:
   - Base Sepolia (ie, 'base-sepolia')
   - Base Mainnet (ie, 'base', 'base-mainnet')
 """,
-        schema=WrapEthSchema
+        schema=WrapEthInput
     )
     def wrap_eth(
         self,
         wallet_provider: EvmWalletProvider,
-        args: dict[str, Any]
+        args: WrapEthInput
     ) -> str:
         """Wrap ETH to WETH.
 
@@ -59,7 +58,7 @@ Important notes:
             tx_hash = wallet_provider.send_transaction({
                 "to": WETH_ADDRESS,
                 "data": data,
-                "value": args["amount_to_wrap"]
+                "value": args.amount_to_wrap
             })
 
             wallet_provider.wait_for_transaction_receipt(tx_hash)
