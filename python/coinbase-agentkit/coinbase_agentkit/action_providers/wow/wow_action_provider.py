@@ -1,12 +1,8 @@
 """WOW action provider implementation."""
 import json
-from decimal import Decimal
 from typing import Any
 
-from eth_account.datastructures import SignedTransaction
-from eth_typing import HexStr
 from web3 import Web3
-from web3.types import BlockIdentifier, ChecksumAddress, HexStr, TxParams
 
 from ...network import Network
 from ...wallet_providers import EvmWalletProvider
@@ -25,6 +21,7 @@ from .utils import (
     get_has_graduated,
     get_sell_quote,
 )
+
 
 class WowActionProvider(ActionProvider[EvmWalletProvider]):
     """Provides actions for interacting with WOW protocol."""
@@ -45,7 +42,7 @@ Inputs:
 
 Important notes:
 - The amount is a string and cannot have any decimal points, since the unit of measurement is wei.
-- Make sure to use the exact amount provided, and if there's any doubt, check by getting more information before continuing with the action. 
+- Make sure to use the exact amount provided, and if there's any doubt, check by getting more information before continuing with the action.
 - 1 wei = 0.000000000000000001 ETH
 - Minimum purchase amount is 100000000000000 wei (0.0000001 ETH)
 - Only supported on the following networks:
@@ -96,7 +93,7 @@ Important notes:
                 f"and receipt:\n{json.dumps(receipt)}"
             )
         except Exception as e:
-            return f"Error buying Zora Wow ERC20 memecoin: {str(e)}"
+            return f"Error buying Zora Wow ERC20 memecoin: {e!s}"
 
     @create_action(
         name="create_token",
@@ -106,7 +103,7 @@ Do not use this tool for any other purpose, or for creating other types of token
 
 Inputs:
 - Token name (e.g. WowCoin)
-- Token symbol (e.g. WOW) 
+- Token symbol (e.g. WOW)
 - Token URI (optional) - Contains metadata about the token
 
 Important notes:
@@ -153,7 +150,7 @@ Important notes:
                 f"and receipt:\n{json.dumps(receipt)}"
             )
         except Exception as e:
-            return f"Error creating Zora Wow ERC20 memecoin: {str(e)}"
+            return f"Error creating Zora Wow ERC20 memecoin: {e!s}"
 
     @create_action(
         name="sell_token",
@@ -167,7 +164,7 @@ Inputs:
 
 Important notes:
 - The amount is a string and cannot have any decimal points, since the unit of measurement is wei.
-- Make sure to use the exact amount provided, and if there's any doubt, check by getting more information before continuing with the action. 
+- Make sure to use the exact amount provided, and if there's any doubt, check by getting more information before continuing with the action.
 - 1 wei = 0.000000000000000001 ETH
 - Minimum purchase amount is 100000000000000 wei (0.0000001 ETH)
 - Only supported on the following networks:
@@ -217,14 +214,15 @@ Important notes:
                 f"and receipt:\n{json.dumps(receipt)}"
             )
         except Exception as e:
-            return f"Error selling Zora Wow ERC20 memecoin: {str(e)}"
+            return f"Error selling Zora Wow ERC20 memecoin: {e!s}"
 
     def supports_network(self, network: Network) -> bool:
         """Check if network is supported by WOW protocol."""
         return (
-            network.protocol_family == "evm" 
+            network.protocol_family == "evm"
             and network.network_id in SUPPORTED_NETWORKS
         )
+
 
 def wow_action_provider() -> WowActionProvider:
     """Create a new WowActionProvider instance."""

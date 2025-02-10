@@ -210,4 +210,4 @@ def test_sell_token_error():
         mock_contract.assert_called_once_with(
             address=MOCK_CONTRACT_ADDRESS,
             abi=WOW_ABI,
-        ) 
+        )

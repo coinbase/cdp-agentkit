@@ -198,4 +198,4 @@ def test_create_token_error():
         mock_contract.assert_called_once_with(
             address=factory_address,
             abi=WOW_FACTORY_ABI,
-        ) 
+        )
