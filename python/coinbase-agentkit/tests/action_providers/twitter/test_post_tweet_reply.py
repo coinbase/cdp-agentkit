@@ -3,6 +3,7 @@ from json import dumps
 from unittest.mock import Mock, patch
 
 import pytest
+from .fixtures.env import mock_env
 import tweepy
 
 from coinbase_agentkit.action_providers.twitter.schemas import PostTweetReplyInput

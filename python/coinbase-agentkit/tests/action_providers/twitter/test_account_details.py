@@ -3,6 +3,7 @@ from json import dumps
 from unittest.mock import Mock, patch
 
 import tweepy
+import pytest
 
 from coinbase_agentkit.action_providers.twitter.twitter_action_provider import (
     twitter_action_provider,
@@ -13,7 +14,8 @@ MOCK_NAME = "Test Account"
 MOCK_USERNAME = "testaccount"
 
 
-def test_account_details_success(mock_env):
+@pytest.mark.usefixtures("mock_env")
+def test_account_details_success():
     """Test successful retrieval of the authenticated Twitter (X) account."""
     provider = twitter_action_provider()
 
@@ -44,7 +46,8 @@ def test_account_details_success(mock_env):
         mock_get_me.assert_called_once_with()
 
 
-def test_account_details_failure(mock_env):
+@pytest.mark.usefixtures("mock_env")
+def test_account_details_failure():
     """Test failure when an API error occurs."""
     provider = twitter_action_provider()
     error = tweepy.errors.TweepyException("Tweepy Error")

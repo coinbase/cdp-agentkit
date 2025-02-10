@@ -27,7 +27,8 @@ def test_account_mentions_input_model_missing_params():
         AccountMentionsInput()
 
 
-def test_account_mentions_success(mock_env):
+@pytest.mark.usefixtures("mock_env")
+def test_account_mentions_success():
     """Test successful retrieval of the authenticated Twitter (X) account's mentions."""
     provider = twitter_action_provider()
 
@@ -52,7 +53,8 @@ def test_account_mentions_success(mock_env):
         mock_get_mentions.assert_called_once_with(MOCK_USER_ID)
 
 
-def test_account_mentions_failure(mock_env):
+@pytest.mark.usefixtures("mock_env")
+def test_account_mentions_failure():
     """Test failure when an API error occurs."""
     provider = twitter_action_provider()
     error = tweepy.errors.TweepyException("Tweepy Error")
