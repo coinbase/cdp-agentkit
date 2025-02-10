@@ -1,6 +1,5 @@
 import os
 from json import dumps
-from typing import Any
 
 from ...network import Network
 from ..action_decorator import create_action
@@ -64,7 +63,7 @@ A failure response will return a message with a Twitter API request error:
     Error retrieving authenticated user account: 429 Too Many Requests""",
         schema=AccountDetailsInput,
     )
-    def account_details(self, args: dict[str, Any]) -> str:
+    def account_details(self, args: AccountDetailsInput) -> str:
         """Get the authenticated Twitter (X) user account details using the Tweepy client."""
         import tweepy
         try:
@@ -87,11 +86,11 @@ A failure response will return a message with the Twitter API request error:
     Error retrieving user mentions: 429 Too Many Requests""",
         schema=AccountMentionsInput,
     )
-    def account_mentions(self, args: dict[str, Any]) -> str:
+    def account_mentions(self, args: AccountMentionsInput) -> str:
         """Get mentions for a specified Twitter user."""
         import tweepy
         try:
-            response = self.client.get_users_mentions(args["user_id"])
+            response = self.client.get_users_mentions(args.user_id)
             return f"Successfully retrieved account mentions:\n{dumps({'data': response.data})}"
         except tweepy.errors.TweepyException as e:
             return f"Error retrieving authenticated account mentions:\n{e}"
@@ -108,11 +107,11 @@ A failure response will return a message with the Twitter API request error:
     You are not allowed to create a Tweet with duplicate content.""",
         schema=PostTweetInput,
     )
-    def post_tweet(self, args: dict[str, Any]) -> str:
+    def post_tweet(self, args: PostTweetInput) -> str:
         """Post a tweet on Twitter."""
         import tweepy
         try:
-            response = self.client.create_tweet(text=args["tweet"])
+            response = self.client.create_tweet(text=args.tweet)
             return f"Successfully posted to Twitter:\n{dumps({'data': response.data})}"
         except tweepy.errors.TweepyException as e:
             return f"Error posting to Twitter:\n{e}"
@@ -129,13 +128,13 @@ A failure response will return a message with the Twitter API request error:
     You are not allowed to create a Tweet with duplicate content.""",
         schema=PostTweetReplyInput,
     )
-    def post_tweet_reply(self, args: dict[str, Any]) -> str:
+    def post_tweet_reply(self, args: PostTweetReplyInput) -> str:
         """Post a reply to a tweet on Twitter."""
         import tweepy
         try:
             response = self.client.create_tweet(
-                text=args["tweet_reply"],
-                in_reply_to_tweet_id=args["tweet_id"]
+                text=args.tweet_reply,
+                in_reply_to_tweet_id=args.tweet_id
             )
             return f"Successfully posted reply to Twitter:\n{dumps({'data': response.data})}"
         except tweepy.errors.TweepyException as e:

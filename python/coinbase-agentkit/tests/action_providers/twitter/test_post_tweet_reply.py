@@ -45,10 +45,8 @@ def test_post_tweet_reply_success():
     expected_response = f"Successfully posted reply to Twitter:\n{dumps(expected_result)}"
 
     with patch.object(provider.client, "create_tweet", return_value=mock_response) as mock_create_tweet:
-        response = provider.post_tweet_reply({
-            "tweet_id": MOCK_TWEET_ID,
-            "tweet_reply": MOCK_TWEET_REPLY
-        })
+        args = PostTweetReplyInput(tweet_id=MOCK_TWEET_ID, tweet_reply=MOCK_TWEET_REPLY)
+        response = provider.post_tweet_reply(args)
         assert response == expected_response
         mock_create_tweet.assert_called_once_with(
             text=MOCK_TWEET_REPLY,
@@ -64,10 +62,8 @@ def test_post_tweet_reply_failure():
     expected_response = f"Error posting reply to Twitter:\n{error}"
 
     with patch.object(provider.client, "create_tweet", side_effect=error) as mock_create_tweet:
-        response = provider.post_tweet_reply({
-            "tweet_id": MOCK_TWEET_ID,
-            "tweet_reply": MOCK_TWEET_REPLY
-        })
+        args = PostTweetReplyInput(tweet_id=MOCK_TWEET_ID, tweet_reply=MOCK_TWEET_REPLY)
+        response = provider.post_tweet_reply(args)
         assert response == expected_response
         mock_create_tweet.assert_called_once_with(
             text=MOCK_TWEET_REPLY,

@@ -46,7 +46,8 @@ def test_account_mentions_success():
 
     with patch.object(provider.client, "get_users_mentions", return_value=mock_response) as mock_get_mentions:
         # Execute action
-        response = provider.account_mentions({"user_id": MOCK_USER_ID})
+        args = AccountMentionsInput(user_id=MOCK_USER_ID)
+        response = provider.account_mentions(args)
 
         # Verify response
         assert response == expected_response
@@ -62,7 +63,8 @@ def test_account_mentions_failure():
 
     with patch.object(provider.client, "get_users_mentions", side_effect=error) as mock_get_mentions:
         # Execute action
-        response = provider.account_mentions({"user_id": MOCK_USER_ID})
+        args = AccountMentionsInput(user_id=MOCK_USER_ID)
+        response = provider.account_mentions(args)
 
         # Verify response
         assert response == expected_response

@@ -44,7 +44,8 @@ def test_post_tweet_success():
 
     with patch.object(provider.client, "create_tweet", return_value=mock_response) as mock_create_tweet:
         # Execute action
-        response = provider.post_tweet({"tweet": MOCK_TWEET})
+        args = PostTweetInput(tweet=MOCK_TWEET)
+        response = provider.post_tweet(args)
 
         # Verify response
         assert response == expected_response
@@ -60,7 +61,8 @@ def test_post_tweet_failure():
 
     with patch.object(provider.client, "create_tweet", side_effect=error) as mock_create_tweet:
         # Execute action
-        response = provider.post_tweet({"tweet": MOCK_TWEET})
+        args = PostTweetInput(tweet=MOCK_TWEET)
+        response = provider.post_tweet(args)
 
         # Verify response
         assert response == expected_response
