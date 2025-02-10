@@ -40,11 +40,11 @@ def main():
 
     try:
         # Get BTC price feed ID
-        feed_id_result = agent_kit.get_actions()[0].invoke({"token_symbol": "BTC"})
+        feed_id_result = agent_kit.get_actions()[1].invoke({"token_symbol": "BTC"})
         print(f"BTC Price Feed ID: {feed_id_result}")
 
         # Get BTC price using the feed ID
-        price_result = agent_kit.get_actions()[1].invoke({"price_feed_id": feed_id_result})
+        price_result = agent_kit.get_actions()[0].invoke({"price_feed_id": feed_id_result})
         print(f"Current BTC Price: ${price_result}")
 
     except Exception as e:

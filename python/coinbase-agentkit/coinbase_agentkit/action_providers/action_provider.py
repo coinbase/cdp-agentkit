@@ -15,7 +15,7 @@ class Action(BaseModel):
 
     name: str
     description: str
-    schema: type[BaseModel] | None = None
+    _schema: type[BaseModel] | None = None
     invoke: Callable = Field(
         ..., exclude=True
     )  # exclude=True prevents serialization issues with callable
@@ -32,23 +32,29 @@ class ActionProvider(Generic[TWalletProvider], ABC):
         self.name = name
         self.action_providers = action_providers
 
+        # Register all decorated methods
+        for method_name in dir(self):
+            method = getattr(self, method_name)
+            if hasattr(method, "_add_to_actions"):
+                method._add_to_actions(self)
+
     def get_actions(self, wallet_provider: TWalletProvider) -> list[Action]:
         """Get all actions from this provider and its sub-providers."""
         actions: list[Action] = []
-
         action_providers = [self, *self.action_providers]
 
         for provider in action_providers:
             provider_actions = getattr(provider, "_actions", [])
-
             for action_metadata in provider_actions:
                 actions.append(
                     Action(
                         name=action_metadata.name,
                         description=action_metadata.description,
-                        schema=action_metadata.schema,
-                        invoke=lambda args, m=action_metadata: (
-                            m.invoke(wallet_provider, args) if m.wallet_provider else m.invoke(args)
+                        _schema=action_metadata.schema,
+                        invoke=lambda args, m=action_metadata, p=provider: (
+                            m.invoke(p, wallet_provider, args)
+                            if m.wallet_provider
+                            else m.invoke(p, args)
                         ),
                     )
                 )
