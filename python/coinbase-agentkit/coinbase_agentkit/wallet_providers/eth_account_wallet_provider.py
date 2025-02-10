@@ -95,21 +95,21 @@ class EthAccountWalletProvider(EvmWalletProvider):
 
     def send_transaction(self, transaction: TxParams) -> HexStr:
         """Send a signed transaction to the network."""
-        max_priority_fee_per_gas, max_fee_per_gas = self.estimate_fees()
-
-        transaction["maxFeePerGas"] = max_fee_per_gas
-        transaction["maxPriorityFeePerGas"] = max_priority_fee_per_gas
-
-        gas = self.web3.eth.estimate_gas(transaction)
-        transaction["gas"] = gas
+        transaction["from"] = self.account.address
+        transaction["chainId"] = self.config.chain_id
 
         nonce = self.web3.eth.get_transaction_count(self.account.address)
         transaction["nonce"] = nonce
 
-        transaction["chainId"] = self.config.chain_id
+        max_priority_fee_per_gas, max_fee_per_gas = self.estimate_fees()
+        transaction["maxPriorityFeePerGas"] = max_priority_fee_per_gas
+        transaction["maxFeePerGas"] = max_fee_per_gas
 
-        tx_hash = self.web3.eth.send_transaction(transaction)
-        return Web3.to_hex(tx_hash)
+        gas = self.web3.eth.estimate_gas(transaction)
+        transaction["gas"] = gas
+
+        hash = self.web3.eth.send_transaction(transaction)
+        return Web3.to_hex(hash)
 
     def wait_for_transaction_receipt(
         self, tx_hash: HexStr, timeout: float = 120, poll_latency: float = 0.1
