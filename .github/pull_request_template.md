@@ -18,7 +18,7 @@
 
 ### Wallet support
 - [ ] CDP Wallet
-- [ ] EVM Wallet
+- [ ] Viem Wallet
 - [ ] Other
 <!-- please specify -->
 
@@ -28,7 +28,6 @@
 - [ ] Doc strings
 - [ ] Readme updates
 - [ ] Rebased against master
-- [ ] Relevant exports added
 
 ### How has it been tested?
 - [ ] Agent tested
