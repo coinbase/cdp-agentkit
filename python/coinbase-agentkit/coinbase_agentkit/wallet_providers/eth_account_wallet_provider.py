@@ -133,3 +133,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
         if args is None:
             args = []
         return func(*args).call(block_identifier=block_identifier)
+
+    def native_transfer(self, to: HexStr, amount: Decimal) -> str:
+        """Transfer the native asset of the network."""
+        pass

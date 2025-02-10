@@ -1,6 +1,6 @@
 """Tests for Twitter account details action."""
 from json import dumps
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 import pytest
 import tweepy
@@ -17,7 +17,7 @@ MOCK_USERNAME = "testaccount"
 
 def test_account_details_input_model_valid():
     """Test that AccountDetailsInput accepts valid parameters."""
-    input_model = AccountDetailsInput()
+    input_model = AccountDetailsInput(**{})
     assert isinstance(input_model, AccountDetailsInput)
 
 
@@ -27,27 +27,20 @@ def test_account_details_success():
     provider = twitter_action_provider()
 
     # Set up mock response
-    mock_response = Mock()
-    mock_response.data = {
-        "id": MOCK_ID,
-        "name": MOCK_NAME,
-        "username": MOCK_USERNAME,
-    }
-
-    expected_result = {
+    mock_response = {
         "data": {
             "id": MOCK_ID,
             "name": MOCK_NAME,
-            "username": MOCK_USERNAME,
-            "url": f"https://x.com/{MOCK_USERNAME}"
+            "username": MOCK_USERNAME
         }
     }
-    expected_response = f"Successfully retrieved authenticated user account details:\n{dumps(expected_result)}"
+    mock_response["data"]["url"] = f"https://x.com/{MOCK_USERNAME}"
+
+    expected_response = f"Successfully retrieved authenticated user account details:\n{dumps(mock_response)}"
 
     with patch.object(provider.client, "get_me", return_value=mock_response) as mock_get_me:
         # Execute action
-        args = AccountDetailsInput()
-        response = provider.account_details(args)
+        response = provider.account_details({})
 
         # Verify response
         assert response == expected_response
@@ -63,8 +56,7 @@ def test_account_details_failure():
 
     with patch.object(provider.client, "get_me", side_effect=error) as mock_get_me:
         # Execute action
-        args = AccountDetailsInput()
-        response = provider.account_details(args)
+        response = provider.account_details({})
 
         # Verify response
         assert response == expected_response

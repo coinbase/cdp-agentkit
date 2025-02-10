@@ -1,5 +1,6 @@
 import os
 from json import dumps
+from typing import Any
 
 from ...network import Network
 from ..action_decorator import create_action
@@ -21,30 +22,36 @@ class TwitterActionProvider(ActionProvider):
         api_secret: str | None = None,
         access_token: str | None = None,
         access_token_secret: str | None = None,
+        bearer_token: str | None = None,
     ):
         super().__init__("twitter", [])
 
-        self.api_key = api_key or os.getenv("TWITTER_API_KEY")
-        self.api_secret = api_secret or os.getenv("TWITTER_API_SECRET")
-        self.access_token = access_token or os.getenv("TWITTER_ACCESS_TOKEN")
-        self.access_token_secret = access_token_secret or os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
+        api_key = api_key or os.getenv("TWITTER_API_KEY")
+        api_secret = api_secret or os.getenv("TWITTER_API_SECRET")
+        access_token = access_token or os.getenv("TWITTER_ACCESS_TOKEN")
+        access_token_secret = access_token_secret or os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
+        bearer_token = bearer_token or os.getenv("TWITTER_BEARER_TOKEN")
 
-        if not self.api_key:
+        if not api_key:
             raise ValueError("TWITTER_API_KEY is not configured.")
-        if not self.api_secret:
+        if not api_secret:
             raise ValueError("TWITTER_API_SECRET is not configured.")
-        if not self.access_token:
+        if not access_token:
             raise ValueError("TWITTER_ACCESS_TOKEN is not configured.")
-        if not self.access_token_secret:
+        if not access_token_secret:
             raise ValueError("TWITTER_ACCESS_TOKEN_SECRET is not configured.")
+        if not bearer_token:
+            raise ValueError("TWITTER_BEARER_TOKEN is not configured.")
 
         try:
             import tweepy
             self.client = tweepy.Client(
-                consumer_key=self.api_key,
-                consumer_secret=self.api_secret,
-                access_token=self.access_token,
-                access_token_secret=self.access_token_secret,
+                consumer_key=api_key,
+                consumer_secret=api_secret,
+                access_token=access_token,
+                access_token_secret=access_token_secret,
+                bearer_token=bearer_token,
+                return_type=dict,
             )
         except ImportError as e:
             raise ImportError("Failed to import tweepy. Please install it with 'pip install tweepy'.") from e
@@ -63,14 +70,18 @@ A failure response will return a message with a Twitter API request error:
     Error retrieving authenticated user account: 429 Too Many Requests""",
         schema=AccountDetailsInput,
     )
-    def account_details(self, args: AccountDetailsInput) -> str:
+    def account_details(self, args: dict[str, Any]) -> str:
         """Get the authenticated Twitter (X) user account details using the Tweepy client."""
+        # Validate args against the Pydantic model
+        AccountDetailsInput(**args)
+
         import tweepy
         try:
             response = self.client.get_me()
-            data = response.data
+            data = response["data"]
             data["url"] = f"https://x.com/{data['username']}"
-            return f"Successfully retrieved authenticated user account details:\n{dumps({'data': data})}"
+
+            return f"Successfully retrieved authenticated user account details:\n{dumps(response)}"
         except tweepy.errors.TweepyException as e:
             return f"Error retrieving authenticated user account details:\n{e}"
 
@@ -86,12 +97,14 @@ A failure response will return a message with the Twitter API request error:
     Error retrieving user mentions: 429 Too Many Requests""",
         schema=AccountMentionsInput,
     )
-    def account_mentions(self, args: AccountMentionsInput) -> str:
+    def account_mentions(self, args: dict[str, Any]) -> str:
         """Get mentions for a specified Twitter user."""
+        # Validate args against the Pydantic model
+        validated_args = AccountMentionsInput(**args)
         import tweepy
         try:
-            response = self.client.get_users_mentions(args.user_id)
-            return f"Successfully retrieved account mentions:\n{dumps({'data': response.data})}"
+            response = self.client.get_users_mentions(validated_args.user_id)
+            return f"Successfully retrieved account mentions:\n{dumps(response)}"
         except tweepy.errors.TweepyException as e:
             return f"Error retrieving authenticated account mentions:\n{e}"
 
@@ -107,12 +120,14 @@ A failure response will return a message with the Twitter API request error:
     You are not allowed to create a Tweet with duplicate content.""",
         schema=PostTweetInput,
     )
-    def post_tweet(self, args: PostTweetInput) -> str:
+    def post_tweet(self, args: dict[str, Any]) -> str:
         """Post a tweet on Twitter."""
+        # Validate args against the Pydantic model
+        validated_args = PostTweetInput(**args)
         import tweepy
         try:
-            response = self.client.create_tweet(text=args.tweet)
-            return f"Successfully posted to Twitter:\n{dumps({'data': response.data})}"
+            response = self.client.create_tweet(text=validated_args.tweet)
+            return f"Successfully posted to Twitter:\n{dumps(response)}"
         except tweepy.errors.TweepyException as e:
             return f"Error posting to Twitter:\n{e}"
 
@@ -128,15 +143,17 @@ A failure response will return a message with the Twitter API request error:
     You are not allowed to create a Tweet with duplicate content.""",
         schema=PostTweetReplyInput,
     )
-    def post_tweet_reply(self, args: PostTweetReplyInput) -> str:
+    def post_tweet_reply(self, args: dict[str, Any]) -> str:
         """Post a reply to a tweet on Twitter."""
+        # Validate args against the Pydantic model
+        validated_args = PostTweetReplyInput(**args)
         import tweepy
         try:
             response = self.client.create_tweet(
-                text=args.tweet_reply,
-                in_reply_to_tweet_id=args.tweet_id
+                text=validated_args.tweet_reply,
+                in_reply_to_tweet_id=validated_args.tweet_id
             )
-            return f"Successfully posted reply to Twitter:\n{dumps({'data': response.data})}"
+            return f"Successfully posted reply to Twitter:\n{dumps(response)}"
         except tweepy.errors.TweepyException as e:
             return f"Error posting reply to Twitter:\n{e}"
 
@@ -153,6 +170,7 @@ def twitter_action_provider(
     api_secret: str | None = None,
     access_token: str | None = None,
     access_token_secret: str | None = None,
+    bearer_token: str | None = None,
 ) -> TwitterActionProvider:
     """Create and return a new TwitterActionProvider instance."""
     return TwitterActionProvider(
@@ -160,4 +178,5 @@ def twitter_action_provider(
         api_secret=api_secret,
         access_token=access_token,
         access_token_secret=access_token_secret,
+        bearer_token=bearer_token,
     )

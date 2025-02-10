@@ -1,6 +1,6 @@
 """Tests for Twitter post tweet action."""
 from json import dumps
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 import pytest
 import tweepy
@@ -10,46 +10,47 @@ from coinbase_agentkit.action_providers.twitter.twitter_action_provider import (
     twitter_action_provider,
 )
 
-MOCK_TWEET = "hello, world!"
-MOCK_TWEET_ID = "0123456789012345678"
+MOCK_TWEET_TEXT = "Hello, world!"
+MOCK_TWEET_ID = "1234"
+MOCK_EDIT_HISTORY_IDS = ["1234"]
 
 
 def test_post_tweet_input_model_valid():
     """Test that PostTweetInput accepts valid parameters."""
-    input_model = PostTweetInput(tweet=MOCK_TWEET)
-    assert input_model.tweet == MOCK_TWEET
+    input_model = PostTweetInput(**{"tweet": MOCK_TWEET_TEXT})
+    assert isinstance(input_model, PostTweetInput)
+    assert input_model.tweet == MOCK_TWEET_TEXT
 
 
-def test_post_tweet_input_model_missing_params():
-    """Test that PostTweetInput raises error when params are missing."""
+def test_post_tweet_input_model_invalid():
+    """Test that PostTweetInput rejects invalid parameters."""
     with pytest.raises(ValueError):
-        PostTweetInput()
+        PostTweetInput(**{})
 
 
 @pytest.mark.usefixtures("mock_env")
 def test_post_tweet_success():
-    """Test successful tweet post to the authenticated Twitter (X) account."""
+    """Test successful posting of a tweet."""
     provider = twitter_action_provider()
 
     # Set up mock response
-    mock_response = Mock()
-    mock_response.data = {
-        "text": MOCK_TWEET,
-        "id": MOCK_TWEET_ID,
-        "edit_history_tweet_ids": [MOCK_TWEET_ID]
+    mock_response = {
+        "data": {
+            "id": MOCK_TWEET_ID,
+            "text": MOCK_TWEET_TEXT,
+            "edit_history_tweet_ids": MOCK_EDIT_HISTORY_IDS
+        }
     }
 
-    expected_result = {"data": mock_response.data}
-    expected_response = f"Successfully posted to Twitter:\n{dumps(expected_result)}"
+    expected_response = f"Successfully posted to Twitter:\n{dumps(mock_response)}"
 
     with patch.object(provider.client, "create_tweet", return_value=mock_response) as mock_create_tweet:
         # Execute action
-        args = PostTweetInput(tweet=MOCK_TWEET)
-        response = provider.post_tweet(args)
+        response = provider.post_tweet({"tweet": MOCK_TWEET_TEXT})
 
         # Verify response
         assert response == expected_response
-        mock_create_tweet.assert_called_once_with(text=MOCK_TWEET)
+        mock_create_tweet.assert_called_once_with(text=MOCK_TWEET_TEXT)
 
 
 @pytest.mark.usefixtures("mock_env")
@@ -61,9 +62,8 @@ def test_post_tweet_failure():
 
     with patch.object(provider.client, "create_tweet", side_effect=error) as mock_create_tweet:
         # Execute action
-        args = PostTweetInput(tweet=MOCK_TWEET)
-        response = provider.post_tweet(args)
+        response = provider.post_tweet({"tweet": MOCK_TWEET_TEXT})
 
         # Verify response
         assert response == expected_response
-        mock_create_tweet.assert_called_once_with(text=MOCK_TWEET)
+        mock_create_tweet.assert_called_once_with(text=MOCK_TWEET_TEXT)

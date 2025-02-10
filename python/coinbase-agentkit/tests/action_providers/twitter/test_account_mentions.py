@@ -1,6 +1,6 @@
 """Tests for Twitter account mentions action."""
 from json import dumps
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 import pytest
 import tweepy
@@ -11,43 +11,43 @@ from coinbase_agentkit.action_providers.twitter.twitter_action_provider import (
 )
 
 MOCK_USER_ID = "1234"
-MOCK_TWEET_ID = "1857479287504584856"
-MOCK_TWEET_TEXT = "@CDPAgentKit reply"
+MOCK_TWEET_ID = "5678"
+MOCK_TWEET_TEXT = "@testaccount Hello!"
 
 
 def test_account_mentions_input_model_valid():
     """Test that AccountMentionsInput accepts valid parameters."""
-    input_model = AccountMentionsInput(user_id=MOCK_USER_ID)
+    input_model = AccountMentionsInput(**{"user_id": MOCK_USER_ID})
+    assert isinstance(input_model, AccountMentionsInput)
     assert input_model.user_id == MOCK_USER_ID
 
 
-def test_account_mentions_input_model_missing_params():
-    """Test that AccountMentionsInput raises error when params are missing."""
+def test_account_mentions_input_model_invalid():
+    """Test that AccountMentionsInput rejects invalid parameters."""
     with pytest.raises(ValueError):
-        AccountMentionsInput()
+        AccountMentionsInput(**{})
 
 
 @pytest.mark.usefixtures("mock_env")
 def test_account_mentions_success():
-    """Test successful retrieval of the authenticated Twitter (X) account's mentions."""
+    """Test successful retrieval of Twitter (X) account mentions."""
     provider = twitter_action_provider()
 
     # Set up mock response
-    mock_response = Mock()
-    mock_response.data = [
-        {
-            "id": MOCK_TWEET_ID,
-            "text": MOCK_TWEET_TEXT,
-        }
-    ]
+    mock_response = {
+        "data": [
+            {
+                "id": MOCK_TWEET_ID,
+                "text": MOCK_TWEET_TEXT
+            }
+        ]
+    }
 
-    expected_result = {"data": mock_response.data}
-    expected_response = f"Successfully retrieved account mentions:\n{dumps(expected_result)}"
+    expected_response = f"Successfully retrieved account mentions:\n{dumps(mock_response)}"
 
     with patch.object(provider.client, "get_users_mentions", return_value=mock_response) as mock_get_mentions:
         # Execute action
-        args = AccountMentionsInput(user_id=MOCK_USER_ID)
-        response = provider.account_mentions(args)
+        response = provider.account_mentions({"user_id": MOCK_USER_ID})
 
         # Verify response
         assert response == expected_response
@@ -63,8 +63,7 @@ def test_account_mentions_failure():
 
     with patch.object(provider.client, "get_users_mentions", side_effect=error) as mock_get_mentions:
         # Execute action
-        args = AccountMentionsInput(user_id=MOCK_USER_ID)
-        response = provider.account_mentions(args)
+        response = provider.account_mentions({"user_id": MOCK_USER_ID})
 
         # Verify response
         assert response == expected_response
