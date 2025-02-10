@@ -73,7 +73,7 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
         return SOLANA_NETWORKS[this.#genesisHash];
     }
 
-    signTransaction(transaction: VersionedTransaction): VersionedTransaction {
+    async signTransaction(transaction: VersionedTransaction): Promise<VersionedTransaction> {
         transaction.sign([this.#keypair])
         return transaction
     }

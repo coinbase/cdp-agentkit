@@ -15,7 +15,7 @@ export abstract class SvmWalletProvider extends WalletProvider {
      * @param transaction - The transaction to sign.
      * @returns The signed transaction.
      */
-    abstract signTransaction(transaction: VersionedTransaction): VersionedTransaction;
+    abstract signTransaction(transaction: VersionedTransaction): Promise<VersionedTransaction>;
 
     /**
      * Send a transaction.
