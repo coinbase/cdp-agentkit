@@ -1,6 +1,6 @@
-from typing import Any, Optional
-from json import dumps
 import os
+from json import dumps
+from typing import Any
 
 from ...network import Network
 from ..action_decorator import create_action
@@ -18,13 +18,13 @@ class TwitterActionProvider(ActionProvider):
 
     def __init__(
         self,
-        api_key: Optional[str] = None,
-        api_secret: Optional[str] = None,
-        access_token: Optional[str] = None,
-        access_token_secret: Optional[str] = None,
+        api_key: str | None = None,
+        api_secret: str | None = None,
+        access_token: str | None = None,
+        access_token_secret: str | None = None,
     ):
         super().__init__("twitter", [])
-        
+
         self.api_key = api_key or os.getenv("TWITTER_API_KEY")
         self.api_secret = api_secret or os.getenv("TWITTER_API_SECRET")
         self.access_token = access_token or os.getenv("TWITTER_ACCESS_TOKEN")
@@ -143,17 +143,17 @@ A failure response will return a message with the Twitter API request error:
 
     def supports_network(self, network: Network) -> bool:
         """Check if network is supported by Twitter actions.
-        
+
         Twitter actions don't depend on blockchain networks, so always return True.
         """
         return True
 
 
 def twitter_action_provider(
-    api_key: Optional[str] = None,
-    api_secret: Optional[str] = None,
-    access_token: Optional[str] = None,
-    access_token_secret: Optional[str] = None,
+    api_key: str | None = None,
+    api_secret: str | None = None,
+    access_token: str | None = None,
+    access_token_secret: str | None = None,
 ) -> TwitterActionProvider:
     """Create and return a new TwitterActionProvider instance."""
     return TwitterActionProvider(

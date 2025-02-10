@@ -1,13 +1,12 @@
 """Tests for Twitter account details action."""
 from json import dumps
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
 
-import pytest
 import tweepy
 
-from coinbase_agentkit.action_providers.twitter.schemas import AccountDetailsInput
-from coinbase_agentkit.action_providers.twitter.twitter_action_provider import twitter_action_provider
-from tests.action_providers.twitter.fixtures.env import mock_env
+from coinbase_agentkit.action_providers.twitter.twitter_action_provider import (
+    twitter_action_provider,
+)
 
 MOCK_ID = 1234
 MOCK_NAME = "Test Account"
@@ -17,7 +16,7 @@ MOCK_USERNAME = "testaccount"
 def test_account_details_success(mock_env):
     """Test successful retrieval of the authenticated Twitter (X) account."""
     provider = twitter_action_provider()
-    
+
     # Set up mock response
     mock_response = Mock()
     mock_response.data = {

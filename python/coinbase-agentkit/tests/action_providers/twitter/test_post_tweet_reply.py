@@ -1,13 +1,14 @@
 """Tests for Twitter post tweet reply action."""
 from json import dumps
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
 
 import pytest
 import tweepy
 
 from coinbase_agentkit.action_providers.twitter.schemas import PostTweetReplyInput
-from coinbase_agentkit.action_providers.twitter.twitter_action_provider import twitter_action_provider
-from tests.action_providers.twitter.fixtures.env import mock_env
+from coinbase_agentkit.action_providers.twitter.twitter_action_provider import (
+    twitter_action_provider,
+)
 
 MOCK_TWEET_ID = "1234"
 MOCK_TWEET_REPLY = "So good to be here!"

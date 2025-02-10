@@ -1,13 +1,14 @@
 """Tests for Twitter post tweet action."""
 from json import dumps
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
 
 import pytest
 import tweepy
 
 from coinbase_agentkit.action_providers.twitter.schemas import PostTweetInput
-from coinbase_agentkit.action_providers.twitter.twitter_action_provider import twitter_action_provider
-from tests.action_providers.twitter.fixtures.env import mock_env
+from coinbase_agentkit.action_providers.twitter.twitter_action_provider import (
+    twitter_action_provider,
+)
 
 MOCK_TWEET = "hello, world!"
 MOCK_TWEET_ID = "0123456789012345678"
@@ -28,7 +29,7 @@ def test_post_tweet_input_model_missing_params():
 def test_post_tweet_success(mock_env):
     """Test successful tweet post to the authenticated Twitter (X) account."""
     provider = twitter_action_provider()
-    
+
     # Set up mock response
     mock_response = Mock()
     mock_response.data = {

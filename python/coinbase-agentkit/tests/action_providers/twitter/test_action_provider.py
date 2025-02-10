@@ -1,8 +1,9 @@
 """Tests for Twitter action provider initialization."""
 import pytest
 
-from coinbase_agentkit.action_providers.twitter.twitter_action_provider import twitter_action_provider
-from tests.action_providers.twitter.fixtures.env import mock_env
+from coinbase_agentkit.action_providers.twitter.twitter_action_provider import (
+    twitter_action_provider,
+)
 
 
 def test_provider_init_with_env_vars(mock_env):

@@ -1,26 +1,18 @@
 """Tests for Twitter account mentions action."""
 from json import dumps
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
 
 import pytest
 import tweepy
 
 from coinbase_agentkit.action_providers.twitter.schemas import AccountMentionsInput
-from coinbase_agentkit.action_providers.twitter.twitter_action_provider import twitter_action_provider
-from tests.action_providers.twitter.fixtures.env import mock_env
+from coinbase_agentkit.action_providers.twitter.twitter_action_provider import (
+    twitter_action_provider,
+)
 
 MOCK_USER_ID = "1234"
 MOCK_TWEET_ID = "1857479287504584856"
 MOCK_TWEET_TEXT = "@CDPAgentKit reply"
-
-
-@pytest.fixture
-def mock_env(monkeypatch):
-    """Set up mock environment variables for Twitter credentials."""
-    monkeypatch.setenv("TWITTER_API_KEY", "mock_api_key")
-    monkeypatch.setenv("TWITTER_API_SECRET", "mock_api_secret")
-    monkeypatch.setenv("TWITTER_ACCESS_TOKEN", "mock_access_token")
-    monkeypatch.setenv("TWITTER_ACCESS_TOKEN_SECRET", "mock_access_token_secret")
 
 
 def test_account_mentions_input_model_valid():
@@ -38,7 +30,7 @@ def test_account_mentions_input_model_missing_params():
 def test_account_mentions_success(mock_env):
     """Test successful retrieval of the authenticated Twitter (X) account's mentions."""
     provider = twitter_action_provider()
-    
+
     # Set up mock response
     mock_response = Mock()
     mock_response.data = [
