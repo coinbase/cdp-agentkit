@@ -1,3 +1,4 @@
+from typing import Any
 
 from web3 import Web3
 
@@ -8,7 +9,8 @@ from ..action_provider import ActionProvider
 from .constants import WETH_ABI, WETH_ADDRESS
 from .schemas import WrapEthInput
 
-SUPPORTED_NETWORKS = ["base-mainnet", "base-sepolia"]
+SUPPORTED_NETWORKS = ["base-mainnet", "base-sepolia", "8453", "84532"]
+
 
 class WethActionProvider(ActionProvider[EvmWalletProvider]):
     """Provides actions for interacting with WETH."""
@@ -31,34 +33,40 @@ Important notes:
 - 1 wei = 0.000000000000000001 WETH
 - Minimum purchase amount is 100000000000000 wei (0.0001 WETH)
 - Only supported on the following networks:
-  - Base Sepolia (ie, 'base-sepolia')
-  - Base Mainnet (ie, 'base', 'base-mainnet')
+  - Base Mainnet (8453) (ie, 'base', 'base-mainnet')
+  - Base Sepolia (84532) (ie, 'base-sepolia')
 """,
         schema=WrapEthInput
     )
     def wrap_eth(
         self,
         wallet_provider: EvmWalletProvider,
-        args: WrapEthInput
+        args: dict[str, Any]
     ) -> str:
         """Wrap ETH to WETH.
 
         Args:
             wallet_provider (EvmWalletProvider): The wallet provider to use for the action.
-            args (dict[str, Any]): The input arguments for the action.
+            args (dict): The input arguments for the action containing amount_to_wrap.
 
         Returns:
             str: A message containing the transaction hash.
 
+        Raises:
+            ValidationError: If the input arguments are invalid.
+
         """
+        print(f"args: {args}")
         try:
+            validated_args = WrapEthInput(**args)
+
             contract = Web3().eth.contract(address=WETH_ADDRESS, abi=WETH_ABI)
             data = contract.encode_abi("deposit", args=[])
 
             tx_hash = wallet_provider.send_transaction({
                 "to": WETH_ADDRESS,
                 "data": data,
-                "value": args.amount_to_wrap
+                "value": validated_args.amount_to_wrap
             })
 
             wallet_provider.wait_for_transaction_receipt(tx_hash)
@@ -69,7 +77,9 @@ Important notes:
 
     def supports_network(self, network: Network) -> bool:
         """Check if network is supported by WETH actions."""
+        print(f"SUPPORTED_NETWORKS: {network}")
         return network.network_id in SUPPORTED_NETWORKS
+
 
 def weth_action_provider() -> WethActionProvider:
     """Create a new WethActionProvider instance."""

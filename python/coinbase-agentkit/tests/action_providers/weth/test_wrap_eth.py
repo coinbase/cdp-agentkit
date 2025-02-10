@@ -73,7 +73,7 @@ def test_wrap_eth_success():
 
         # Create provider and call wrap_eth
         provider = WethActionProvider()
-        args = WrapEthInput(amount_to_wrap=MOCK_AMOUNT)
+        args = {"amount_to_wrap": MOCK_AMOUNT}
         response = provider.wrap_eth(mock_wallet, args)
 
         expected_response = f"Wrapped ETH with transaction hash: {MOCK_TX_HASH}"
@@ -101,8 +101,26 @@ def test_wrap_eth_success():
         # Verify receipt wait
         mock_wallet.wait_for_transaction_receipt.assert_called_once_with(MOCK_TX_HASH)
 
-def test_wrap_eth_error():
-    """Test wrap_eth when error occurs."""
+def test_wrap_eth_validation_error():
+    """Test wrap_eth with invalid input."""
+    provider = WethActionProvider()
+
+    invalid_inputs = [
+        {},  # Missing required field
+        {"amount_to_wrap": ""},  # Empty string
+        {"amount_to_wrap": "-123"},  # Negative number
+        {"amount_to_wrap": "abc"},  # Non-numeric string
+        {"amount_to_wrap": "123.456"},  # Decimal number
+        {"amount_to_wrap": str(MIN_WRAP_AMOUNT - 1)},  # Below minimum
+    ]
+
+    for invalid_input in invalid_inputs:
+        response = provider.wrap_eth(None, invalid_input)
+        assert "Error wrapping ETH: " in response
+        assert "validation error" in response.lower()
+
+def test_wrap_eth_transaction_error():
+    """Test wrap_eth when transaction fails."""
     with (
         patch("coinbase_agentkit.action_providers.weth.weth_action_provider.Web3") as mock_web3,
         patch("coinbase_agentkit.wallet_providers.EvmWalletProvider") as mock_wallet,
@@ -116,7 +134,7 @@ def test_wrap_eth_error():
 
         # Create provider and call wrap_eth
         provider = WethActionProvider()
-        args = WrapEthInput(amount_to_wrap=MOCK_AMOUNT)
+        args = {"amount_to_wrap": MOCK_AMOUNT}
         response = provider.wrap_eth(mock_wallet, args)
 
         expected_response = "Error wrapping ETH: Transaction failed"
