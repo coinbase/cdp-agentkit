@@ -536,10 +536,10 @@ export class CdpWalletProvider extends EvmWalletProvider {
    *
    * @returns The wallet.
    */
-    getWallet(): Wallet {
-      if (!this.#cdpWallet) {
-        throw new Error("Wallet not initialized");
-      }
-      return this.#cdpWallet;
+  getWallet(): Wallet {
+    if (!this.#cdpWallet) {
+      throw new Error("Wallet not initialized");
     }
+    return this.#cdpWallet;
+  }
 }
