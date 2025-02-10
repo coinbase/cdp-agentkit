@@ -1,13 +1,10 @@
-from decimal import Decimal
 from typing import Any
-
-from pydantic import BaseModel
 
 from ...network import Network
 from ...wallet_providers import WalletProvider
 from ..action_decorator import create_action
 from ..action_provider import ActionProvider
-from .schemas import GetWalletDetailsSchema, GetBalanceSchema
+from .schemas import GetBalanceSchema, GetWalletDetailsSchema
 
 
 class WalletActionProvider(ActionProvider[WalletProvider]):
@@ -62,7 +59,7 @@ class WalletActionProvider(ActionProvider[WalletProvider]):
         try:
             balance = self.wallet_provider.get_balance()
             wallet_address = self.wallet_provider.get_address()
-            
+
             return f"Native balance at address {wallet_address}: {balance}"
         except Exception as e:
             return f"Error getting balance: {e}"
