@@ -1,47 +1,28 @@
 """Tests for WETH action provider."""
-import json
-from unittest.mock import patch, Mock
+from unittest.mock import patch
 
 import pytest
 from pydantic import ValidationError
 
-from coinbase_agentkit.action_providers.weth.weth_action_provider import (
-    WETH_ADDRESS,
-    WETH_ABI,
-    SUPPORTED_NETWORKS,
-    WethActionProvider,
-)
 from coinbase_agentkit.action_providers.weth.constants import MIN_WRAP_AMOUNT
 from coinbase_agentkit.action_providers.weth.schemas import WrapEthSchema
-from coinbase_agentkit.wallet_providers import EvmWalletProvider
+from coinbase_agentkit.action_providers.weth.weth_action_provider import (
+    WETH_ABI,
+    WETH_ADDRESS,
+    WethActionProvider,
+)
 from coinbase_agentkit.network import Network
 
-# Test constants
-MOCK_ADDRESS = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
-MOCK_AMOUNT = str(MIN_WRAP_AMOUNT)
-MOCK_TX_HASH = "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"
-MOCK_RECEIPT = {"status": 1, "transactionHash": MOCK_TX_HASH}
-MOCK_NETWORK = Network(
-    protocol_family="evm",
-    chain_id=1,
-    network_id="base-sepolia"
+# Import constants from conftest
+from .conftest import (
+    MOCK_ADDRESS,
+    MOCK_NETWORK,
+    MOCK_RECEIPT,
+    MOCK_TX_HASH,
 )
 
-@pytest.fixture
-def mock_wallet_provider():
-    """Create a mock wallet provider for testing."""
-    mock = Mock(spec=EvmWalletProvider)
-    mock.get_address.return_value = MOCK_ADDRESS
-    mock.get_network.return_value = MOCK_NETWORK
-    mock.send_transaction.return_value = MOCK_TX_HASH
-    return mock
-
-@pytest.fixture
-def weth_action_provider(mock_wallet_provider):
-    """Create a WethActionProvider instance with a mock wallet provider."""
-    provider = WethActionProvider()
-    provider.wallet_provider = mock_wallet_provider
-    return provider
+# Test constants
+MOCK_AMOUNT = str(MIN_WRAP_AMOUNT)
 
 def test_wrap_eth_input_model_valid():
     """Test that WrapEthSchema accepts valid parameters."""

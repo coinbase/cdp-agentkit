@@ -1,20 +1,19 @@
-import re
 from typing import Any
 
 from web3 import Web3
 
-from ...wallet_providers import EvmWalletProvider
-from ..action_provider import ActionProvider
-from ..action_decorator import create_action
 from ...network import Network
-from .constants import WETH_ADDRESS, WETH_ABI
+from ...wallet_providers import EvmWalletProvider
+from ..action_decorator import create_action
+from ..action_provider import ActionProvider
+from .constants import WETH_ABI, WETH_ADDRESS
 from .schemas import WrapEthSchema
 
 SUPPORTED_NETWORKS = ["base-mainnet", "base-sepolia"]
 
 class WethActionProvider(ActionProvider[EvmWalletProvider]):
     """Provides actions for interacting with WETH."""
-    
+
     def __init__(self):
         super().__init__("weth", [])
 
@@ -51,6 +50,7 @@ Important notes:
 
         Returns:
             str: A message containing the transaction hash.
+
         """
         try:
             contract = Web3().eth.contract(address=WETH_ADDRESS, abi=WETH_ABI)
@@ -63,7 +63,7 @@ Important notes:
             })
 
             wallet_provider.wait_for_transaction_receipt(tx_hash)
-            
+
             return f"Wrapped ETH with transaction hash: {tx_hash}"
         except Exception as e:
             return f"Error wrapping ETH: {e}"
