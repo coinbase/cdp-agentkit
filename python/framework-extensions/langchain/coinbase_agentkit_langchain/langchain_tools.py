@@ -1,5 +1,6 @@
-from coinbase_agentkit import Action, AgentKit
 from langchain.tools import StructuredTool
+
+from coinbase_agentkit import Action, AgentKit
 
 
 def get_langchain_tools(agent_kit: AgentKit) -> list[StructuredTool]:
@@ -18,9 +19,8 @@ def get_langchain_tools(agent_kit: AgentKit) -> list[StructuredTool]:
     for action in actions:
 
         def create_tool_fn(action=action):
-            async def tool_fn(**kwargs) -> str:
-                result = await action.invoke(kwargs)
-                return result
+            def tool_fn(**kwargs) -> str:
+                return action.invoke(kwargs)
 
             return tool_fn
 
@@ -28,7 +28,7 @@ def get_langchain_tools(agent_kit: AgentKit) -> list[StructuredTool]:
             name=action.name,
             description=action.description,
             func=create_tool_fn(action),
-            args_schema=action.schema,
+            args_schema=action.args_schema,
         )
         tools.append(tool)
 

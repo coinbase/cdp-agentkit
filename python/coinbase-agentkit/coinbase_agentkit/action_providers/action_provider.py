@@ -15,7 +15,7 @@ class Action(BaseModel):
 
     name: str
     description: str
-    _schema: type[BaseModel] | None = None
+    args_schema: type[BaseModel] | None = None
     invoke: Callable = Field(
         ..., exclude=True
     )  # exclude=True prevents serialization issues with callable
@@ -50,7 +50,7 @@ class ActionProvider(Generic[TWalletProvider], ABC):
                     Action(
                         name=action_metadata.name,
                         description=action_metadata.description,
-                        _schema=action_metadata.schema,
+                        args_schema=action_metadata.args_schema,
                         invoke=lambda args, m=action_metadata, p=provider: (
                             m.invoke(p, wallet_provider, args)
                             if m.wallet_provider
