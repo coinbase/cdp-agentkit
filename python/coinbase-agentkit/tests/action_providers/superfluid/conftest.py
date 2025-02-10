@@ -4,6 +4,7 @@ import pytest
 
 class MockTransaction:
     """Mock transaction object."""
+
     def __init__(self, tx_hash="0x123456789abcdef"):
         self.tx_hash = tx_hash
 
@@ -14,6 +15,7 @@ class MockTransaction:
 
 class MockWalletProvider:
     """Mock wallet provider implementation."""
+
     def __init__(self, address="0xmockWalletAddress"):
         self.address = address
         self._should_fail = False
@@ -40,4 +42,4 @@ def wallet_provider_factory():
     """Create a mock wallet provider factory."""
     def _factory():
         return MockWalletProvider()
-    return _factory 
+    return _factory
