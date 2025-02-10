@@ -57,18 +57,18 @@ Important notes:
 - 1 wei = 0.000000000000000001 ETH""",
         schema=CreateFlowInput,
     )
-    def create_flow(self, args: dict[str, Any]) -> str:
+    def create_flow(self, wallet_provider: WalletProvider, args: CreateFlowInput) -> str:
         """Create a money flow using Superfluid."""
         try:
-            transaction = self.wallet_provider.send_transaction(
+            transaction = wallet_provider.send_transaction(
                 contract_address=SUPERFLUID_HOST_ADDRESS,
                 abi=CREATE_ABI,
                 method="createFlow",
                 args={
-                    "token": args["token_address"],
-                    "sender": self.wallet_provider.get_address(),
-                    "receiver": args["recipient"],
-                    "flowrate": args["flow_rate"],
+                    "token": args.token_address,
+                    "sender": wallet_provider.get_address(),
+                    "receiver": args.recipient,
+                    "flowrate": args.flow_rate,
                     "userData": "0x",
                 },
             )
@@ -94,18 +94,18 @@ Important notes:
 - 1 wei = 0.000000000000000001 ETH""",
         schema=UpdateFlowInput,
     )
-    def update_flow(self, args: dict[str, Any]) -> str:
+    def update_flow(self, wallet_provider: WalletProvider, args: UpdateFlowInput) -> str:
         """Update an existing money flow using Superfluid."""
         try:
-            transaction = self.wallet_provider.send_transaction(
+            transaction = wallet_provider.send_transaction(
                 contract_address=SUPERFLUID_HOST_ADDRESS,
                 abi=UPDATE_ABI,
                 method="updateFlow",
                 args={
-                    "token": args["token_address"],
-                    "sender": self.wallet_provider.get_address(),
-                    "receiver": args["recipient"],
-                    "flowrate": args["new_flow_rate"],
+                    "token": args.token_address,
+                    "sender": wallet_provider.get_address(),
+                    "receiver": args.recipient,
+                    "flowrate": args.new_flow_rate,
                     "userData": "0x",
                 },
             )
@@ -125,17 +125,17 @@ Inputs:
 - Super token contract address""",
         schema=DeleteFlowInput,
     )
-    def delete_flow(self, args: dict[str, Any]) -> str:
+    def delete_flow(self, wallet_provider: WalletProvider, args: DeleteFlowInput) -> str:
         """Delete an existing money flow using Superfluid."""
         try:
-            transaction = self.wallet_provider.send_transaction(
+            transaction = wallet_provider.send_transaction(
                 contract_address=SUPERFLUID_HOST_ADDRESS,
                 abi=DELETE_ABI,
                 method="deleteFlow",
                 args={
-                    "token": args["token_address"],
-                    "sender": self.wallet_provider.get_address(),
-                    "receiver": args["recipient"],
+                    "token": args.token_address,
+                    "sender": wallet_provider.get_address(),
+                    "receiver": args.recipient,
                     "userData": "0x",
                 },
             )

@@ -43,6 +43,11 @@ def test_delete_flow_success(wallet_provider_factory):
     mock_receipt = Mock()
     mock_receipt.transaction_hash = MOCK_TX_HASH
 
+    input_args = DeleteFlowInput(
+        recipient=MOCK_RECIPIENT,
+        token_address=MOCK_TOKEN_ADDRESS,
+    )
+
     with (
         patch.object(
             wallet_provider, "send_transaction", return_value=mock_transaction
@@ -52,10 +57,7 @@ def test_delete_flow_success(wallet_provider_factory):
         ) as mock_wait_for_receipt,
     ):
         # Execute action
-        response = provider.delete_flow({
-            "recipient": MOCK_RECIPIENT,
-            "token_address": MOCK_TOKEN_ADDRESS,
-        })
+        response = provider.delete_flow(wallet_provider, input_args)
 
         # Verify response
         expected_response = f"Flow deleted successfully. Transaction hash: {MOCK_TX_HASH}"
@@ -81,14 +83,16 @@ def test_delete_flow_error(wallet_provider_factory):
     provider = superfluid_action_provider(wallet_provider)
     error = Exception("Contract error")
 
+    input_args = DeleteFlowInput(
+        recipient=MOCK_RECIPIENT,
+        token_address=MOCK_TOKEN_ADDRESS,
+    )
+
     with patch.object(
         wallet_provider, "send_transaction", side_effect=error
     ) as mock_send_transaction:
         # Execute action
-        response = provider.delete_flow({
-            "recipient": MOCK_RECIPIENT,
-            "token_address": MOCK_TOKEN_ADDRESS,
-        })
+        response = provider.delete_flow(wallet_provider, input_args)
 
         # Verify response
         expected_response = "Error deleting flow: Contract error"

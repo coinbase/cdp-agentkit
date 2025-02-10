@@ -46,6 +46,12 @@ def test_update_flow_success(wallet_provider_factory):
     mock_receipt = Mock()
     mock_receipt.transaction_hash = MOCK_TX_HASH
 
+    input_args = UpdateFlowInput(
+        recipient=MOCK_RECIPIENT,
+        token_address=MOCK_TOKEN_ADDRESS,
+        new_flow_rate=MOCK_NEW_FLOW_RATE,
+    )
+
     with (
         patch.object(
             wallet_provider, "send_transaction", return_value=mock_transaction
@@ -55,11 +61,7 @@ def test_update_flow_success(wallet_provider_factory):
         ) as mock_wait_for_receipt,
     ):
         # Execute action
-        response = provider.update_flow({
-            "recipient": MOCK_RECIPIENT,
-            "token_address": MOCK_TOKEN_ADDRESS,
-            "new_flow_rate": MOCK_NEW_FLOW_RATE,
-        })
+        response = provider.update_flow(wallet_provider, input_args)
 
         # Verify response
         expected_response = f"Flow updated successfully. Transaction hash: {MOCK_TX_HASH}"
@@ -86,15 +88,17 @@ def test_update_flow_error(wallet_provider_factory):
     provider = superfluid_action_provider(wallet_provider)
     error = Exception("Contract error")
 
+    input_args = UpdateFlowInput(
+        recipient=MOCK_RECIPIENT,
+        token_address=MOCK_TOKEN_ADDRESS,
+        new_flow_rate=MOCK_NEW_FLOW_RATE,
+    )
+
     with patch.object(
         wallet_provider, "send_transaction", side_effect=error
     ) as mock_send_transaction:
         # Execute action
-        response = provider.update_flow({
-            "recipient": MOCK_RECIPIENT,
-            "token_address": MOCK_TOKEN_ADDRESS,
-            "new_flow_rate": MOCK_NEW_FLOW_RATE,
-        })
+        response = provider.update_flow(wallet_provider, input_args)
 
         # Verify response
         expected_response = "Error updating flow: Contract error"
