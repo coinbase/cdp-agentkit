@@ -1,13 +1,16 @@
 """Tests for Superfluid delete flow action."""
-from json import dumps
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
 
 import pytest
 
-from coinbase_agentkit.action_providers.superfluid.superfluid_action_provider import superfluid_action_provider
+from coinbase_agentkit.action_providers.superfluid.constants import (
+    DELETE_ABI,
+    SUPERFLUID_HOST_ADDRESS,
+)
 from coinbase_agentkit.action_providers.superfluid.schemas import DeleteFlowInput
-from coinbase_agentkit.action_providers.superfluid.constants import DELETE_ABI, SUPERFLUID_HOST_ADDRESS
-from tests.action_providers.superfluid.fixtures.wallet import wallet_provider_factory
+from coinbase_agentkit.action_providers.superfluid.superfluid_action_provider import (
+    superfluid_action_provider,
+)
 
 MOCK_RECIPIENT = "0xvalidRecipientAddress"
 MOCK_TOKEN_ADDRESS = "0xvalidTokenAddress"
@@ -100,4 +103,4 @@ def test_delete_flow_error(wallet_provider_factory):
                 "receiver": MOCK_RECIPIENT,
                 "userData": "0x",
             },
-        ) 
+        )

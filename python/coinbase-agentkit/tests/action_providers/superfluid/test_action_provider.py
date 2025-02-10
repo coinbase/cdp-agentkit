@@ -1,8 +1,8 @@
-import pytest
 
+from coinbase_agentkit.action_providers.superfluid.superfluid_action_provider import (
+    superfluid_action_provider,
+)
 from coinbase_agentkit.network import Network
-from coinbase_agentkit.action_providers.superfluid.superfluid_action_provider import superfluid_action_provider
-from tests.action_providers.superfluid.fixtures.wallet import wallet_provider_factory
 
 
 def test_provider_init(wallet_provider_factory):
@@ -15,7 +15,7 @@ def test_provider_init(wallet_provider_factory):
 def test_supports_network(wallet_provider_factory):
     """Test network support validation."""
     provider = superfluid_action_provider(wallet_provider_factory())
-    
+
     test_cases = [
         # network_id, chain_id, protocol_family, expected_result
         ("ethereum-mainnet", 1, "evm", True),      # Ethereum
@@ -46,4 +46,4 @@ def test_supports_network(wallet_provider_factory):
         )
         result = provider.supports_network(network)
         assert result is expected_result, \
-            f"Network {network_id} should{' ' if expected_result else ' not '}be supported" 
+            f"Network {network_id} should{' ' if expected_result else ' not '}be supported"

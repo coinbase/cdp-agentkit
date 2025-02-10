@@ -1,13 +1,16 @@
 """Tests for Superfluid update flow action."""
-from json import dumps
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
 
 import pytest
 
-from coinbase_agentkit.action_providers.superfluid.superfluid_action_provider import superfluid_action_provider
+from coinbase_agentkit.action_providers.superfluid.constants import (
+    SUPERFLUID_HOST_ADDRESS,
+    UPDATE_ABI,
+)
 from coinbase_agentkit.action_providers.superfluid.schemas import UpdateFlowInput
-from coinbase_agentkit.action_providers.superfluid.constants import UPDATE_ABI, SUPERFLUID_HOST_ADDRESS
-from tests.action_providers.superfluid.fixtures.wallet import wallet_provider_factory
+from coinbase_agentkit.action_providers.superfluid.superfluid_action_provider import (
+    superfluid_action_provider,
+)
 
 MOCK_RECIPIENT = "0xvalidRecipientAddress"
 MOCK_TOKEN_ADDRESS = "0xvalidTokenAddress"
@@ -107,4 +110,4 @@ def test_update_flow_error(wallet_provider_factory):
                 "flowrate": MOCK_NEW_FLOW_RATE,
                 "userData": "0x",
             },
-        ) 
+        )
