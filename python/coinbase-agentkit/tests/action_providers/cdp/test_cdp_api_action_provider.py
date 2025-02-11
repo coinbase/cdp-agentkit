@@ -1,4 +1,5 @@
 """Tests for CDP API action provider."""
+
 import os
 from unittest.mock import patch
 
@@ -29,8 +30,7 @@ def test_provider_init_with_config():
     """Test provider initialization with config."""
     with patch("cdp.Cdp") as mock_cdp:
         config = CdpProviderConfig(
-            api_key_name=MOCK_API_KEY_NAME,
-            api_key_private_key=MOCK_API_KEY_PRIVATE_KEY
+            api_key_name=MOCK_API_KEY_NAME, api_key_private_key=MOCK_API_KEY_PRIVATE_KEY
         )
         _ = cdp_api_action_provider(config)
         mock_cdp.configure.assert_called_once_with(
@@ -64,7 +64,9 @@ def test_provider_init_import_error():
     """Test provider initialization fails with import error."""
     with (
         patch.dict("sys.modules", {"cdp": None}),
-        pytest.raises(ImportError, match="Failed to import cdp. Please install it with 'pip install cdp-sdk'."),
+        pytest.raises(
+            ImportError, match="Failed to import cdp. Please install it with 'pip install cdp-sdk'."
+        ),
     ):
         cdp_api_action_provider()
 

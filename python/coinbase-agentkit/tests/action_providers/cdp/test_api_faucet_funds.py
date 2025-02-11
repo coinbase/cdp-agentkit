@@ -1,4 +1,5 @@
 """Tests for CDP API faucet funds action."""
+
 from unittest.mock import Mock, patch
 
 import pytest
@@ -35,16 +36,25 @@ def test_request_faucet_funds_success(mock_wallet, mock_transaction):
         mock_address.return_value.faucet.return_value = mock_transaction
 
         response = provider.request_faucet_funds(mock_wallet, {})
-        assert response == f"Received ETH from the faucet. Transaction: {MOCK_EXPLORER_URL}/{MOCK_TX_HASH}"
+        assert (
+            response
+            == f"Received ETH from the faucet. Transaction: {MOCK_EXPLORER_URL}/{MOCK_TX_HASH}"
+        )
         mock_address.return_value.faucet.assert_called_with(None)
 
         response = provider.request_faucet_funds(mock_wallet, {"asset_id": "eth"})
-        assert response == f"Received eth from the faucet. Transaction: {MOCK_EXPLORER_URL}/{MOCK_TX_HASH}"
+        assert (
+            response
+            == f"Received eth from the faucet. Transaction: {MOCK_EXPLORER_URL}/{MOCK_TX_HASH}"
+        )
         mock_address.assert_called_with("base-sepolia", mock_wallet.get_address())
         mock_address.return_value.faucet.assert_called_with("eth")
 
         response = provider.request_faucet_funds(mock_wallet, {"asset_id": "usdc"})
-        assert response == f"Received usdc from the faucet. Transaction: {MOCK_EXPLORER_URL}/{MOCK_TX_HASH}"
+        assert (
+            response
+            == f"Received usdc from the faucet. Transaction: {MOCK_EXPLORER_URL}/{MOCK_TX_HASH}"
+        )
         mock_address.return_value.faucet.assert_called_with("usdc")
 
 
@@ -54,9 +64,7 @@ def test_request_faucet_funds_wrong_network():
     provider = cdp_api_action_provider()
     wallet = Mock()
     wallet.get_network.return_value = Network(
-        protocol_family="evm",
-        network_id="base-mainnet",
-        chain_id=8453
+        protocol_family="evm", network_id="base-mainnet", chain_id=8453
     )
 
     response = provider.request_faucet_funds(wallet, {})
