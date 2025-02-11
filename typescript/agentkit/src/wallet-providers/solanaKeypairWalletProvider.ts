@@ -32,6 +32,8 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
 
   /**
    * Creates a new SolanaKeypairWalletProvider
+   *
+   * @param args - Configuration arguments
    * @param args.keypair - Either a Uint8Array or a base58 encoded string representing a 32-byte secret key
    * @param args.rpcUrl - URL of the Solana RPC endpoint
    * @param args.genesisHash - The genesis hash of the network
@@ -61,6 +63,7 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
 
   /**
    * Get the default RPC URL for a Solana cluster
+   *
    * @param cluster - The cluster to get the RPC URL for
    * @returns The RPC URL for the cluster
    */
@@ -83,6 +86,7 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
 
   /**
    * Create a new SolanaKeypairWalletProvider from an RPC URL and a keypair
+   *
    * @param rpcUrl - The URL of the Solana RPC endpoint
    * @param keypair - Either a Uint8Array or a base58 encoded string representing a 32-byte secret key
    * @returns The new SolanaKeypairWalletProvider
@@ -97,6 +101,7 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
 
   /**
    * Create a new SolanaKeypairWalletProvider from a Connection and a keypair
+   *
    * @param connection - The Connection to use
    * @param keypair - Either a Uint8Array or a base58 encoded string representing a 32-byte secret key
    * @returns The new SolanaKeypairWalletProvider
@@ -115,6 +120,7 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
 
   /**
    * Get the address of the wallet
+   *
    * @returns The base58 encoded address of the wallet
    */
   getAddress(): string {
@@ -123,6 +129,7 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
 
   /**
    * Get the network
+   *
    * @returns The network
    */
   getNetwork(): Network {
@@ -131,6 +138,7 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
 
   /**
    * Sign a transaction
+   *
    * @param transaction - The transaction to sign
    * @returns The signed transaction
    */
@@ -141,6 +149,7 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
 
   /**
    * Send a transaction
+   *
    * @param transaction - The transaction to send
    * @returns The transaction hash
    */
@@ -150,15 +159,18 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
 
   /**
    * Wait for a transaction receipt
+   *
    * @param txHash - The transaction hash
    * @returns The transaction receipt
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   waitForTransactionReceipt(txHash: string): Promise<any> {
     return this.#connection.confirmTransaction(txHash);
   }
 
   /**
    * Get the name of the wallet provider
+   *
    * @returns The name of the wallet provider
    */
   getName(): string {
@@ -167,6 +179,7 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
 
   /**
    * Get the balance of the wallet
+   *
    * @returns The balance of the wallet
    */
   getBalance(): Promise<bigint> {
@@ -175,6 +188,7 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
 
   /**
    * Transfer SOL from the wallet to another address
+   *
    * @param to - The base58 encoded address to transfer the SOL to
    * @param value - The amount of SOL to transfer
    * @returns The transaction hash
