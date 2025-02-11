@@ -180,3 +180,99 @@ class CdpWalletProvider(EvmWalletProvider):
     ) -> dict[str, Any]:
         """Wait for transaction confirmation and return receipt."""
         raise NotImplementedError
+
+    def export_wallet(self) -> str:
+        """Export the wallet data."""
+        if not self._wallet:
+            raise Exception("Wallet not initialized")
+
+        return self._wallet.export_data()
+
+    def deploy_contract(
+        self,
+        solidity_version: str,
+        solidity_input_json: str,
+        contract_name: str,
+        constructor_args: dict[str, Any],
+    ) -> Any:
+        """Deploy a smart contract.
+
+        Args:
+            solidity_version: The version of the Solidity compiler to use
+            solidity_input_json: The JSON input for the Solidity compiler
+            contract_name: The name of the contract to deploy
+            constructor_args: Key-value map of constructor args
+
+        Returns:
+            The deployed contract instance
+
+        Raises:
+            Exception: If wallet is not initialized or deployment fails
+
+        """
+        if not self._wallet:
+            raise Exception("Wallet not initialized")
+
+        try:
+            return self._wallet.deploy_contract(
+                solidity_version=solidity_version,
+                solidity_input_json=solidity_input_json,
+                contract_name=contract_name,
+                constructor_args=constructor_args,
+            )
+        except Exception as e:
+            raise Exception(f"Failed to deploy contract: {e!s}") from e
+
+    def deploy_nft(self, name: str, symbol: str, base_uri: str) -> Any:
+        """Deploy a new NFT (ERC-721) smart contract.
+
+        Args:
+            name: The name of the collection
+            symbol: The token symbol for the collection
+            base_uri: The base URI for token metadata
+
+        Returns:
+            The deployed NFT contract instance
+
+        Raises:
+            Exception: If wallet is not initialized or deployment fails
+
+        """
+        if not self._wallet:
+            raise Exception("Wallet not initialized")
+
+        try:
+            return self._wallet.deploy_nft(
+                name=name,
+                symbol=symbol,
+                base_uri=base_uri,
+            )
+        except Exception as e:
+            raise Exception(f"Failed to deploy NFT: {e!s}") from e
+
+    def deploy_token(self, name: str, symbol: str, total_supply: str) -> Any:
+        """Deploy an ERC20 token contract.
+
+        Args:
+            name: The name of the token
+            symbol: The symbol of the token
+            total_supply: The total supply of the token
+
+        Returns:
+            The deployed token contract instance
+
+        Raises:
+            Exception: If wallet is not initialized or deployment fails
+
+        """
+        if not self._wallet:
+            raise Exception("Wallet not initialized")
+
+        try:
+            return self._wallet.deploy_token(
+                name=name,
+                symbol=symbol,
+                total_supply=total_supply,
+            )
+        except Exception as e:
+            raise Exception(f"Failed to deploy token: {e!s}") from e
