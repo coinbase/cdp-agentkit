@@ -6,6 +6,7 @@ from .action_providers import (
     create_action,
     morpho_action_provider,
     pyth_action_provider,
+    twitter_action_provider,
     wallet_action_provider,
 )
 from .agentkit import AgentKit, AgentKitOptions
@@ -30,5 +31,6 @@ __all__ = [
     "EthAccountWalletProviderConfig",
     "morpho_action_provider",
     "pyth_action_provider",
+    "twitter_action_provider",
     "wallet_action_provider",
 ]
