@@ -9,7 +9,7 @@ from coinbase_agentkit.wallet_providers import EvmWalletProvider
 
 MOCK_ADDRESS = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
 MOCK_TX_HASH = "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"
-MOCK_RECEIPT = {"status": 84532, "transactionHash": MOCK_TX_HASH}
+MOCK_RECEIPT = {"status": 1, "transactionHash": MOCK_TX_HASH}
 MOCK_NETWORK = Network(
     protocol_family="evm",
     chain_id=84532,
