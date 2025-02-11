@@ -152,8 +152,8 @@ def test_supports_network():
 
     test_cases = [
         # network_id, chain_id, protocol_family, expected_result
-        ("base-mainnet", 1, "evm", True),
-        ("base-sepolia", 1, "evm", True),
+        ("base-mainnet", 8453, "evm", True),  # Base Mainnet
+        ("base-sepolia", 84532, "evm", True),  # Base Sepolia
         ("ethereum-mainnet", 1, "evm", False),
         ("arbitrum-one", 42161, "evm", False),
         ("optimism", 10, "evm", False),
@@ -170,7 +170,7 @@ def test_supports_network():
         )
         result = provider.supports_network(network)
         assert result is expected_result, \
-            f"Network {network_id} should{' ' if expected_result else ' not '}be supported"
+            f"Network {network_id} (chain_id: {chain_id}) should{' ' if expected_result else ' not '}be supported"
 
 def test_action_provider_setup():
     """Test action provider initialization."""

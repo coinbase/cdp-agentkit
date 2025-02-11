@@ -9,7 +9,7 @@ from ..action_provider import ActionProvider
 from .constants import WETH_ABI, WETH_ADDRESS
 from .schemas import WrapEthInput
 
-SUPPORTED_NETWORKS = ["base-mainnet", "base-sepolia", "8453", "84532"]
+SUPPORTED_CHAINS = [8453, 84532]
 
 
 class WethActionProvider(ActionProvider[EvmWalletProvider]):
@@ -56,7 +56,7 @@ Important notes:
             ValidationError: If the input arguments are invalid.
 
         """
-        print(f"args: {args}")
+
         try:
             validated_args = WrapEthInput(**args)
 
@@ -77,8 +77,7 @@ Important notes:
 
     def supports_network(self, network: Network) -> bool:
         """Check if network is supported by WETH actions."""
-        print(f"SUPPORTED_NETWORKS: {network}")
-        return network.network_id in SUPPORTED_NETWORKS
+        return network.chain_id in SUPPORTED_CHAINS
 
 
 def weth_action_provider() -> WethActionProvider:
