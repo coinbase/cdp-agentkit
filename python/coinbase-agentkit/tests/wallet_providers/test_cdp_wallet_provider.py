@@ -1,4 +1,5 @@
 """Tests for CDP wallet provider."""
+
 from decimal import Decimal
 from unittest.mock import Mock, patch
 
@@ -70,15 +71,17 @@ def mock_wallet_class(mock_wallet):
 @pytest.fixture
 def provider_factory(mock_wallet, mock_cdp, mock_wallet_class):
     """Create a provider factory with mock wallet."""
+
     def _factory():
-        with patch.dict('os.environ', {
-            'CDP_API_KEY_NAME': MOCK_API_KEY_NAME,
-            'CDP_API_KEY_PRIVATE_KEY': MOCK_API_KEY_PRIVATE_KEY,
-        }):
+        with patch.dict(
+            "os.environ",
+            {
+                "CDP_API_KEY_NAME": MOCK_API_KEY_NAME,
+                "CDP_API_KEY_PRIVATE_KEY": MOCK_API_KEY_PRIVATE_KEY,
+            },
+        ):
             config = CdpWalletProviderConfig(
-                network_id=MOCK_NETWORK_ID,
-                chain_id=MOCK_CHAIN_ID,
-                rpc_url=MOCK_RPC_URL
+                network_id=MOCK_NETWORK_ID, chain_id=MOCK_CHAIN_ID, rpc_url=MOCK_RPC_URL
             )
             provider = CdpWalletProvider(config)
             provider._wallet = mock_wallet
@@ -89,6 +92,7 @@ def provider_factory(mock_wallet, mock_cdp, mock_wallet_class):
             )
             provider._web3 = Web3()
             return provider
+
     return _factory
 
 
@@ -168,7 +172,7 @@ def test_provider_initialization(mock_cdp, mock_wallet_class):
         api_key_private_key=MOCK_API_KEY_PRIVATE_KEY,
         network_id=MOCK_NETWORK_ID,
         chain_id=MOCK_CHAIN_ID,
-        rpc_url=MOCK_RPC_URL
+        rpc_url=MOCK_RPC_URL,
     )
 
     _ = CdpWalletProvider(config)
@@ -182,14 +186,15 @@ def test_provider_initialization(mock_cdp, mock_wallet_class):
 
 def test_configure_with_new_wallet(mock_cdp, mock_wallet_class):
     """Test configuring provider with new wallet creation."""
-    with patch.dict('os.environ', {
-        'CDP_API_KEY_NAME': MOCK_API_KEY_NAME,
-        'CDP_API_KEY_PRIVATE_KEY': MOCK_API_KEY_PRIVATE_KEY,
-    }):
+    with patch.dict(
+        "os.environ",
+        {
+            "CDP_API_KEY_NAME": MOCK_API_KEY_NAME,
+            "CDP_API_KEY_PRIVATE_KEY": MOCK_API_KEY_PRIVATE_KEY,
+        },
+    ):
         config = CdpWalletProviderConfig(
-            network_id=MOCK_NETWORK_ID,
-            chain_id=MOCK_CHAIN_ID,
-            rpc_url=MOCK_RPC_URL
+            network_id=MOCK_NETWORK_ID, chain_id=MOCK_CHAIN_ID, rpc_url=MOCK_RPC_URL
         )
         provider = CdpWalletProvider(config)
 
@@ -207,10 +212,16 @@ def test_configure_with_new_wallet(mock_cdp, mock_wallet_class):
 
 def test_configure_with_wallet_data(mock_wallet_class):
     """Test configuring provider with existing wallet data."""
-    with patch("cdp.WalletData") as mock_wallet_data_class, patch.dict('os.environ', {
-        'CDP_API_KEY_NAME': MOCK_API_KEY_NAME,
-        'CDP_API_KEY_PRIVATE_KEY': MOCK_API_KEY_PRIVATE_KEY,
-    }):
+    with (
+        patch("cdp.WalletData") as mock_wallet_data_class,
+        patch.dict(
+            "os.environ",
+            {
+                "CDP_API_KEY_NAME": MOCK_API_KEY_NAME,
+                "CDP_API_KEY_PRIVATE_KEY": MOCK_API_KEY_PRIVATE_KEY,
+            },
+        ),
+    ):
         mock_wallet_data = Mock()
         mock_wallet_data_class.from_dict.return_value = mock_wallet_data
 
@@ -218,16 +229,18 @@ def test_configure_with_wallet_data(mock_wallet_class):
             network_id=MOCK_NETWORK_ID,
             chain_id=MOCK_CHAIN_ID,
             rpc_url=MOCK_RPC_URL,
-            wallet_data=MOCK_WALLET_DATA
+            wallet_data=MOCK_WALLET_DATA,
         )
         provider = CdpWalletProvider(config)
 
-        mock_wallet_data_class.from_dict.assert_called_once_with({
-            "wallet_id": MOCK_WALLET_ID,
-            "seed": MOCK_WALLET_SEED,
-            "network_id": MOCK_NETWORK_ID,
-            "default_address_id": MOCK_WALLET_DEFAULT_ADDRESS
-        })
+        mock_wallet_data_class.from_dict.assert_called_once_with(
+            {
+                "wallet_id": MOCK_WALLET_ID,
+                "seed": MOCK_WALLET_SEED,
+                "network_id": MOCK_NETWORK_ID,
+                "default_address_id": MOCK_WALLET_DEFAULT_ADDRESS,
+            }
+        )
 
         mock_wallet_class.import_data.assert_called_once_with(mock_wallet_data)
 
@@ -247,10 +260,16 @@ def test_configure_with_wallet_data(mock_wallet_class):
 
 def test_configure_with_mnemonic_phrase(mock_wallet_class):
     """Test configuring provider with mnemonic phrase."""
-    with patch("cdp.MnemonicSeedPhrase") as mock_mnemonic_class, patch.dict('os.environ', {
-        'CDP_API_KEY_NAME': MOCK_API_KEY_NAME,
-        'CDP_API_KEY_PRIVATE_KEY': MOCK_API_KEY_PRIVATE_KEY,
-    }):
+    with (
+        patch("cdp.MnemonicSeedPhrase") as mock_mnemonic_class,
+        patch.dict(
+            "os.environ",
+            {
+                "CDP_API_KEY_NAME": MOCK_API_KEY_NAME,
+                "CDP_API_KEY_PRIVATE_KEY": MOCK_API_KEY_PRIVATE_KEY,
+            },
+        ),
+    ):
         mock_mnemonic = Mock()
         mock_mnemonic_class.return_value = mock_mnemonic
 
@@ -258,7 +277,7 @@ def test_configure_with_mnemonic_phrase(mock_wallet_class):
             network_id=MOCK_NETWORK_ID,
             chain_id=MOCK_CHAIN_ID,
             rpc_url=MOCK_RPC_URL,
-            mnemonic_phrase=MOCK_MNEMONIC_PHRASE
+            mnemonic_phrase=MOCK_MNEMONIC_PHRASE,
         )
         provider = CdpWalletProvider(config)
 
@@ -287,17 +306,14 @@ def test_native_transfer_success(provider_factory, mock_wallet):
     mock_wallet.transfer.return_value = transfer_result
 
     provider = provider_factory()
-    tx_hash = provider.native_transfer(
-        to=MOCK_TO_ADDRESS,
-        value=MOCK_ETH_AMOUNT
-    )
+    tx_hash = provider.native_transfer(to=MOCK_TO_ADDRESS, value=MOCK_ETH_AMOUNT)
 
     assert tx_hash == MOCK_TX_HASH
     mock_wallet.transfer.assert_called_once_with(
         amount=MOCK_ETH_AMOUNT,
         asset_id="eth",
         destination=Web3.to_checksum_address(MOCK_TO_ADDRESS),
-        gasless=False
+        gasless=False,
     )
 
 
@@ -308,17 +324,14 @@ def test_native_transfer_failure(provider_factory, mock_wallet):
     mock_wallet.transfer.side_effect = Exception(error_message)
 
     with pytest.raises(Exception) as exc_info:
-        provider.native_transfer(
-            to=MOCK_TO_ADDRESS,
-            value=MOCK_ETH_AMOUNT
-        )
+        provider.native_transfer(to=MOCK_TO_ADDRESS, value=MOCK_ETH_AMOUNT)
 
     assert str(exc_info.value) == f"Failed to transfer native tokens: {error_message}"
     mock_wallet.transfer.assert_called_once_with(
         amount=MOCK_ETH_AMOUNT,
         asset_id="eth",
         destination=Web3.to_checksum_address(MOCK_TO_ADDRESS),
-        gasless=False
+        gasless=False,
     )
 
 
@@ -331,15 +344,12 @@ def test_native_transfer_missing_tx_hash(provider_factory, mock_wallet):
 
     provider = provider_factory()
     with pytest.raises(Exception) as exc_info:
-        provider.native_transfer(
-            to=MOCK_TO_ADDRESS,
-            value=MOCK_ETH_AMOUNT
-        )
+        provider.native_transfer(to=MOCK_TO_ADDRESS, value=MOCK_ETH_AMOUNT)
 
     assert str(exc_info.value) == "Failed to transfer native tokens: Transaction hash not found"
     mock_wallet.transfer.assert_called_once_with(
         amount=MOCK_ETH_AMOUNT,
         asset_id="eth",
         destination=Web3.to_checksum_address(MOCK_TO_ADDRESS),
-        gasless=False
+        gasless=False,
     )

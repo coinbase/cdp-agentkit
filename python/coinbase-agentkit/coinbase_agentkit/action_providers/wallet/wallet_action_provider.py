@@ -75,9 +75,7 @@ Important notes:
 """,
         schema=NativeTransferInput,
     )
-    def native_transfer(
-        self, wallet_provider: WalletProvider, args: dict[str, Any]
-    ) -> str:
+    def native_transfer(self, wallet_provider: WalletProvider, args: dict[str, Any]) -> str:
         """Transfer native tokens to a destination address."""
         try:
             validated_args = NativeTransferInput(**args)

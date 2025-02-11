@@ -1,4 +1,5 @@
 """Test fixtures for CDP API tests."""
+
 from unittest.mock import Mock
 
 import pytest
@@ -24,9 +25,7 @@ def mock_wallet():
     """Create a mock wallet for testing."""
     wallet = Mock()
     wallet.get_network.return_value = Network(
-        protocol_family="evm",
-        network_id="base-sepolia",
-        chain_id=84532
+        protocol_family="evm", network_id="base-sepolia", chain_id=84532
     )
     wallet.get_address.return_value = MOCK_WALLET_ADDRESS
     return wallet
