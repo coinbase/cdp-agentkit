@@ -1,10 +1,14 @@
 """Tests for CDP wallet action provider."""
 
+from coinbase_agentkit.action_providers.cdp.schemas import TradeInput
+from coinbase_agentkit.wallet_providers.cdp_wallet_provider import CdpWalletProvider
+from coinbase_agentkit.network import Network
 from unittest.mock import Mock
 
 import pytest
 
 from coinbase_agentkit.action_providers.cdp.cdp_wallet_action_provider import (
+    CdpWalletActionProvider,
     cdp_wallet_action_provider,
 )
 
@@ -176,3 +180,103 @@ class TestCdpWalletActionProvider:
 
         result = provider.deploy_token(mock_wallet, args)
         assert f"Error deploying token {error_message}" in result
+
+
+MOCK_NETWORK_ID = "base-mainnet"
+MOCK_CHAIN_ID = 8453
+MOCK_VALUE = "3000"
+MOCK_TO_AMOUNT = "1"
+MOCK_FROM_ASSET_ID = "usdc"
+MOCK_TO_ASSET_ID = "weth"
+MOCK_TX_HASH = "0xffcc5fb66fd40f25af7a412025043096577d8c1e00f5fa2c95861a1ba6832a37"
+MOCK_TX_LINK = "https://basescan.org/tx/0xffcc5fb66fd40f25af7a412025043096577d8c1e00f5fa2c95861a1ba6832a37"
+
+
+def test_trade_input_model_valid():
+    """Test that TradeInput accepts valid parameters."""
+    input_model = TradeInput(
+        value=MOCK_VALUE,
+        from_asset_id=MOCK_FROM_ASSET_ID,
+        to_asset_id=MOCK_TO_ASSET_ID,
+    )
+
+    assert input_model.value == MOCK_VALUE
+    assert input_model.from_asset_id == MOCK_FROM_ASSET_ID
+    assert input_model.to_asset_id == MOCK_TO_ASSET_ID
+
+
+def test_trade_input_model_missing_params():
+    """Test that TradeInput raises error when params are missing."""
+    with pytest.raises(ValueError):
+        TradeInput()
+
+
+def test_trade_success():
+    """Test successful trade with valid parameters."""
+    mock_wallet_provider = Mock(spec=CdpWalletProvider)
+    mock_wallet_provider.get_network.return_value = Network(
+        protocol_family="evm",
+        network_id=MOCK_NETWORK_ID,
+        chain_id=MOCK_CHAIN_ID,
+    )
+    mock_wallet_provider.trade.return_value = f"Traded {MOCK_VALUE} of {MOCK_FROM_ASSET_ID} for {MOCK_TO_AMOUNT} of {MOCK_TO_ASSET_ID}.\nTransaction hash for the trade: {MOCK_TX_HASH}\nTransaction link for the trade: {MOCK_TX_LINK}"
+
+    provider = CdpWalletActionProvider()
+    action_response = provider.trade(mock_wallet_provider, {
+        "value": MOCK_VALUE,
+        "from_asset_id": MOCK_FROM_ASSET_ID,
+        "to_asset_id": MOCK_TO_ASSET_ID,
+    })
+
+    expected_response = f"Traded {MOCK_VALUE} of {MOCK_FROM_ASSET_ID} for {MOCK_TO_AMOUNT} of {MOCK_TO_ASSET_ID}.\nTransaction hash for the trade: {MOCK_TX_HASH}\nTransaction link for the trade: {MOCK_TX_LINK}"
+    assert action_response == expected_response
+    mock_wallet_provider.trade.assert_called_once_with(
+        amount=MOCK_VALUE,
+        from_asset_id=MOCK_FROM_ASSET_ID,
+        to_asset_id=MOCK_TO_ASSET_ID,
+    )
+
+
+def test_trade_testnet_error():
+    """Test trade when on testnet network."""
+    mock_wallet_provider = Mock(spec=CdpWalletProvider)
+    mock_wallet_provider.get_network.return_value = Network(
+        protocol_family="evm",
+        network_id="base-sepolia",
+        chain_id=84532,
+    )
+
+    provider = CdpWalletActionProvider()
+    action_response = provider.trade(mock_wallet_provider, {
+        "value": MOCK_VALUE,
+        "from_asset_id": MOCK_FROM_ASSET_ID,
+        "to_asset_id": MOCK_TO_ASSET_ID,
+    })
+
+    assert action_response == "Error: Trades are only supported on mainnet networks"
+    mock_wallet_provider.trade.assert_not_called()
+
+
+def test_trade_api_error():
+    """Test trade when API error occurs."""
+    mock_wallet_provider = Mock(spec=CdpWalletProvider)
+    mock_wallet_provider.get_network.return_value = Network(
+        protocol_family="evm",
+        network_id=MOCK_NETWORK_ID,
+        chain_id=MOCK_CHAIN_ID,
+    )
+    mock_wallet_provider.trade.side_effect = Exception("API error")
+
+    provider = CdpWalletActionProvider()
+    action_response = provider.trade(mock_wallet_provider, {
+        "value": MOCK_VALUE,
+        "from_asset_id": MOCK_FROM_ASSET_ID,
+        "to_asset_id": MOCK_TO_ASSET_ID,
+    })
+
+    assert action_response == "Error trading assets: API error"
+    mock_wallet_provider.trade.assert_called_once_with(
+        amount=MOCK_VALUE,
+        from_asset_id=MOCK_FROM_ASSET_ID,
+        to_asset_id=MOCK_TO_ASSET_ID,
+    )

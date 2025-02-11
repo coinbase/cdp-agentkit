@@ -5,15 +5,6 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 
-class RequestFaucetFundsInput(BaseModel):
-    """Input schema for requesting faucet funds."""
-
-    asset_id: str | None = Field(
-        None,
-        description="The asset ID to request from the faucet (defaults to ETH if not specified)",
-    )
-
-
 class DeployContractSchema(BaseModel):
     """Input argument schema for deploy contract action."""
 
@@ -49,4 +40,29 @@ class DeployTokenSchema(BaseModel):
     symbol: str = Field(..., description='The token symbol (e.g., "USDC", "MEME", "SYM")')
     total_supply: str = Field(
         ..., description='The total supply of tokens to mint (e.g., "1000000")'
+    )
+
+
+class RequestFaucetFundsInput(BaseModel):
+    """Input schema for requesting faucet funds."""
+
+    asset_id: str | None = Field(
+        None,
+        description="The asset ID to request from the faucet (defaults to ETH if not specified)",
+    )
+
+
+class TradeInput(BaseModel):
+    """Input argument schema for trade action."""
+
+    value: str = Field(
+        ..., description="The amount of the from asset to trade, e.g. `15`, `0.000001`"
+    )
+    from_asset_id: str = Field(
+        ...,
+        description="The from asset ID to trade, e.g. `eth`, `0x036CbD53842c5426634e7929541eC2318f3dCF7e`",
+    )
+    to_asset_id: str = Field(
+        ...,
+        description="The to asset ID to receive from the trade, e.g. `eth`, `0x036CbD53842c5426634e7929541eC2318f3dCF7e`",
     )

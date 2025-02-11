@@ -7,7 +7,7 @@ from ...wallet_providers import CdpProviderConfig, CdpWalletProvider
 from ..action_decorator import create_action
 from ..action_provider import ActionProvider
 from .constants import SOLIDITY_VERSIONS
-from .schemas import DeployContractSchema, DeployNftSchema, DeployTokenSchema
+from .schemas import DeployContractSchema, DeployNftSchema, DeployTokenSchema, TradeInput
 
 
 class CdpWalletActionProvider(ActionProvider[CdpWalletProvider]):
@@ -98,11 +98,61 @@ address as the owner and initial token holder.
 
         return f"Deployed ERC20 token contract {args['name']} ({args['symbol']}) with total supply of {args['total_supply']} tokens at address {token_contract.contract_address}. Transaction link: {token_contract.transaction.transaction_link}"
 
+    @create_action(
+        name="trade",
+        description="""This tool will trade a specified amount of a 'from asset' to a 'to asset' for the wallet.
+It takes the following inputs:
+- The amount of the 'from asset' to trade
+- The from asset ID to trade 
+- The asset ID to receive from the trade
+
+Important notes:
+- Trades are only supported on mainnet networks (ie, 'base-mainnet', 'base', 'ethereum-mainnet', 'ethereum', etc.)
+- Never allow trades on any non-mainnet network (ie, 'base-sepolia', 'ethereum-sepolia', etc.)
+- When selling a native asset (e.g. 'eth' on base-mainnet), ensure there is sufficient balance to pay for the trade AND the gas cost of this trade""",
+        schema=TradeInput,
+    )
+    def trade(self, wallet_provider: CdpWalletProvider, args: dict[str, Any]) -> str:
+        """Trade a specified amount of a from asset to a to asset for the wallet.
+
+        Args:
+            wallet_provider: The wallet provider to trade the asset from.
+            args: The input arguments for the action.
+
+        Returns:
+            A message containing the trade details.
+        """
+        validated_args = TradeInput(**args)
+
+        network_id = wallet_provider.get_network().network_id
+        if "sepolia" in network_id or "testnet" in network_id:
+            return "Error: Trades are only supported on mainnet networks"
+
+        try:
+            return wallet_provider.trade(
+                amount=validated_args.value,
+                from_asset_id=validated_args.from_asset_id,
+                to_asset_id=validated_args.to_asset_id,
+            )
+        except Exception as e:
+            return f"Error trading assets: {e}"
+
     def supports_network(self, _: Network) -> bool:
-        """Check if the network is supported."""
+        """Check if the CDP action provider supports the given network.
+
+        Args:
+            _: The network to check.
+
+        Returns:
+            True
+        """
         return True
 
 
-def cdp_wallet_action_provider(config: CdpProviderConfig | None = None) -> CdpWalletActionProvider:
-    """Create a new CDP wallet action provider."""
-    return CdpWalletActionProvider(config)
+def cdp_wallet_action_provider() -> CdpWalletActionProvider:
+    """Create a new CdpWalletActionProvider instance.
+
+    Returns:
+        A new CdpWalletActionProvider instance.
+    """
+    return CdpWalletActionProvider()
