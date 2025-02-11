@@ -9,7 +9,19 @@ from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
 
-from coinbase_agentkit import AgentKit, AgentKitOptions, pyth_action_provider, morpho_action_provider, wallet_action_provider, EthAccountWalletProvider, EthAccountWalletProviderConfig
+from coinbase_agentkit import (
+    AgentKit,
+    AgentKitOptions,
+
+    CdpWalletProvider,
+    CdpWalletProviderConfig,
+    EthAccountWalletProvider,
+    EthAccountWalletProviderConfig,
+
+    pyth_action_provider,
+    morpho_action_provider,
+    wallet_action_provider,
+)
 from coinbase_agentkit_langchain import get_langchain_tools
 
 # Configure a file to persist the agent's CDP MPC Wallet Data.
@@ -17,11 +29,26 @@ wallet_data_file = "wallet_data.txt"
 
 load_dotenv()
 
+
 def initialize_agent():
     """Initialize the agent with CDP Agentkit."""
-    # Initialize LLM.
+    # Initialize LLM
     llm = ChatOpenAI(model="gpt-4o-mini")
 
+    #  # Initialize CDP Wallet Provider
+    #  mnemonic_phrase = os.environ.get("MNEMONIC_PHRASE")
+    #  assert mnemonic_phrase is not None, "You must set MNEMONIC_PHRASE environment variable"
+
+    #  wallet_provider = CdpWalletProvider(
+    #      config=CdpWalletProviderConfig(
+    #          mnemonic_phrase=mnemonic_phrase,
+    #          chain_id=84532,
+    #          network_id="base-sepolia",
+    #          rpc_url="https://sepolia.base.org",
+    #      )
+    #  )
+
+    # Initialize ETH Wallet Provider
     private_key = os.environ.get("PRIVATE_KEY")
     assert private_key is not None, "You must set PRIVATE_KEY environment variable"
     assert private_key.startswith("0x"), "Private key must start with 0x hex prefix"
@@ -29,8 +56,8 @@ def initialize_agent():
     wallet_provider = EthAccountWalletProvider(
         config=EthAccountWalletProviderConfig(
             private_key=private_key,
-            rpc_url="https://mainnet.base.org",
-            chain_id=8453,
+            chain_id=84532,
+            rpc_url="https://sepolia.base.org",
         )
     )
 
@@ -153,4 +180,4 @@ def main():
 
 if __name__ == "__main__":
     print("Starting Agent...")
-    main() 
+    main()
