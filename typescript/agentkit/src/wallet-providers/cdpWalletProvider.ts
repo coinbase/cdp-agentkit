@@ -66,6 +66,11 @@ export interface CdpWalletProviderConfig extends CdpProviderConfig {
    * The network ID of the wallet.
    */
   networkId?: string;
+
+  /**
+   * A internal multiplier on maxFeePerGas.
+   */
+  feePerGasMultiplier?: number;
 }
 
 /**
@@ -91,6 +96,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
   #address?: string;
   #network?: Network;
   #publicClient: PublicClient;
+  #feePerGasMultiplier: number;
 
   /**
    * Constructs a new CdpWalletProvider.
@@ -103,6 +109,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
     this.#cdpWallet = config.wallet;
     this.#address = config.address;
     this.#network = config.network;
+    this.#feePerGasMultiplier = config.feePerGasMultiplier ?? 1;
     this.#publicClient = createPublicClient({
       chain: NETWORK_ID_TO_VIEM_CHAIN[config.network!.networkId!],
       transport: http(),
@@ -291,13 +298,16 @@ export class CdpWalletProvider extends EvmWalletProvider {
 
     const feeData = await this.#publicClient!.estimateFeesPerGas();
 
+    const maxFeePerGas = BigInt(Math.round(Number(feeData.maxFeePerGas) * this.#feePerGasMultiplier));
+    const maxPriorityFeePerGas = BigInt(Math.round(Number(feeData.maxPriorityFeePerGas) * this.#feePerGasMultiplier));
+
     const gas = await this.#publicClient!.estimateGas({
       account: this.#address! as `0x${string}`,
       to,
       value,
       data,
-      maxFeePerGas: feeData.maxFeePerGas,
-      maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
+      maxFeePerGas,
+      maxPriorityFeePerGas,
     });
 
     const chainId = parseInt(this.#network!.chainId!, 10);
@@ -307,8 +317,8 @@ export class CdpWalletProvider extends EvmWalletProvider {
       value,
       data,
       nonce,
-      maxFeePerGas: feeData.maxFeePerGas,
-      maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
+      maxFeePerGas,
+      maxPriorityFeePerGas,
       gas,
       chainId,
       type: "eip1559",
