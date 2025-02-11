@@ -7,6 +7,7 @@
 - Added `svmWalletProvider` abstract class for interacting with Solana.
 - Added `solanaKeypairWalletProvider` to concretely implement `svmWalletProvider` with a local keypair.
 - Added gas configuration parameters (`gasLimitMultiplier`, `feePerGasMultiplier`) to `CdpWalletProvider` and `ViemWalletProvider`.
+- Added `alloraActionProvider` to fetch inferences from Allora Network.
 
 ## [0.1.2] - 2025-02-07
 
