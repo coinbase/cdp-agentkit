@@ -276,3 +276,38 @@ class CdpWalletProvider(EvmWalletProvider):
             )
         except Exception as e:
             raise Exception(f"Failed to deploy token: {e!s}") from e
+
+    def trade(self, amount: str, from_asset_id: str, to_asset_id: str) -> str:
+        """Trade a specified amount of a from asset to a to asset for the wallet.
+
+        Args:
+            amount (str): The amount of the from asset to trade, e.g. `15`, `0.000001`.
+            from_asset_id (str): The from asset ID to trade (e.g., "eth", "usdc", or a valid contract address).
+            to_asset_id (str): The to asset ID to trade (e.g., "eth", "usdc", or a valid contract address).
+
+        Returns:
+            str: A message containing the trade details.
+
+        Raises:
+            Exception: If the trade fails or if the wallet is not initialized.
+
+        """
+        if not self._wallet:
+            raise Exception("Wallet not initialized")
+
+        try:
+            trade_result = self._wallet.trade(
+                amount=amount,
+                from_asset_id=from_asset_id,
+                to_asset_id=to_asset_id,
+            ).wait()
+
+            return "\n".join(
+                [
+                    f"Traded {amount} of {from_asset_id} for {trade_result.to_amount} of {to_asset_id}.",
+                    f"Transaction hash for the trade: {trade_result.transaction.transaction_hash}",
+                    f"Transaction link for the trade: {trade_result.transaction.transaction_link}",
+                ]
+            )
+        except Exception as e:
+            raise Exception(f"Error trading assets: {e!s}") from e
