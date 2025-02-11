@@ -129,7 +129,7 @@ class CdpWalletProvider(EvmWalletProvider):
             transfer_result = self._wallet.transfer(
                 amount=value,
                 asset_id="eth",
-                destination=to,
+                destination=Web3.to_checksum_address(to),
                 gasless=False,
             )
 

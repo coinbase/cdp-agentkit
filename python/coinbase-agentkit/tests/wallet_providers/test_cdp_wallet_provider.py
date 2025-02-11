@@ -296,7 +296,7 @@ def test_native_transfer_success(provider_factory, mock_wallet):
     mock_wallet.transfer.assert_called_once_with(
         amount=MOCK_ETH_AMOUNT,
         asset_id="eth",
-        destination=MOCK_TO_ADDRESS,
+        destination=Web3.to_checksum_address(MOCK_TO_ADDRESS),
         gasless=False
     )
 
@@ -317,7 +317,7 @@ def test_native_transfer_failure(provider_factory, mock_wallet):
     mock_wallet.transfer.assert_called_once_with(
         amount=MOCK_ETH_AMOUNT,
         asset_id="eth",
-        destination=MOCK_TO_ADDRESS,
+        destination=Web3.to_checksum_address(MOCK_TO_ADDRESS),
         gasless=False
     )
 
@@ -340,6 +340,6 @@ def test_native_transfer_missing_tx_hash(provider_factory, mock_wallet):
     mock_wallet.transfer.assert_called_once_with(
         amount=MOCK_ETH_AMOUNT,
         asset_id="eth",
-        destination=MOCK_TO_ADDRESS,
+        destination=Web3.to_checksum_address(MOCK_TO_ADDRESS),
         gasless=False
     )

@@ -5,18 +5,6 @@ from decimal import Decimal
 from pydantic_core import PydanticCustomError
 
 
-def eth_address_validator(value: str) -> str:
-    """Validate Ethereum address format."""
-    pattern = r"^0x[a-fA-F0-9]{40}$"
-    if not re.match(pattern, value):
-        raise PydanticCustomError(
-            "eth_address",
-            "Invalid Ethereum address format. Must be a 0x-prefixed hex string with 40 characters.",
-            {"pattern": pattern},
-        )
-    return value
-
-
 def positive_decimal_validator(value: str) -> str:
     """Validate positive decimal number format."""
     pattern = r"^[0-9]*\.?[0-9]+$"

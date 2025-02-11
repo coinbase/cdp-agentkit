@@ -1,7 +1,7 @@
-
 from pydantic import BaseModel, Field, field_validator
+from web3 import Web3
 
-from .validators import eth_address_validator, positive_decimal_validator
+from .validators import positive_decimal_validator
 
 
 class GetWalletDetailsInput(BaseModel):
@@ -27,8 +27,12 @@ class NativeTransferInput(BaseModel):
     @field_validator("to")
     @classmethod
     def validate_address(cls, v: str) -> str:
-        """Validate the Ethereum address format."""
-        return eth_address_validator(v)
+        """Validate the Ethereum address."""
+        try:
+            Web3.to_checksum_address(v)
+            return v
+        except ValueError as e:
+            raise ValueError("Invalid Ethereum address format") from e
 
     @field_validator("value")
     @classmethod
