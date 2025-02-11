@@ -42,6 +42,7 @@
     "@coinbase/coinbase-sdk": "^0.17.0",
     "md5": "^2.3.0",
     "reflect-metadata": "^0.2.2",
+    "sushi": "5.0.13",
     "twitter-api-v2": "^1.18.2",
     "viem": "^2.22.16",
     "zod": "^3.23.8"
