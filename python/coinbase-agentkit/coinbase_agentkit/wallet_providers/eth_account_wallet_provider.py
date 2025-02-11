@@ -134,7 +134,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
             args = []
         return func(*args).call(block_identifier=block_identifier)
 
-    def native_transfer(self, to: str, amount: Decimal) -> str:
+    def native_transfer(self, to: str, value: Decimal) -> str:
         """Transfer the native asset of the network.
 
         Args:
@@ -145,7 +145,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
             The transaction hash as a string
 
         """
-        value_wei = Web3.to_wei(amount, "ether")
+        value_wei = Web3.to_wei(value, "ether")
 
         transfer_result = self.send_transaction({
             "to": Web3.to_checksum_address(to),
@@ -157,4 +157,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
             raise Exception("Transaction failed")
 
         tx_hash = receipt["transactionHash"]
+        if not tx_hash:
+            raise Exception("Transaction hash not found")
+
         return tx_hash.hex()

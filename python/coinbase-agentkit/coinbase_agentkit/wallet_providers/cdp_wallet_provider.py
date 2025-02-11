@@ -93,13 +93,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
     def get_address(self) -> str:
         """Get the wallet address."""
-        if not self._address:
-            self._address = self._wallet.default_address.address_id
         return self._address
-
-    def get_network(self) -> Network:
-        """Get the current network."""
-        return self._network
 
     def get_balance(self) -> Decimal:
         """Get the wallet balance in native currency."""
@@ -113,7 +107,11 @@ class CdpWalletProvider(EvmWalletProvider):
         """Get the name of the wallet provider."""
         return "cdp_wallet_provider"
 
-    def native_transfer(self, to: str, amount: Decimal) -> str:
+    def get_network(self) -> Network:
+        """Get the current network."""
+        return self._network
+
+    def native_transfer(self, to: str, value: Decimal) -> str:
         """Transfer the native asset of the network.
 
         Args:
@@ -129,7 +127,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
         try:
             transfer_result = self._wallet.transfer(
-                amount=amount,
+                amount=value,
                 asset_id="eth",
                 destination=to,
                 gasless=False,

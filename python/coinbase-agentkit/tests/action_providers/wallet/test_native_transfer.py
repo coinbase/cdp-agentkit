@@ -9,7 +9,7 @@ from coinbase_agentkit.action_providers.wallet.schemas import NativeTransferInpu
 from .conftest import MOCK_ADDRESS
 
 MOCK_TX_HASH = HexStr("0x742d35Cc6634C0532925a3b844Bc454e4438f44e")
-MOCK_ETH_AMOUNT = "0.0001"  # Small amount of ETH
+MOCK_ETH_AMOUNT = "0.0001"
 INVALID_ADDRESS = "not-an-address"
 INVALID_AMOUNT = "not-a-number"
 
@@ -36,21 +36,18 @@ def test_native_transfer_schema_invalid_address():
 
 def test_native_transfer_schema_invalid_value():
     """Test that NativeTransferInput rejects invalid values."""
-    # Test non-numeric value
     with pytest.raises(ValidationError, match=r"Invalid decimal format. Must be a positive number."):
         NativeTransferInput(
             to=MOCK_ADDRESS,
             value=INVALID_AMOUNT,
         )
 
-    # Test negative value
     with pytest.raises(ValidationError, match=r"Invalid decimal format. Must be a positive number."):
         NativeTransferInput(
             to=MOCK_ADDRESS,
             value="-1.5",
         )
 
-    # Test zero value
     with pytest.raises(ValidationError, match=r"Failed to parse decimal value"):
         NativeTransferInput(
             to=MOCK_ADDRESS,

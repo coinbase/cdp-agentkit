@@ -12,7 +12,6 @@ from coinbase_agentkit.wallet_providers.cdp_wallet_provider import (
     CdpWalletProviderConfig,
 )
 
-
 MOCK_API_KEY_NAME = "test_key"
 MOCK_API_KEY_PRIVATE_KEY = "test_private_key"
 
@@ -26,12 +25,7 @@ MOCK_WALLET_ID = "86324540-4dba-4856-a120-702f70737204"
 MOCK_WALLET_SEED = "0xbea184c08988a12229a53c762531b426b2b233b6152e1374f63404207141f26d"
 MOCK_WALLET_DEFAULT_ADDRESS = "0x2c84938D3Ca551A476e540297A40d36736948eA1"
 
-MOCK_WALLET_DATA = '{{"wallet_id": "{wallet_id}", "seed": "{seed}", "network_id": "{network_id}", "default_address_id": "{default_address}"}}'.format(
-    wallet_id=MOCK_WALLET_ID,
-    seed=MOCK_WALLET_SEED,
-    network_id=MOCK_NETWORK_ID,
-    default_address=MOCK_WALLET_DEFAULT_ADDRESS
-)
+MOCK_WALLET_DATA = f'{{"wallet_id": "{MOCK_WALLET_ID}", "seed": "{MOCK_WALLET_SEED}", "network_id": "{MOCK_NETWORK_ID}", "default_address_id": "{MOCK_WALLET_DEFAULT_ADDRESS}"}}'
 
 MOCK_ETH_AMOUNT = Decimal("0.01")
 MOCK_ETH_BALANCE = Decimal("1.0")
@@ -200,8 +194,15 @@ def test_configure_with_new_wallet(mock_cdp, mock_wallet_class):
         provider = CdpWalletProvider(config)
 
         mock_wallet_class.create.assert_called_once_with(network_id=MOCK_NETWORK_ID)
+
+        assert provider._address is not None
+        assert provider._network is not None
+        assert provider._network.chain_id == MOCK_CHAIN_ID
         assert provider._network.network_id == MOCK_NETWORK_ID
         assert provider._network.protocol_family == "evm"
+        assert provider._wallet is not None
+        assert provider._web3 is not None
+        assert isinstance(provider._web3, Web3)
 
 
 def test_configure_with_wallet_data(mock_wallet_class):
@@ -221,7 +222,6 @@ def test_configure_with_wallet_data(mock_wallet_class):
         )
         provider = CdpWalletProvider(config)
 
-        # Verify WalletData was created correctly
         mock_wallet_data_class.from_dict.assert_called_once_with({
             "wallet_id": MOCK_WALLET_ID,
             "seed": MOCK_WALLET_SEED,
@@ -229,14 +229,18 @@ def test_configure_with_wallet_data(mock_wallet_class):
             "default_address_id": MOCK_WALLET_DEFAULT_ADDRESS
         })
 
-        # Verify wallet was imported with correct data
         mock_wallet_class.import_data.assert_called_once_with(mock_wallet_data)
-        
-        # Verify network setup
+
+        assert provider._address is not None
+        assert provider._address == MOCK_WALLET_DEFAULT_ADDRESS
+        assert provider._network is not None
+        assert provider._network.chain_id == MOCK_CHAIN_ID
         assert provider._network.network_id == MOCK_NETWORK_ID
         assert provider._network.protocol_family == "evm"
-        
-        # Verify other methods weren't called
+        assert provider._wallet is not None
+        assert provider._web3 is not None
+        assert isinstance(provider._web3, Web3)
+
         mock_wallet_class.create.assert_not_called()
         mock_wallet_class.import_wallet.assert_not_called()
 
@@ -258,17 +262,19 @@ def test_configure_with_mnemonic_phrase(mock_wallet_class):
         )
         provider = CdpWalletProvider(config)
 
-        # Verify mnemonic was created correctly
         mock_mnemonic_class.assert_called_once_with(MOCK_MNEMONIC_PHRASE)
-
-        # Verify wallet was imported with correct mnemonic and network
         mock_wallet_class.import_wallet.assert_called_once_with(mock_mnemonic, MOCK_NETWORK_ID)
-        
-        # Verify network setup
+
+        assert provider._address is not None
+        assert provider._address == MOCK_WALLET_DEFAULT_ADDRESS
+        assert provider._network is not None
+        assert provider._network.chain_id == MOCK_CHAIN_ID
         assert provider._network.network_id == MOCK_NETWORK_ID
         assert provider._network.protocol_family == "evm"
-        
-        # Verify other methods weren't called
+        assert provider._wallet is not None
+        assert provider._web3 is not None
+        assert isinstance(provider._web3, Web3)
+
         mock_wallet_class.create.assert_not_called()
         mock_wallet_class.import_data.assert_not_called()
 
@@ -283,7 +289,7 @@ def test_native_transfer_success(provider_factory, mock_wallet):
     provider = provider_factory()
     tx_hash = provider.native_transfer(
         to=MOCK_TO_ADDRESS,
-        amount=MOCK_ETH_AMOUNT
+        value=MOCK_ETH_AMOUNT
     )
 
     assert tx_hash == MOCK_TX_HASH
@@ -304,7 +310,7 @@ def test_native_transfer_failure(provider_factory, mock_wallet):
     with pytest.raises(Exception) as exc_info:
         provider.native_transfer(
             to=MOCK_TO_ADDRESS,
-            amount=MOCK_ETH_AMOUNT
+            value=MOCK_ETH_AMOUNT
         )
 
     assert str(exc_info.value) == f"Failed to transfer native tokens: {error_message}"
@@ -327,7 +333,7 @@ def test_native_transfer_missing_tx_hash(provider_factory, mock_wallet):
     with pytest.raises(Exception) as exc_info:
         provider.native_transfer(
             to=MOCK_TO_ADDRESS,
-            amount=MOCK_ETH_AMOUNT
+            value=MOCK_ETH_AMOUNT
         )
 
     assert str(exc_info.value) == "Failed to transfer native tokens: Transaction hash not found"

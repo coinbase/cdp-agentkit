@@ -1,8 +1,6 @@
 from abc import ABC, ABCMeta, abstractmethod
 from decimal import Decimal
 
-from web3.types import HexStr
-
 from ..analytics import RequiredEventData, send_analytics_event
 from ..network import Network
 
@@ -66,6 +64,6 @@ class WalletProvider(ABC, metaclass=WalletProviderMeta):
         pass
 
     @abstractmethod
-    def native_transfer(self, to: str, amount: Decimal) -> str:
+    def native_transfer(self, to: str, value: Decimal) -> str:
         """Transfer the native asset of the network."""
         pass
