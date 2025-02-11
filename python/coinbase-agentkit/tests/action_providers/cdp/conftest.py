@@ -33,7 +33,9 @@ MOCK_TO_AMOUNT = "1"
 MOCK_FROM_ASSET_ID = "usdc"
 MOCK_TO_ASSET_ID = "weth"
 MOCK_MAINNET_TX_HASH = "0xffcc5fb66fd40f25af7a412025043096577d8c1e00f5fa2c95861a1ba6832a37"
-MOCK_MAINNET_TX_LINK = "https://basescan.org/tx/0xffcc5fb66fd40f25af7a412025043096577d8c1e00f5fa2c95861a1ba6832a37"
+MOCK_MAINNET_TX_LINK = (
+    "https://basescan.org/tx/0xffcc5fb66fd40f25af7a412025043096577d8c1e00f5fa2c95861a1ba6832a37"
+)
 
 
 @pytest.fixture
@@ -108,8 +110,7 @@ def mock_contract():
     contract = Mock()
     contract.contract_address = MOCK_CONTRACT_ADDRESS
     contract.transaction = Mock(
-        transaction_link=f"{MOCK_EXPLORER_URL}/{MOCK_TX_HASH}",
-        transaction_hash=MOCK_TX_HASH
+        transaction_link=f"{MOCK_EXPLORER_URL}/{MOCK_TX_HASH}", transaction_hash=MOCK_TX_HASH
     )
     contract.wait.return_value = contract
     return contract

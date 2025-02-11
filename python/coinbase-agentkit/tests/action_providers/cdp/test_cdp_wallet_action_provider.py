@@ -180,19 +180,24 @@ def test_trade_input_model_missing_params():
 
 def test_trade_success(mock_wallet_provider):
     """Test successful trade with valid parameters."""
-    mock_trade_response = "\n".join([
-        f"Traded {MOCK_VALUE} of {MOCK_FROM_ASSET_ID} for {MOCK_TO_AMOUNT} of {MOCK_TO_ASSET_ID}.",
-        f"Transaction hash for the trade: {MOCK_MAINNET_TX_HASH}",
-        f"Transaction link for the trade: {MOCK_MAINNET_TX_LINK}",
-    ])
+    mock_trade_response = "\n".join(
+        [
+            f"Traded {MOCK_VALUE} of {MOCK_FROM_ASSET_ID} for {MOCK_TO_AMOUNT} of {MOCK_TO_ASSET_ID}.",
+            f"Transaction hash for the trade: {MOCK_MAINNET_TX_HASH}",
+            f"Transaction link for the trade: {MOCK_MAINNET_TX_LINK}",
+        ]
+    )
     mock_wallet_provider.trade.return_value = mock_trade_response
 
     provider = CdpWalletActionProvider()
-    action_response = provider.trade(mock_wallet_provider, {
-        "value": MOCK_VALUE,
-        "from_asset_id": MOCK_FROM_ASSET_ID,
-        "to_asset_id": MOCK_TO_ASSET_ID,
-    })
+    action_response = provider.trade(
+        mock_wallet_provider,
+        {
+            "value": MOCK_VALUE,
+            "from_asset_id": MOCK_FROM_ASSET_ID,
+            "to_asset_id": MOCK_TO_ASSET_ID,
+        },
+    )
 
     assert action_response == mock_trade_response
 
@@ -209,11 +214,14 @@ def test_trade_api_error(mock_wallet_provider):
     mock_wallet_provider.trade.side_effect = Exception(error_message)
 
     provider = CdpWalletActionProvider()
-    action_response = provider.trade(mock_wallet_provider, {
-        "value": MOCK_VALUE,
-        "from_asset_id": MOCK_FROM_ASSET_ID,
-        "to_asset_id": MOCK_TO_ASSET_ID,
-    })
+    action_response = provider.trade(
+        mock_wallet_provider,
+        {
+            "value": MOCK_VALUE,
+            "from_asset_id": MOCK_FROM_ASSET_ID,
+            "to_asset_id": MOCK_TO_ASSET_ID,
+        },
+    )
 
     assert action_response == f"Error trading assets: {error_message}"
     mock_wallet_provider.trade.assert_called_once_with(

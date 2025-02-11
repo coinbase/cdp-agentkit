@@ -61,9 +61,9 @@ class TradeInput(BaseModel):
 
     from_asset_id: str = Field(
         ...,
-        description="The from asset ID to trade (e.g. `eth`, `0x036CbD53842c5426634e7929541eC2318f3dCF7e`)"
+        description="The from asset ID to trade (e.g. `eth`, `0x036CbD53842c5426634e7929541eC2318f3dCF7e`)",
     )
     to_asset_id: str = Field(
         ...,
-        description="The to asset ID to receive from the trade (e.g. `eth`, `0x036CbD53842c5426634e7929541eC2318f3dCF7e`)"
+        description="The to asset ID to receive from the trade (e.g. `eth`, `0x036CbD53842c5426634e7929541eC2318f3dCF7e`)",
     )

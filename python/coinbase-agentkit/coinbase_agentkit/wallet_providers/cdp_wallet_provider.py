@@ -302,10 +302,12 @@ class CdpWalletProvider(EvmWalletProvider):
                 to_asset_id=to_asset_id,
             ).wait()
 
-            return "\n".join([
-                f"Traded {amount} of {from_asset_id} for {trade_result.to_amount} of {to_asset_id}.",
-                f"Transaction hash for the trade: {trade_result.transaction.transaction_hash}",
-                f"Transaction link for the trade: {trade_result.transaction.transaction_link}",
-            ])
+            return "\n".join(
+                [
+                    f"Traded {amount} of {from_asset_id} for {trade_result.to_amount} of {to_asset_id}.",
+                    f"Transaction hash for the trade: {trade_result.transaction.transaction_hash}",
+                    f"Transaction link for the trade: {trade_result.transaction.transaction_link}",
+                ]
+            )
         except Exception as e:
             raise Exception(f"Error trading assets: {e!s}") from e
