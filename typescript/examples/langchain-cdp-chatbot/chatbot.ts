@@ -87,6 +87,7 @@ async function initializeAgent() {
       apiKeyPrivateKey: process.env.CDP_API_KEY_PRIVATE_KEY?.replace(/\\n/g, "\n"),
       cdpWalletData: walletDataStr || undefined,
       networkId: process.env.NETWORK_ID || "base-sepolia",
+      feePerGasMultiplier: 1.15
     };
 
     const walletProvider = await CdpWalletProvider.configureWithWallet(config);
