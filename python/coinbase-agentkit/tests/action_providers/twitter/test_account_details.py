@@ -1,4 +1,5 @@
 """Tests for Twitter account details action."""
+
 from json import dumps
 from unittest.mock import patch
 
@@ -26,16 +27,12 @@ def test_account_details_success():
     """Test successful retrieval of the authenticated Twitter (X) account."""
     provider = twitter_action_provider()
 
-    mock_response = {
-        "data": {
-            "id": MOCK_ID,
-            "name": MOCK_NAME,
-            "username": MOCK_USERNAME
-        }
-    }
+    mock_response = {"data": {"id": MOCK_ID, "name": MOCK_NAME, "username": MOCK_USERNAME}}
     mock_response["data"]["url"] = f"https://x.com/{MOCK_USERNAME}"
 
-    expected_response = f"Successfully retrieved authenticated user account details:\n{dumps(mock_response)}"
+    expected_response = (
+        f"Successfully retrieved authenticated user account details:\n{dumps(mock_response)}"
+    )
 
     with patch.object(provider.client, "get_me", return_value=mock_response) as mock_get_me:
         response = provider.account_details({})

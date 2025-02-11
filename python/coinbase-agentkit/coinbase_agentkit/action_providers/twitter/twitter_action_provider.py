@@ -45,6 +45,7 @@ class TwitterActionProvider(ActionProvider):
 
         try:
             import tweepy
+
             self.client = tweepy.Client(
                 consumer_key=api_key,
                 consumer_secret=api_secret,
@@ -54,7 +55,9 @@ class TwitterActionProvider(ActionProvider):
                 return_type=dict,
             )
         except ImportError as e:
-            raise ImportError("Failed to import tweepy. Please install it with 'pip install tweepy'.") from e
+            raise ImportError(
+                "Failed to import tweepy. Please install it with 'pip install tweepy'."
+            ) from e
         except Exception as e:
             raise ValueError(f"Failed to initialize Twitter client: {e}") from e
 
@@ -75,6 +78,7 @@ A failure response will return a message with a Twitter API request error:
         AccountDetailsInput(**args)
 
         import tweepy
+
         try:
             response = self.client.get_me()
             data = response["data"]
@@ -101,6 +105,7 @@ A failure response will return a message with the Twitter API request error:
         validated_args = AccountMentionsInput(**args)
 
         import tweepy
+
         try:
             response = self.client.get_users_mentions(validated_args.user_id)
             return f"Successfully retrieved account mentions:\n{dumps(response)}"
@@ -124,6 +129,7 @@ A failure response will return a message with the Twitter API request error:
         validated_args = PostTweetInput(**args)
 
         import tweepy
+
         try:
             response = self.client.create_tweet(text=validated_args.tweet)
             return f"Successfully posted to Twitter:\n{dumps(response)}"
@@ -147,10 +153,10 @@ A failure response will return a message with the Twitter API request error:
         validated_args = PostTweetReplyInput(**args)
 
         import tweepy
+
         try:
             response = self.client.create_tweet(
-                text=validated_args.tweet_reply,
-                in_reply_to_tweet_id=validated_args.tweet_id
+                text=validated_args.tweet_reply, in_reply_to_tweet_id=validated_args.tweet_id
             )
             return f"Successfully posted reply to Twitter:\n{dumps(response)}"
         except tweepy.errors.TweepyException as e:

@@ -1,4 +1,5 @@
 """Tests for Twitter post tweet reply action."""
+
 from json import dumps
 from unittest.mock import patch
 
@@ -18,10 +19,7 @@ MOCK_EDIT_HISTORY_IDS = ["5678"]
 
 def test_post_tweet_reply_input_model_valid():
     """Test that PostTweetReplyInput accepts valid parameters."""
-    input_model = PostTweetReplyInput(**{
-        "tweet_id": MOCK_TWEET_ID,
-        "tweet_reply": MOCK_REPLY_TEXT
-    })
+    input_model = PostTweetReplyInput(**{"tweet_id": MOCK_TWEET_ID, "tweet_reply": MOCK_REPLY_TEXT})
     assert isinstance(input_model, PostTweetReplyInput)
     assert input_model.tweet_id == MOCK_TWEET_ID
     assert input_model.tweet_reply == MOCK_REPLY_TEXT
@@ -42,22 +40,22 @@ def test_post_tweet_reply_success():
         "data": {
             "id": MOCK_REPLY_ID,
             "text": MOCK_REPLY_TEXT,
-            "edit_history_tweet_ids": MOCK_EDIT_HISTORY_IDS
+            "edit_history_tweet_ids": MOCK_EDIT_HISTORY_IDS,
         }
     }
 
     expected_response = f"Successfully posted reply to Twitter:\n{dumps(mock_response)}"
 
-    with patch.object(provider.client, "create_tweet", return_value=mock_response) as mock_create_tweet:
-        response = provider.post_tweet_reply({
-            "tweet_id": MOCK_TWEET_ID,
-            "tweet_reply": MOCK_REPLY_TEXT
-        })
+    with patch.object(
+        provider.client, "create_tweet", return_value=mock_response
+    ) as mock_create_tweet:
+        response = provider.post_tweet_reply(
+            {"tweet_id": MOCK_TWEET_ID, "tweet_reply": MOCK_REPLY_TEXT}
+        )
 
         assert response == expected_response
         mock_create_tweet.assert_called_once_with(
-            text=MOCK_REPLY_TEXT,
-            in_reply_to_tweet_id=MOCK_TWEET_ID
+            text=MOCK_REPLY_TEXT, in_reply_to_tweet_id=MOCK_TWEET_ID
         )
 
 
@@ -69,13 +67,11 @@ def test_post_tweet_reply_failure():
     expected_response = f"Error posting reply to Twitter:\n{error}"
 
     with patch.object(provider.client, "create_tweet", side_effect=error) as mock_create_tweet:
-        response = provider.post_tweet_reply({
-            "tweet_id": MOCK_TWEET_ID,
-            "tweet_reply": MOCK_REPLY_TEXT
-        })
+        response = provider.post_tweet_reply(
+            {"tweet_id": MOCK_TWEET_ID, "tweet_reply": MOCK_REPLY_TEXT}
+        )
 
         assert response == expected_response
         mock_create_tweet.assert_called_once_with(
-            text=MOCK_REPLY_TEXT,
-            in_reply_to_tweet_id=MOCK_TWEET_ID
+            text=MOCK_REPLY_TEXT, in_reply_to_tweet_id=MOCK_TWEET_ID
         )
