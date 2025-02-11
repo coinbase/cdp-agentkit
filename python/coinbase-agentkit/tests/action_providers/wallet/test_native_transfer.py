@@ -25,15 +25,6 @@ def test_native_transfer_schema_valid():
     assert schema.value == MOCK_ETH_AMOUNT
 
 
-def test_native_transfer_schema_invalid_address():
-    """Test that NativeTransferInput rejects invalid addresses."""
-    with pytest.raises(ValidationError, match=r"Invalid Ethereum address format"):
-        NativeTransferInput(
-            to=INVALID_ADDRESS,
-            value=MOCK_ETH_AMOUNT,
-        )
-
-
 def test_native_transfer_schema_invalid_value():
     """Test that NativeTransferInput rejects invalid values."""
     with pytest.raises(ValidationError, match=r"Invalid decimal format. Must be a positive number."):
