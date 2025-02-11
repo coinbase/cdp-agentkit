@@ -88,6 +88,7 @@ Important notes:
                 return price_str if not price_str.startswith(".") else f"0{price_str}"
 
             scaled_price = price // (10**exponent)
+
             return str(scaled_price)
         except Exception as e:
             return f"Error fetching price from Pyth: {e!s}"

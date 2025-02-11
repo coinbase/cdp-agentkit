@@ -16,11 +16,9 @@ class Action(BaseModel):
     name: str
     description: str
     args_schema: type[BaseModel] | None = None
-    invoke: Callable = Field(
-        ..., exclude=True
-    )  # exclude=True prevents serialization issues with callable
+    invoke: Callable = Field(..., exclude=True)
 
-    model_config = ConfigDict(arbitrary_types_allowed=True)  # Updated Config syntax for Pydantic v2
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
 
 class ActionProvider(Generic[TWalletProvider], ABC):
@@ -32,7 +30,6 @@ class ActionProvider(Generic[TWalletProvider], ABC):
         self.name = name
         self.action_providers = action_providers
 
-        # Register all decorated methods
         for method_name in dir(self):
             method = getattr(self, method_name)
             if hasattr(method, "_add_to_actions"):

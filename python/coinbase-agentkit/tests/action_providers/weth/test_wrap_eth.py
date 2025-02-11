@@ -1,5 +1,6 @@
 """Tests for WETH action provider."""
-from unittest.mock import patch
+
+from unittest.mock import MagicMock, patch
 
 import pytest
 from pydantic import ValidationError
@@ -14,8 +15,6 @@ from coinbase_agentkit.action_providers.weth.weth_action_provider import (
 from coinbase_agentkit.network import Network
 
 from .conftest import (
-    MOCK_ADDRESS,
-    MOCK_NETWORK,
     MOCK_RECEIPT,
     MOCK_TX_HASH,
 )
@@ -64,12 +63,10 @@ def test_wrap_eth_success():
     """Test successful ETH wrapping."""
     with (
         patch("coinbase_agentkit.action_providers.weth.weth_action_provider.Web3") as mock_web3,
-        patch("coinbase_agentkit.wallet_providers.EvmWalletProvider") as mock_wallet,
     ):
         mock_contract = mock_web3.return_value.eth.contract.return_value
         mock_contract.encode_abi.return_value = "0xencoded"
-        mock_wallet.get_address.return_value = MOCK_ADDRESS
-        mock_wallet.get_network.return_value = MOCK_NETWORK
+        mock_wallet = MagicMock()
         mock_wallet.send_transaction.return_value = MOCK_TX_HASH
         mock_wallet.wait_for_transaction_receipt.return_value = MOCK_RECEIPT
 
@@ -103,6 +100,8 @@ def test_wrap_eth_validation_error():
     """Test wrap_eth with invalid input."""
     provider = WethActionProvider()
 
+    mock_wallet = MagicMock()
+
     invalid_inputs = [
         {},
         {"amount_to_wrap": ""},
@@ -113,7 +112,7 @@ def test_wrap_eth_validation_error():
     ]
 
     for invalid_input in invalid_inputs:
-        response = provider.wrap_eth(None, invalid_input)
+        response = provider.wrap_eth(mock_wallet, invalid_input)
         assert "Error wrapping ETH: " in response
         assert "validation error" in response.lower()
 
@@ -122,12 +121,10 @@ def test_wrap_eth_transaction_error():
     """Test wrap_eth when transaction fails."""
     with (
         patch("coinbase_agentkit.action_providers.weth.weth_action_provider.Web3") as mock_web3,
-        patch("coinbase_agentkit.wallet_providers.EvmWalletProvider") as mock_wallet,
     ):
         mock_contract = mock_web3.return_value.eth.contract.return_value
         mock_contract.encode_abi.return_value = "0xencoded"
-        mock_wallet.get_address.return_value = MOCK_ADDRESS
-        mock_wallet.get_network.return_value = MOCK_NETWORK
+        mock_wallet = MagicMock()
         mock_wallet.send_transaction.side_effect = Exception("Transaction failed")
 
         provider = WethActionProvider()
@@ -159,14 +156,11 @@ def test_supports_network():
     ]
 
     for network_id, chain_id, protocol_family, expected_result in test_cases:
-        network = Network(
-            protocol_family=protocol_family,
-            chain_id=chain_id,
-            network_id=network_id
-        )
+        network = Network(protocol_family=protocol_family, chain_id=chain_id, network_id=network_id)
         result = provider.supports_network(network)
-        assert result is expected_result, \
-            f"Network {network_id} (chain_id: {chain_id}) should{' ' if expected_result else ' not '}be supported"
+        assert (
+            result is expected_result
+        ), f"Network {network_id} (chain_id: {chain_id}) should{' ' if expected_result else ' not '}be supported"
 
 
 def test_action_provider_setup():
