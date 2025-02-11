@@ -1,8 +1,5 @@
 """Tests for CDP wallet action provider."""
 
-from coinbase_agentkit.action_providers.cdp.schemas import TradeInput
-from coinbase_agentkit.wallet_providers.cdp_wallet_provider import CdpWalletProvider
-from coinbase_agentkit.network import Network
 from unittest.mock import Mock
 
 import pytest
@@ -11,11 +8,12 @@ from coinbase_agentkit.action_providers.cdp.cdp_wallet_action_provider import (
     CdpWalletActionProvider,
     cdp_wallet_action_provider,
 )
+from coinbase_agentkit.action_providers.cdp.schemas import TradeInput
 
 from .conftest import (
+    MOCK_CONSTRUCTOR_ARGS,
     MOCK_CONTRACT_ADDRESS,
     MOCK_CONTRACT_NAME,
-    MOCK_CONSTRUCTOR_ARGS,
     MOCK_EXPLORER_URL,
     MOCK_FROM_ASSET_ID,
     MOCK_MAINNET_TX_HASH,

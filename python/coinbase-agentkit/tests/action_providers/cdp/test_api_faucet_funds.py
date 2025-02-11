@@ -2,8 +2,6 @@
 
 from unittest.mock import Mock, patch
 
-import pytest
-
 from coinbase_agentkit.action_providers.cdp.cdp_api_action_provider import (
     RequestFaucetFundsInput,
     cdp_api_action_provider,
@@ -12,8 +10,8 @@ from coinbase_agentkit.network import Network
 
 from .conftest import (
     MOCK_EXPLORER_URL,
-    MOCK_MAINNET_NETWORK_ID,
     MOCK_MAINNET_CHAIN_ID,
+    MOCK_MAINNET_NETWORK_ID,
     MOCK_TESTNET_NETWORK_ID,
     MOCK_TX_HASH,
 )
@@ -31,9 +29,12 @@ def test_request_faucet_funds_input_without_asset_id():
     assert input_model.asset_id is None
 
 
-def test_request_eth_without_asset_id(mock_testnet_wallet_provider, mock_transaction):
+def test_request_eth_without_asset_id(mock_testnet_wallet_provider, mock_transaction, mock_env):
     """Test requesting ETH from faucet without specifying asset_id."""
-    with patch("cdp.ExternalAddress") as mock_address:
+    with (
+        patch("cdp.Cdp"),
+        patch("cdp.ExternalAddress") as mock_address,
+    ):
         mock_address.return_value.faucet.return_value = mock_transaction
 
         response = cdp_api_action_provider().request_faucet_funds(mock_testnet_wallet_provider, {})
@@ -48,9 +49,12 @@ def test_request_eth_without_asset_id(mock_testnet_wallet_provider, mock_transac
         mock_address.return_value.faucet.assert_called_with(None)
 
 
-def test_request_eth_with_asset_id(mock_testnet_wallet_provider, mock_transaction):
+def test_request_eth_with_asset_id(mock_testnet_wallet_provider, mock_transaction, mock_env):
     """Test requesting ETH from faucet with eth asset_id."""
-    with patch("cdp.ExternalAddress") as mock_address:
+    with (
+        patch("cdp.Cdp"),
+        patch("cdp.ExternalAddress") as mock_address,
+    ):
         mock_address.return_value.faucet.return_value = mock_transaction
 
         response = cdp_api_action_provider().request_faucet_funds(
@@ -67,9 +71,12 @@ def test_request_eth_with_asset_id(mock_testnet_wallet_provider, mock_transactio
         mock_address.return_value.faucet.assert_called_with("eth")
 
 
-def test_request_usdc(mock_testnet_wallet_provider, mock_transaction):
+def test_request_usdc(mock_testnet_wallet_provider, mock_transaction, mock_env):
     """Test requesting USDC from faucet."""
-    with patch("cdp.ExternalAddress") as mock_address:
+    with (
+        patch("cdp.Cdp"),
+        patch("cdp.ExternalAddress") as mock_address,
+    ):
         mock_address.return_value.faucet.return_value = mock_transaction
 
         response = cdp_api_action_provider().request_faucet_funds(
@@ -86,22 +93,26 @@ def test_request_usdc(mock_testnet_wallet_provider, mock_transaction):
         mock_address.return_value.faucet.assert_called_with("usdc")
 
 
-def test_request_faucet_wrong_network():
+def test_request_faucet_wrong_network(mock_env):
     """Test faucet request fails on wrong network (mainnet)."""
-    wallet = Mock()
-    wallet.get_network.return_value = Network(
-        protocol_family="evm",
-        network_id=MOCK_MAINNET_NETWORK_ID,
-        chain_id=MOCK_MAINNET_CHAIN_ID,
-    )
+    with patch("cdp.Cdp"):
+        wallet = Mock()
+        wallet.get_network.return_value = Network(
+            protocol_family="evm",
+            network_id=MOCK_MAINNET_NETWORK_ID,
+            chain_id=MOCK_MAINNET_CHAIN_ID,
+        )
 
-    response = cdp_api_action_provider().request_faucet_funds(wallet, {})
-    assert response == "Error: Faucet is only available on base-sepolia network"
+        response = cdp_api_action_provider().request_faucet_funds(wallet, {})
+        assert response == "Error: Faucet is only available on base-sepolia network"
 
 
-def test_request_faucet_api_error(mock_testnet_wallet_provider):
+def test_request_faucet_api_error(mock_testnet_wallet_provider, mock_env):
     """Test faucet request when API error occurs."""
-    with patch("cdp.ExternalAddress") as mock_address:
+    with (
+        patch("cdp.Cdp"),
+        patch("cdp.ExternalAddress") as mock_address,
+    ):
         mock_address.return_value.faucet.side_effect = Exception("Faucet request failed")
 
         response = cdp_api_action_provider().request_faucet_funds(mock_testnet_wallet_provider, {})

@@ -103,7 +103,7 @@ address as the owner and initial token holder.
         description="""This tool will trade a specified amount of a 'from asset' to a 'to asset' for the wallet.
 It takes the following inputs:
 - The amount of the 'from asset' to trade
-- The from asset ID to trade 
+- The from asset ID to trade
 - The asset ID to receive from the trade
 
 Important notes:
@@ -121,6 +121,7 @@ Important notes:
 
         Returns:
             A message containing the trade details.
+
         """
         validated_args = TradeInput(**args)
 
@@ -145,6 +146,7 @@ Important notes:
 
         Returns:
             True
+
         """
         return True
 
@@ -154,5 +156,6 @@ def cdp_wallet_action_provider() -> CdpWalletActionProvider:
 
     Returns:
         A new CdpWalletActionProvider instance.
+
     """
     return CdpWalletActionProvider()
