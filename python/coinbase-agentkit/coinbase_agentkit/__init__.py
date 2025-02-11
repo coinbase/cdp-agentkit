@@ -8,6 +8,7 @@ from .action_providers import (
     pyth_action_provider,
     twitter_action_provider,
     wallet_action_provider,
+    weth_action_provider,
 )
 from .agentkit import AgentKit, AgentKitOptions
 from .wallet_providers import (
@@ -33,4 +34,5 @@ __all__ = [
     "pyth_action_provider",
     "twitter_action_provider",
     "wallet_action_provider",
+    "weth_action_provider",
 ]
