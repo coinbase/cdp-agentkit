@@ -56,7 +56,6 @@ Important notes:
             ValidationError: If the input arguments are invalid.
 
         """
-
         try:
             validated_args = WrapEthInput(**args)
 

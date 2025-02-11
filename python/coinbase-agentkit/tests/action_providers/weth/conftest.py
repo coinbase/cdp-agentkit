@@ -3,10 +3,9 @@ from unittest.mock import Mock
 
 import pytest
 
+from coinbase_agentkit.action_providers.weth.weth_action_provider import WethActionProvider
 from coinbase_agentkit.network import Network
 from coinbase_agentkit.wallet_providers import EvmWalletProvider
-
-from coinbase_agentkit.action_providers.weth.weth_action_provider import WethActionProvider
 
 MOCK_ADDRESS = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
 MOCK_TX_HASH = "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"
