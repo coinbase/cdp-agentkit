@@ -39,6 +39,18 @@ MOCK_MAINNET_TX_LINK = (
 
 
 @pytest.fixture
+def mock_contract():
+    """Create a mock contract for testing."""
+    contract = Mock()
+    contract.contract_address = MOCK_CONTRACT_ADDRESS
+    contract.transaction = Mock(
+        transaction_link=f"{MOCK_EXPLORER_URL}/{MOCK_TX_HASH}", transaction_hash=MOCK_TX_HASH
+    )
+    contract.wait.return_value = contract
+    return contract
+
+
+@pytest.fixture
 def mock_contract_result():
     """Create a mock contract deployment result."""
     result = Mock()
@@ -58,6 +70,15 @@ def mock_env(monkeypatch):
     """Mock environment variables for testing."""
     monkeypatch.setenv("CDP_API_KEY_NAME", MOCK_API_KEY_NAME)
     monkeypatch.setenv("CDP_API_KEY_PRIVATE_KEY", MOCK_API_KEY_PRIVATE_KEY)
+
+
+@pytest.fixture
+def mock_transaction():
+    """Create a mock transaction for testing."""
+    mock_tx = Mock()
+    mock_tx.transaction_link = f"{MOCK_EXPLORER_URL}/{MOCK_TX_HASH}"
+    mock_tx.wait.return_value = mock_tx
+    return mock_tx
 
 
 @pytest.fixture
@@ -83,7 +104,7 @@ def mock_wallet_provider():
 
 
 @pytest.fixture
-def mock_testnet_wallet_provider():
+def mock_wallet_testnet_provider():
     """Create a mock testnet wallet for testing."""
     wallet = Mock()
     wallet.get_network.return_value = Network(
@@ -93,24 +114,3 @@ def mock_testnet_wallet_provider():
     )
     wallet.get_address.return_value = MOCK_WALLET_ADDRESS
     return wallet
-
-
-@pytest.fixture
-def mock_transaction():
-    """Create a mock transaction for testing."""
-    mock_tx = Mock()
-    mock_tx.transaction_link = f"{MOCK_EXPLORER_URL}/{MOCK_TX_HASH}"
-    mock_tx.wait.return_value = mock_tx
-    return mock_tx
-
-
-@pytest.fixture
-def mock_contract():
-    """Create a mock contract for testing."""
-    contract = Mock()
-    contract.contract_address = MOCK_CONTRACT_ADDRESS
-    contract.transaction = Mock(
-        transaction_link=f"{MOCK_EXPLORER_URL}/{MOCK_TX_HASH}", transaction_hash=MOCK_TX_HASH
-    )
-    contract.wait.return_value = contract
-    return contract

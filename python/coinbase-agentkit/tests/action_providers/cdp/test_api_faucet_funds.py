@@ -14,6 +14,7 @@ from .conftest import (
     MOCK_MAINNET_NETWORK_ID,
     MOCK_TESTNET_NETWORK_ID,
     MOCK_TX_HASH,
+    MOCK_WALLET_ADDRESS,
 )
 
 
@@ -29,7 +30,7 @@ def test_request_faucet_funds_input_without_asset_id():
     assert input_model.asset_id is None
 
 
-def test_request_eth_without_asset_id(mock_testnet_wallet_provider, mock_transaction, mock_env):
+def test_request_eth_without_asset_id(mock_wallet_testnet_provider, mock_transaction, mock_env):
     """Test requesting ETH from faucet without specifying asset_id."""
     with (
         patch("cdp.Cdp"),
@@ -37,19 +38,17 @@ def test_request_eth_without_asset_id(mock_testnet_wallet_provider, mock_transac
     ):
         mock_address.return_value.faucet.return_value = mock_transaction
 
-        response = cdp_api_action_provider().request_faucet_funds(mock_testnet_wallet_provider, {})
+        response = cdp_api_action_provider().request_faucet_funds(mock_wallet_testnet_provider, {})
 
         expected_response = (
             f"Received ETH from the faucet. Transaction: {MOCK_EXPLORER_URL}/{MOCK_TX_HASH}"
         )
         assert response == expected_response
-        mock_address.assert_called_with(
-            MOCK_TESTNET_NETWORK_ID, mock_testnet_wallet_provider.get_address()
-        )
+        mock_address.assert_called_with(MOCK_TESTNET_NETWORK_ID, MOCK_WALLET_ADDRESS)
         mock_address.return_value.faucet.assert_called_with(None)
 
 
-def test_request_eth_with_asset_id(mock_testnet_wallet_provider, mock_transaction, mock_env):
+def test_request_eth_with_asset_id(mock_wallet_testnet_provider, mock_transaction, mock_env):
     """Test requesting ETH from faucet with eth asset_id."""
     with (
         patch("cdp.Cdp"),
@@ -58,20 +57,18 @@ def test_request_eth_with_asset_id(mock_testnet_wallet_provider, mock_transactio
         mock_address.return_value.faucet.return_value = mock_transaction
 
         response = cdp_api_action_provider().request_faucet_funds(
-            mock_testnet_wallet_provider, {"asset_id": "eth"}
+            mock_wallet_testnet_provider, {"asset_id": "eth"}
         )
 
         expected_response = (
             f"Received eth from the faucet. Transaction: {MOCK_EXPLORER_URL}/{MOCK_TX_HASH}"
         )
         assert response == expected_response
-        mock_address.assert_called_with(
-            MOCK_TESTNET_NETWORK_ID, mock_testnet_wallet_provider.get_address()
-        )
+        mock_address.assert_called_with(MOCK_TESTNET_NETWORK_ID, MOCK_WALLET_ADDRESS)
         mock_address.return_value.faucet.assert_called_with("eth")
 
 
-def test_request_usdc(mock_testnet_wallet_provider, mock_transaction, mock_env):
+def test_request_usdc(mock_wallet_testnet_provider, mock_transaction, mock_env):
     """Test requesting USDC from faucet."""
     with (
         patch("cdp.Cdp"),
@@ -80,16 +77,14 @@ def test_request_usdc(mock_testnet_wallet_provider, mock_transaction, mock_env):
         mock_address.return_value.faucet.return_value = mock_transaction
 
         response = cdp_api_action_provider().request_faucet_funds(
-            mock_testnet_wallet_provider, {"asset_id": "usdc"}
+            mock_wallet_testnet_provider, {"asset_id": "usdc"}
         )
 
         expected_response = (
             f"Received usdc from the faucet. Transaction: {MOCK_EXPLORER_URL}/{MOCK_TX_HASH}"
         )
         assert response == expected_response
-        mock_address.assert_called_with(
-            MOCK_TESTNET_NETWORK_ID, mock_testnet_wallet_provider.get_address()
-        )
+        mock_address.assert_called_with(MOCK_TESTNET_NETWORK_ID, MOCK_WALLET_ADDRESS)
         mock_address.return_value.faucet.assert_called_with("usdc")
 
 
@@ -107,7 +102,7 @@ def test_request_faucet_wrong_network(mock_env):
         assert response == "Error: Faucet is only available on base-sepolia network"
 
 
-def test_request_faucet_api_error(mock_testnet_wallet_provider, mock_env):
+def test_request_faucet_api_error(mock_wallet_testnet_provider, mock_env):
     """Test faucet request when API error occurs."""
     with (
         patch("cdp.Cdp"),
@@ -115,10 +110,8 @@ def test_request_faucet_api_error(mock_testnet_wallet_provider, mock_env):
     ):
         mock_address.return_value.faucet.side_effect = Exception("Faucet request failed")
 
-        response = cdp_api_action_provider().request_faucet_funds(mock_testnet_wallet_provider, {})
+        response = cdp_api_action_provider().request_faucet_funds(mock_wallet_testnet_provider, {})
 
         assert response == "Error requesting faucet funds: Faucet request failed"
-        mock_address.assert_called_with(
-            MOCK_TESTNET_NETWORK_ID, mock_testnet_wallet_provider.get_address()
-        )
+        mock_address.assert_called_with(MOCK_TESTNET_NETWORK_ID, MOCK_WALLET_ADDRESS)
         mock_address.return_value.faucet.assert_called_with(None)
