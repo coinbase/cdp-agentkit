@@ -1,4 +1,5 @@
 """Tests for Twitter post tweet action."""
+
 from json import dumps
 from unittest.mock import patch
 
@@ -37,13 +38,15 @@ def test_post_tweet_success():
         "data": {
             "id": MOCK_TWEET_ID,
             "text": MOCK_TWEET_TEXT,
-            "edit_history_tweet_ids": MOCK_EDIT_HISTORY_IDS
+            "edit_history_tweet_ids": MOCK_EDIT_HISTORY_IDS,
         }
     }
 
     expected_response = f"Successfully posted to Twitter:\n{dumps(mock_response)}"
 
-    with patch.object(provider.client, "create_tweet", return_value=mock_response) as mock_create_tweet:
+    with patch.object(
+        provider.client, "create_tweet", return_value=mock_response
+    ) as mock_create_tweet:
         response = provider.post_tweet({"tweet": MOCK_TWEET_TEXT})
 
         assert response == expected_response

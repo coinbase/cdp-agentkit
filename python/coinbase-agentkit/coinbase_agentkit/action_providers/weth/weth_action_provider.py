@@ -33,13 +33,9 @@ Important notes:
 - 1 wei = 0.000000000000000001 WETH
 - Minimum purchase amount is 100000000000000 wei (0.0001 WETH)
 """,
-        schema=WrapEthInput
+        schema=WrapEthInput,
     )
-    def wrap_eth(
-        self,
-        wallet_provider: EvmWalletProvider,
-        args: dict[str, Any]
-    ) -> str:
+    def wrap_eth(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Wrap ETH to WETH.
 
         Args:
@@ -59,11 +55,9 @@ Important notes:
             contract = Web3().eth.contract(address=WETH_ADDRESS, abi=WETH_ABI)
             data = contract.encode_abi("deposit", args=[])
 
-            tx_hash = wallet_provider.send_transaction({
-                "to": WETH_ADDRESS,
-                "data": data,
-                "value": validated_args.amount_to_wrap
-            })
+            tx_hash = wallet_provider.send_transaction(
+                {"to": WETH_ADDRESS, "data": data, "value": validated_args.amount_to_wrap}
+            )
 
             wallet_provider.wait_for_transaction_receipt(tx_hash)
 

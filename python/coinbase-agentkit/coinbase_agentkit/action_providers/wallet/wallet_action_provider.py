@@ -1,4 +1,3 @@
-
 from ...network import Network
 from ...wallet_providers import WalletProvider
 from ..action_decorator import create_action
@@ -21,12 +20,10 @@ class WalletActionProvider(ActionProvider[WalletProvider]):
     - Native token balance
     - Wallet provider name
     """,
-        schema=GetWalletDetailsInput
+        schema=GetWalletDetailsInput,
     )
     def get_wallet_details(
-        self,
-        wallet_provider: WalletProvider,
-        args: GetWalletDetailsInput
+        self, wallet_provider: WalletProvider, args: GetWalletDetailsInput
     ) -> str:
         """Get details about the wallet."""
         try:
@@ -49,13 +46,9 @@ class WalletActionProvider(ActionProvider[WalletProvider]):
     @create_action(
         name="get_balance",
         description="This tool will get the native currency balance of the connected wallet.",
-        schema=GetBalanceInput
+        schema=GetBalanceInput,
     )
-    def get_balance(
-        self,
-        wallet_provider: WalletProvider,
-        args: GetBalanceInput
-    ) -> str:
+    def get_balance(self, wallet_provider: WalletProvider, args: GetBalanceInput) -> str:
         """Get native currency balance for the wallet."""
         try:
             balance = wallet_provider.get_balance()
@@ -68,6 +61,7 @@ class WalletActionProvider(ActionProvider[WalletProvider]):
     def supports_network(self, network: Network) -> bool:
         """Check if network is supported by wallet actions."""
         return True
+
 
 def wallet_action_provider() -> WalletActionProvider:
     """Create a new WalletActionProvider instance."""

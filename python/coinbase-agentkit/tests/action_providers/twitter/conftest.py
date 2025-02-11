@@ -1,4 +1,5 @@
 """Shared fixtures for Twitter action provider tests."""
+
 import pytest
 
 

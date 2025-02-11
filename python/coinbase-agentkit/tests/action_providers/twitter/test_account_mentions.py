@@ -1,4 +1,5 @@
 """Tests for Twitter account mentions action."""
+
 from json import dumps
 from unittest.mock import patch
 
@@ -33,18 +34,13 @@ def test_account_mentions_success():
     """Test successful retrieval of Twitter (X) account mentions."""
     provider = twitter_action_provider()
 
-    mock_response = {
-        "data": [
-            {
-                "id": MOCK_TWEET_ID,
-                "text": MOCK_TWEET_TEXT
-            }
-        ]
-    }
+    mock_response = {"data": [{"id": MOCK_TWEET_ID, "text": MOCK_TWEET_TEXT}]}
 
     expected_response = f"Successfully retrieved account mentions:\n{dumps(mock_response)}"
 
-    with patch.object(provider.client, "get_users_mentions", return_value=mock_response) as mock_get_mentions:
+    with patch.object(
+        provider.client, "get_users_mentions", return_value=mock_response
+    ) as mock_get_mentions:
         response = provider.account_mentions({"user_id": MOCK_USER_ID})
 
         assert response == expected_response
@@ -58,7 +54,9 @@ def test_account_mentions_failure():
     error = tweepy.errors.TweepyException("Tweepy Error")
     expected_response = f"Error retrieving authenticated account mentions:\n{error}"
 
-    with patch.object(provider.client, "get_users_mentions", side_effect=error) as mock_get_mentions:
+    with patch.object(
+        provider.client, "get_users_mentions", side_effect=error
+    ) as mock_get_mentions:
         response = provider.account_mentions({"user_id": MOCK_USER_ID})
 
         assert response == expected_response
