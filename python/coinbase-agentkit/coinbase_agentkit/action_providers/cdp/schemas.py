@@ -56,13 +56,14 @@ class TradeInput(BaseModel):
     """Input argument schema for trade action."""
 
     value: str = Field(
-        ..., description="The amount of the from asset to trade, e.g. `15`, `0.000001`"
+        ..., description="The amount of the from asset to trade (e.g. `1.5`, `0.000001`)"
     )
+
     from_asset_id: str = Field(
         ...,
-        description="The from asset ID to trade, e.g. `eth`, `0x036CbD53842c5426634e7929541eC2318f3dCF7e`",
+        description="The from asset ID to trade (e.g. `eth`, `0x036CbD53842c5426634e7929541eC2318f3dCF7e`)"
     )
     to_asset_id: str = Field(
         ...,
-        description="The to asset ID to receive from the trade, e.g. `eth`, `0x036CbD53842c5426634e7929541eC2318f3dCF7e`",
+        description="The to asset ID to receive from the trade (e.g. `eth`, `0x036CbD53842c5426634e7929541eC2318f3dCF7e`)"
     )

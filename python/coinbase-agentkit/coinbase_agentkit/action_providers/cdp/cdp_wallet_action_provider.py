@@ -135,7 +135,7 @@ Important notes:
                 to_asset_id=validated_args.to_asset_id,
             )
         except Exception as e:
-            return f"Error trading assets: {e}"
+            return f"Error trading assets: {e!s}"
 
     def supports_network(self, _: Network) -> bool:
         """Check if the CDP action provider supports the given network.

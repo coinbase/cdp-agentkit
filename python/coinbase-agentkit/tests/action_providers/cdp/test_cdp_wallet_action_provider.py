@@ -219,7 +219,13 @@ def test_trade_success():
         network_id=MOCK_NETWORK_ID,
         chain_id=MOCK_CHAIN_ID,
     )
-    mock_wallet_provider.trade.return_value = f"Traded {MOCK_VALUE} of {MOCK_FROM_ASSET_ID} for {MOCK_TO_AMOUNT} of {MOCK_TO_ASSET_ID}.\nTransaction hash for the trade: {MOCK_TX_HASH}\nTransaction link for the trade: {MOCK_TX_LINK}"
+
+    mock_trade_response = "\n".join([
+        f"Traded {MOCK_VALUE} of {MOCK_FROM_ASSET_ID} for {MOCK_TO_AMOUNT} of {MOCK_TO_ASSET_ID}.",
+        f"Transaction hash for the trade: {MOCK_TX_HASH}",
+        f"Transaction link for the trade: {MOCK_TX_LINK}",
+    ])
+    mock_wallet_provider.trade.return_value = mock_trade_response
 
     provider = CdpWalletActionProvider()
     action_response = provider.trade(mock_wallet_provider, {
@@ -228,8 +234,8 @@ def test_trade_success():
         "to_asset_id": MOCK_TO_ASSET_ID,
     })
 
-    expected_response = f"Traded {MOCK_VALUE} of {MOCK_FROM_ASSET_ID} for {MOCK_TO_AMOUNT} of {MOCK_TO_ASSET_ID}.\nTransaction hash for the trade: {MOCK_TX_HASH}\nTransaction link for the trade: {MOCK_TX_LINK}"
-    assert action_response == expected_response
+    assert action_response == mock_trade_response
+
     mock_wallet_provider.trade.assert_called_once_with(
         amount=MOCK_VALUE,
         from_asset_id=MOCK_FROM_ASSET_ID,
