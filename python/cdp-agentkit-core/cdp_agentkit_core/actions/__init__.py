@@ -24,6 +24,9 @@ from cdp_agentkit_core.actions.wow.buy_token import WowBuyTokenAction
 from cdp_agentkit_core.actions.wow.create_token import WowCreateTokenAction
 from cdp_agentkit_core.actions.wow.sell_token import WowSellTokenAction
 from cdp_agentkit_core.actions.wrap_eth import WrapEthAction
+from cdp_agentkit_core.actions.allora.get_all_topics import GetAllTopicsAction
+from cdp_agentkit_core.actions.allora.get_price_inference import GetPriceInferenceAction
+from cdp_agentkit_core.actions.allora.get_inference_by_topic_id import GetInferenceByTopicIdAction
 
 
 # WARNING: All new CdpAction subclasses must be imported above, otherwise they will not be discovered
@@ -40,17 +43,27 @@ CDP_ACTIONS = get_all_cdp_actions()
 
 __all__ = [
     "CDP_ACTIONS",
-    "CdpAction",
     "AddressReputationAction",
+    "CdpAction",
+    "DeployContractAction",
     "DeployNftAction",
     "DeployTokenAction",
-    "DeployContractAction",
+    "GetAllTopicsAction",
     "GetBalanceAction",
     "GetBalanceNftAction",
+    "GetInferenceByTopicIdAction",
+    "GetPriceInferenceAction",
     "GetWalletDetailsAction",
     "MintNftAction",
+    "MorphoDepositAction",
+    "MorphoWithdrawAction",
+    "PythFetchPriceAction",
+    "PythFetchPriceFeedIDAction",
     "RegisterBasenameAction",
     "RequestFaucetFundsAction",
+    "SuperfluidCreateFlowAction",
+    "SuperfluidDeleteFlowAction",
+    "SuperfluidUpdateFlowAction",
     "TradeAction",
     "TransferAction",
     "TransferNftAction",
@@ -58,11 +71,4 @@ __all__ = [
     "WowCreateTokenAction",
     "WowSellTokenAction",
     "WrapEthAction",
-    "MorphoDepositAction",
-    "MorphoWithdrawAction",
-    "PythFetchPriceFeedIDAction",
-    "PythFetchPriceAction",
-    "SuperfluidCreateFlowAction",
-    "SuperfluidUpdateFlowAction",
-    "SuperfluidDeleteFlowAction",
 ]
