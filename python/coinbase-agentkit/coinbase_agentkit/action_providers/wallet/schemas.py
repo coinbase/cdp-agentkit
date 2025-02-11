@@ -1,4 +1,7 @@
-from pydantic import BaseModel
+
+from pydantic import BaseModel, Field, field_validator
+
+from .validators import eth_address_validator, positive_decimal_validator
 
 
 class GetWalletDetailsInput(BaseModel):
@@ -13,3 +16,28 @@ class GetBalanceInput(BaseModel):
 
     # No additional fields needed as this action doesn't require any input parameters
     pass
+
+
+class NativeTransferInput(BaseModel):
+    """Input schema for native asset transfer."""
+
+    to: str = Field(
+        ...,
+        description="The destination address to transfer to (e.g. '0x58dBecc0894Ab4C24F98a0e684c989eD07e4e027', 'example.eth', 'example.base.eth')",
+    )
+    value: str = Field(
+        ...,
+        description="The amount to transfer in whole units (e.g. '1.5' for 1.5 ETH)",
+    )
+
+    @field_validator("to")
+    @classmethod
+    def validate_address(cls, v: str) -> str:
+        """Validate the Ethereum address format."""
+        return eth_address_validator(v)
+
+    @field_validator("value")
+    @classmethod
+    def validate_value(cls, v: str) -> str:
+        """Validate the transfer value."""
+        return positive_decimal_validator(v)

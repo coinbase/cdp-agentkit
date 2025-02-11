@@ -13,6 +13,8 @@ from .action_providers import (
 )
 from .agentkit import AgentKit, AgentKitOptions
 from .wallet_providers import (
+    CdpWalletProvider,
+    CdpWalletProviderConfig,
     EthAccountWalletProvider,
     EthAccountWalletProviderConfig,
     EvmWalletProvider,
@@ -28,6 +30,8 @@ __all__ = [
     "ActionProvider",
     "create_action",
     "WalletProvider",
+    "CdpWalletProvider",
+    "CdpWalletProviderConfig",
     "EvmWalletProvider",
     "EthAccountWalletProvider",
     "EthAccountWalletProviderConfig",

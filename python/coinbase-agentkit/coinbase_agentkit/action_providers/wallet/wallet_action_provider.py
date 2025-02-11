@@ -1,11 +1,13 @@
+from typing import Any
+
 from ...network import Network
-from ...wallet_providers import WalletProvider
+from ...wallet_providers import EvmWalletProvider
 from ..action_decorator import create_action
 from ..action_provider import ActionProvider
-from .schemas import GetBalanceInput, GetWalletDetailsInput
+from .schemas import GetBalanceInput, GetWalletDetailsInput, NativeTransferInput
 
 
-class WalletActionProvider(ActionProvider[WalletProvider]):
+class WalletActionProvider(ActionProvider[EvmWalletProvider]):
     """Provides actions for interacting with wallet functionality."""
 
     def __init__(self):
@@ -23,7 +25,7 @@ class WalletActionProvider(ActionProvider[WalletProvider]):
         schema=GetWalletDetailsInput,
     )
     def get_wallet_details(
-        self, wallet_provider: WalletProvider, args: GetWalletDetailsInput
+        self, wallet_provider: EvmWalletProvider, args: GetWalletDetailsInput
     ) -> str:
         """Get details about the wallet."""
         try:
@@ -48,7 +50,7 @@ class WalletActionProvider(ActionProvider[WalletProvider]):
         description="This tool will get the native currency balance of the connected wallet.",
         schema=GetBalanceInput,
     )
-    def get_balance(self, wallet_provider: WalletProvider, args: GetBalanceInput) -> str:
+    def get_balance(self, wallet_provider: EvmWalletProvider, args: GetBalanceInput) -> str:
         """Get native currency balance for the wallet."""
         try:
             balance = wallet_provider.get_balance()
@@ -57,6 +59,32 @@ class WalletActionProvider(ActionProvider[WalletProvider]):
             return f"Native balance at address {wallet_address}: {balance}"
         except Exception as e:
             return f"Error getting balance: {e}"
+
+    @create_action(
+        name="native_transfer",
+        description="""
+This tool will transfer native tokens from the wallet to another onchain address.
+
+It takes the following inputs:
+- to: The destination address to receive the funds (can be an onchain address, ENS 'example.eth', or Basename 'example.base.eth')
+- value: The amount to transfer in whole units (e.g. '1.5' for 1.5 ETH)
+
+Important notes:
+- Ensure sufficient balance of the input asset before transferring
+- Ensure there is sufficient balance for the transfer itself AND the gas cost of this transfer
+""",
+        schema=NativeTransferInput,
+    )
+    def native_transfer(
+        self, wallet_provider: EvmWalletProvider, args: dict[str, Any]
+    ) -> str:
+        """Transfer native tokens to a destination address."""
+        try:
+            validated_args = NativeTransferInput(**args)
+            tx_hash = wallet_provider.native_transfer(validated_args.to, validated_args.value)
+            return f"Successfully transferred {validated_args.value} native tokens to {validated_args.to}.\nTransaction hash: {tx_hash}"
+        except Exception as e:
+            return f"Error transferring native tokens: {e}"
 
     def supports_network(self, network: Network) -> bool:
         """Check if network is supported by wallet actions."""
