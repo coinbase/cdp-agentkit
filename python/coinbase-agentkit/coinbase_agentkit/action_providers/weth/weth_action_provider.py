@@ -32,9 +32,6 @@ Important notes:
 - Make sure to use the exact amount provided, and if there's any doubt, check by getting more information before continuing with the action.
 - 1 wei = 0.000000000000000001 WETH
 - Minimum purchase amount is 100000000000000 wei (0.0001 WETH)
-- Only supported on the following networks:
-  - Base Mainnet (8453) (ie, 'base', 'base-mainnet')
-  - Base Sepolia (84532) (ie, 'base-sepolia')
 """,
         schema=WrapEthInput
     )

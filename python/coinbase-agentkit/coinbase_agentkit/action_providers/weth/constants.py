@@ -19,7 +19,6 @@ WETH_ABI = [
                 "type": "address",
             },
         ],
-        "name": "balanceOf",
         "outputs": [
             {
                 "type": "uint256",
