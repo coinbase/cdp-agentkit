@@ -1,15 +1,13 @@
 """CDP API action provider for interacting with CDP API."""
-from typing import Any
 import os
+from typing import Any
 
-from pydantic import BaseModel, Field, field_validator
-import re
+from pydantic import BaseModel, Field
 
 from ...network import Network
 from ...wallet_providers import EvmWalletProvider
 from ..action_decorator import create_action
 from ..action_provider import ActionProvider
-
 
 BASE_SEPOLIA_NETWORK_ID = "base-sepolia"
 BASE_SEPOLIA_CHAIN_ID = 84532
@@ -18,19 +16,21 @@ BASE_SEPOLIA_CHAIN_ID = 84532
 # TODO: ask John where this should probably go
 class CdpProviderConfig(BaseModel):
     """Configuration options for CDP providers."""
+
     api_key_name: str | None = Field(None, description="The CDP API key name")
     api_key_private_key: str | None = Field(None, description="The CDP API private key")
 
 
 class RequestFaucetFundsInput(BaseModel):
     """Input schema for requesting faucet funds."""
+
     asset_id: str | None = Field(
         None, description="The asset ID to request from the faucet (defaults to ETH if not specified)")
 
 
 class CdpApiActionProvider(ActionProvider[EvmWalletProvider]):
     """Provides actions for interacting with CDP API.
-    
+
     This provider is used for any action that uses the CDP API, but does not require a CDP Wallet.
     """
 
@@ -89,10 +89,7 @@ from another wallet and provide the user with your wallet details.""",
             return f"Error requesting faucet funds: {e!s}"
 
     def supports_network(self, network: Network) -> bool:
-        """Check if network is supported by CDP API actions.
-        
-        CDP API actions 
-        """
+        """Network support will vary action to action."""
         return True
 
 

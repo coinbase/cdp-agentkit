@@ -1,13 +1,14 @@
 """Tests for CDP API faucet funds action."""
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
 
 import pytest
 
 from coinbase_agentkit.action_providers.cdp.cdp_api_action_provider import (
-    cdp_api_action_provider,
     RequestFaucetFundsInput,
+    cdp_api_action_provider,
 )
 from coinbase_agentkit.network import Network
+
 from .conftest import (
     MOCK_EXPLORER_URL,
     MOCK_TX_HASH,

@@ -1,10 +1,9 @@
 """Test fixtures for CDP API tests."""
-from unittest.mock import Mock, patch
-import os
+from unittest.mock import Mock
+
 import pytest
 
 from coinbase_agentkit.network import Network
-
 
 MOCK_API_KEY_NAME = "mock-api-key"
 MOCK_API_KEY_PRIVATE_KEY = "mock-private-key"
@@ -39,4 +38,4 @@ def mock_transaction():
     mock_tx = Mock()
     mock_tx.transaction_link = f"{MOCK_EXPLORER_URL}/{MOCK_TX_HASH}"
     mock_tx.wait.return_value = mock_tx
-    return mock_tx 
+    return mock_tx
