@@ -1,4 +1,5 @@
 """CDP wallet provider."""
+
 import json
 import os
 from decimal import Decimal
@@ -87,7 +88,9 @@ class CdpWalletProvider(EvmWalletProvider):
             self._web3 = Web3(Web3.HTTPProvider(rpc_url))
 
         except ImportError as e:
-            raise ImportError("Failed to import cdp. Please install it with 'pip install cdp-sdk'.") from e
+            raise ImportError(
+                "Failed to import cdp. Please install it with 'pip install cdp-sdk'."
+            ) from e
         except Exception as e:
             raise ValueError(f"Failed to initialize CDP wallet: {e!s}") from e
 

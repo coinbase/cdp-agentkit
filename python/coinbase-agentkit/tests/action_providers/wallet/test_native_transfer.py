@@ -27,13 +27,17 @@ def test_native_transfer_schema_valid():
 
 def test_native_transfer_schema_invalid_value():
     """Test that NativeTransferInput rejects invalid values."""
-    with pytest.raises(ValidationError, match=r"Invalid decimal format. Must be a positive number."):
+    with pytest.raises(
+        ValidationError, match=r"Invalid decimal format. Must be a positive number."
+    ):
         NativeTransferInput(
             to=MOCK_ADDRESS,
             value=INVALID_AMOUNT,
         )
 
-    with pytest.raises(ValidationError, match=r"Invalid decimal format. Must be a positive number."):
+    with pytest.raises(
+        ValidationError, match=r"Invalid decimal format. Must be a positive number."
+    ):
         NativeTransferInput(
             to=MOCK_ADDRESS,
             value="-1.5",

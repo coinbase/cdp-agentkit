@@ -148,10 +148,12 @@ class EthAccountWalletProvider(EvmWalletProvider):
         try:
             value_wei = Web3.to_wei(value, "ether")
 
-            transfer_result = self.send_transaction({
-                "to": Web3.to_checksum_address(to),
-                "value": value_wei,
-            })
+            transfer_result = self.send_transaction(
+                {
+                    "to": Web3.to_checksum_address(to),
+                    "value": value_wei,
+                }
+            )
 
             receipt = self.wait_for_transaction_receipt(transfer_result)
             if not receipt:

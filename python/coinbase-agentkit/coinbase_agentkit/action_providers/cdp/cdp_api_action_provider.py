@@ -1,4 +1,5 @@
 """CDP API action provider for interacting with CDP API."""
+
 import os
 from typing import Any
 
@@ -26,17 +27,21 @@ class CdpApiActionProvider(ActionProvider[EvmWalletProvider]):
             from cdp import Cdp
 
             api_key_name = config.api_key_name if config else os.getenv("CDP_API_KEY_NAME")
-            api_key_private_key = config.api_key_private_key if config else os.getenv("CDP_API_KEY_PRIVATE_KEY")
+            api_key_private_key = (
+                config.api_key_private_key if config else os.getenv("CDP_API_KEY_PRIVATE_KEY")
+            )
 
             if api_key_name and api_key_private_key:
                 Cdp.configure(
                     api_key_name=api_key_name,
-                    private_key=api_key_private_key.replace('\\n', '\n'),
+                    private_key=api_key_private_key.replace("\\n", "\n"),
                 )
             else:
                 Cdp.configure_from_json()
         except ImportError as e:
-            raise ImportError("Failed to import cdp. Please install it with 'pip install cdp-sdk'.") from e
+            raise ImportError(
+                "Failed to import cdp. Please install it with 'pip install cdp-sdk'."
+            ) from e
         except Exception as e:
             raise ValueError(f"Failed to initialize CDP client: {e!s}") from e
 
@@ -69,7 +74,9 @@ from another wallet and provide the user with your wallet details.""",
             faucet_tx.wait()
 
             asset_str = validated_args.asset_id or "ETH"
-            return f"Received {asset_str} from the faucet. Transaction: {faucet_tx.transaction_link}"
+            return (
+                f"Received {asset_str} from the faucet. Transaction: {faucet_tx.transaction_link}"
+            )
         except Exception as e:
             return f"Error requesting faucet funds: {e!s}"
 
