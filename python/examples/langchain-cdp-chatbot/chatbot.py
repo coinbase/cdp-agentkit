@@ -9,7 +9,19 @@ from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
 
-from coinbase_agentkit import AgentKit, AgentKitOptions, pyth_action_provider, morpho_action_provider, wallet_action_provider, CdpWalletProvider, CdpWalletProviderConfig, EthAccountWalletProvider, EthAccountWalletProviderConfig
+from coinbase_agentkit import (
+    AgentKit,
+    AgentKitOptions,
+
+    CdpWalletProvider,
+    CdpWalletProviderConfig,
+    EthAccountWalletProvider,
+    EthAccountWalletProviderConfig,
+
+    pyth_action_provider,
+    morpho_action_provider,
+    wallet_action_provider,
+)
 from coinbase_agentkit_langchain import get_langchain_tools
 
 # Configure a file to persist the agent's CDP MPC Wallet Data.
@@ -52,6 +64,8 @@ def initialize_agent():
     agentkit = AgentKit.from_options(AgentKitOptions(
         wallet_provider=wallet_provider,
         action_providers=[
+            pyth_action_provider(),
+            morpho_action_provider(),
             wallet_action_provider(),
         ]
     ))

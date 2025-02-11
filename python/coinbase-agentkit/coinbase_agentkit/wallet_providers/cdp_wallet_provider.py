@@ -32,13 +32,6 @@ class CdpWalletProviderConfig(CdpProviderConfig):
 class CdpWalletProvider(EvmWalletProvider):
     """A wallet provider that uses the CDP SDK."""
 
-    from cdp import Cdp, Wallet
-
-    _cdp: Cdp | None = None
-    _network: Network | None = None
-    _wallet: Wallet | None = None
-    _web3: Web3 | None = None
-
     def __init__(self, config: CdpWalletProviderConfig | None = None):
         """Initialize CDP wallet provider.
 
@@ -120,7 +113,7 @@ class CdpWalletProvider(EvmWalletProvider):
         """Get the name of the wallet provider."""
         return "cdp_wallet_provider"
 
-    def native_transfer(self, to: str, value: str) -> HexStr:
+    def native_transfer(self, to: str, amount: Decimal) -> str:
         """Transfer the native asset of the network.
 
         Args:
@@ -128,7 +121,7 @@ class CdpWalletProvider(EvmWalletProvider):
             value: The amount to transfer in whole units (e.g. '1.5' for 1.5 ETH)
 
         Returns:
-            The transaction hash as a hex string
+            The transaction hash as a string
 
         """
         if not self._wallet:
@@ -136,7 +129,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
         try:
             transfer_result = self._wallet.transfer(
-                amount=Decimal(value),
+                amount=amount,
                 asset_id="eth",
                 destination=to,
                 gasless=False,
@@ -148,7 +141,7 @@ class CdpWalletProvider(EvmWalletProvider):
             if not tx_hash:
                 raise Exception("Transaction hash not found")
 
-            return HexStr(tx_hash)
+            return tx_hash
         except Exception as e:
             raise Exception(f"Failed to transfer native tokens: {e!s}") from e
 

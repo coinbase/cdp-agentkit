@@ -21,14 +21,8 @@ class GetBalanceInput(BaseModel):
 class NativeTransferInput(BaseModel):
     """Input schema for native asset transfer."""
 
-    to: str = Field(
-        ...,
-        description="The destination address to transfer to (e.g. '0x58dBecc0894Ab4C24F98a0e684c989eD07e4e027', 'example.eth', 'example.base.eth')",
-    )
-    value: str = Field(
-        ...,
-        description="The amount to transfer in whole units (e.g. '1.5' for 1.5 ETH)",
-    )
+    to: str = Field(..., description="The destination address to transfer to (e.g. '0x5154eae861cac3aa757d6016babaf972341354cf')")
+    value: str = Field(..., description="The amount to transfer in whole units (e.g. '1.5' for 1.5 ETH)")
 
     @field_validator("to")
     @classmethod

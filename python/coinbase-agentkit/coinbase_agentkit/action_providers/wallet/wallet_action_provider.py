@@ -1,13 +1,13 @@
 from typing import Any
 
 from ...network import Network
-from ...wallet_providers import EvmWalletProvider
+from ...wallet_providers.wallet_provider import WalletProvider
 from ..action_decorator import create_action
 from ..action_provider import ActionProvider
 from .schemas import GetBalanceInput, GetWalletDetailsInput, NativeTransferInput
 
 
-class WalletActionProvider(ActionProvider[EvmWalletProvider]):
+class WalletActionProvider(ActionProvider[WalletProvider]):
     """Provides actions for interacting with wallet functionality."""
 
     def __init__(self):
@@ -25,7 +25,7 @@ class WalletActionProvider(ActionProvider[EvmWalletProvider]):
         schema=GetWalletDetailsInput,
     )
     def get_wallet_details(
-        self, wallet_provider: EvmWalletProvider, args: GetWalletDetailsInput
+        self, wallet_provider: WalletProvider, args: GetWalletDetailsInput
     ) -> str:
         """Get details about the wallet."""
         try:
@@ -50,7 +50,7 @@ class WalletActionProvider(ActionProvider[EvmWalletProvider]):
         description="This tool will get the native currency balance of the connected wallet.",
         schema=GetBalanceInput,
     )
-    def get_balance(self, wallet_provider: EvmWalletProvider, args: GetBalanceInput) -> str:
+    def get_balance(self, wallet_provider: WalletProvider, args: GetBalanceInput) -> str:
         """Get native currency balance for the wallet."""
         try:
             balance = wallet_provider.get_balance()
@@ -66,7 +66,7 @@ class WalletActionProvider(ActionProvider[EvmWalletProvider]):
 This tool will transfer native tokens from the wallet to another onchain address.
 
 It takes the following inputs:
-- to: The destination address to receive the funds (can be an onchain address, ENS 'example.eth', or Basename 'example.base.eth')
+- to: The destination address to receive the funds (e.g. '0x5154eae861cac3aa757d6016babaf972341354cf')
 - value: The amount to transfer in whole units (e.g. '1.5' for 1.5 ETH)
 
 Important notes:
@@ -76,7 +76,7 @@ Important notes:
         schema=NativeTransferInput,
     )
     def native_transfer(
-        self, wallet_provider: EvmWalletProvider, args: dict[str, Any]
+        self, wallet_provider: WalletProvider, args: dict[str, Any]
     ) -> str:
         """Transfer native tokens to a destination address."""
         try:

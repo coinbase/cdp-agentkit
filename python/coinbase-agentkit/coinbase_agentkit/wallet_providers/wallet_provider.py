@@ -66,6 +66,6 @@ class WalletProvider(ABC, metaclass=WalletProviderMeta):
         pass
 
     @abstractmethod
-    def native_transfer(self, to: HexStr, amount: Decimal) -> HexStr:
+    def native_transfer(self, to: str, amount: Decimal) -> str:
         """Transfer the native asset of the network."""
         pass
