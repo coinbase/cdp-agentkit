@@ -2,30 +2,15 @@
 import os
 from typing import Any
 
-from pydantic import BaseModel, Field
-
 from ...network import Network
 from ...wallet_providers import EvmWalletProvider
+from ...wallet_providers.cdp_wallet_provider import CdpProviderConfig
 from ..action_decorator import create_action
 from ..action_provider import ActionProvider
+from .schemas import RequestFaucetFundsInput
 
 BASE_SEPOLIA_NETWORK_ID = "base-sepolia"
 BASE_SEPOLIA_CHAIN_ID = 84532
-
-
-# TODO: ask John where this should probably go
-class CdpProviderConfig(BaseModel):
-    """Configuration options for CDP providers."""
-
-    api_key_name: str | None = Field(None, description="The CDP API key name")
-    api_key_private_key: str | None = Field(None, description="The CDP API private key")
-
-
-class RequestFaucetFundsInput(BaseModel):
-    """Input schema for requesting faucet funds."""
-
-    asset_id: str | None = Field(
-        None, description="The asset ID to request from the faucet (defaults to ETH if not specified)")
 
 
 class CdpApiActionProvider(ActionProvider[EvmWalletProvider]):

@@ -4,11 +4,9 @@ from unittest.mock import patch
 
 import pytest
 
-from coinbase_agentkit.action_providers.cdp.cdp_api_action_provider import (
-    CdpProviderConfig,
-    cdp_api_action_provider,
-)
+from coinbase_agentkit.action_providers.cdp.cdp_api_action_provider import cdp_api_action_provider
 from coinbase_agentkit.network import Network
+from coinbase_agentkit.wallet_providers.cdp_wallet_provider import CdpProviderConfig
 
 from .conftest import (
     MOCK_API_KEY_NAME,
