@@ -43,7 +43,6 @@
     "@bgd-labs/aave-address-book": "^4.7.4",
     "@coinbase/coinbase-sdk": "^0.17.0",
     "@solana/web3.js": "^1.98.0",
-    "ethers": "^5.7.2",
     "md5": "^2.3.0",
     "reflect-metadata": "^0.2.2",
     "twitter-api-v2": "^1.18.2",
