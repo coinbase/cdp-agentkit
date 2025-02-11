@@ -1,9 +1,3 @@
-/* eslint-disable jsdoc/require-param-description */
-/* eslint-disable jsdoc/require-returns */
-/* eslint-disable jsdoc/require-description */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/member-ordering */
 import { Pool, EthereumTransactionTypeExtended } from "@aave/contract-helpers";
 import { AaveV3Base } from "@bgd-labs/aave-address-book";
 import { parseUnits, formatUnits } from "viem";
@@ -19,6 +13,14 @@ import { ethers } from "ethers";
 
 export const SUPPORTED_NETWORKS = ["base-mainnet"];
 
+// Define provider type to avoid 'any'
+type ExtendedProvider = {
+  transport: {
+    url: string;
+  };
+  getBalance(address: string): Promise<bigint>;
+};
+
 /**
  * AaveActionProvider provides actions for interacting with the Aave protocol
  */
@@ -31,52 +33,42 @@ export class AaveActionProvider extends ActionProvider<EvmWalletProvider> {
   }
 
   /**
-   * Check if network is supported
-   *
-   * @param network - The network to check support for
-   * @returns True if network is supported
-   */
-  supportsNetwork = (network: Network): boolean =>
-    network.protocolFamily === "evm" && SUPPORTED_NETWORKS.includes(network.networkId!);
-
-  /**
-   * Supply assets to Aave
+   * Supply assets to Aave protocol
    *
    * @param wallet - The wallet provider to use
    * @param args - The supply parameters
-   * @returns A string describing the result
+   * @returns A string describing the result of the supply operation
    */
   @CreateAction({
     name: "supply",
     description: `
 This tool will supply assets to the Aave protocol. It takes:
 - chain: The chain to supply on (e.g. base-mainnet)
-- amount: The amount to supply
+- amount: The amount in decimal format (e.g. "0.1" for 0.1 ETH or "100" for 100 USDC)
 - asset: The asset to supply (e.g. ETH, USDC)
 
 The tool will handle the approval and supply transaction.
     `,
     schema: SupplySchema,
   })
-  async supply(wallet: EvmWalletProvider, args: z.infer<typeof SupplySchema>): Promise<string> {
+  public async supply(
+    wallet: EvmWalletProvider,
+    args: z.infer<typeof SupplySchema>,
+  ): Promise<string> {
     try {
       const { chain, amount, asset } = args;
-      console.log(`Calling the AAVE logic to supply ${amount} ${asset}`);
 
-      // Validate chain and get provider
       const chainAddresses = AAVE_V3_ADDRESSES[chain];
       if (!chainAddresses) {
         return `Error: Aave is only available on Base mainnet...`;
       }
 
-      const provider = (await wallet.getProvider()) as any;
+      const provider = (await wallet.getProvider()) as ExtendedProvider;
       if (!provider) {
         return "Error: Could not connect to network provider";
       }
 
-      // Create ethers provider
-      const ethersProvider = new ethers.providers.JsonRpcProvider((provider as any).transport.url);
-      console.log(`Created ethers provider with URL: ${(provider as any).transport.url}`);
+      const ethersProvider = new ethers.providers.JsonRpcProvider(provider.transport.url);
 
       // Initialize Aave Pool
       const pool = new Pool(ethersProvider, {
@@ -100,7 +92,6 @@ The tool will handle the approval and supply transaction.
           if (approvalResult.startsWith("Error")) {
             return `Error: Failed to approve USDC: ${approvalResult}`;
           }
-          console.log("USDC approved for Aave Pool");
 
           // Create Pool interface for encoding
           const poolInterface = new ethers.utils.Interface([
@@ -124,7 +115,6 @@ The tool will handle the approval and supply transaction.
 
           return `Successfully supplied ${amount} USDC to Aave. Transaction: https://basescan.org/tx/${supplyTx}`;
         } catch (error) {
-          console.error("Supply transaction failed:", error);
           return `Error executing supply: ${error instanceof Error ? error.message : String(error)}`;
         }
       }
@@ -169,80 +159,31 @@ The tool will handle the approval and supply transaction.
     }
   }
 
-  // Add helper method to get token balance
   /**
-   *
-   * @param wallet
-   * @param tokenAddress
-   */
-  private async getTokenBalance(wallet: EvmWalletProvider, tokenAddress: string): Promise<bigint> {
-    const erc20Contract = {
-      address: tokenAddress as `0x${string}`,
-      abi: [
-        {
-          type: "function",
-          name: "balanceOf",
-          inputs: [{ name: "account", type: "address" }],
-          outputs: [{ type: "uint256" }],
-          stateMutability: "view",
-        },
-      ] as const,
-    };
-
-    return (await wallet.readContract({
-      ...erc20Contract,
-      functionName: "balanceOf",
-      args: [wallet.getAddress() as `0x${string}`],
-    })) as bigint;
-  }
-
-  // Add helper method to get aToken balance
-  /**
-   *
-   * @param wallet
-   * @param asset
-   */
-  private async getATokenBalance(wallet: EvmWalletProvider, asset: string): Promise<bigint> {
-    const assetConfig = SUPPORTED_ASSETS[asset.toUpperCase()];
-    if (!assetConfig) {
-      throw new Error(`Asset ${asset} is not supported`);
-    }
-
-    // Get the aToken address for the asset
-    const assetKey = Object.keys(AaveV3Base.ASSETS).find(
-      key => key.toLowerCase() === asset.toLowerCase(),
-    );
-    if (!assetKey) {
-      throw new Error(`Asset ${asset} not found in Aave`);
-    }
-
-    const aTokenAddress = AaveV3Base.ASSETS[assetKey as keyof typeof AaveV3Base.ASSETS].A_TOKEN;
-
-    return this.getTokenBalance(wallet, aTokenAddress);
-  }
-
-  /**
-   * Withdraw assets from Aave
+   * Withdraw assets from Aave protocol
    *
    * @param wallet - The wallet provider to use
    * @param args - The withdrawal parameters
-   * @returns A string describing the result
+   * @returns A string describing the result of the withdrawal operation
    */
   @CreateAction({
     name: "withdraw",
-    description: `This tool will withdraw assets from the Aave protocol. It takes:
+    description: `
+This tool will withdraw assets from the Aave protocol. It takes:
 - chain: The chain to withdraw from (e.g. base-mainnet)
-- amount: The amount to withdraw  
+- amount: The amount in decimal format (e.g. "0.1" for 0.1 ETH or "100" for 100 USDC)
 - asset: The asset to withdraw (e.g. ETH, USDC)
 
 The tool will handle the withdrawal transaction.
     `,
     schema: WithdrawSchema,
   })
-  async withdraw(wallet: EvmWalletProvider, args: z.infer<typeof WithdrawSchema>): Promise<string> {
+  public async withdraw(
+    wallet: EvmWalletProvider,
+    args: z.infer<typeof WithdrawSchema>,
+  ): Promise<string> {
     try {
       const { chain, amount, asset } = args;
-      console.log(`Checking aToken balance before withdrawing ${amount} ${asset}`);
 
       // Get decimals and convert amount once
       const assetConfig = SUPPORTED_ASSETS[asset.toUpperCase()];
@@ -267,20 +208,16 @@ The tool will handle the withdrawal transaction.
         return `Error withdrawing from Aave: Chain ${chain} is not supported`;
       }
 
-      const provider = (await wallet.getProvider()) as any;
-      console.log("Initializing withdraw with provider...");
+      const provider = (await wallet.getProvider()) as ExtendedProvider;
 
-      const ethersProvider = new ethers.providers.Web3Provider(provider as any);
+      const ethersProvider = new ethers.providers.JsonRpcProvider(provider.transport.url);
       const pool = new Pool(ethersProvider, {
         POOL: chainAddresses.POOL,
         WETH_GATEWAY: chainAddresses.WETH_GATEWAY,
       });
 
-      console.log("Pool initialized, asset:", asset);
-
       // Handle ETH withdrawal first
       if (asset.toUpperCase() === "ETH") {
-        console.log("Processing ETH withdrawal");
         const withdrawTxs = await pool.withdraw({
           user: wallet.getAddress(),
           reserve: chainAddresses.ASSETS.WETH,
@@ -288,9 +225,7 @@ The tool will handle the withdrawal transaction.
           onBehalfOf: wallet.getAddress(),
         });
 
-        console.log("Generated withdraw transactions:", withdrawTxs);
         const txResponse = await this.submitTransaction(wallet, withdrawTxs[0]);
-        console.log("Withdraw transaction response:", txResponse);
 
         return `Successfully withdrew ${amount} ETH. Transaction hash: ${txResponse}`;
       }
@@ -326,7 +261,6 @@ The tool will handle the withdrawal transaction.
           if (approvalResult.startsWith("Error")) {
             return `Error: Failed to approve aUSDC: ${approvalResult}`;
           }
-          console.log("aUSDC approved for Aave Pool");
 
           // Create Pool interface for encoding
           const poolInterface = new ethers.utils.Interface([
@@ -345,18 +279,11 @@ The tool will handle the withdrawal transaction.
             gas: 300000n,
           };
 
-          console.log("Submitting withdraw transaction with params:", {
-            to: withdrawParams.to,
-            gas: withdrawParams.gas.toString(),
-            amount: atomicAmount.toString(),
-          });
-
           const withdrawTx = await wallet.sendTransaction(withdrawParams);
           await wallet.waitForTransactionReceipt(withdrawTx);
 
           return `Successfully withdrew ${amount} USDC from Aave. Transaction: https://basescan.org/tx/${withdrawTx}`;
         } catch (error) {
-          console.error("Withdraw transaction failed:", error);
           return `Error executing withdraw: ${error instanceof Error ? error.message : String(error)}`;
         }
       }
@@ -373,7 +300,6 @@ The tool will handle the withdrawal transaction.
 
       // Submit transactions
       if (txs && txs.length > 0) {
-        console.log(`Submitting withdraw transactions`);
         const results: string[] = [];
         for (const tx of txs) {
           const result = await this.submitTransaction(wallet, tx);
@@ -391,58 +317,102 @@ The tool will handle the withdrawal transaction.
     }
   }
 
+  supportsNetwork = (network: Network): boolean =>
+    network.protocolFamily === "evm" && SUPPORTED_NETWORKS.includes(network.networkId!);
+
   /**
-   * Helper to submit transactions
+   * Gets the token balance for a given address
+   *
+   * @param wallet - The wallet provider to use
+   * @param tokenAddress - The address of the token contract
+   * @returns The token balance as a bigint
+   */
+  protected async getTokenBalance(
+    wallet: EvmWalletProvider,
+    tokenAddress: string,
+  ): Promise<bigint> {
+    const erc20Contract = {
+      address: tokenAddress as `0x${string}`,
+      abi: [
+        {
+          type: "function",
+          name: "balanceOf",
+          inputs: [{ name: "account", type: "address" }],
+          outputs: [{ type: "uint256" }],
+          stateMutability: "view",
+        },
+      ] as const,
+    };
+
+    return (await wallet.readContract({
+      ...erc20Contract,
+      functionName: "balanceOf",
+      args: [wallet.getAddress() as `0x${string}`],
+    })) as bigint;
+  }
+
+  /**
+   * Gets the aToken balance for a given asset
+   *
+   * @param wallet - The wallet provider to use
+   * @param asset - The asset symbol (e.g. ETH, USDC)
+   * @returns The aToken balance as a bigint
+   */
+  protected async getATokenBalance(wallet: EvmWalletProvider, asset: string): Promise<bigint> {
+    const assetConfig = SUPPORTED_ASSETS[asset.toUpperCase()];
+    if (!assetConfig) {
+      throw new Error(`Asset ${asset} is not supported`);
+    }
+
+    // Get the aToken address for the asset
+    const assetKey = Object.keys(AaveV3Base.ASSETS).find(
+      key => key.toLowerCase() === asset.toLowerCase(),
+    );
+    if (!assetKey) {
+      throw new Error(`Asset ${asset} not found in Aave`);
+    }
+
+    const aTokenAddress = AaveV3Base.ASSETS[assetKey as keyof typeof AaveV3Base.ASSETS].A_TOKEN;
+
+    return this.getTokenBalance(wallet, aTokenAddress);
+  }
+
+  /**
+   * Helper to submit transactions to the network
    *
    * @param wallet - The wallet provider to use
    * @param tx - The transaction to submit
    * @returns The transaction hash
    */
-  private async submitTransaction(
+  protected async submitTransaction(
     wallet: EvmWalletProvider,
     tx: EthereumTransactionTypeExtended,
   ): Promise<string> {
     try {
       const txData = await tx.tx();
-      const { from, gasPrice, gasLimit, ...txParams } = txData;
+      const { gasLimit, ...txParams } = txData;
 
-      // Validate transaction data
       if (!txParams.to || !txParams.data) {
         throw new Error("Invalid transaction data");
       }
 
-      // Add manual gas limit and buffer
       const gas = gasLimit ? BigInt(gasLimit.toString()) * 2n : 1000000n;
 
-      console.log("Submitting transaction with params:", {
-        to: txParams.to,
-        value: txParams.value?.toString() || "0",
-        gas: gas.toString(),
-        data: txParams.data?.slice(0, 66) + "...",
+      const hash = await wallet.sendTransaction({
+        data: txParams.data as `0x${string}`,
+        to: txParams.to as `0x${string}`,
+        value: txParams.value ? BigInt(txParams.value) : 0n,
+        gas,
+        from: wallet.getAddress() as `0x${string}`,
       });
 
-      try {
-        const hash = await wallet.sendTransaction({
-          ...txParams,
-          data: txParams.data as `0x${string}`,
-          to: txParams.to as `0x${string}`,
-          value: txParams.value ? BigInt(txParams.value) : 0n,
-          gas,
-        });
-
-        const receipt = await wallet.waitForTransactionReceipt(hash);
-        if (receipt.status !== "success") {
-          throw new Error("Transaction failed");
-        }
-
-        return hash;
-      } catch (txError: any) {
-        if (txError.message?.includes("transfer amount exceeds balance")) {
-          throw new Error("Insufficient USDC balance. Please check your balance and try again.");
-        }
-        throw txError;
+      const receipt = await wallet.waitForTransactionReceipt(hash);
+      if (receipt.status !== "success") {
+        throw new Error("Transaction failed");
       }
-    } catch (error: unknown) {
+
+      return hash;
+    } catch (error) {
       console.error("Transaction error:", error);
       throw error;
     }
