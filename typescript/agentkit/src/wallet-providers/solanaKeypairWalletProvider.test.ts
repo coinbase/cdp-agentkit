@@ -18,12 +18,7 @@ describe("Solana Keypair Wallet", () => {
     });
 
     it("should error when the network genesis hash is unknown", async () => {
-        try {
-            new SolanaKeypairWalletProvider({ keypair: Keypair.generate().secretKey, rpcUrl: clusterApiUrl('mainnet-beta'), genesisHash: "0x123" });
-        } catch (error) {
-            expect(error).toBeDefined();
-            expect(error).toBeInstanceOf(Error);
-            expect((error as Error).message).toContain("Unknown network with genesis hash");
-        }
+        expect(() => new SolanaKeypairWalletProvider({ keypair: Keypair.generate().secretKey, rpcUrl: clusterApiUrl('mainnet-beta'), genesisHash: "0x123" }))
+            .toThrowError("Unknown network with genesis hash");
     });
 });
