@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Added support for Allora Network (`get_price_inference`, `get_all_topics` and `get_inference_by_topic_id` actions).
+
 ## [0.0.11] - 2025-01-24
 
 ### Added
