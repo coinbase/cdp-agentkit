@@ -26,7 +26,6 @@ def test_account_details_success():
     """Test successful retrieval of the authenticated Twitter (X) account."""
     provider = twitter_action_provider()
 
-    # Set up mock response
     mock_response = {
         "data": {
             "id": MOCK_ID,
@@ -39,10 +38,8 @@ def test_account_details_success():
     expected_response = f"Successfully retrieved authenticated user account details:\n{dumps(mock_response)}"
 
     with patch.object(provider.client, "get_me", return_value=mock_response) as mock_get_me:
-        # Execute action
         response = provider.account_details({})
 
-        # Verify response
         assert response == expected_response
         mock_get_me.assert_called_once_with()
 
@@ -55,9 +52,7 @@ def test_account_details_failure():
     expected_response = f"Error retrieving authenticated user account details:\n{error}"
 
     with patch.object(provider.client, "get_me", side_effect=error) as mock_get_me:
-        # Execute action
         response = provider.account_details({})
 
-        # Verify response
         assert response == expected_response
         mock_get_me.assert_called_once_with()

@@ -33,7 +33,6 @@ def test_post_tweet_success():
     """Test successful posting of a tweet."""
     provider = twitter_action_provider()
 
-    # Set up mock response
     mock_response = {
         "data": {
             "id": MOCK_TWEET_ID,
@@ -45,10 +44,8 @@ def test_post_tweet_success():
     expected_response = f"Successfully posted to Twitter:\n{dumps(mock_response)}"
 
     with patch.object(provider.client, "create_tweet", return_value=mock_response) as mock_create_tweet:
-        # Execute action
         response = provider.post_tweet({"tweet": MOCK_TWEET_TEXT})
 
-        # Verify response
         assert response == expected_response
         mock_create_tweet.assert_called_once_with(text=MOCK_TWEET_TEXT)
 
@@ -61,9 +58,7 @@ def test_post_tweet_failure():
     expected_response = f"Error posting to Twitter:\n{error}"
 
     with patch.object(provider.client, "create_tweet", side_effect=error) as mock_create_tweet:
-        # Execute action
         response = provider.post_tweet({"tweet": MOCK_TWEET_TEXT})
 
-        # Verify response
         assert response == expected_response
         mock_create_tweet.assert_called_once_with(text=MOCK_TWEET_TEXT)

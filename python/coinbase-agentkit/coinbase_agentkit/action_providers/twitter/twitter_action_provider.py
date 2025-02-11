@@ -72,7 +72,6 @@ A failure response will return a message with a Twitter API request error:
     )
     def account_details(self, args: dict[str, Any]) -> str:
         """Get the authenticated Twitter (X) user account details using the Tweepy client."""
-        # Validate args against the Pydantic model
         AccountDetailsInput(**args)
 
         import tweepy
@@ -99,8 +98,8 @@ A failure response will return a message with the Twitter API request error:
     )
     def account_mentions(self, args: dict[str, Any]) -> str:
         """Get mentions for a specified Twitter user."""
-        # Validate args against the Pydantic model
         validated_args = AccountMentionsInput(**args)
+
         import tweepy
         try:
             response = self.client.get_users_mentions(validated_args.user_id)
@@ -122,8 +121,8 @@ A failure response will return a message with the Twitter API request error:
     )
     def post_tweet(self, args: dict[str, Any]) -> str:
         """Post a tweet on Twitter."""
-        # Validate args against the Pydantic model
         validated_args = PostTweetInput(**args)
+
         import tweepy
         try:
             response = self.client.create_tweet(text=validated_args.tweet)
@@ -145,8 +144,8 @@ A failure response will return a message with the Twitter API request error:
     )
     def post_tweet_reply(self, args: dict[str, Any]) -> str:
         """Post a reply to a tweet on Twitter."""
-        # Validate args against the Pydantic model
         validated_args = PostTweetReplyInput(**args)
+
         import tweepy
         try:
             response = self.client.create_tweet(

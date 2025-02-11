@@ -33,7 +33,6 @@ def test_account_mentions_success():
     """Test successful retrieval of Twitter (X) account mentions."""
     provider = twitter_action_provider()
 
-    # Set up mock response
     mock_response = {
         "data": [
             {
@@ -46,10 +45,8 @@ def test_account_mentions_success():
     expected_response = f"Successfully retrieved account mentions:\n{dumps(mock_response)}"
 
     with patch.object(provider.client, "get_users_mentions", return_value=mock_response) as mock_get_mentions:
-        # Execute action
         response = provider.account_mentions({"user_id": MOCK_USER_ID})
 
-        # Verify response
         assert response == expected_response
         mock_get_mentions.assert_called_once_with(MOCK_USER_ID)
 
@@ -62,9 +59,7 @@ def test_account_mentions_failure():
     expected_response = f"Error retrieving authenticated account mentions:\n{error}"
 
     with patch.object(provider.client, "get_users_mentions", side_effect=error) as mock_get_mentions:
-        # Execute action
         response = provider.account_mentions({"user_id": MOCK_USER_ID})
 
-        # Verify response
         assert response == expected_response
         mock_get_mentions.assert_called_once_with(MOCK_USER_ID)
