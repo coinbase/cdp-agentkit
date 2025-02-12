@@ -4,7 +4,10 @@
 import { WalletProvider } from "./walletProvider";
 import { TransactionRequest, ReadContractParameters, ReadContractReturnType, PublicClient, EstimateGasReturnType, EstimateGasParameters, Chain, EstimateFeesPerGasParameters, FeeValuesEIP1559 } from "viem";
 
-export interface EVMWalletProviderGasConfig {
+/**
+ * Configuration for gas limit and gas fee multipliers.
+ */
+export interface EvmWalletProviderGasConfig {
   /**
    * A internal multiplier on gas limit estimation.
    */
@@ -19,16 +22,16 @@ export interface EVMWalletProviderGasConfig {
 /**
  * Configuration options for the EVM Providers.
  */
-export interface EVMWalletProviderConfig {
+export interface EvmWalletProviderConfig {
   /**
    * A RPC client.
    */
   publicClient: PublicClient;
 
   /**
-   * Config for gas multipliers.
+   * Configuration for gas multipliers.
    */
-  gas?: EVMWalletProviderGasConfig;
+  gas?: EvmWalletProviderGasConfig;
 }
 
 /**
@@ -41,7 +44,12 @@ export abstract class EvmWalletProvider extends WalletProvider {
   #gasLimitMultiplier: number;
   #feePerGasMultiplier: number;
 
-  constructor(config: EVMWalletProviderConfig) {
+  /**
+   * Constructs a new EvmWalletProvider.
+   *
+   * @param config - The configuration options for the EvmWalletProvider.
+   */
+  constructor(config: EvmWalletProviderConfig) {
     super();
     this.#gasLimitMultiplier = Math.max(config.gas?.gasLimitMultiplier ?? 1, 1);
     this.#feePerGasMultiplier = Math.max(config.gas?.feePerGasMultiplier ?? 1, 1);
@@ -96,14 +104,27 @@ export abstract class EvmWalletProvider extends WalletProvider {
    */
   abstract readContract(params: ReadContractParameters): Promise<ReadContractReturnType>;
 
-  protected async estimateGas(args: EstimateGasParameters<Chain | undefined>): Promise<EstimateGasReturnType> {
-    const gasLimit = await this.#publicClient.estimateGas(args);
+  /**
+   * Estimates gas consumption and modifies the response based on the gas configuration.
+   *
+   * @param params - The parameters for a transaction to estimate the gas consumption of.
+   * @returns The modified gasLimit.
+   */
+  protected async estimateGas(params: EstimateGasParameters<Chain | undefined>): Promise<EstimateGasReturnType> {
+    const gasLimit = await this.#publicClient.estimateGas(params);
 
     return BigInt(Math.round(Number(gasLimit) * this.#gasLimitMultiplier))
   }
 
-  protected async estimateFeesPerGas(args?: EstimateFeesPerGasParameters<Chain | undefined, undefined, "eip1559"> | undefined): Promise<FeeValuesEIP1559> {
-    const feeData = await this.#publicClient.estimateFeesPerGas(args);
+
+  /**
+   * Estimates fee per gas prices and modifies the response based on the gas configuration.
+   *
+   * @param params - The parameters for fee per gas price estimation.
+   * @returns The fee per gas estimates.
+   */
+  protected async estimateFeesPerGas(params?: EstimateFeesPerGasParameters<Chain | undefined, undefined, "eip1559"> | undefined): Promise<FeeValuesEIP1559> {
+    const feeData = await this.#publicClient.estimateFeesPerGas(params);
 
     return {
       maxFeePerGas: BigInt(Math.round(Number(feeData.maxFeePerGas) * this.#feePerGasMultiplier)),

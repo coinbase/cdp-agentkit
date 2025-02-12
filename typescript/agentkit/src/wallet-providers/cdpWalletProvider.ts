@@ -12,7 +12,7 @@ import {
   Signature,
   PublicClient,
 } from "viem";
-import { EvmWalletProvider, EVMWalletProviderGasConfig } from "./evmWalletProvider";
+import { EvmWalletProvider, EvmWalletProviderGasConfig } from "./evmWalletProvider";
 import { Network } from "../network";
 import {
   Coinbase,
@@ -68,9 +68,9 @@ export interface CdpWalletProviderConfig extends CdpProviderConfig {
   networkId?: string;
 
   /**
-   * Gas configuration.
+   * Configuration for gas multipliers.
    */
-  gas?: EVMWalletProviderGasConfig;
+  gas?: EvmWalletProviderGasConfig;
 }
 
 /**
