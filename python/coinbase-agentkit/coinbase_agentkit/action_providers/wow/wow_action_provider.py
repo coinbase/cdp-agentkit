@@ -127,20 +127,20 @@ Important notes:
 
             token_uri = validated_args.token_uri or GENERIC_TOKEN_METADATA_URI
 
-            invocation = wallet_provider.invoke_contract(
-                contract_address=factory_address,
-                method="deploy",
-                abi=WOW_FACTORY_ABI,
-                args={
-                    "_tokenCreator": wallet_provider.get_address(),
-                    "_platformReferrer": "0x0000000000000000000000000000000000000000",
-                    "_tokenURI": token_uri or GENERIC_TOKEN_METADATA_URI,
-                    "_name": validated_args.name,
-                    "_symbol": validated_args.symbol,
-                },
-            ).wait()
+            #  invocation = wallet_provider.invoke_contract(
+            #      contract_address=factory_address,
+            #      method="deploy",
+            #      abi=WOW_FACTORY_ABI,
+            #      args={
+            #          "_tokenCreator": wallet_provider.get_address(),
+            #          "_platformReferrer": "0x0000000000000000000000000000000000000000",
+            #          "_tokenURI": token_uri or GENERIC_TOKEN_METADATA_URI,
+            #          "_name": validated_args.name,
+            #          "_symbol": validated_args.symbol,
+            #      },
+            #  ).wait()
 
-            return f"Created WoW ERC20 memecoin {validated_args.name} with symbol {validated_args.symbol} on network {wallet_provider.get_network().network_id}.\nTransaction hash for the token creation: {invocation.transaction.transaction_hash}\nTransaction link for the token creation: {invocation.transaction.transaction_link}"
+            #  return f"Created WoW ERC20 memecoin {validated_args.name} with symbol {validated_args.symbol} on network {wallet_provider.get_network().network_id}.\nTransaction hash for the token creation: {invocation.transaction.transaction_hash}\nTransaction link for the token creation: {invocation.transaction.transaction_link}"
 
             #  token_uri = urllib.parse.quote(token_uri)
 
