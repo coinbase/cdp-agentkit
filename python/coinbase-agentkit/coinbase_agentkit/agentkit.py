@@ -28,8 +28,8 @@ class AgentKit:
         """Initialize AgentKit with the given configuration.
 
         Args:
-            config: Configuration options for AgentKit. If not provided,
-                   a default CDP wallet provider will be used.
+            config (AgentKitConfig | None): Configuration options for AgentKit. If not provided,
+                                          a default CDP wallet provider will be used.
 
         """
         if not config:
@@ -47,11 +47,10 @@ class AgentKit:
         """Get all available actions for the current wallet and network.
 
         Returns:
-            List of available actions from all providers
+            list[Action]: List of available actions from all providers
 
         Raises:
             ValueError: If no wallet provider is configured
-
         """
         if not self.wallet_provider:
             raise ValueError("No wallet provider configured")

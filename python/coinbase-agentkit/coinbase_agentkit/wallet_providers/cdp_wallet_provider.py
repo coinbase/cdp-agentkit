@@ -45,7 +45,7 @@ class CdpWalletProvider(EvmWalletProvider):
         """Initialize CDP wallet provider.
 
         Args:
-            config: Configuration options for the CDP provider. If not provided,
+            config (CdpWalletProviderConfig | None): Configuration options for the CDP provider. If not provided,
                    will attempt to configure from environment variables.
 
         Raises:
@@ -103,7 +103,7 @@ class CdpWalletProvider(EvmWalletProvider):
         """Get the wallet address.
 
         Returns:
-            The wallet's address as a hex string
+            str: The wallet's address as a hex string
 
         """
         return self._address
@@ -112,7 +112,7 @@ class CdpWalletProvider(EvmWalletProvider):
         """Get the wallet balance in native currency.
 
         Returns:
-            The wallet's balance in wei as a Decimal
+            Decimal: The wallet's balance in wei as a Decimal
 
         Raises:
             Exception: If wallet is not initialized
@@ -128,7 +128,7 @@ class CdpWalletProvider(EvmWalletProvider):
         """Get the name of the wallet provider.
 
         Returns:
-            The string 'cdp_wallet_provider'
+            str: The string 'cdp_wallet_provider'
 
         """
         return "cdp_wallet_provider"
@@ -137,7 +137,7 @@ class CdpWalletProvider(EvmWalletProvider):
         """Get the current network.
 
         Returns:
-            Network object containing protocol family, network ID, and chain ID
+            Network: Network object containing protocol family, network ID, and chain ID
 
         """
         return self._network
@@ -146,11 +146,11 @@ class CdpWalletProvider(EvmWalletProvider):
         """Transfer the native asset of the network.
 
         Args:
-            to: The destination address to receive the transfer
-            value: The amount to transfer in whole units (e.g. 1.5 for 1.5 ETH)
+            to (str): The destination address to receive the transfer
+            value (Decimal): The amount to transfer in whole units (e.g. 1.5 for 1.5 ETH)
 
         Returns:
-            The transaction hash as a string
+            str: The transaction hash as a string
 
         Raises:
             Exception: If transfer fails or wallet is not initialized
@@ -188,14 +188,14 @@ class CdpWalletProvider(EvmWalletProvider):
         """Read data from a smart contract.
 
         Args:
-            contract_address: The address of the contract to read from
-            abi: The ABI of the contract
-            function_name: The name of the function to call
-            args: Arguments to pass to the function call, defaults to empty list
-            block_identifier: The block number to read from, defaults to 'latest'
+            contract_address (ChecksumAddress): The address of the contract to read from
+            abi (list[dict[str, Any]]): The ABI of the contract
+            function_name (str): The name of the function to call
+            args (list[Any] | None): Arguments to pass to the function call, defaults to empty list
+            block_identifier (BlockIdentifier): The block number to read from, defaults to 'latest'
 
         Returns:
-            The result of the contract function call
+            Any: The result of the contract function call
 
         Raises:
             Exception: If the contract call fails or wallet is not initialized
@@ -211,10 +211,10 @@ class CdpWalletProvider(EvmWalletProvider):
         """Sign a message using the wallet's private key.
 
         Args:
-            message: The message to sign, either as a string or bytes
+            message (str | bytes): The message to sign, either as a string or bytes
 
         Returns:
-            The signature as a hex string
+            HexStr: The signature as a hex string
 
         Raises:
             Exception: If the wallet is not initialized or signing fails
@@ -232,10 +232,10 @@ class CdpWalletProvider(EvmWalletProvider):
         """Sign typed data according to EIP-712 standard.
 
         Args:
-            typed_data: The typed data to sign following EIP-712 format
+            typed_data (dict[str, Any]): The typed data to sign following EIP-712 format
 
         Returns:
-            The signature as a hex string
+            HexStr: The signature as a hex string
 
         Raises:
             Exception: If the wallet is not initialized or signing fails
@@ -254,10 +254,10 @@ class CdpWalletProvider(EvmWalletProvider):
         """Sign an EVM transaction.
 
         Args:
-            transaction: Transaction parameters including to, value, gas, etc.
+            transaction (TxParams): Transaction parameters including to, value, gas, etc.
 
         Returns:
-            The transaction signature as a hex string
+            HexStr: The transaction signature as a hex string
 
         Raises:
             Exception: If wallet is not initialized or signing fails
@@ -278,10 +278,10 @@ class CdpWalletProvider(EvmWalletProvider):
         """Send a signed transaction to the network.
 
         Args:
-            transaction: Transaction parameters including to, value, gas, etc.
+            transaction (TxParams): Transaction parameters including to, value, gas, etc.
 
         Returns:
-            The transaction hash as a hex string
+            HexStr: The transaction hash as a hex string
 
         Raises:
             Exception: If transaction preparation or sending fails
@@ -314,12 +314,12 @@ class CdpWalletProvider(EvmWalletProvider):
         """Wait for transaction confirmation and return receipt.
 
         Args:
-            tx_hash: The transaction hash to wait for
-            timeout: Maximum time to wait in seconds, defaults to 120
-            poll_latency: Time between polling attempts in seconds, defaults to 0.1
+            tx_hash (HexStr): The transaction hash to wait for
+            timeout (float): Maximum time to wait in seconds, defaults to 120
+            poll_latency (float): Time between polling attempts in seconds, defaults to 0.1
 
         Returns:
-            The transaction receipt as a dictionary
+            dict[str, Any]: The transaction receipt as a dictionary
 
         Raises:
             TimeoutError: If transaction is not mined within timeout period
@@ -333,10 +333,10 @@ class CdpWalletProvider(EvmWalletProvider):
         """Prepare EIP-1559 transaction for signing.
 
         Args:
-            transaction: Raw transaction parameters
+            transaction (TxParams): Raw transaction parameters
 
         Returns:
-            Transaction parameters with gas estimation and fee calculation
+            TxParams: Transaction parameters with gas estimation and fee calculation
 
         Raises:
             Exception: If transaction preparation fails
@@ -376,10 +376,10 @@ class CdpWalletProvider(EvmWalletProvider):
         """Estimate gas fees for a transaction.
 
         Args:
-            multiplier: Buffer multiplier for base fee, defaults to 1.2
+            multiplier (float): Buffer multiplier for base fee, defaults to 1.2
 
         Returns:
-            Tuple of (max_priority_fee_per_gas, max_fee_per_gas) in wei
+            tuple[int, int]: Tuple of (max_priority_fee_per_gas, max_fee_per_gas) in wei
 
         """
 
@@ -399,7 +399,7 @@ class CdpWalletProvider(EvmWalletProvider):
         """Export the wallet data for persistence, backup, or transfer.
 
         Returns:
-            The wallet data object containing all necessary information
+            WalletData: The wallet data object containing all necessary information
 
         Raises:
             Exception: If wallet is not initialized
@@ -420,13 +420,13 @@ class CdpWalletProvider(EvmWalletProvider):
         """Deploy a smart contract.
 
         Args:
-            solidity_version: The version of the Solidity compiler to use
-            solidity_input_json: The JSON input for the Solidity compiler
-            contract_name: The name of the contract to deploy
-            constructor_args: Key-value map of constructor arguments
+            solidity_version (str): The version of the Solidity compiler to use
+            solidity_input_json (str): The JSON input for the Solidity compiler
+            contract_name (str): The name of the contract to deploy
+            constructor_args (dict[str, Any]): Key-value map of constructor arguments
 
         Returns:
-            The deployed contract instance
+            Any: The deployed contract instance
 
         Raises:
             Exception: If wallet is not initialized or deployment fails
@@ -449,12 +449,12 @@ class CdpWalletProvider(EvmWalletProvider):
         """Deploy a new NFT (ERC-721) smart contract.
 
         Args:
-            name: The name of the NFT collection
-            symbol: The token symbol for the collection
-            base_uri: The base URI for token metadata
+            name (str): The name of the NFT collection
+            symbol (str): The token symbol for the collection
+            base_uri (str): The base URI for token metadata
 
         Returns:
-            The deployed NFT contract instance
+            Any: The deployed NFT contract instance
 
         Raises:
             Exception: If wallet is not initialized or deployment fails
@@ -476,12 +476,12 @@ class CdpWalletProvider(EvmWalletProvider):
         """Deploy an ERC20 token contract.
 
         Args:
-            name: The name of the token
-            symbol: The symbol of the token
-            total_supply: The total supply of the token
+            name (str): The name of the token
+            symbol (str): The symbol of the token
+            total_supply (str): The total supply of the token
 
         Returns:
-            The deployed token contract instance
+            Any: The deployed token contract instance
 
         Raises:
             Exception: If wallet is not initialized or deployment fails
@@ -508,7 +508,7 @@ class CdpWalletProvider(EvmWalletProvider):
             to_asset_id (str): The to asset ID to trade (e.g., "eth", "usdc", or a valid contract address).
 
         Returns:
-            A message containing the trade details and transaction information
+            str: A message containing the trade details and transaction information
 
         Raises:
             Exception: If trade fails or wallet is not initialized

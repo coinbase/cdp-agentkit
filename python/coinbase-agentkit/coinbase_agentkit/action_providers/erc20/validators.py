@@ -9,7 +9,7 @@ def wei_amount_validator(value: str) -> str:
     """Validate that amount is a valid wei value (positive whole number as string).
 
     Args:
-        value: The string value to validate, expected to be a positive whole number
+        value (str): The string value to validate, expected to be a positive whole number
 
     Returns:
         str: The validated value if it passes all checks

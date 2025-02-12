@@ -19,13 +19,13 @@ def approve(wallet: EvmWalletProvider, token_address: str, spender_address: str,
     """Approve a spender to spend tokens on behalf of the owner.
 
     Args:
-        wallet: The wallet provider to use for the transaction
-        token_address: The address of the token contract to approve
-        spender_address: The address of the spender to approve
-        amount: The amount of tokens to approve in atomic units (wei)
+        wallet (EvmWalletProvider): The wallet provider to use for the transaction
+        token_address (str): The address of the token contract to approve
+        spender_address (str): The address of the spender to approve
+        amount (int): The amount of tokens to approve in atomic units (wei)
 
     Returns:
-        The transaction receipt if successful, or an error message string if failed
+        dict | str: The transaction receipt if successful, or an error message string if failed
 
     Raises:
         Exception: If the approval transaction fails
