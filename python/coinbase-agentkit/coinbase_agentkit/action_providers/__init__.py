@@ -9,6 +9,10 @@ from .cdp.cdp_wallet_action_provider import CdpWalletActionProvider, cdp_wallet_
 from .erc20.erc20_action_provider import ERC20ActionProvider, erc20_action_provider
 from .morpho.morpho_action_provider import MorphoActionProvider, morpho_action_provider
 from .pyth.pyth_action_provider import PythActionProvider, pyth_action_provider
+from .superfluid.superfluid_action_provider import (
+    SuperfluidActionProvider,
+    superfluid_action_provider,
+)
 from .twitter.twitter_action_provider import TwitterActionProvider, twitter_action_provider
 from .wallet.wallet_action_provider import WalletActionProvider, wallet_action_provider
 from .weth.weth_action_provider import WethActionProvider, weth_action_provider
@@ -35,4 +39,6 @@ __all__ = [
     "weth_action_provider",
     "BasenameActionProvider",
     "basename_action_provider",
+    "SuperfluidActionProvider",
+    "superfluid_action_provider",
 ]
