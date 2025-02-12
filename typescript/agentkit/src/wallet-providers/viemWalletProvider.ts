@@ -21,19 +21,21 @@ import { CHAIN_ID_TO_NETWORK_ID } from "../network/network";
 export class ViemWalletProvider extends EvmWalletProvider {
   #walletClient: ViemWalletClient;
   #publicClient: ViemPublicClient;
+  #feePerGasMultiplier: number;
 
   /**
    * Constructs a new ViemWalletProvider.
    *
    * @param walletClient - The wallet client.
    */
-  constructor(walletClient: ViemWalletClient) {
+  constructor(walletClient: ViemWalletClient, feePerGasMultiplier: number) {
     super();
     this.#walletClient = walletClient;
     this.#publicClient = createPublicClient({
       chain: walletClient.chain,
       transport: http(),
     });
+    this.#feePerGasMultiplier = Math.min(feePerGasMultiplier ?? 1, 1);
   }
 
   /**
@@ -102,12 +104,22 @@ export class ViemWalletProvider extends EvmWalletProvider {
       throw new Error("Chain not found");
     }
 
+    const estimatedGas = await this.#publicClient.estimateGas({
+      account,
+      to: transaction.to,
+      value: transaction.value,
+      data: transaction.data
+    })
+
+    const gas = BigInt(Math.round(Number(estimatedGas) * this.#feePerGasMultiplier))
+
     const txParams = {
       account: account,
       chain: chain,
       data: transaction.data,
       to: transaction.to,
       value: transaction.value,
+      gas,
     };
 
     return this.#walletClient.sendTransaction(txParams);

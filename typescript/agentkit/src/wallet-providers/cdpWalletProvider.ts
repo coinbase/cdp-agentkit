@@ -109,7 +109,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
     this.#cdpWallet = config.wallet;
     this.#address = config.address;
     this.#network = config.network;
-    this.#feePerGasMultiplier = config.feePerGasMultiplier ?? 1;
+    this.#feePerGasMultiplier = Math.min(config.feePerGasMultiplier ?? 1, 1);
     this.#publicClient = createPublicClient({
       chain: NETWORK_ID_TO_VIEM_CHAIN[config.network!.networkId!],
       transport: http(),
