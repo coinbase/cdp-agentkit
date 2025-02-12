@@ -109,6 +109,10 @@ class EthAccountWalletProvider(EvmWalletProvider):
         hash = self.web3.eth.send_transaction(transaction)
         return Web3.to_hex(hash)
 
+    def get_transaction_receipt(self, tx_hash: HexStr) -> dict[str, Any]:
+        """Get the transaction receipt for a given transaction hash."""
+        return self.web3.eth.get_transaction_receipt(tx_hash)
+
     def wait_for_transaction_receipt(
         self, tx_hash: HexStr, timeout: float = 120, poll_latency: float = 0.1
     ) -> dict[str, Any]:

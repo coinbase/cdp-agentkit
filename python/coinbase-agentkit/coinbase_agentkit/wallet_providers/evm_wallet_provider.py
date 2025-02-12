@@ -31,6 +31,11 @@ class EvmWalletProvider(WalletProvider, ABC):
         pass
 
     @abstractmethod
+    def get_transaction_receipt(self, tx_hash: HexStr) -> dict[str, Any]:
+        """Get the transaction receipt for a given transaction hash."""
+        pass
+
+    @abstractmethod
     def wait_for_transaction_receipt(
         self, tx_hash: HexStr, timeout: float = 120, poll_latency: float = 0.1
     ) -> dict[str, Any]:

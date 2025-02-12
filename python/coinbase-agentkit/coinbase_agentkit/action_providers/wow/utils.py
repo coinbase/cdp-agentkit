@@ -1,117 +1,86 @@
-"""Utility functions for WOW action provider."""
-
+from web3 import Web3
 
 from ...wallet_providers import EvmWalletProvider
+from ..uniswap.utils import get_has_graduated, get_uniswap_quote
 from .constants import WOW_ABI, WOW_FACTORY_CONTRACT_ADDRESSES
 
 
-def get_has_graduated(wallet: EvmWalletProvider, token_address: str) -> bool:
-    """Check if a token has graduated from the WOW protocol.
+def get_factory_address(chain_id: int) -> str:
+    """Get the WOW factory contract address for a given chain ID.
 
     Args:
-        wallet: The wallet provider to use for contract calls
-        token_address: The token contract address
+        chain_id: Chain ID (8453 for Base Mainnet, 84532 for Base Sepolia)
 
     Returns:
-        True if the token has graduated, False otherwise
-
+        str: The factory contract address for the given chain
     """
-    market_type = wallet.read_contract(
+    network_id = "base-mainnet" if chain_id == 8453 else "base-sepolia"
+    return WOW_FACTORY_CONTRACT_ADDRESSES[network_id]
+
+
+def get_current_supply(wallet_provider: EvmWalletProvider, token_address: str) -> int:
+    """Get the current supply of a token.
+
+    Args:
+        wallet_provider: The wallet provider to use for contract calls
+        token_address: Address of the token contract, such as `0x036CbD53842c5426634e7929541eC2318f3dCF7e`
+
+    Returns:
+        int: The current total supply of the token
+    """
+    return wallet_provider.read_contract(
         contract_address=token_address,
         abi=WOW_ABI,
-        function_name="marketType",
+        function_name="totalSupply",
         args=[],
     )
-    return market_type == 1
 
 
-def get_buy_quote(
-    wallet: EvmWalletProvider,
-    token_address: str,
-    amount_eth_in_wei: str
-) -> str:
+def get_buy_quote(wallet_provider: EvmWalletProvider, token_address: str, amount_eth_in_wei: str) -> int:
     """Get quote for buying tokens.
 
     Args:
-        wallet: The wallet provider to use for contract calls
-        token_address: The token contract address
-        amount_eth_in_wei: Amount of ETH to spend (in wei)
+        wallet_provider: The wallet provider to use for contract calls
+        token_address: Address of the token contract, such as `0x036CbD53842c5426634e7929541eC2318f3dCF7e`
+        amount_eth_in_wei: Amount of ETH to buy (in wei), meaning 1 is 1 wei or 0.000000000000000001 of ETH
 
     Returns:
-        The buy quote amount
-
-    Raises:
-        NotImplementedError: If the token has graduated and requires Uniswap quote logic
-
+        int: The amount of tokens that would be received for the given ETH amount
     """
-    has_graduated = get_has_graduated(wallet, token_address)
-
-    if has_graduated:
-        # TODO: Implement Uniswap quote logic
-        raise NotImplementedError("Uniswap quote not implemented yet")
-
-    token_quote = wallet.read_contract(
+    has_graduated = get_has_graduated(wallet_provider, token_address)
+    
+    token_quote = (
+        has_graduated
+        and (get_uniswap_quote(wallet_provider, token_address, amount_eth_in_wei, "buy")).amount_out
+    ) or wallet_provider.read_contract(
         contract_address=token_address,
         abi=WOW_ABI,
         function_name="getEthBuyQuote",
         args=[amount_eth_in_wei],
     )
+    return token_quote
 
-    return str(token_quote)
 
-
-def get_sell_quote(
-    wallet: EvmWalletProvider,
-    token_address: str,
-    amount_tokens_in_wei: str
-) -> str:
+def get_sell_quote(wallet_provider: EvmWalletProvider, token_address: str, amount_tokens_in_wei: str) -> int:
     """Get quote for selling tokens.
 
     Args:
-        wallet: The wallet provider to use for contract calls
-        token_address: The token contract address
-        amount_tokens_in_wei: Amount of tokens to sell (in wei)
+        wallet_provider: The wallet provider to use for contract calls
+        token_address: Address of the token contract, such as `0x036CbD53842c5426634e7929541eC2318f3dCF7e`
+        amount_tokens_in_wei: Amount of tokens to sell (in wei), meaning 1 is 1 wei or 0.000000000000000001 of the token
 
     Returns:
-        The sell quote amount
-
-    Raises:
-        NotImplementedError: If the token has graduated and requires Uniswap quote logic
-
+        int: The amount of ETH that would be received for the given token amount
     """
-    has_graduated = get_has_graduated(wallet, token_address)
-
-    if has_graduated:
-        # TODO: Implement Uniswap quote logic
-        raise NotImplementedError("Uniswap quote not implemented yet")
-
-    token_quote = wallet.read_contract(
+    has_graduated = get_has_graduated(wallet_provider, token_address)
+    
+    token_quote = (
+        has_graduated
+        and (get_uniswap_quote(wallet_provider, token_address, amount_tokens_in_wei, "sell")).amount_out
+    ) or wallet_provider.read_contract(
         contract_address=token_address,
         abi=WOW_ABI,
         function_name="getTokenSellQuote",
         args=[amount_tokens_in_wei],
     )
-
-    return str(token_quote)
-
-
-def get_factory_address(network_id: str) -> str:
-    """Get the WOW factory contract address for the given network.
-
-    Args:
-        network_id: The network ID to get the factory address for
-
-    Returns:
-        The factory contract address
-
-    Raises:
-        ValueError: If the network is not supported
-
-    """
-    normalized_network = network_id.lower()
-    if normalized_network not in WOW_FACTORY_CONTRACT_ADDRESSES:
-        raise ValueError(
-            f"Invalid network: {network_id}. Valid networks are: "
-            f"{', '.join(WOW_FACTORY_CONTRACT_ADDRESSES.keys())}"
-        )
-    return WOW_FACTORY_CONTRACT_ADDRESSES[normalized_network]
+    return token_quote
