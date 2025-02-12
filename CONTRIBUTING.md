@@ -27,7 +27,8 @@ agentkit/
 │   │── framework-extensions/
 │   │   └── langchain/
 │   └── examples/
-│       └── langchain-cdp-chatbot/
+│       ├── langchain-cdp-chatbot/
+│       └── langchain-twitter-chatbot/
 ```
 
 ## Language-Specific Guides

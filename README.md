@@ -153,7 +153,8 @@ agentkit/
 │   ├── framework-extensions/
 │   |   └── langchain/
 │   └── examples/
-│       └── cdp-langchain-chatbot/
+│       ├── langchain-cdp-chatbot/
+│       └── langchain-twitter-chatbot/
 ```
 
 ## 🤝 Contributing
