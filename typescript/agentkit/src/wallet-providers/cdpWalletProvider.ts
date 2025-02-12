@@ -68,9 +68,9 @@ export interface CdpWalletProviderConfig extends CdpProviderConfig {
   networkId?: string;
 
   /**
-   * A internal multiplier on maxFeePerGas.
+   * A internal multiplier on gas price.
    */
-  feePerGasMultiplier?: number;
+  gasMultiplier?: number;
 }
 
 /**
@@ -96,7 +96,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
   #address?: string;
   #network?: Network;
   #publicClient: PublicClient;
-  #feePerGasMultiplier: number;
+  #gasMultiplier: number;
 
   /**
    * Constructs a new CdpWalletProvider.
@@ -109,7 +109,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
     this.#cdpWallet = config.wallet;
     this.#address = config.address;
     this.#network = config.network;
-    this.#feePerGasMultiplier = Math.min(config.feePerGasMultiplier ?? 1, 1);
+    this.#gasMultiplier = Math.min(config.gasMultiplier ?? 1, 1);
     this.#publicClient = createPublicClient({
       chain: NETWORK_ID_TO_VIEM_CHAIN[config.network!.networkId!],
       transport: http(),
@@ -298,8 +298,8 @@ export class CdpWalletProvider extends EvmWalletProvider {
 
     const feeData = await this.#publicClient!.estimateFeesPerGas();
 
-    const maxFeePerGas = BigInt(Math.round(Number(feeData.maxFeePerGas) * this.#feePerGasMultiplier));
-    const maxPriorityFeePerGas = BigInt(Math.round(Number(feeData.maxPriorityFeePerGas) * this.#feePerGasMultiplier));
+    const maxFeePerGas = BigInt(Math.round(Number(feeData.maxFeePerGas) * this.#gasMultiplier));
+    const maxPriorityFeePerGas = BigInt(Math.round(Number(feeData.maxPriorityFeePerGas) * this.#gasMultiplier));
 
     const gas = await this.#publicClient!.estimateGas({
       account: this.#address! as `0x${string}`,
