@@ -6,7 +6,7 @@ export
 
 .PHONY: install
 install:
-	poetry install --with dev
+	poetry install
 
 .PHONY: run
 run:
