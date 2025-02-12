@@ -182,11 +182,12 @@ def exact_input_single(
     """
     try:
         chain_id = wallet_provider.get_network().chain_id
-        if chain_id not in addresses:
-            raise ValueError(f"Unsupported chain ID: {chain_id}")
+        network = "base-mainnet" if chain_id == 8453 else "base-sepolia"
+        if network not in addresses:
+            raise ValueError(f"Unsupported network: {network}")
 
         amount = wallet_provider.read_contract(
-            contract_address=addresses[chain_id]["UniswapQuoter"],
+            contract_address=addresses[network]["uniswap_quoter"],
             abi=UNISWAP_QUOTER_ABI,
             function_name="quoteExactInputSingle",
             args=[
@@ -230,10 +231,11 @@ def get_uniswap_quote(
     quote_result = None
     utilization = Wei(0)
     insufficient_liquidity = False
-    chain_id = wallet_provider.get_network().chain_id
 
-    if chain_id not in addresses:
-        raise ValueError(f"Unsupported chain ID: {chain_id}")
+    chain_id = wallet_provider.get_network().chain_id
+    network = "base-mainnet" if chain_id == 8453 else "base-sepolia"
+    if network not in addresses:
+        raise ValueError(f"Unsupported network: {network}")
 
     pool_address = wallet_provider.read_contract(
         contract_address=token_address,
@@ -253,7 +255,7 @@ def get_uniswap_quote(
         tokens = (token0, token1)
         balances = (balance0, balance1)
 
-        is_token0_weth = token0.lower() == addresses[chain_id]["WETH"].lower()
+        is_token0_weth = token0.lower() == addresses[network]["weth"].lower()
         token_in = (
             token0
             if (quote_type == "buy" and is_token0_weth)
@@ -293,7 +295,7 @@ def get_uniswap_quote(
 
     balance_result = None
     if tokens and balances:
-        is_weth_token0 = tokens[0].lower() == addresses[chain_id]["WETH"].lower()
+        is_weth_token0 = tokens[0].lower() == addresses[network]["weth"].lower()
         balance_result = Balance(
             erc20z=Wei(balances[1][0] if isinstance(balances[1], list | tuple) else balances[1])
             if is_weth_token0

@@ -3,21 +3,26 @@ from .constants import WOW_ABI, WOW_FACTORY_CONTRACT_ADDRESSES
 from .uniswap.utils import get_has_graduated, get_uniswap_quote
 
 
-def get_factory_address(chain_id: int) -> str:
-    """Get the WOW factory contract address for a given chain ID.
+def get_factory_address(chain_id: str) -> str:
+    """Get the Zora Wow ERC20 Factory contract address for the specified network.
 
     Args:
-        chain_id: Chain ID (8453 for Base Mainnet, 84532 for Base Sepolia)
+        chain_id (str): The chain ID to get the contract address for.
+            Valid networks are: base-sepolia, base-mainnet.
 
     Returns:
-        str: The factory contract address for the given chain
+        str: The contract address for the specified network.
+
+    Raises:
+        ValueError: If the specified network is not supported.
 
     """
-    if chain_id not in WOW_FACTORY_CONTRACT_ADDRESSES:
+    network = "base-mainnet" if chain_id == 8453 else "base-sepolia"
+    if network not in WOW_FACTORY_CONTRACT_ADDRESSES:
         raise ValueError(
-            f"Invalid chain ID: {chain_id}. Valid chain IDs are: {', '.join(str(k) for k in WOW_FACTORY_CONTRACT_ADDRESSES)}"
+            f"Invalid network: {network}. Valid networks are: {', '.join(WOW_FACTORY_CONTRACT_ADDRESSES.keys())}"
         )
-    return WOW_FACTORY_CONTRACT_ADDRESSES[chain_id]
+    return WOW_FACTORY_CONTRACT_ADDRESSES[network]
 
 
 def get_current_supply(wallet_provider: EvmWalletProvider, token_address: str) -> int:
