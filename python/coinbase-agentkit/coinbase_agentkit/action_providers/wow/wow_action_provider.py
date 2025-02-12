@@ -46,10 +46,7 @@ Important notes:
 - The amount is a string and cannot have any decimal points, since the unit of measurement is wei.
 - Make sure to use the exact amount provided, and if there's any doubt, check by getting more information before continuing with the action.
 - 1 wei = 0.000000000000000001 ETH
-- Minimum purchase amount is 100000000000000 wei (0.0000001 ETH)
-- Only supported on the following networks:
-  - Base Sepolia(84532) (ie, 'base-sepolia')
-  - Base Mainnet(8453) (ie, 'base', 'base-mainnet')""",
+- Minimum purchase amount is 100000000000000 wei (0.0000001 ETH)""",
         schema=WowBuyTokenInput,
     )
     def buy_token(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
@@ -174,10 +171,7 @@ Important notes:
 - The amount is a string and cannot have any decimal points, since the unit of measurement is wei.
 - Make sure to use the exact amount provided, and if there's any doubt, check by getting more information before continuing with the action.
 - 1 wei = 0.000000000000000001 ETH
-- Minimum purchase amount to account for slippage is 100000000000000 wei (0.0000001 ETH)
-- Only supported on the following networks:
-  - Base Sepolia(chainid: 84532) (ie, 'base-sepolia')
-  - Base Mainnet(chainid: 8453) (ie, 'base', 'base-mainnet')""",
+- Minimum purchase amount to account for slippage is 100000000000000 wei (0.0000001 ETH)""",
         schema=WowSellTokenInput,
     )
     def sell_token(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
