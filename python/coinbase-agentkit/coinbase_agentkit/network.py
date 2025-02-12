@@ -1,3 +1,5 @@
+"""Network configuration and utilities."""
+
 from pydantic import BaseModel
 
 

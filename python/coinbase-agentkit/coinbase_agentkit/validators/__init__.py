@@ -1,1 +1,1 @@
-"""Validators for use with Pydantic models."""
+"""Schema validators for AgentKit."""

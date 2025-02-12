@@ -1,4 +1,4 @@
-"""Constants for the ERC20 action provider."""
+"""Constants for ERC20 action provider."""
 
 ERC20_ABI = [
     {

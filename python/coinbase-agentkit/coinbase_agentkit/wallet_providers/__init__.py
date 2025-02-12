@@ -1,3 +1,5 @@
+"""Wallet providers for AgentKit."""
+
 from .cdp_wallet_provider import CdpProviderConfig, CdpWalletProvider, CdpWalletProviderConfig
 from .eth_account_wallet_provider import EthAccountWalletProvider, EthAccountWalletProviderConfig
 from .evm_wallet_provider import EvmWalletProvider

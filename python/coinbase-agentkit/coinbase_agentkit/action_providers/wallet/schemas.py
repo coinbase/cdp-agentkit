@@ -1,19 +1,18 @@
+"""Schemas for Wallet action provider."""
+
 from pydantic import BaseModel, Field, field_validator
+from decimal import Decimal
 
 from .validators import positive_decimal_validator
 
 
 class GetWalletDetailsSchema(BaseModel):
     """Input schema for getting wallet details."""
-
-    # No additional fields needed as this action doesn't require any input parameters
     pass
 
 
 class GetBalanceSchema(BaseModel):
     """Input schema for getting native currency balance."""
-
-    # No additional fields needed as this action doesn't require any input parameters
     pass
 
 

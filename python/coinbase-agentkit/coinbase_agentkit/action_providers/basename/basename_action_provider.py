@@ -1,4 +1,4 @@
-"""ERC721 action provider for NFT interactions."""
+"""Basename action provider for Base domain name registration."""
 
 from typing import Any
 
@@ -40,7 +40,6 @@ Basename fails, you should prompt to try again with a more unique name.
     def register_basename(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Register a Basename for the agent."""
         try:
-            # Get the checksum address
             address = Web3.to_checksum_address(wallet_provider.get_address())
             is_mainnet = wallet_provider.get_network().network_id == "base-mainnet"
 
@@ -48,7 +47,6 @@ Basename fails, you should prompt to try again with a more unique name.
             if not args["basename"].endswith(suffix):
                 args["basename"] += suffix
 
-            # Get checksum addresses for contracts
             l2_resolver_address = Web3.to_checksum_address(
                 L2_RESOLVER_ADDRESS_MAINNET if is_mainnet else L2_RESOLVER_ADDRESS_TESTNET
             )

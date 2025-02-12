@@ -1,4 +1,4 @@
-"""ERC20 action provider implementation."""
+"""ERC20 action provider."""
 
 from web3 import Web3
 

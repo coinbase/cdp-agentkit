@@ -1,3 +1,5 @@
+"""Schemas for Morpho action provider."""
+
 from pydantic import BaseModel, Field
 
 

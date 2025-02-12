@@ -1,4 +1,4 @@
-"""ERC721 action provider for NFT interactions."""
+"""ERC721 action provider."""
 
 from typing import Any
 

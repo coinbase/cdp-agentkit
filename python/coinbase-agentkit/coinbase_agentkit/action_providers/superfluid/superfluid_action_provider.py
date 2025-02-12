@@ -1,3 +1,5 @@
+"""Superfluid action provider."""
+
 from typing import Any
 
 from web3 import Web3

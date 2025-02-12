@@ -1,4 +1,4 @@
-"""CDP wallet provider."""
+"""CDP Wallet provider."""
 
 import json
 import os
@@ -45,8 +45,12 @@ class CdpWalletProvider(EvmWalletProvider):
         """Initialize CDP wallet provider.
 
         Args:
-            config: Configuration options for the CDP provider.
+            config: Configuration options for the CDP provider. If not provided,
+                   will attempt to configure from environment variables.
 
+        Raises:
+            ImportError: If CDP SDK is not installed
+            ValueError: If required configuration is missing or initialization fails
         """
         if not config:
             config = CdpWalletProviderConfig()
@@ -95,11 +99,22 @@ class CdpWalletProvider(EvmWalletProvider):
             raise ValueError(f"Failed to initialize CDP wallet: {e!s}") from e
 
     def get_address(self) -> str:
-        """Get the wallet address."""
+        """Get the wallet address.
+
+        Returns:
+            The wallet's address as a hex string
+        """
         return self._address
 
     def get_balance(self) -> Decimal:
-        """Get the wallet balance in native currency."""
+        """Get the wallet balance in native currency.
+
+        Returns:
+            The wallet's balance in wei as a Decimal
+
+        Raises:
+            Exception: If wallet is not initialized
+        """
         if not self._wallet:
             raise Exception("Wallet not initialized")
 
@@ -107,23 +122,33 @@ class CdpWalletProvider(EvmWalletProvider):
         return Decimal(str(Web3.to_wei(balance, "ether")))
 
     def get_name(self) -> str:
-        """Get the name of the wallet provider."""
+        """Get the name of the wallet provider.
+
+        Returns:
+            The string 'cdp_wallet_provider'
+        """
         return "cdp_wallet_provider"
 
     def get_network(self) -> Network:
-        """Get the current network."""
+        """Get the current network.
+
+        Returns:
+            Network object containing protocol family, network ID, and chain ID
+        """
         return self._network
 
     def native_transfer(self, to: str, value: Decimal) -> str:
         """Transfer the native asset of the network.
 
         Args:
-            to: The destination address
-            value: The amount to transfer in whole units (e.g. '1.5' for 1.5 ETH)
+            to: The destination address to receive the transfer
+            value: The amount to transfer in whole units (e.g. 1.5 for 1.5 ETH)
 
         Returns:
             The transaction hash as a string
 
+        Raises:
+            Exception: If transfer fails or wallet is not initialized
         """
         if not self._wallet:
             raise Exception("Wallet not initialized")
@@ -154,7 +179,21 @@ class CdpWalletProvider(EvmWalletProvider):
         args: list[Any] | None = None,
         block_identifier: BlockIdentifier = "latest",
     ) -> Any:
-        """Read data from a smart contract."""
+        """Read data from a smart contract.
+
+        Args:
+            contract_address: The address of the contract to read from
+            abi: The ABI of the contract
+            function_name: The name of the function to call
+            args: Arguments to pass to the function call, defaults to empty list
+            block_identifier: The block number to read from, defaults to 'latest'
+
+        Returns:
+            The result of the contract function call
+
+        Raises:
+            Exception: If the contract call fails or wallet is not initialized
+        """
         contract = self._web3.eth.contract(address=contract_address, abi=abi)
         func = contract.functions[function_name]
         if args is None:
@@ -162,7 +201,17 @@ class CdpWalletProvider(EvmWalletProvider):
         return func(*args).call(block_identifier=block_identifier)
 
     def sign_message(self, message: str | bytes) -> HexStr:
-        """Sign a message using the wallet's private key."""
+        """Sign a message using the wallet's private key.
+
+        Args:
+            message: The message to sign, either as a string or bytes
+
+        Returns:
+            The signature as a hex string
+
+        Raises:
+            Exception: If the wallet is not initialized or signing fails
+        """
         if not self._wallet:
             raise Exception("Wallet not initialized")
 
@@ -172,7 +221,17 @@ class CdpWalletProvider(EvmWalletProvider):
         return payload_signature.signature
 
     def sign_typed_data(self, typed_data: dict[str, Any]) -> HexStr:
-        """Sign typed data according to EIP-712 standard."""
+        """Sign typed data according to EIP-712 standard.
+
+        Args:
+            typed_data: The typed data to sign following EIP-712 format
+
+        Returns:
+            The signature as a hex string
+
+        Raises:
+            Exception: If the wallet is not initialized or signing fails
+        """
         if not self._wallet:
             raise Exception("Wallet not initialized")
 
@@ -183,7 +242,17 @@ class CdpWalletProvider(EvmWalletProvider):
         return payload_signature.signature
 
     def sign_transaction(self, transaction: TxParams) -> HexStr:
-        """Sign an EVM transaction."""
+        """Sign an EVM transaction.
+
+        Args:
+            transaction: Transaction parameters including to, value, gas, etc.
+
+        Returns:
+            The transaction signature as a hex string
+
+        Raises:
+            Exception: If wallet is not initialized or signing fails
+        """
         if not self._wallet:
             raise Exception("Wallet not initialized")
 
@@ -196,7 +265,17 @@ class CdpWalletProvider(EvmWalletProvider):
         return payload_signature.signature
 
     def send_transaction(self, transaction: TxParams) -> HexStr:
-        """Send a signed transaction to the network."""
+        """Send a signed transaction to the network.
+
+        Args:
+            transaction: Transaction parameters including to, value, gas, etc.
+
+        Returns:
+            The transaction hash as a hex string
+
+        Raises:
+            Exception: If transaction preparation or sending fails
+        """
         self._prepare_transaction(transaction)
 
         signature = self.sign_transaction(transaction)
@@ -221,13 +300,35 @@ class CdpWalletProvider(EvmWalletProvider):
     def wait_for_transaction_receipt(
         self, tx_hash: HexStr, timeout: float = 120, poll_latency: float = 0.1
     ) -> dict[str, Any]:
-        """Wait for transaction confirmation and return receipt."""
+        """Wait for transaction confirmation and return receipt.
+
+        Args:
+            tx_hash: The transaction hash to wait for
+            timeout: Maximum time to wait in seconds, defaults to 120
+            poll_latency: Time between polling attempts in seconds, defaults to 0.1
+
+        Returns:
+            The transaction receipt as a dictionary
+
+        Raises:
+            TimeoutError: If transaction is not mined within timeout period
+        """
         return self._web3.eth.wait_for_transaction_receipt(
             tx_hash, timeout=timeout, poll_latency=poll_latency
         )
 
     def _prepare_transaction(self, transaction: TxParams) -> TxParams:
-        """Prepare EIP-1559 transaction for signing."""
+        """Prepare EIP-1559 transaction for signing.
+
+        Args:
+            transaction: Raw transaction parameters
+
+        Returns:
+            Transaction parameters with gas estimation and fee calculation
+
+        Raises:
+            Exception: If transaction preparation fails
+        """
         if transaction["to"]:
             transaction["to"] = Web3.to_bytes(hexstr=transaction["to"])
         else:
@@ -259,7 +360,14 @@ class CdpWalletProvider(EvmWalletProvider):
         return transaction
 
     def _estimate_fees(self, multiplier=1.2):
-        """Estimate fees."""
+        """Estimate gas fees for a transaction.
+
+        Args:
+            multiplier: Buffer multiplier for base fee, defaults to 1.2
+
+        Returns:
+            Tuple of (max_priority_fee_per_gas, max_fee_per_gas) in wei
+        """
 
         def get_base_fee():
             latest_block = self._web3.eth.get_block("latest")
@@ -274,11 +382,13 @@ class CdpWalletProvider(EvmWalletProvider):
         return (max_priority_fee_per_gas, max_fee_per_gas)
 
     def export_wallet(self) -> WalletData:
-        """Export the wallet.
+        """Export the wallet data for persistence, backup, or transfer.
 
         Returns:
-            The wallet data.
+            The wallet data object containing all necessary information
 
+        Raises:
+            Exception: If wallet is not initialized
         """
         if not self._wallet:
             raise Exception("Wallet not initialized")
@@ -298,14 +408,13 @@ class CdpWalletProvider(EvmWalletProvider):
             solidity_version: The version of the Solidity compiler to use
             solidity_input_json: The JSON input for the Solidity compiler
             contract_name: The name of the contract to deploy
-            constructor_args: Key-value map of constructor args
+            constructor_args: Key-value map of constructor arguments
 
         Returns:
             The deployed contract instance
 
         Raises:
             Exception: If wallet is not initialized or deployment fails
-
         """
         if not self._wallet:
             raise Exception("Wallet not initialized")
@@ -324,7 +433,7 @@ class CdpWalletProvider(EvmWalletProvider):
         """Deploy a new NFT (ERC-721) smart contract.
 
         Args:
-            name: The name of the collection
+            name: The name of the NFT collection
             symbol: The token symbol for the collection
             base_uri: The base URI for token metadata
 
@@ -333,7 +442,6 @@ class CdpWalletProvider(EvmWalletProvider):
 
         Raises:
             Exception: If wallet is not initialized or deployment fails
-
         """
         if not self._wallet:
             raise Exception("Wallet not initialized")
@@ -360,7 +468,6 @@ class CdpWalletProvider(EvmWalletProvider):
 
         Raises:
             Exception: If wallet is not initialized or deployment fails
-
         """
         if not self._wallet:
             raise Exception("Wallet not initialized")
@@ -375,7 +482,7 @@ class CdpWalletProvider(EvmWalletProvider):
             raise Exception(f"Failed to deploy token: {e!s}") from e
 
     def trade(self, amount: str, from_asset_id: str, to_asset_id: str) -> str:
-        """Trade a specified amount of a from asset to a to asset for the wallet.
+        """Trade a specified amount of one asset for another.
 
         Args:
             amount (str): The amount of the from asset to trade, e.g. `15`, `0.000001`.
@@ -383,11 +490,10 @@ class CdpWalletProvider(EvmWalletProvider):
             to_asset_id (str): The to asset ID to trade (e.g., "eth", "usdc", or a valid contract address).
 
         Returns:
-            str: A message containing the trade details.
+            A message containing the trade details and transaction information
 
         Raises:
-            Exception: If the trade fails or if the wallet is not initialized.
-
+            Exception: If trade fails or wallet is not initialized
         """
         if not self._wallet:
             raise Exception("Wallet not initialized")

@@ -1,3 +1,5 @@
+"""Wallet action provider for basic wallet operations."""
+
 from typing import Any
 
 from ...network import Network

@@ -1,3 +1,5 @@
+"""Morpho action provider."""
+
 from decimal import Decimal
 from typing import Any
 

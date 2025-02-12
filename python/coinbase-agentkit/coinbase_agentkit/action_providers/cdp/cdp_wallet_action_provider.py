@@ -1,4 +1,4 @@
-"""CDP wallet action provider."""
+"""CDP Wallet action provider."""
 
 from typing import Any
 

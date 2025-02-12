@@ -1,3 +1,5 @@
+"""LangChain integration tools for AgentKit."""
+
 from langchain.tools import StructuredTool
 
 from coinbase_agentkit import Action, AgentKit

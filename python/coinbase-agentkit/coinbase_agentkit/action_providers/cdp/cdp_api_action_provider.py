@@ -1,4 +1,4 @@
-"""CDP API action provider for interacting with CDP API."""
+"""CDP API action provider."""
 
 import os
 from typing import Any

@@ -1,3 +1,5 @@
+"""Decorator utilities for creating and managing actions."""
+
 import inspect
 from collections.abc import Callable
 from functools import wraps

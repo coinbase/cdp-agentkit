@@ -1,4 +1,4 @@
-"""WOW action provider implementation."""
+"""WOW action provider."""
 
 import math
 from typing import Any

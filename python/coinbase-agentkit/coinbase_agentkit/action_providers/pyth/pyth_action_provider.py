@@ -1,3 +1,5 @@
+"""Pyth action provider."""
+
 from typing import Any
 
 import requests

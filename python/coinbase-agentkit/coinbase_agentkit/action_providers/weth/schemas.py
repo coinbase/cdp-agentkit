@@ -1,3 +1,5 @@
+"""Schemas for WETH action provider."""
+
 import re
 
 from pydantic import BaseModel, Field, validator
