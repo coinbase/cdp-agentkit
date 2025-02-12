@@ -16,7 +16,7 @@ from .action_providers import (
     weth_action_provider,
     wow_action_provider,
 )
-from .agentkit import AgentKit, AgentKitOptions
+from .agentkit import AgentKit, AgentKitConfig
 from .wallet_providers import (
     CdpWalletProvider,
     CdpWalletProviderConfig,
@@ -30,7 +30,7 @@ __version__ = "0.1.0"
 
 __all__ = [
     "AgentKit",
-    "AgentKitOptions",
+    "AgentKitConfig",
     "Action",
     "ActionProvider",
     "create_action",
