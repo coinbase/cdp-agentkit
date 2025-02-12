@@ -8,6 +8,7 @@ from coinbase_agentkit.action_providers.erc20.erc20_action_provider import (
     erc20_action_provider,
 )
 from coinbase_agentkit.action_providers.erc20.schemas import GetBalanceSchema, TransferSchema
+from coinbase_agentkit.network import Network
 
 from .conftest import (
     MOCK_AMOUNT,
@@ -133,3 +134,16 @@ def test_transfer_error(mock_wallet):
         }
     )
     assert f"Error transferring the asset: {error!s}" in response
+
+
+def test_supports_network():
+    """Test network support based on protocol family."""
+    test_cases = [
+        ("evm", True),
+        ("solana", False),
+    ]
+
+    provider = erc20_action_provider()
+    for protocol_family, expected in test_cases:
+        network = Network(chain_id=1, protocol_family=protocol_family)
+        assert provider.supports_network(network) is expected

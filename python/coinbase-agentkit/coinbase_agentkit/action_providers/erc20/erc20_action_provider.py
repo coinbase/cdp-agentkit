@@ -101,7 +101,7 @@ class ERC20ActionProvider(ActionProvider):
         except Exception as e:
             return f"Error transferring the asset: {e!s}"
 
-    def supports_network(self, _: Network) -> bool:
+    def supports_network(self, network: Network) -> bool:
         """Check if the ERC20 action provider supports the given network.
 
         Args:
@@ -111,7 +111,7 @@ class ERC20ActionProvider(ActionProvider):
             True if the ERC20 action provider supports the network, false otherwise.
 
         """
-        return True
+        return network.protocol_family == "evm"
 
 
 def erc20_action_provider() -> ERC20ActionProvider:
