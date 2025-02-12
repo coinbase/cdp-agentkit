@@ -14,6 +14,7 @@ from .action_providers import (
     twitter_action_provider,
     wallet_action_provider,
     weth_action_provider,
+    wow_action_provider,
 )
 from .agentkit import AgentKit, AgentKitOptions
 from .wallet_providers import (
@@ -45,8 +46,9 @@ __all__ = [
     "cdp_wallet_action_provider",
     "morpho_action_provider",
     "pyth_action_provider",
+    "superfluid_action_provider",
     "twitter_action_provider",
     "wallet_action_provider",
     "weth_action_provider",
-    "superfluid_action_provider",
+    "wow_action_provider",
 ]

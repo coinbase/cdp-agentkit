@@ -16,11 +16,14 @@ from .superfluid.superfluid_action_provider import (
 from .twitter.twitter_action_provider import TwitterActionProvider, twitter_action_provider
 from .wallet.wallet_action_provider import WalletActionProvider, wallet_action_provider
 from .weth.weth_action_provider import WethActionProvider, weth_action_provider
+from .wow.wow_action_provider import WowActionProvider, wow_action_provider
 
 __all__ = [
     "Action",
     "ActionProvider",
     "create_action",
+    "BasenameActionProvider",
+    "basename_action_provider",
     "CdpApiActionProvider",
     "cdp_api_action_provider",
     "CdpWalletActionProvider",
@@ -31,14 +34,14 @@ __all__ = [
     "morpho_action_provider",
     "PythActionProvider",
     "pyth_action_provider",
+    "SuperfluidActionProvider",
+    "superfluid_action_provider",
     "TwitterActionProvider",
     "twitter_action_provider",
     "WalletActionProvider",
     "wallet_action_provider",
     "WethActionProvider",
     "weth_action_provider",
-    "BasenameActionProvider",
-    "basename_action_provider",
-    "SuperfluidActionProvider",
-    "superfluid_action_provider",
+    "WowActionProvider",
+    "wow_action_provider",
 ]
