@@ -11,7 +11,7 @@ import {
   ReadContractReturnType,
   parseEther,
 } from "viem";
-import { EvmWalletProvider } from "./evmWalletProvider";
+import { EvmWalletProvider, EVMWalletProviderGasConfig } from "./evmWalletProvider";
 import { Network } from "../network";
 import { CHAIN_ID_TO_NETWORK_ID } from "../network/network";
 
@@ -27,13 +27,13 @@ export class ViemWalletProvider extends EvmWalletProvider {
    *
    * @param walletClient - The wallet client.
    */
-  constructor(walletClient: ViemWalletClient, gasMultiplier: number = 1) {
+  constructor(walletClient: ViemWalletClient, gasConfig?: EVMWalletProviderGasConfig) {
     const publicClient = createPublicClient({
       chain: walletClient.chain,
       transport: http(),
     });
 
-    super({ gasMultiplier, publicClient });
+    super({ gas: gasConfig, publicClient });
 
     this.#walletClient = walletClient;
     this.#publicClient = createPublicClient({
@@ -114,6 +114,9 @@ export class ViemWalletProvider extends EvmWalletProvider {
       value: transaction.value,
       data: transaction.data
     })
+    
+    const { maxFeePerGas, maxPriorityFeePerGas } = await this.estimateFeesPerGas();
+
 
     const txParams = {
       account: account,
@@ -122,6 +125,8 @@ export class ViemWalletProvider extends EvmWalletProvider {
       to: transaction.to,
       value: transaction.value,
       gas,
+      maxFeePerGas,
+      maxPriorityFeePerGas,
     };
 
     return this.#walletClient.sendTransaction(txParams);

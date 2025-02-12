@@ -12,7 +12,7 @@ import {
   Signature,
   PublicClient,
 } from "viem";
-import { EvmWalletProvider } from "./evmWalletProvider";
+import { EvmWalletProvider, EVMWalletProviderGasConfig } from "./evmWalletProvider";
 import { Network } from "../network";
 import {
   Coinbase,
@@ -68,9 +68,9 @@ export interface CdpWalletProviderConfig extends CdpProviderConfig {
   networkId?: string;
 
   /**
-   * A internal multiplier on gas price.
+   * Gas configuration.
    */
-  gasMultiplier?: number;
+  gas?: EVMWalletProviderGasConfig;
 }
 
 /**
@@ -108,7 +108,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
       transport: http(),
     });
 
-    super({gasMultiplier: config.gasMultiplier, publicClient});
+    super({gas: config.gas, publicClient});
 
     this.#cdpWallet = config.wallet;
     this.#address = config.address;
@@ -296,7 +296,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
       address: this.#address! as `0x${string}`,
     });
 
-    const { maxFeePerGas, maxPriorityFeePerGas } = await this.#publicClient!.estimateFeesPerGas();
+    const { maxFeePerGas, maxPriorityFeePerGas } = await this.estimateFeesPerGas();
 
     const gas = await this.estimateGas({
       account: this.#address! as `0x${string}`,

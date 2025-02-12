@@ -2,21 +2,33 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { WalletProvider } from "./walletProvider";
-import { TransactionRequest, ReadContractParameters, ReadContractReturnType, PublicClient, EstimateGasReturnType, EstimateGasParameters, Chain } from "viem";
+import { TransactionRequest, ReadContractParameters, ReadContractReturnType, PublicClient, EstimateGasReturnType, EstimateGasParameters, Chain, EstimateFeesPerGasParameters, FeeValuesEIP1559 } from "viem";
+
+export interface EVMWalletProviderGasConfig {
+  /**
+   * A internal multiplier on gas limit estimation.
+   */
+  gasLimitMultiplier?: number;
+
+  /**
+   * A internal multiplier on fee per gas estimation.
+   */
+  feePerGasMultiplier?: number;
+}
 
 /**
  * Configuration options for the EVM Providers.
  */
-export interface EVMProviderConfig {
+export interface EVMWalletProviderConfig {
   /**
    * A RPC client.
    */
   publicClient: PublicClient;
 
   /**
-   * A internal multiplier on gas estimation.
+   * Config for gas multipliers.
    */
-  gasMultiplier?: number;
+  gas?: EVMWalletProviderGasConfig;
 }
 
 /**
@@ -26,11 +38,13 @@ export interface EVMProviderConfig {
  */
 export abstract class EvmWalletProvider extends WalletProvider {
   #publicClient: PublicClient;
-  #gasMultiplier: number;
+  #gasLimitMultiplier: number;
+  #feePerGasMultiplier: number;
 
-  constructor(config: EVMProviderConfig) {
+  constructor(config: EVMWalletProviderConfig) {
     super();
-    this.#gasMultiplier = Math.max(config.gasMultiplier ?? 1, 1);
+    this.#gasLimitMultiplier = Math.max(config.gas?.gasLimitMultiplier ?? 1, 1);
+    this.#feePerGasMultiplier = Math.max(config.gas?.feePerGasMultiplier ?? 1, 1);
     this.#publicClient = config.publicClient;
   }
 
@@ -84,6 +98,16 @@ export abstract class EvmWalletProvider extends WalletProvider {
 
   protected async estimateGas(args: EstimateGasParameters<Chain | undefined>): Promise<EstimateGasReturnType> {
     const gasLimit = await this.#publicClient.estimateGas(args);
-    return BigInt(Math.round(Number(gasLimit) * this.#gasMultiplier))
+
+    return BigInt(Math.round(Number(gasLimit) * this.#gasLimitMultiplier))
+  }
+
+  protected async estimateFeesPerGas(args?: EstimateFeesPerGasParameters<Chain | undefined, undefined, "eip1559"> | undefined): Promise<FeeValuesEIP1559> {
+    const feeData = await this.#publicClient.estimateFeesPerGas(args);
+
+    return {
+      maxFeePerGas: BigInt(Math.round(Number(feeData.maxFeePerGas) * this.#feePerGasMultiplier)),
+      maxPriorityFeePerGas:  BigInt(Math.round(Number(feeData.maxPriorityFeePerGas) * this.#feePerGasMultiplier)),
+    }
   }
 }
