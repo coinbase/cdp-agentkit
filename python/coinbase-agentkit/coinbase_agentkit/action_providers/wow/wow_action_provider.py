@@ -3,7 +3,6 @@
 import math
 from typing import Any
 
-from eth_typing import HexStr
 from web3 import Web3
 
 from ...network import Network
