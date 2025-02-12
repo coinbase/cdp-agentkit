@@ -181,7 +181,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
       wallet,
       address,
       network,
-      gas: config.gas
+      gas: config.gas,
     });
 
     return cdpWalletProvider;
