@@ -19,15 +19,12 @@ from coinbase_agentkit import (
     EthAccountWalletProvider,
     EthAccountWalletProviderConfig,
 
-    cdp_api_action_provider,
-    erc20_action_provider,
     pyth_action_provider,
     morpho_action_provider,
-    superfluid_action_provider,
     wallet_action_provider,
+    cdp_api_action_provider,
     weth_action_provider,
-    wow_action_provider,
-    uniswap_action_provider,
+    superfluid_action_provider,
 )
 from coinbase_agentkit_langchain import get_langchain_tools
 
@@ -42,100 +39,56 @@ def initialize_agent():
     # Initialize LLM
     llm = ChatOpenAI(model="gpt-4o-mini")
 
-    # Initialize CDP Wallet Provider
+     # Initialize CDP Wallet Provider
+     # mnemonic_phrase = os.environ.get("MNEMONIC_PHRASE")
+     # assert mnemonic_phrase is not None, "You must set MNEMONIC_PHRASE environment variable"
 
-    #  wallet_data = None
-    #  if os.path.exists(wallet_data_file):
-    #      with open(wallet_data_file) as f:
-    #          wallet_data = f.read()
+    wallet_data = None
+    if os.path.exists(wallet_data_file):
+        with open(wallet_data_file) as f:
+            wallet_data = f.read()
 
-    #  cdp_config = None
-    #  if wallet_data is not None:
-    #      cdp_config = CdpWalletProviderConfig(wallet_data=wallet_data)
-    #  else:
-    #      mnemonic_phrase = os.environ.get("MNEMONIC_PHRASE")
-    #      assert mnemonic_phrase is not None, "You must set MNEMONIC_PHRASE environment variable"
-
-    #      cdp_config = CdpWalletProviderConfig(
-    #          mnemonic_phrase=mnemonic_phrase,
-    #          chain_id=8453,
-    #          network_id="base-mainnet",
-    #          rpc_url="https://mainnet.base.org",
-    #      )
-    #  cdp_config = CdpWalletProviderConfig(
-    #      mnemonic_phrase=mnemonic_phrase,
-    #      chain_id=84532,
-    #      network_id="base-sepolia",
-    #      rpc_url="https://sepolia.base.org",
-    #  )
+    cdp_config = None
+    if wallet_data is not None:
+        cdp_config = CdpWalletProviderConfig(wallet_data=wallet_data)
+         # config=CdpWalletProviderConfig(
+         #     mnemonic_phrase=mnemonic_phrase,
+         #     chain_id=84532,
+         #     network_id="base-sepolia",
+         #     rpc_url="https://sepolia.base.org",
+         # )
 
     # Initialize ETH Wallet Provider
-    private_key = os.environ.get("PRIVATE_KEY")
-    assert private_key is not None, "You must set PRIVATE_KEY environment variable"
-    assert private_key.startswith("0x"), "Private key must start with 0x hex prefix"
+    # private_key = os.environ.get("PRIVATE_KEY")
+    # assert private_key is not None, "You must set PRIVATE_KEY environment variable"
+    # assert private_key.startswith("0x"), "Private key must start with 0x hex prefix"
 
-    wallet_provider = EthAccountWalletProvider(
-        config=EthAccountWalletProviderConfig(
-            private_key=private_key,
-            chain_id=8453,
-            rpc_url="https://mainnet.base.org",
-            #  chain_id=84532,
-            #  rpc_url="https://sepolia.base.org",
-        )
-    )
+    # wallet_provider = EthAccountWalletProvider(
+    #     config=EthAccountWalletProviderConfig(
+    #         private_key=private_key,
+    #         chain_id=84532,
+    #         rpc_url="https://sepolia.base.org",
+    #     )
+    # )
 
-    #  wallet_provider = CdpWalletProvider(cdp_config)
-
-    #  # Initialize CDP Wallet Provider
-    #  mnemonic_phrase = os.environ.get("MNEMONIC_PHRASE")
-    #  assert mnemonic_phrase is not None, "You must set MNEMONIC_PHRASE environment variable"
-
-    #  wallet_provider = CdpWalletProvider(
-    #      config=CdpWalletProviderConfig(
-    #          mnemonic_phrase=mnemonic_phrase,
-    #          chain_id=8453,
-    #          network_id="base-mainnet",
-    #          rpc_url="https://mainnet.base.org",
-    #          #  chain_id=84532,
-    #          #  network_id="base-sepolia",
-    #          #  rpc_url="https://sepolia.base.org",
-    #      )
-    #  )
-
-    # Initialize ETH Wallet Provider
-    #  private_key = os.environ.get("PRIVATE_KEY")
-    #  assert private_key is not None, "You must set PRIVATE_KEY environment variable"
-    #  assert private_key.startswith("0x"), "Private key must start with 0x hex prefix"
-
-    #  wallet_provider = EthAccountWalletProvider(
-    #      config=EthAccountWalletProviderConfig(
-    #          private_key=private_key,
-    #          chain_id=8453,
-    #          rpc_url="https://mainnet.base.org",
-    #          #  chain_id=84532,
-    #          #  rpc_url="https://sepolia.base.org",
-    #      )
-    #  )
+    wallet_provider = CdpWalletProvider(cdp_config)
 
     agentkit = AgentKit.from_options(AgentKitOptions(
         wallet_provider=wallet_provider,
         action_providers=[
-            #  erc20_action_provider(),
-            #  pyth_action_provider(),
-            #  morpho_action_provider(),
+            pyth_action_provider(),
+            morpho_action_provider(),
             wallet_action_provider(),
-            #  cdp_api_action_provider(),
-            #  weth_action_provider(),
-            #  superfluid_action_provider(),
-            wow_action_provider(),
-            uniswap_action_provider(),
+            cdp_api_action_provider(),
+            weth_action_provider(),
+            superfluid_action_provider(),
         ]
     ))
 
-    #  wallet_data_json = json.dumps(wallet_provider.export_wallet().to_dict())
+    wallet_data_json = json.dumps(wallet_provider.export_wallet().to_dict())
 
-    #  with open(wallet_data_file, "w") as f:
-    #      f.write(wallet_data_json)
+    with open(wallet_data_file, "w") as f:
+        f.write(wallet_data_json)
 
     # use get_langchain_tools
     tools = get_langchain_tools(agentkit)
