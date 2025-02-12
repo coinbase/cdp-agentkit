@@ -3,12 +3,14 @@
 import os
 from typing import Any
 
+from cdp import Cdp, ExternalAddress
+
 from ...network import Network
 from ...wallet_providers import EvmWalletProvider
 from ...wallet_providers.cdp_wallet_provider import CdpProviderConfig
 from ..action_decorator import create_action
 from ..action_provider import ActionProvider
-from .schemas import RequestFaucetFundsInput
+from .schemas import AddressReputationInput, RequestFaucetFundsInput
 
 BASE_SEPOLIA_NETWORK_ID = "base-sepolia"
 BASE_SEPOLIA_CHAIN_ID = 84532
@@ -24,8 +26,6 @@ class CdpApiActionProvider(ActionProvider[EvmWalletProvider]):
         super().__init__("cdp_api", [])
 
         try:
-            from cdp import Cdp
-
             api_key_name = config.api_key_name if config else os.getenv("CDP_API_KEY_NAME")
             api_key_private_key = (
                 config.api_key_private_key if config else os.getenv("CDP_API_KEY_PRIVATE_KEY")
@@ -38,10 +38,6 @@ class CdpApiActionProvider(ActionProvider[EvmWalletProvider]):
                 )
             else:
                 Cdp.configure_from_json()
-        except ImportError as e:
-            raise ImportError(
-                "Failed to import cdp. Please install it with 'pip install cdp-sdk'."
-            ) from e
         except Exception as e:
             raise ValueError(f"Failed to initialize CDP client: {e!s}") from e
 
@@ -57,8 +53,6 @@ from another wallet and provide the user with your wallet details.""",
     def request_faucet_funds(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Request test tokens from the faucet."""
         validated_args = RequestFaucetFundsInput(**args)
-
-        from cdp import ExternalAddress
 
         try:
             network = wallet_provider.get_network()
@@ -79,6 +73,33 @@ from another wallet and provide the user with your wallet details.""",
             )
         except Exception as e:
             return f"Error requesting faucet funds: {e!s}"
+
+    @create_action(
+        name="address_reputation",
+        description="""
+This tool checks the reputation of an address on a given network. It takes:
+
+- network: The network the address is on (e.g. "base-mainnet")
+- address: The Ethereum address to check
+
+Important notes:
+- This tool will not work on base-sepolia, you can default to using base-mainnet instead
+- The wallet's default address and its network may be used if not provided
+""",
+        schema=AddressReputationInput,
+    )
+    def address_reputation(self, args: dict[str, Any]) -> str:
+        """Check the reputation of an Ethereum address on a given network."""
+        try:
+            validated_args = AddressReputationInput(**args)
+
+            address = ExternalAddress(validated_args.network, validated_args.address)
+
+            reputation = address.reputation()
+
+            return f"Address {validated_args.address} reputation: {reputation}"
+        except Exception as e:
+            return f"Error checking address reputation: {e!s}"
 
     def supports_network(self, network: Network) -> bool:
         """Network support will vary action to action."""

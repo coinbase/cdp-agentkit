@@ -67,3 +67,10 @@ class TradeInput(BaseModel):
         ...,
         description="The to asset ID to receive from the trade (e.g. `eth`, `0x036CbD53842c5426634e7929541eC2318f3dCF7e`)",
     )
+
+
+class AddressReputationInput(BaseModel):
+    """Input argument schema for checking address reputation."""
+
+    address: str = Field(..., description="The Ethereum address to check")
+    network: str = Field(..., description="The network to check the address on")
