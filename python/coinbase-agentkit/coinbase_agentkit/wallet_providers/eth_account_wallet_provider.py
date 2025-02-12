@@ -62,11 +62,9 @@ class EthAccountWalletProvider(EvmWalletProvider):
         signed = self.account.sign_message(message_obj)
         return HexStr(signed.signature.hex())
 
-    def sign_typed_data(
-        self, domain: dict[str, Any], types: dict[str, Any], data: dict[str, Any]
-    ) -> HexStr:
+    def sign_typed_data(self, typed_data: dict[str, Any]) -> HexStr:
         """Sign typed data according to EIP-712 standard."""
-        signed = self.account.sign_typed_data(domain, types, data)
+        signed = self.account.sign_typed_data(full_message=typed_data)
         return HexStr(signed.signature.hex())
 
     def sign_transaction(self, transaction: TxParams) -> SignedTransaction:
@@ -79,7 +77,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
         return self.account.sign_transaction(transaction)
 
     def estimate_fees(self, multiplier=1.2):
-        """Esimate fees."""
+        """Estimate fees."""
 
         def get_base_fee():
             latest_block = self.web3.eth.get_block("latest")
