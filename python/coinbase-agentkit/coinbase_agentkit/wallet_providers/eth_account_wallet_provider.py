@@ -97,7 +97,6 @@ class EthAccountWalletProvider(EvmWalletProvider):
         transaction["chainId"] = self.config.chain_id
 
         nonce = self.web3.eth.get_transaction_count(self.account.address)
-        print(f"nonce: {nonce}")
         transaction["nonce"] = nonce
 
         max_priority_fee_per_gas, max_fee_per_gas = self.estimate_fees()

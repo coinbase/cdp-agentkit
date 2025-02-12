@@ -1,5 +1,4 @@
 """Tests for WOW create token action."""
-import json
 from unittest.mock import patch
 
 import pytest
@@ -16,6 +15,7 @@ from coinbase_agentkit.action_providers.wow.wow_action_provider import WowAction
 MOCK_NAME = "Test Token"
 MOCK_SYMBOL = "TEST"
 MOCK_NETWORK_ID = "base-sepolia"
+MOCK_CHAIN_ID = 84532  # Base Sepolia chain ID
 MOCK_WALLET_ADDRESS = "0x1234567890123456789012345678901234567890"
 MOCK_TOKEN_URI = "ipfs://QmY1GqprFYvojCcUEKgqHeDj9uhZD9jmYGrQTfA9vAE78J"
 MOCK_TX_HASH = "0xabcdef1234567890"
@@ -50,41 +50,41 @@ def test_create_token_success():
         patch("coinbase_agentkit.wallet_providers.EvmWalletProvider") as mock_wallet,
     ):
         # Set up mocks
-        mock_contract.return_value.encodeABI.return_value = "0xencoded"
+        mock_contract.return_value.encode_abi.return_value = "0xencoded"
         mock_web3.to_checksum_address.side_effect = lambda x: x
         mock_web3.return_value.eth.contract = mock_contract
         mock_wallet.get_address.return_value = MOCK_WALLET_ADDRESS
         mock_wallet.get_network.return_value.network_id = MOCK_NETWORK_ID
+        mock_wallet.get_network.return_value.chain_id = MOCK_CHAIN_ID
         mock_wallet.send_transaction.return_value = MOCK_TX_HASH
         mock_wallet.wait_for_transaction_receipt.return_value = MOCK_RECEIPT
 
         # Create provider and call create_token
         provider = WowActionProvider()
-        args = WowCreateTokenInput(
-            name=MOCK_NAME,
-            symbol=MOCK_SYMBOL,
-        )
+        args = {
+            "name": MOCK_NAME,
+            "symbol": MOCK_SYMBOL,
+        }
         response = provider.create_token(mock_wallet, args)
 
         expected_response = (
             f"Created WoW ERC20 memecoin {MOCK_NAME} with symbol {MOCK_SYMBOL} "
             f"on network {MOCK_NETWORK_ID}.\n"
-            f"Transaction hash for the token creation: {MOCK_TX_HASH}, "
-            f"and receipt:\n{json.dumps(MOCK_RECEIPT)}"
+            f"Transaction hash for the token creation: {MOCK_TX_HASH}"
         )
         assert response == expected_response
 
         # Verify contract calls
-        factory_address = get_factory_address(MOCK_NETWORK_ID)
+        factory_address = get_factory_address(MOCK_CHAIN_ID)
         mock_contract.assert_called_once_with(
             address=factory_address,
             abi=WOW_FACTORY_ABI,
         )
 
         # Verify function encoding
-        mock_contract.return_value.encodeABI.assert_called_once_with(
-            fn_name="deploy",
-            args=[
+        mock_contract.return_value.encode_abi.assert_called_once_with(
+            "deploy",
+            [
                 MOCK_WALLET_ADDRESS,
                 "0x0000000000000000000000000000000000000000",
                 GENERIC_TOKEN_METADATA_URI,
@@ -112,42 +112,42 @@ def test_create_token_with_custom_token_uri_success():
         patch("coinbase_agentkit.wallet_providers.EvmWalletProvider") as mock_wallet,
     ):
         # Set up mocks
-        mock_contract.return_value.encodeABI.return_value = "0xencoded"
+        mock_contract.return_value.encode_abi.return_value = "0xencoded"
         mock_web3.to_checksum_address.side_effect = lambda x: x
         mock_web3.return_value.eth.contract = mock_contract
         mock_wallet.get_address.return_value = MOCK_WALLET_ADDRESS
         mock_wallet.get_network.return_value.network_id = MOCK_NETWORK_ID
+        mock_wallet.get_network.return_value.chain_id = MOCK_CHAIN_ID
         mock_wallet.send_transaction.return_value = MOCK_TX_HASH
         mock_wallet.wait_for_transaction_receipt.return_value = MOCK_RECEIPT
 
         # Create provider and call create_token
         provider = WowActionProvider()
-        args = WowCreateTokenInput(
-            name=MOCK_NAME,
-            symbol=MOCK_SYMBOL,
-            token_uri=MOCK_TOKEN_URI,
-        )
+        args = {
+            "name": MOCK_NAME,
+            "symbol": MOCK_SYMBOL,
+            "token_uri": MOCK_TOKEN_URI,
+        }
         response = provider.create_token(mock_wallet, args)
 
         expected_response = (
             f"Created WoW ERC20 memecoin {MOCK_NAME} with symbol {MOCK_SYMBOL} "
             f"on network {MOCK_NETWORK_ID}.\n"
-            f"Transaction hash for the token creation: {MOCK_TX_HASH}, "
-            f"and receipt:\n{json.dumps(MOCK_RECEIPT)}"
+            f"Transaction hash for the token creation: {MOCK_TX_HASH}"
         )
         assert response == expected_response
 
         # Verify contract calls
-        factory_address = get_factory_address(MOCK_NETWORK_ID)
+        factory_address = get_factory_address(MOCK_CHAIN_ID)
         mock_contract.assert_called_once_with(
             address=factory_address,
             abi=WOW_FACTORY_ABI,
         )
 
         # Verify function encoding
-        mock_contract.return_value.encodeABI.assert_called_once_with(
-            fn_name="deploy",
-            args=[
+        mock_contract.return_value.encode_abi.assert_called_once_with(
+            "deploy",
+            [
                 MOCK_WALLET_ADDRESS,
                 "0x0000000000000000000000000000000000000000",
                 MOCK_TOKEN_URI,
@@ -175,26 +175,27 @@ def test_create_token_error():
         patch("coinbase_agentkit.wallet_providers.EvmWalletProvider") as mock_wallet,
     ):
         # Set up mocks
-        mock_contract.return_value.encodeABI.return_value = "0xencoded"
+        mock_contract.return_value.encode_abi.return_value = "0xencoded"
         mock_web3.to_checksum_address.side_effect = lambda x: x
         mock_web3.return_value.eth.contract = mock_contract
         mock_wallet.get_address.return_value = MOCK_WALLET_ADDRESS
         mock_wallet.get_network.return_value.network_id = MOCK_NETWORK_ID
+        mock_wallet.get_network.return_value.chain_id = MOCK_CHAIN_ID
         mock_wallet.send_transaction.side_effect = Exception("Transaction failed")
 
         # Create provider and call create_token
         provider = WowActionProvider()
-        args = WowCreateTokenInput(
-            name=MOCK_NAME,
-            symbol=MOCK_SYMBOL,
-        )
+        args = {
+            "name": MOCK_NAME,
+            "symbol": MOCK_SYMBOL,
+        }
         response = provider.create_token(mock_wallet, args)
 
         expected_response = "Error creating Zora Wow ERC20 memecoin: Transaction failed"
         assert response == expected_response
 
         # Verify contract calls
-        factory_address = get_factory_address(MOCK_NETWORK_ID)
+        factory_address = get_factory_address(MOCK_CHAIN_ID)
         mock_contract.assert_called_once_with(
             address=factory_address,
             abi=WOW_FACTORY_ABI,

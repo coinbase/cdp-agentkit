@@ -1,7 +1,7 @@
 from web3 import Web3
 
 from ...wallet_providers import EvmWalletProvider
-from ..uniswap.utils import get_has_graduated, get_uniswap_quote
+from .uniswap.utils import get_has_graduated, get_uniswap_quote
 from .constants import WOW_ABI, WOW_FACTORY_CONTRACT_ADDRESSES
 
 
@@ -14,7 +14,6 @@ def get_factory_address(chain_id: int) -> str:
     Returns:
         str: The factory contract address for the given chain
     """
-    print(f"CHAIN_ID: {chain_id}")
     if chain_id not in WOW_FACTORY_CONTRACT_ADDRESSES:
         raise ValueError(
             f"Invalid chain ID: {chain_id}. Valid chain IDs are: {', '.join(str(k) for k in WOW_FACTORY_CONTRACT_ADDRESSES.keys())}"
@@ -51,16 +50,17 @@ def get_buy_quote(wallet_provider: EvmWalletProvider, token_address: str, amount
     Returns:
         int: The amount of tokens that would be received for the given ETH amount
     """
+    amount_eth_in_wei_int = int(amount_eth_in_wei)
     has_graduated = get_has_graduated(wallet_provider, token_address)
 
     token_quote = (
         has_graduated
-        and (get_uniswap_quote(wallet_provider, token_address, amount_eth_in_wei, "buy")).amount_out
+        and (get_uniswap_quote(wallet_provider, token_address, amount_eth_in_wei_int, "buy")).amount_out
     ) or wallet_provider.read_contract(
         contract_address=token_address,
         abi=WOW_ABI,
         function_name="getEthBuyQuote",
-        args=[amount_eth_in_wei],
+        args=[amount_eth_in_wei_int],
     )
     return token_quote
 
@@ -76,15 +76,16 @@ def get_sell_quote(wallet_provider: EvmWalletProvider, token_address: str, amoun
     Returns:
         int: The amount of ETH that would be received for the given token amount
     """
+    amount_tokens_in_wei_int = int(amount_tokens_in_wei)
     has_graduated = get_has_graduated(wallet_provider, token_address)
 
     token_quote = (
         has_graduated
-        and (get_uniswap_quote(wallet_provider, token_address, amount_tokens_in_wei, "sell")).amount_out
+        and (get_uniswap_quote(wallet_provider, token_address, amount_tokens_in_wei_int, "sell")).amount_out
     ) or wallet_provider.read_contract(
         contract_address=token_address,
         abi=WOW_ABI,
         function_name="getTokenSellQuote",
-        args=[amount_tokens_in_wei],
+        args=[amount_tokens_in_wei_int],
     )
     return token_quote

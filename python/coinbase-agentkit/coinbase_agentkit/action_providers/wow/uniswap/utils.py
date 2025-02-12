@@ -5,8 +5,8 @@ from typing import Literal
 from web3 import Web3
 from web3.types import Wei
 
-from ...wallet_providers import EvmWalletProvider
-from ..wow.constants import WOW_ABI, addresses
+from ....wallet_providers import EvmWalletProvider
+from ..constants import WOW_ABI, addresses
 from .constants import UNISWAP_QUOTER_ABI, UNISWAP_V3_ABI
 
 
@@ -163,7 +163,7 @@ def get_pool_info(wallet_provider: EvmWalletProvider, pool_address: str) -> Pool
 
 
 def exact_input_single(
-    wallet_provider: EvmWalletProvider, token_in: str, token_out: str, amount_in: str, fee: str
+    wallet_provider: EvmWalletProvider, token_in: str, token_out: str, amount_in: int, fee: str
 ) -> int:
     """Get exact input quote from Uniswap.
 
@@ -179,6 +179,9 @@ def exact_input_single(
     """
     try:
         chain_id = wallet_provider.get_network().chain_id
+        if chain_id not in addresses:
+            raise ValueError(f"Unsupported chain ID: {chain_id}")
+
         amount = wallet_provider.read_contract(
             contract_address=addresses[chain_id]["UniswapQuoter"],
             abi=UNISWAP_QUOTER_ABI,
@@ -192,8 +195,8 @@ def exact_input_single(
             }],
         )
         return amount
-    except Exception as error:
-        print(f"Quoter error: {error}")
+    except Exception as e:
+        print(f"Quoter error: {e!s}")
         return 0
 
 
@@ -220,6 +223,9 @@ def get_uniswap_quote(
     insufficient_liquidity = False
     chain_id = wallet_provider.get_network().chain_id
 
+    if chain_id not in addresses:
+        raise ValueError(f"Unsupported chain ID: {chain_id}")
+
     pool_address = wallet_provider.read_contract(
         contract_address=token_address,
         abi=WOW_ABI,
@@ -227,7 +233,6 @@ def get_uniswap_quote(
         args=[],
     )
     invalid_pool_error = "Invalid pool address" if not pool_address else None
-    print("pool address: " + pool_address)
 
     try:
         pool_info = get_pool_info(wallet_provider, pool_address)
@@ -248,13 +253,18 @@ def get_uniswap_quote(
         )
 
         token_out, balance_out = (token1, balance1) if token_in == token0 else (token0, balance0)
+        
+        if isinstance(balance_out, (list, tuple)):
+            balance_out = balance_out[0] if balance_out else 0
+        balance_out = int(balance_out)
+        
         insufficient_liquidity = quote_type == "buy" and amount > balance_out
-        utilization = Wei(int(amount / balance_out)) if quote_type == "buy" else Wei(0)
+        utilization = Wei(int(amount / balance_out)) if quote_type == "buy" and balance_out > 0 else Wei(0)
 
         quote_result = exact_input_single(wallet_provider, token_in, token_out, amount, fee)
 
-    except Exception as error:
-        print(f"Error fetching quote: {error}")
+    except Exception as e:
+        print(f"Error fetching quote: {e!s}")
 
     insufficient_liquidity = (
         quote_type == "sell" and pool and not quote_result
@@ -274,8 +284,8 @@ def get_uniswap_quote(
     if tokens and balances:
         is_weth_token0 = tokens[0].lower() == addresses[chain_id]["WETH"].lower()
         balance_result = Balance(
-            erc20z=Wei(balances[1]) if is_weth_token0 else Wei(balances[0]),
-            weth=Wei(balances[0]) if is_weth_token0 else Wei(balances[1]),
+            erc20z=Wei(balances[1][0] if isinstance(balances[1], (list, tuple)) else balances[1]) if is_weth_token0 else Wei(balances[0][0] if isinstance(balances[0], (list, tuple)) else balances[0]),
+            weth=Wei(balances[0][0] if isinstance(balances[0], (list, tuple)) else balances[0]) if is_weth_token0 else Wei(balances[1][0] if isinstance(balances[1], (list, tuple)) else balances[1]),
         )
 
     return Quote(
