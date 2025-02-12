@@ -90,29 +90,29 @@ async function runAutonomousMode(agent: any, config: any, interval = 3600) {
     try {
       const thought =
         "You can choose only one of these 7 actions. " +
-        "1. Start a new game with board size 16, game type 1 and game tile type 4. After receving confirmation, you will initialize the game." +
-        "After initializing the game, play it to completion, wait for game to be solved and then mint its nft. " +
-        "After minting its NFT post it on Twitter along with a witty message. After you get confirmation thaat is was posted, " +
+        "1. Start a new game with board size 16, game type 1 and game tile type 4. ONLY AFTER receving confirmation, you will initialize the game." +
+        "ONLY AFTER initializing the game, play it to completion, wait for game to be solved and then mint its nft. " +
+        "ONLY AFTER minting its NFT post it on Twitter along with a witty message. ONLY AFTER you get confirmation thaat is was posted, " +
         "Take the imageUrl resulted, and used to post it on Farcaster, along with the same witty message." +
         "2. Make an art suggestion for user 0xD37319CbBd1e13b26326622763d312C56B3936ee, and post it on Twitter, along with a description of what this is. " +
         "3. See if there is any arbitrage for a builder, and then post that on Twitter, using post flip to Twitter, but without a message." +
-        "4. Start a new game with board size 16, game type 1 and game tile type 3. After receving confirmation, you will initialize the game." +
-        "After initializing the game, play it to completion, wait for game to be solved and then mint its nft. " +
-        "After minting its NFT post it on Twitter along with a witty message. After you get confirmation thaat is was posted, " +
+        "4. Start a new game with board size 16, game type 1 and game tile type 3. ONLY AFTER receving confirmation, you will initialize the game." +
+        "ONLY AFTER initializing the game, play it to completion, wait for game to be solved and then mint its nft. " +
+        "ONLY AFTER minting its NFT post it on Twitter along with a witty message. ONLY AFTER you get confirmation thaat is was posted, " +
         "Take the imageUrl resulted, and used to post it on Farcaster, along with the same witty message." +
-        "5. Start a new game with board size 16, game type 1 and game tile type 6. After receving confirmation, you will initialize the game." +
-        "After initializing the game, play it to completion, wait for game to be solved and then mint its nft. " +
-        "After minting its NFT post it on Twitter along with a witty message. After you get confirmation thaat is was posted, " +
+        "5. Start a new game with board size 16, game type 1 and game tile type 6. ONLY AFTER receving confirmation, you will initialize the game." +
+        "ONLY AFTER initializing the game, play it to completion, wait for game to be solved and then mint its nft. " +
+        "ONLY AFTER minting its NFT post it on Twitter along with a witty message. ONLY AFTER you get confirmation thaat is was posted, " +
         "Take the imageUrl resulted, and used to post it on Farcaster, along with the same witty message." +
-        "6. Start a new game with board size 16, game type 1 and game tile type 2. After receving confirmation, you will initialize the game." +
-        "After initializing the game, play it to completion, wait for game to be solved and then mint its nft. " +
-        "After minting its NFT post it on Twitter along with a witty message. After you get confirmation thaat is was posted, " +
+        "6. Start a new game with board size 16, game type 1 and game tile type 2. ONLY AFTER receving confirmation, you will initialize the game." +
+        "ONLY AFTER initializing the game, play it to completion, wait for game to be solved and then mint its nft. " +
+        "ONLY AFTER minting its NFT post it on Twitter along with a witty message. ONLY AFTER you get confirmation thaat is was posted, " +
         "Take the imageUrl resulted, and used to post it on Farcaster, along with the same witty message." +
-        "7. Start a new game with board size 16, game type 1 and game tile type 5. After receving confirmation, you will initialize the game." +
-        "After initializing the game, play it to completion, wait for game to be solved and then mint its nft. " +
-        "After minting its NFT post it on Twitter along with a witty message. After you get confirmation thaat is was posted, " +
+        "7. Start a new game with board size 16, game type 1 and game tile type 5. ONLY AFTER receving confirmation, you will initialize the game." +
+        "ONLY AFTER initializing the game, play it to completion, wait for game to be solved and then mint its nft. " +
+        "ONLY AFTER minting its NFT post it on Twitter along with a witty message. ONLY AFTER you get confirmation thaat is was posted, " +
         "Take the imageUrl resulted, and used to post it on Farcaster, along with the same witty message." +
-        "General notes, applying to every Twitter post: you will tag the game, https://x.com/Flippando0, with an incenitive to follow. " +
+        "THIS APPLIES TO EVERY TWITTER POST: you will tag the game, https://x.com/Flippando0, with an incenitive to follow. " +
         "You will also tag one of these accounts, with a firendly mesage, either dedicating the flip / art suggestion to them, or just saying hi, from agent to agent: "
         "https://x.com/Zerebro, https://x.com/VaderAI, https://x.com/AI16Z, https://x.com/NFTxbt, https://x.com/aixbt_agent, https://x.com/Luna_Virtuals, https://x.com/Ava_Holoworld," +
         "https://x.com/PodflowAI, https://x.com/Project89_Solana, https://x.com/TruthTerminal, https://x.com/DolosDiary, https://x.com/BottoDAO, https://x.com/GOATGaming, https://x.com/VirtualsProtocol, https://x.com/GriffainAI, https://x.com/FreysaAI, " +
