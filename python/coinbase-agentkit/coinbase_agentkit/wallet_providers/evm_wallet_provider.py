@@ -17,7 +17,7 @@ class EvmWalletProvider(WalletProvider, ABC):
 
     @abstractmethod
     def sign_typed_data(
-        self, domain: dict[str, Any], types: dict[str, Any], data: dict[str, Any]
+        self, typed_data: dict[str, Any]
     ) -> HexStr:
         """Sign typed data according to EIP-712 standard."""
         pass
