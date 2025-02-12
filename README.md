@@ -284,7 +284,8 @@ AgentKit is organized as a monorepo that contains multiple packages.
 │   └── examples/
 │       ├── langchain-cdp-chatbot/
 │       ├── langchain-farcaster-chatbot/
-│       └── langchain-twitter-chatbot/
+│       ├── langchain-twitter-chatbot/
+|       └── langchain-cdp-chatbot-with-Api/
 ├── python/
 │   ├── cdp-agentkit-core/
 │   ├── cdp-langchain/
