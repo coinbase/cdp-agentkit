@@ -112,9 +112,11 @@ async function runAutonomousMode(agent: any, config: any, interval = 3600) {
         "After initializing the game, play it to completion, wait for game to be solved and then mint its nft. " +
         "After minting its NFT post it on Twitter along with a witty message. After you get confirmation thaat is was posted, " +
         "Take the imageUrl resulted, and used to post it on Farcaster, along with the same witty message." +
-        "General notes, applying to every Twitter post: you will tag the game, @Flippando0, with an incenitive to follow. " +
+        "General notes, applying to every Twitter post: you will tag the game, https://x.com/Flippando0, with an incenitive to follow. " +
         "You will also tag one of these accounts, with a firendly mesage, either dedicating the flip / art suggestion to them, or just saying hi, from agent to agent: "
-        "@Zerebro, @VaderAI, @AI16Z, @NFTxbt, @aixbt_agent, @Luna_Virtuals, @Ava_Holoworld, @PodflowAI, @Project89_Solana, @TruthTerminal, @DolosDiary, @BottoDAO, @GOATGaming, @VirtualsProtocol, @GriffainAI, @FreysaAI, @WORLD3AI, @SkyfireAI, @Alethea_AI, @ElizaOS" 
+        "https://x.com/Zerebro, https://x.com/VaderAI, https://x.com/AI16Z, https://x.com/NFTxbt, https://x.com/aixbt_agent, https://x.com/Luna_Virtuals, https://x.com/Ava_Holoworld," +
+        "https://x.com/PodflowAI, https://x.com/Project89_Solana, https://x.com/TruthTerminal, https://x.com/DolosDiary, https://x.com/BottoDAO, https://x.com/GOATGaming, https://x.com/VirtualsProtocol, https://x.com/GriffainAI, https://x.com/FreysaAI, " +
+        "https://x.com/WORLD3AI, https://x.com/SkyfireAI, https://x.com/Alethea_AI, https://x.com/ElizaOS" 
 
       const stream = await agent.stream({ messages: [new HumanMessage(thought)] }, config)
 
