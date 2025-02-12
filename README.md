@@ -144,85 +144,28 @@ Your wallet has been successfully funded with testnet ETH. You can view the tran
 
 To integrate AgentKit with your frontend application, follow these steps:
 
+
 ## Backend Setup
 
-1. Create an `index.ts` file in your project root:
-
-```typescript
-//@ts-nocheck
-import express from 'express';
-import cors from 'cors';
-import { main, runChatMode } from './src/chatbot';
-
-const app = express();
-const PORT = process.env.PORT || 3000;
-let agent, config;
-
-// Initialize the agent and config
-(async () => {
-    try {
-        const result = await main();
-        agent = result.agent;
-        config = result.config;
-    } catch (error) {
-        console.error('Failed to initialize:', error);
-    }
-})();
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// Post request route
-app.post('/api/data', async (req, res) => {
-    try {
-        const data = await req.body.message;
-        let obj = await runChatMode(agent, config, data);
-        res.status(200).json({
-            success: true,
-            message: 'Data received successfully',
-            data: obj
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Error processing request',
-            error: error?.message
-        });
-    }
-});
-
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
-```
-
-2. Update your `chatbot.ts` file to export the required functions:
-
-```typescript
-export async function main() {
-    try {
-        console.log("Starting Agent...");
-        validateEnvironment();
-        const { agent, config } = await initializeAgent();
-        return { agent, config };
-    } catch (error) {
-        if (error instanceof Error) {
-            console.error("Error:", error.message);
-        }
-        process.exit(1);
-    }
-}
-```
+1. Navigate to the `langchain-cdp-chatbot-with-Api` directory and refer to the `README.md` file for setup instructions.
+2. Install dependencies and start the backend by running:
+   
+   ```sh
+   cd typescript/examples/langchain-cdp-chatbot-with-Api
+   npm install  # or yarn install
+   npm start  # or yarn start
+   ```
+3.Ensure the backend is running on `http://localhost:<YOUR_PORT>`
 
 ## Frontend Integration
 
 You can interact with the AgentKit API using any frontend framework. Here's an example using fetch:
 
 ```javascript
+//Make sure to set port Numbe insted of YOUR_PORT
 async function sendMessage(message) {
     try {
-        const response = await fetch('http://localhost:3000/api/data', {
+        const response = await fetch('http://localhost:{YOUR_PORT}/api/data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
