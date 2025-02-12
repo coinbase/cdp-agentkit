@@ -12,7 +12,7 @@ from langgraph.prebuilt import create_react_agent
 
 from coinbase_agentkit import (
     AgentKit,
-    AgentKitOptions,
+    AgentKitConfig,
 
     CdpWalletProvider,
     CdpWalletProviderConfig,
@@ -64,7 +64,7 @@ def initialize_agent():
 
     wallet_provider = CdpWalletProvider(cdp_config)
 
-    agentkit = AgentKit.from_options(AgentKitOptions(
+    agentkit = AgentKit(AgentKitConfig(
         wallet_provider=wallet_provider,
         action_providers=[
             cdp_api_action_provider(),
