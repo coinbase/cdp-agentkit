@@ -12,9 +12,9 @@ from coinbase_agentkit.action_providers.superfluid.constants import (
     UPDATE_ABI,
 )
 from coinbase_agentkit.action_providers.superfluid.schemas import (
-    CreateFlowInput,
-    DeleteFlowInput,
-    UpdateFlowInput,
+    CreateFlowSchema,
+    DeleteFlowSchema,
+    UpdateFlowSchema,
 )
 from coinbase_agentkit.action_providers.superfluid.superfluid_action_provider import (
     SuperfluidActionProvider,
@@ -33,9 +33,9 @@ def test_create_flowinput_model_valid():
         "token_address": "0xTokenAddress",
         "flow_rate": "1000",
     }
-    input_model = CreateFlowInput(**valid_input)
+    input_model = CreateFlowSchema(**valid_input)
 
-    assert isinstance(input_model, CreateFlowInput)
+    assert isinstance(input_model, CreateFlowSchema)
     assert input_model.recipient == valid_input["recipient"]
     assert input_model.token_address == valid_input["token_address"]
     assert input_model.flow_rate == valid_input["flow_rate"]
@@ -44,7 +44,7 @@ def test_create_flowinput_model_valid():
 def test_create_flow_input_model_missing_params():
     """Test that CreateFlowInput schema raises error when params are missing."""
     with pytest.raises(ValidationError):
-        CreateFlowInput()
+        CreateFlowSchema()
 
 
 def test_update_flow_input_model_valid():
@@ -54,9 +54,9 @@ def test_update_flow_input_model_valid():
         "token_address": "0xTokenAddress",
         "new_flow_rate": "2000",
     }
-    input_model = UpdateFlowInput(**valid_input)
+    input_model = UpdateFlowSchema(**valid_input)
 
-    assert isinstance(input_model, UpdateFlowInput)
+    assert isinstance(input_model, UpdateFlowSchema)
     assert input_model.recipient == valid_input["recipient"]
     assert input_model.token_address == valid_input["token_address"]
     assert input_model.new_flow_rate == valid_input["new_flow_rate"]
@@ -65,15 +65,15 @@ def test_update_flow_input_model_valid():
 def test_update_flow_input_model_missing_params():
     """Test that UpdateFlowInput schema raises error when params are missing."""
     with pytest.raises(ValidationError):
-        UpdateFlowInput()
+        UpdateFlowSchema()
 
 
 def test_delete_flow_input_model_valid():
     """Test that DeleteFlowInput schema accepts valid parameters."""
     valid_input = {"recipient": "0xRecipientAddress", "token_address": "0xTokenAddress"}
-    input_model = DeleteFlowInput(**valid_input)
+    input_model = DeleteFlowSchema(**valid_input)
 
-    assert isinstance(input_model, DeleteFlowInput)
+    assert isinstance(input_model, DeleteFlowSchema)
     assert input_model.recipient == valid_input["recipient"]
     assert input_model.token_address == valid_input["token_address"]
 
@@ -81,7 +81,7 @@ def test_delete_flow_input_model_valid():
 def test_delete_flow_input_model_missing_params():
     """Test that DeleteFlowInput schema raises error when params are missing."""
     with pytest.raises(ValidationError):
-        DeleteFlowInput()
+        DeleteFlowSchema()
 
 
 def test_create_flow_success():

@@ -9,7 +9,7 @@ from coinbase_agentkit.action_providers.wow.constants import (
     GENERIC_TOKEN_METADATA_URI,
     WOW_FACTORY_ABI,
 )
-from coinbase_agentkit.action_providers.wow.schemas import WowCreateTokenInput
+from coinbase_agentkit.action_providers.wow.schemas import WowCreateTokenSchema
 from coinbase_agentkit.action_providers.wow.utils import get_factory_address
 from coinbase_agentkit.action_providers.wow.wow_action_provider import WowActionProvider
 
@@ -25,7 +25,7 @@ MOCK_RECEIPT = {"status": 1, "transactionHash": MOCK_TX_HASH}
 
 def test_create_token_input_model_valid():
     """Test that WowCreateTokenInput accepts valid parameters."""
-    input_model = WowCreateTokenInput(
+    input_model = WowCreateTokenSchema(
         name=MOCK_NAME,
         symbol=MOCK_SYMBOL,
         token_uri=MOCK_TOKEN_URI,
@@ -39,7 +39,7 @@ def test_create_token_input_model_valid():
 def test_create_token_input_model_missing_params():
     """Test that WowCreateTokenInput raises error when params are missing."""
     with pytest.raises(ValidationError):
-        WowCreateTokenInput()
+        WowCreateTokenSchema()
 
 
 def test_create_token_success():

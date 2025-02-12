@@ -3,21 +3,21 @@ from pydantic import BaseModel, Field, field_validator
 from .validators import positive_decimal_validator
 
 
-class GetWalletDetailsInput(BaseModel):
+class GetWalletDetailsSchema(BaseModel):
     """Input schema for getting wallet details."""
 
     # No additional fields needed as this action doesn't require any input parameters
     pass
 
 
-class GetBalanceInput(BaseModel):
+class GetBalanceSchema(BaseModel):
     """Input schema for getting native currency balance."""
 
     # No additional fields needed as this action doesn't require any input parameters
     pass
 
 
-class NativeTransferInput(BaseModel):
+class NativeTransferSchema(BaseModel):
     """Input schema for native asset transfer."""
 
     to: str = Field(

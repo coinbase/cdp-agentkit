@@ -6,10 +6,10 @@ from ...network import Network
 from ..action_decorator import create_action
 from ..action_provider import ActionProvider
 from .schemas import (
-    AccountDetailsInput,
-    AccountMentionsInput,
-    PostTweetInput,
-    PostTweetReplyInput,
+    AccountDetailsSchema,
+    AccountMentionsSchema,
+    PostTweetReplySchema,
+    PostTweetSchema,
 )
 
 
@@ -71,11 +71,11 @@ A successful response will return a message with the api response as a json payl
 
 A failure response will return a message with a Twitter API request error:
     Error retrieving authenticated user account: 429 Too Many Requests""",
-        schema=AccountDetailsInput,
+        schema=AccountDetailsSchema,
     )
     def account_details(self, args: dict[str, Any]) -> str:
         """Get the authenticated Twitter (X) user account details using the Tweepy client."""
-        AccountDetailsInput(**args)
+        AccountDetailsSchema(**args)
 
         import tweepy
 
@@ -98,11 +98,11 @@ A successful response will return a message with the API response as a JSON payl
 
 A failure response will return a message with the Twitter API request error:
     Error retrieving user mentions: 429 Too Many Requests""",
-        schema=AccountMentionsInput,
+        schema=AccountMentionsSchema,
     )
     def account_mentions(self, args: dict[str, Any]) -> str:
         """Get mentions for a specified Twitter user."""
-        validated_args = AccountMentionsInput(**args)
+        validated_args = AccountMentionsSchema(**args)
 
         import tweepy
 
@@ -122,11 +122,11 @@ A successful response will return a message with the API response as a JSON payl
 
 A failure response will return a message with the Twitter API request error:
     You are not allowed to create a Tweet with duplicate content.""",
-        schema=PostTweetInput,
+        schema=PostTweetSchema,
     )
     def post_tweet(self, args: dict[str, Any]) -> str:
         """Post a tweet on Twitter."""
-        validated_args = PostTweetInput(**args)
+        validated_args = PostTweetSchema(**args)
 
         import tweepy
 
@@ -146,11 +146,11 @@ A successful response will return a message with the API response as a JSON payl
 
 A failure response will return a message with the Twitter API request error:
     You are not allowed to create a Tweet with duplicate content.""",
-        schema=PostTweetReplyInput,
+        schema=PostTweetReplySchema,
     )
     def post_tweet_reply(self, args: dict[str, Any]) -> str:
         """Post a reply to a tweet on Twitter."""
-        validated_args = PostTweetReplyInput(**args)
+        validated_args = PostTweetReplySchema(**args)
 
         import tweepy
 

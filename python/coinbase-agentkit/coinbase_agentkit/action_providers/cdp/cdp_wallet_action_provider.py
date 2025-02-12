@@ -7,7 +7,7 @@ from ...wallet_providers import CdpProviderConfig, CdpWalletProvider
 from ..action_decorator import create_action
 from ..action_provider import ActionProvider
 from .constants import SOLIDITY_VERSIONS
-from .schemas import DeployContractSchema, DeployNftSchema, DeployTokenSchema, TradeInput
+from .schemas import DeployContractSchema, DeployNftSchema, DeployTokenSchema, TradeSchema
 
 
 class CdpWalletActionProvider(ActionProvider[CdpWalletProvider]):
@@ -108,7 +108,7 @@ It takes the following inputs:
 
 Important notes:
 - When selling a native asset (e.g. 'eth' on base-mainnet), ensure there is sufficient balance to pay for the trade AND the gas cost of this trade""",
-        schema=TradeInput,
+        schema=TradeSchema,
     )
     def trade(self, wallet_provider: CdpWalletProvider, args: dict[str, Any]) -> str:
         """Trade a specified amount of a from asset to a to asset for the wallet.
@@ -121,7 +121,7 @@ Important notes:
             A message containing the trade details.
 
         """
-        validated_args = TradeInput(**args)
+        validated_args = TradeSchema(**args)
 
         network_id = wallet_provider.get_network().network_id
         if "sepolia" in network_id or "testnet" in network_id:

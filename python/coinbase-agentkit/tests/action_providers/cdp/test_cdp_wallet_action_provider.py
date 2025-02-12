@@ -8,7 +8,7 @@ from coinbase_agentkit.action_providers.cdp.cdp_wallet_action_provider import (
     CdpWalletActionProvider,
     cdp_wallet_action_provider,
 )
-from coinbase_agentkit.action_providers.cdp.schemas import TradeInput
+from coinbase_agentkit.action_providers.cdp.schemas import TradeSchema
 
 from .conftest import (
     MOCK_CONSTRUCTOR_ARGS,
@@ -159,7 +159,7 @@ def test_deploy_token_error(mock_wallet):
 
 def test_trade_input_model_valid():
     """Test that TradeInput accepts valid parameters."""
-    input_model = TradeInput(
+    input_model = TradeSchema(
         value=MOCK_VALUE,
         from_asset_id=MOCK_FROM_ASSET_ID,
         to_asset_id=MOCK_TO_ASSET_ID,
@@ -173,7 +173,7 @@ def test_trade_input_model_valid():
 def test_trade_input_model_missing_params():
     """Test that TradeInput raises error when params are missing."""
     with pytest.raises(ValueError):
-        TradeInput()
+        TradeSchema()
 
 
 def test_trade_success(mock_wallet_provider):

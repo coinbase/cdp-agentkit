@@ -7,7 +7,7 @@ from ...wallet_providers import EvmWalletProvider
 from ..action_decorator import create_action
 from ..action_provider import ActionProvider
 from .constants import WETH_ABI, WETH_ADDRESS
-from .schemas import WrapEthInput
+from .schemas import WrapEthSchema
 
 SUPPORTED_CHAINS = [8453, 84532]
 
@@ -33,7 +33,7 @@ Important notes:
 - 1 wei = 0.000000000000000001 WETH
 - Minimum purchase amount is 100000000000000 wei (0.0001 WETH)
 """,
-        schema=WrapEthInput,
+        schema=WrapEthSchema,
     )
     def wrap_eth(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Wrap ETH to WETH.
@@ -50,7 +50,7 @@ Important notes:
 
         """
         try:
-            validated_args = WrapEthInput(**args)
+            validated_args = WrapEthSchema(**args)
 
             contract = Web3().eth.contract(address=WETH_ADDRESS, abi=WETH_ABI)
             data = contract.encode_abi("deposit", args=[])

@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field, field_validator
 from ...validators.eth import validate_eth_address
 
 
-class WowBuyTokenInput(BaseModel):
+class WowBuyTokenSchema(BaseModel):
     """Input schema for buying WOW tokens."""
 
     contract_address: str = Field(..., description="The WOW token contract address")
@@ -31,7 +31,7 @@ class WowBuyTokenInput(BaseModel):
         return validate_eth_address(v)
 
 
-class WowCreateTokenInput(BaseModel):
+class WowCreateTokenSchema(BaseModel):
     """Input schema for creating WOW tokens."""
 
     name: str = Field(..., description="The name of the token to create, e.g. WowCoin")
@@ -41,7 +41,7 @@ class WowCreateTokenInput(BaseModel):
     )
 
 
-class WowSellTokenInput(BaseModel):
+class WowSellTokenSchema(BaseModel):
     """Input schema for selling WOW tokens."""
 
     contract_address: str = Field(..., description="The WOW token contract address")
