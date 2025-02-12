@@ -1,6 +1,6 @@
 """Test fixtures for CDP API tests."""
 
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 import pytest
 
@@ -114,3 +114,15 @@ def mock_wallet_testnet_provider():
     )
     wallet.get_address.return_value = MOCK_WALLET_ADDRESS
     return wallet
+
+
+@pytest.fixture(autouse=True)
+def mock_cdp_imports():
+    """Mock CDP SDK imports."""
+    with (
+        patch("coinbase_agentkit.action_providers.cdp.cdp_api_action_provider.Cdp") as mock_cdp,
+        patch(
+            "coinbase_agentkit.action_providers.cdp.cdp_api_action_provider.ExternalAddress"
+        ) as mock_external_address,
+    ):
+        yield mock_cdp, mock_external_address
