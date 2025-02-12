@@ -94,7 +94,7 @@ Important notes:
             receipt = wallet_provider.wait_for_transaction_receipt(tx_hash)
 
             if receipt["status"] == 0:
-                return f"Transaction failed with hash: {tx_hash}. The transaction was mined but failed to execute."
+                return f"Transaction failed with hash: {tx_hash}. The transaction failed to execute."
 
             return f"Purchased WoW ERC20 memecoin with transaction hash: {tx_hash}"
         except Exception as e:
