@@ -3,6 +3,10 @@ import json
 import math
 from typing import Any
 
+import urllib.parse
+
+
+from eth_typing import HexStr
 from web3 import Web3
 
 from ...network import Network
@@ -24,6 +28,7 @@ from .utils import (
 
 
 SUPPORTED_CHAINS = [8453, 84532]  # Base Mainnet and Base Sepolia chain IDs
+
 
 class WowActionProvider(ActionProvider[EvmWalletProvider]):
     """Provides actions for interacting with WOW protocol."""
@@ -56,7 +61,8 @@ Important notes:
         """Buy WOW tokens with ETH."""
         try:
             validated_args = WowBuyTokenInput(**args)
-            token_quote = get_buy_quote(wallet_provider, validated_args.contract_address, validated_args.amount_eth_in_wei)
+            token_quote = get_buy_quote(wallet_provider, validated_args.contract_address,
+                                        validated_args.amount_eth_in_wei)
             has_graduated = get_has_graduated(wallet_provider, validated_args.contract_address)
 
             min_tokens = math.floor(float(token_quote) * 0.99)
@@ -85,7 +91,7 @@ Important notes:
                 "value": int(validated_args.amount_eth_in_wei),
             })
             receipt = wallet_provider.wait_for_transaction_receipt(tx_hash)
-            
+
             if receipt["status"] == 0:
                 return f"Transaction failed with hash: {tx_hash}. The transaction was mined but failed to execute."
 
@@ -112,27 +118,44 @@ Important notes:
         """Create a new WOW token."""
         try:
             validated_args = WowCreateTokenInput(**args)
+
             factory_address = get_factory_address(wallet_provider.get_network().chain_id)
             print(f"Using factory address: {factory_address}")
 
-            # Validate factory address
             if not Web3.is_address(factory_address):
                 return f"Invalid factory address: {factory_address}"
+
+            token_uri = validated_args.token_uri or GENERIC_TOKEN_METADATA_URI
+
+            invocation = wallet_provider.invoke_contract(
+                contract_address=factory_address,
+                method="deploy",
+                abi=WOW_FACTORY_ABI,
+                args={
+                    "_tokenCreator": wallet_provider.get_address(),
+                    "_platformReferrer": "0x0000000000000000000000000000000000000000",
+                    "_tokenURI": token_uri or GENERIC_TOKEN_METADATA_URI,
+                    "_name": validated_args.name,
+                    "_symbol": validated_args.symbol,
+                },
+            ).wait()
+
+            return f"Created WoW ERC20 memecoin {validated_args.name} with symbol {validated_args.symbol} on network {wallet_provider.get_network().network_id}.\nTransaction hash for the token creation: {invocation.transaction.transaction_hash}\nTransaction link for the token creation: {invocation.transaction.transaction_link}"
+
+            #  token_uri = urllib.parse.quote(token_uri)
 
             contract = Web3().eth.contract(
                 address=Web3.to_checksum_address(factory_address),
                 abi=WOW_FACTORY_ABI
             )
 
-            # Prepare arguments
             creator_address = wallet_provider.get_address()
-            token_uri = validated_args.token_uri or GENERIC_TOKEN_METADATA_URI
             deploy_args = [
-                creator_address,  # _tokenCreator
-                "0x0000000000000000000000000000000000000000",  # _platformReferrer
-                token_uri,  # _tokenURI
-                validated_args.name,  # _name
-                validated_args.symbol,  # _symbol
+                Web3.to_checksum_address(creator_address),
+                Web3.to_checksum_address("0x0000000000000000000000000000000000000000"),
+                token_uri,
+                validated_args.name,
+                validated_args.symbol,
             ]
             print(f"Deploy arguments: {deploy_args}")
 
@@ -141,17 +164,31 @@ Important notes:
                 deploy_args
             )
 
-            # Prepare transaction
             tx = {
-                "to": Web3.to_checksum_address(factory_address),
-                "data": encoded_data,
+                "to": HexStr(factory_address),
+                "data": HexStr(encoded_data),
             }
             print(f"Transaction data: {tx}")
+
+            #  try:
+            #      # Simulate the transaction to get the revert reason
+            #      wallet_provider.read_contract(
+            #          contract_address=factory_address,
+            #          abi=WOW_FACTORY_ABI,
+            #          function_name="deploy",
+            #          args=deploy_args
+            #      )
+            #  except Exception as sim_error:
+            #      print(f"Transaction failed: {sim_error!s}")
+            #  finally:
+            #      print(f"Transaction should succeed")
 
             tx_hash = wallet_provider.send_transaction(tx)
             print(f"Transaction hash: {tx_hash}")
 
             receipt = wallet_provider.wait_for_transaction_receipt(tx_hash)
+            print(f"Transaction receipt: {receipt}")
+
             if receipt["status"] == 0:
                 # Try to get more detailed error information
                 try:
@@ -200,7 +237,8 @@ Important notes:
         """Sell WOW tokens for ETH."""
         try:
             validated_args = WowSellTokenInput(**args)
-            eth_quote = get_sell_quote(wallet_provider, validated_args.contract_address, validated_args.amount_tokens_in_wei)
+            eth_quote = get_sell_quote(wallet_provider, validated_args.contract_address,
+                                       validated_args.amount_tokens_in_wei)
             has_graduated = get_has_graduated(wallet_provider, validated_args.contract_address)
 
             min_eth = math.floor(float(eth_quote) * 0.98)

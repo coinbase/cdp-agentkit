@@ -97,6 +97,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
         transaction["chainId"] = self.config.chain_id
 
         nonce = self.web3.eth.get_transaction_count(self.account.address)
+        print(f"nonce: {nonce}")
         transaction["nonce"] = nonce
 
         max_priority_fee_per_gas, max_fee_per_gas = self.estimate_fees()
@@ -168,3 +169,6 @@ class EthAccountWalletProvider(EvmWalletProvider):
             return tx_hash.hex()
         except Exception as e:
             raise Exception(f"Failed to transfer native tokens: {e!s}") from e
+
+    def invoke_contract(self, *args, **kwargs):
+        pass

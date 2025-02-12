@@ -420,3 +420,6 @@ class CdpWalletProvider(EvmWalletProvider):
             )
         except Exception as e:
             raise Exception(f"Error trading assets: {e!s}") from e
+
+    def invoke_contract(self, *args, **kwargs):
+        return self._wallet.invoke_contract(*args, **kwargs)

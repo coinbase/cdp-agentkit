@@ -14,8 +14,12 @@ def get_factory_address(chain_id: int) -> str:
     Returns:
         str: The factory contract address for the given chain
     """
-    network_id = "base-mainnet" if chain_id == 8453 else "base-sepolia"
-    return WOW_FACTORY_CONTRACT_ADDRESSES[network_id]
+    print(f"CHAIN_ID: {chain_id}")
+    if chain_id not in WOW_FACTORY_CONTRACT_ADDRESSES:
+        raise ValueError(
+            f"Invalid chain ID: {chain_id}. Valid chain IDs are: {', '.join(str(k) for k in WOW_FACTORY_CONTRACT_ADDRESSES.keys())}"
+        )
+    return WOW_FACTORY_CONTRACT_ADDRESSES[chain_id]
 
 
 def get_current_supply(wallet_provider: EvmWalletProvider, token_address: str) -> int:
@@ -48,7 +52,7 @@ def get_buy_quote(wallet_provider: EvmWalletProvider, token_address: str, amount
         int: The amount of tokens that would be received for the given ETH amount
     """
     has_graduated = get_has_graduated(wallet_provider, token_address)
-    
+
     token_quote = (
         has_graduated
         and (get_uniswap_quote(wallet_provider, token_address, amount_eth_in_wei, "buy")).amount_out
@@ -73,7 +77,7 @@ def get_sell_quote(wallet_provider: EvmWalletProvider, token_address: str, amoun
         int: The amount of ETH that would be received for the given token amount
     """
     has_graduated = get_has_graduated(wallet_provider, token_address)
-    
+
     token_quote = (
         has_graduated
         and (get_uniswap_quote(wallet_provider, token_address, amount_tokens_in_wei, "sell")).amount_out

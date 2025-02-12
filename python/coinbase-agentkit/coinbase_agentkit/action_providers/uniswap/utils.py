@@ -178,7 +178,7 @@ def exact_input_single(
         int: Amount of tokens to receive (in Wei)
     """
     try:
-        network_id = wallet_provider.get_network().chain_id
+        chain_id = wallet_provider.get_network().chain_id
         amount = wallet_provider.read_contract(
             contract_address=addresses[chain_id]["UniswapQuoter"],
             abi=UNISWAP_QUOTER_ABI,
@@ -218,7 +218,7 @@ def get_uniswap_quote(
     quote_result = None
     utilization = Wei(0)
     insufficient_liquidity = False
-    network_id = wallet_provider.get_network().network_id
+    chain_id = wallet_provider.get_network().chain_id
 
     pool_address = wallet_provider.read_contract(
         contract_address=token_address,
@@ -239,7 +239,7 @@ def get_uniswap_quote(
         tokens = (token0, token1)
         balances = (balance0, balance1)
 
-        is_token0_weth = token0.lower() == addresses[network_id]["WETH"].lower()
+        is_token0_weth = token0.lower() == addresses[chain_id]["WETH"].lower()
         token_in = (
             token0
             if (quote_type == "buy" and is_token0_weth)
@@ -272,7 +272,7 @@ def get_uniswap_quote(
 
     balance_result = None
     if tokens and balances:
-        is_weth_token0 = tokens[0].lower() == addresses[network_id]["WETH"].lower()
+        is_weth_token0 = tokens[0].lower() == addresses[chain_id]["WETH"].lower()
         balance_result = Balance(
             erc20z=Wei(balances[1]) if is_weth_token0 else Wei(balances[0]),
             weth=Wei(balances[0]) if is_weth_token0 else Wei(balances[1]),

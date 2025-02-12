@@ -815,32 +815,54 @@ WOW_ABI = [
 ]
 
 WOW_FACTORY_CONTRACT_ADDRESSES = {
-    "base-sepolia": "0x04870e22fa217cb16aa00501d7d5253b8838c1ea",
-    "base-mainnet": "0x997020e5f59ccb79c74d527be492cc610cb9fa2b",
+    84532: "0x04870e22fa217Cb16aa00501D7D5253B8838C1eA",
+    8453: "0x997020E5F59cCB79C74D527Be492Cc610CB9fA2B",
 }
 
 addresses = {
     84532: {
-        "wowfactory": "0xb09c0b1b18369ef62e896d5a49af8d65efa0a404",
-        "wowfactoryimpl": "0xb522291f22fe7fa45d56797f7a685d5c637edc32",
-        "wow": "0x15ba66e376856f3f6fe53de9eeab10def10e8c92",
-        "bondingcurve": "0xce00c75b9807a2aa87b2297ca7dc1c0190137d6f",
-        "nonfungiblepositionmanager": "0x27f971cb582bf9e50f397e4d29a5c7a34f11faa2",
-        "swaprouter02": "0x94cc0aac535ccdb3c01d6787d6413c739ae12bc4",
-        "weth": "0x4200000000000000000000000000000000000006",
-        "uniswapquoter": "0xc5290058841028f1614f3a6f0f5816cad0df5e27",
+        "WowFactory": "0xB09c0b1b18369Ef62e896D5a49Af8d65EFa0A404",
+        "WowFactoryImpl": "0xB522291f22FE7FA45D56797F7A685D5c637Edc32",
+        "Wow": "0x15ba66e376856F3F6FE53dE9eeAb10dEF10E8C92",
+        "BondingCurve": "0xCE00c75B9807A2aA87B2297cA7Dc1C0190137D6F",
+        "NonfungiblePositionManager": "0x27F971cb582BF9E50F397e4d29a5C7A34f11faA2",
+        "SwapRouter02": "0x94cC0AaC535CCDB3C01d6787D6413C739ae12bc4",
+        "WETH": "0x4200000000000000000000000000000000000006",
+        "UniswapQuoter": "0xC5290058841028F1614F3A6F0F5816cAd0df5E27",
     },
-    8453: {
-        "wowfactory": "0xa06262157905913f855573f53ad48de2d4ba1f4a",
-        "wowfactoryimpl": "0xe4c17055048aee01d0d122804816fee5e6ac4a67",
-        "wow": "0x293997c6a1f2a1ca3ab971f548c4d95585e46282",
-        "bondingcurve": "0x264ece5d58a576cc775b719bf182f2946076be78",
-        "nonfungiblepositionmanager": "0x03a520b32c04bf3beef7beb72e919cf822ed34f1",
-        "swaprouter02": "0x2626664c2603336e57b271c5c0b26f421741e481",
-        "weth": "0x4200000000000000000000000000000000000006",
-        "uniswapquoter": "0x3d4e44eb1374240ce5f1b871ab261cd16335b76a",
+    84532: {
+        "WowFactory": "0xA06262157905913f855573f53AD48DE2D4ba1F4A",
+        "WowFactoryImpl": "0xe4c17055048aEe01D0d122804816fEe5E6ac4A67",
+        "Wow": "0x293997C6a1f2A1cA3aB971f548c4D95585E46282",
+        "BondingCurve": "0x264ece5D58A576cc775B719bf182F2946076bE78",
+        "NonfungiblePositionManager": "0x03a520b32C04BF3bEEf7BEb72E919cf822Ed34f1",
+        "SwapRouter02": "0x2626664c2603336E57B271c5C0b26F421741e481",
+        "WETH": "0x4200000000000000000000000000000000000006",
+        "UniswapQuoter": "0x3d4e44Eb1374240CE5F1B871ab261CD16335B76a",
     },
 }
+
+
+def get_factory_address(network: str) -> str:
+    """Get the Zora Wow ERC20 Factory contract address for the specified network.
+
+    Args:
+        network (str): The network ID to get the contract address for.
+            Valid networks are: base-sepolia, base-mainnet.
+
+    Returns:
+        str: The contract address for the specified network.
+
+    Raises:
+        ValueError: If the specified network is not supported.
+
+    """
+    network = network.lower()
+    if network not in WOW_FACTORY_CONTRACT_ADDRESSES:
+        raise ValueError(
+            f"Invalid network: {network}. Valid networks are: {', '.join(WOW_FACTORY_CONTRACT_ADDRESSES.keys())}"
+        )
+    return WOW_FACTORY_CONTRACT_ADDRESSES[network]
 
 
 GENERIC_TOKEN_METADATA_URI = "ipfs://QmY1GqprFYvojCcUEKgqHeDj9uhZD9jmYGrQTfA9vAE78J"
