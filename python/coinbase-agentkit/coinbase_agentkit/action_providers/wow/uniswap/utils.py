@@ -106,7 +106,6 @@ def get_pool_info(wallet_provider: EvmWalletProvider, pool_address: str) -> Pool
 
     """
     try:
-        # Parallel execution of contract calls
         token0 = wallet_provider.read_contract(
             contract_address=pool_address,
             abi=UNISWAP_V3_ABI,

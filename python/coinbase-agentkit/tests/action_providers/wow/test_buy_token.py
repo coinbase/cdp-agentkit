@@ -13,7 +13,7 @@ MOCK_CONTRACT_ADDRESS = "0x1234567890123456789012345678901234567890"
 MOCK_AMOUNT_ETH = "100000000000000"
 MOCK_NETWORK_ID = "base-sepolia"
 MOCK_WALLET_ADDRESS = "0x9876543210987654321098765432109876543210"
-MOCK_TOKEN_QUOTE = "1000000000000000000"  # 1 token
+MOCK_TOKEN_QUOTE = "1000000000000000000"
 MOCK_TX_HASH = "0xabcdef1234567890"
 MOCK_RECEIPT = {"status": 1, "transactionHash": MOCK_TX_HASH}
 
@@ -44,7 +44,7 @@ def test_buy_token_input_model_invalid_wei():
     with pytest.raises(ValidationError):
         WowBuyTokenInput(
             contract_address=MOCK_CONTRACT_ADDRESS,
-            amount_eth_in_wei="1.5",  # Wei amounts can't have decimals
+            amount_eth_in_wei="1.5",
         )
 
 
@@ -70,7 +70,6 @@ def test_buy_token_success():
             return_value=False,
         ),
     ):
-        # Set up mocks
         mock_contract.return_value.encode_abi.return_value = "0xencoded"
         mock_web3.to_checksum_address.side_effect = lambda x: x
         mock_web3.return_value.eth.contract = mock_contract
@@ -79,7 +78,6 @@ def test_buy_token_success():
         mock_wallet.send_transaction.return_value = MOCK_TX_HASH
         mock_wallet.wait_for_transaction_receipt.return_value = MOCK_RECEIPT
 
-        # Create provider and call buy_token
         provider = WowActionProvider()
         args = {
             "contract_address": MOCK_CONTRACT_ADDRESS,
@@ -90,16 +88,13 @@ def test_buy_token_success():
         expected_response = f"Purchased WoW ERC20 memecoin with transaction hash: {MOCK_TX_HASH}"
         assert response == expected_response
 
-        # Verify contract calls
         mock_contract.assert_called_once_with(
             address=MOCK_CONTRACT_ADDRESS,
             abi=WOW_ABI,
         )
 
-        # Calculate expected minimum tokens (99% of quote for slippage protection)
         min_tokens = int(int(MOCK_TOKEN_QUOTE) * 0.99)
 
-        # Verify function encoding
         mock_contract.return_value.encode_abi.assert_called_once_with(
             "buy",
             [
@@ -107,13 +102,12 @@ def test_buy_token_success():
                 MOCK_WALLET_ADDRESS,
                 "0x0000000000000000000000000000000000000000",
                 "",
-                0,  # not graduated
+                0,
                 min_tokens,
                 0,
             ],
         )
 
-        # Verify transaction parameters
         mock_wallet.send_transaction.assert_called_once_with(
             {
                 "to": MOCK_CONTRACT_ADDRESS,
@@ -122,7 +116,6 @@ def test_buy_token_success():
             }
         )
 
-        # Verify receipt wait
         mock_wallet.wait_for_transaction_receipt.assert_called_once_with(MOCK_TX_HASH)
 
 
@@ -142,7 +135,6 @@ def test_buy_token_graduated_pool():
             return_value=True,
         ),
     ):
-        # Set up mocks
         mock_contract.return_value.encode_abi.return_value = "0xencoded"
         mock_web3.to_checksum_address.side_effect = lambda x: x
         mock_web3.return_value.eth.contract = mock_contract
@@ -151,7 +143,6 @@ def test_buy_token_graduated_pool():
         mock_wallet.send_transaction.return_value = MOCK_TX_HASH
         mock_wallet.wait_for_transaction_receipt.return_value = MOCK_RECEIPT
 
-        # Create provider and call buy_token
         provider = WowActionProvider()
         args = {
             "contract_address": MOCK_CONTRACT_ADDRESS,
@@ -162,10 +153,8 @@ def test_buy_token_graduated_pool():
         expected_response = f"Purchased WoW ERC20 memecoin with transaction hash: {MOCK_TX_HASH}"
         assert response == expected_response
 
-        # Calculate expected minimum tokens (99% of quote for slippage protection)
         min_tokens = int(int(MOCK_TOKEN_QUOTE) * 0.99)
 
-        # Verify function encoding with graduated=1
         mock_contract.return_value.encode_abi.assert_called_once_with(
             "buy",
             [
@@ -173,13 +162,12 @@ def test_buy_token_graduated_pool():
                 MOCK_WALLET_ADDRESS,
                 "0x0000000000000000000000000000000000000000",
                 "",
-                1,  # graduated
+                1,
                 min_tokens,
                 0,
             ],
         )
 
-        # Verify transaction parameters
         mock_wallet.send_transaction.assert_called_once_with(
             {
                 "to": MOCK_CONTRACT_ADDRESS,
@@ -205,7 +193,6 @@ def test_buy_token_error():
             return_value=False,
         ),
     ):
-        # Set up mocks
         mock_contract.return_value.encode_abi.return_value = "0xencoded"
         mock_web3.to_checksum_address.side_effect = lambda x: x
         mock_web3.return_value.eth.contract = mock_contract
@@ -213,7 +200,6 @@ def test_buy_token_error():
         mock_wallet.get_network.return_value.network_id = MOCK_NETWORK_ID
         mock_wallet.send_transaction.side_effect = Exception("Transaction failed")
 
-        # Create provider and call buy_token
         provider = WowActionProvider()
         args = {
             "contract_address": MOCK_CONTRACT_ADDRESS,
@@ -224,7 +210,6 @@ def test_buy_token_error():
         expected_response = "Error buying Zora Wow ERC20 memecoin: Transaction failed"
         assert response == expected_response
 
-        # Verify contract calls
         mock_contract.assert_called_once_with(
             address=MOCK_CONTRACT_ADDRESS,
             abi=WOW_ABI,
