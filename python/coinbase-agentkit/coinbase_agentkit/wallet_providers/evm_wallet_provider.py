@@ -53,7 +53,3 @@ class EvmWalletProvider(WalletProvider, ABC):
     ) -> Any:
         """Read data from a smart contract."""
         pass
-
-    @abstractmethod
-    def invoke_contract(self, *args, **kwargs):
-        pass

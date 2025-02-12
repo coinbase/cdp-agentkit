@@ -1,4 +1,5 @@
 """Tests for WOW create token action."""
+
 from unittest.mock import patch
 
 import pytest
@@ -94,10 +95,12 @@ def test_create_token_success():
         )
 
         # Verify transaction parameters
-        mock_wallet.send_transaction.assert_called_once_with({
-            "to": factory_address,
-            "data": "0xencoded",
-        })
+        mock_wallet.send_transaction.assert_called_once_with(
+            {
+                "to": factory_address,
+                "data": "0xencoded",
+            }
+        )
 
         # Verify receipt wait
         mock_wallet.wait_for_transaction_receipt.assert_called_once_with(MOCK_TX_HASH)
@@ -157,10 +160,12 @@ def test_create_token_with_custom_token_uri_success():
         )
 
         # Verify transaction parameters
-        mock_wallet.send_transaction.assert_called_once_with({
-            "to": factory_address,
-            "data": "0xencoded",
-        })
+        mock_wallet.send_transaction.assert_called_once_with(
+            {
+                "to": factory_address,
+                "data": "0xencoded",
+            }
+        )
 
         # Verify receipt wait
         mock_wallet.wait_for_transaction_receipt.assert_called_once_with(MOCK_TX_HASH)

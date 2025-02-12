@@ -1,8 +1,6 @@
-from web3 import Web3
-
 from ...wallet_providers import EvmWalletProvider
-from .uniswap.utils import get_has_graduated, get_uniswap_quote
 from .constants import WOW_ABI, WOW_FACTORY_CONTRACT_ADDRESSES
+from .uniswap.utils import get_has_graduated, get_uniswap_quote
 
 
 def get_factory_address(chain_id: int) -> str:
@@ -13,10 +11,11 @@ def get_factory_address(chain_id: int) -> str:
 
     Returns:
         str: The factory contract address for the given chain
+
     """
     if chain_id not in WOW_FACTORY_CONTRACT_ADDRESSES:
         raise ValueError(
-            f"Invalid chain ID: {chain_id}. Valid chain IDs are: {', '.join(str(k) for k in WOW_FACTORY_CONTRACT_ADDRESSES.keys())}"
+            f"Invalid chain ID: {chain_id}. Valid chain IDs are: {', '.join(str(k) for k in WOW_FACTORY_CONTRACT_ADDRESSES)}"
         )
     return WOW_FACTORY_CONTRACT_ADDRESSES[chain_id]
 
@@ -30,6 +29,7 @@ def get_current_supply(wallet_provider: EvmWalletProvider, token_address: str) -
 
     Returns:
         int: The current total supply of the token
+
     """
     return wallet_provider.read_contract(
         contract_address=token_address,
@@ -39,7 +39,9 @@ def get_current_supply(wallet_provider: EvmWalletProvider, token_address: str) -
     )
 
 
-def get_buy_quote(wallet_provider: EvmWalletProvider, token_address: str, amount_eth_in_wei: str) -> int:
+def get_buy_quote(
+    wallet_provider: EvmWalletProvider, token_address: str, amount_eth_in_wei: str
+) -> int:
     """Get quote for buying tokens.
 
     Args:
@@ -49,13 +51,16 @@ def get_buy_quote(wallet_provider: EvmWalletProvider, token_address: str, amount
 
     Returns:
         int: The amount of tokens that would be received for the given ETH amount
+
     """
     amount_eth_in_wei_int = int(amount_eth_in_wei)
     has_graduated = get_has_graduated(wallet_provider, token_address)
 
     token_quote = (
         has_graduated
-        and (get_uniswap_quote(wallet_provider, token_address, amount_eth_in_wei_int, "buy")).amount_out
+        and (
+            get_uniswap_quote(wallet_provider, token_address, amount_eth_in_wei_int, "buy")
+        ).amount_out
     ) or wallet_provider.read_contract(
         contract_address=token_address,
         abi=WOW_ABI,
@@ -65,7 +70,9 @@ def get_buy_quote(wallet_provider: EvmWalletProvider, token_address: str, amount
     return token_quote
 
 
-def get_sell_quote(wallet_provider: EvmWalletProvider, token_address: str, amount_tokens_in_wei: str) -> int:
+def get_sell_quote(
+    wallet_provider: EvmWalletProvider, token_address: str, amount_tokens_in_wei: str
+) -> int:
     """Get quote for selling tokens.
 
     Args:
@@ -75,13 +82,16 @@ def get_sell_quote(wallet_provider: EvmWalletProvider, token_address: str, amoun
 
     Returns:
         int: The amount of ETH that would be received for the given token amount
+
     """
     amount_tokens_in_wei_int = int(amount_tokens_in_wei)
     has_graduated = get_has_graduated(wallet_provider, token_address)
 
     token_quote = (
         has_graduated
-        and (get_uniswap_quote(wallet_provider, token_address, amount_tokens_in_wei_int, "sell")).amount_out
+        and (
+            get_uniswap_quote(wallet_provider, token_address, amount_tokens_in_wei_int, "sell")
+        ).amount_out
     ) or wallet_provider.read_contract(
         contract_address=token_address,
         abi=WOW_ABI,

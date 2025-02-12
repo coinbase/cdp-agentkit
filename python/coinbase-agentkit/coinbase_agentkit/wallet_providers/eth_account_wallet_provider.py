@@ -168,6 +168,3 @@ class EthAccountWalletProvider(EvmWalletProvider):
             return tx_hash.hex()
         except Exception as e:
             raise Exception(f"Failed to transfer native tokens: {e!s}") from e
-
-    def invoke_contract(self, *args, **kwargs):
-        pass

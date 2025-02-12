@@ -1,5 +1,5 @@
 """WOW action provider implementation."""
-import json
+
 import math
 from typing import Any
 
@@ -22,7 +22,6 @@ from .utils import (
     get_has_graduated,
     get_sell_quote,
 )
-
 
 SUPPORTED_CHAINS = [8453, 84532]
 
@@ -57,20 +56,20 @@ Important notes:
     def buy_token(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Buy WOW tokens with ETH."""
         try:
-            token_quote = get_buy_quote(wallet_provider, args["contract_address"],
-                                      args["amount_eth_in_wei"])
-            
-            if isinstance(token_quote, (list, tuple)):
+            token_quote = get_buy_quote(
+                wallet_provider, args["contract_address"], args["amount_eth_in_wei"]
+            )
+
+            if isinstance(token_quote, list | tuple):
                 token_quote = token_quote[0] if token_quote else 0
             token_quote = int(token_quote)
-            
+
             has_graduated = get_has_graduated(wallet_provider, args["contract_address"])
 
             min_tokens = math.floor(float(token_quote) * 0.99)
 
             contract = Web3().eth.contract(
-                address=Web3.to_checksum_address(args["contract_address"]),
-                abi=WOW_ABI
+                address=Web3.to_checksum_address(args["contract_address"]), abi=WOW_ABI
             )
 
             encoded_data = contract.encode_abi(
@@ -83,14 +82,16 @@ Important notes:
                     1 if has_graduated else 0,
                     min_tokens,
                     0,
-                ]
+                ],
             )
 
-            tx_hash = wallet_provider.send_transaction({
-                "to": Web3.to_checksum_address(args["contract_address"]),
-                "data": encoded_data,
-                "value": int(args["amount_eth_in_wei"]),
-            })
+            tx_hash = wallet_provider.send_transaction(
+                {
+                    "to": Web3.to_checksum_address(args["contract_address"]),
+                    "data": encoded_data,
+                    "value": int(args["amount_eth_in_wei"]),
+                }
+            )
             receipt = wallet_provider.wait_for_transaction_receipt(tx_hash)
 
             if receipt["status"] == 0:
@@ -126,8 +127,7 @@ Important notes:
             token_uri = args.get("token_uri") or GENERIC_TOKEN_METADATA_URI
 
             contract = Web3().eth.contract(
-                address=Web3.to_checksum_address(factory_address),
-                abi=WOW_FACTORY_ABI
+                address=Web3.to_checksum_address(factory_address), abi=WOW_FACTORY_ABI
             )
 
             creator_address = wallet_provider.get_address()
@@ -139,10 +139,7 @@ Important notes:
                 args["symbol"],
             ]
 
-            encoded_data = contract.encode_abi(
-                "deploy",
-                deploy_args
-            )
+            encoded_data = contract.encode_abi("deploy", deploy_args)
 
             tx = {
                 "to": HexStr(factory_address),
@@ -187,20 +184,20 @@ Important notes:
     def sell_token(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Sell WOW tokens for ETH."""
         try:
-            eth_quote = get_sell_quote(wallet_provider, args["contract_address"],
-                                     args["amount_tokens_in_wei"])
-            
-            if isinstance(eth_quote, (list, tuple)):
+            eth_quote = get_sell_quote(
+                wallet_provider, args["contract_address"], args["amount_tokens_in_wei"]
+            )
+
+            if isinstance(eth_quote, list | tuple):
                 eth_quote = eth_quote[0] if eth_quote else 0
             eth_quote = int(eth_quote)
-            
+
             has_graduated = get_has_graduated(wallet_provider, args["contract_address"])
 
             min_eth = math.floor(float(eth_quote) * 0.98)
 
             contract = Web3().eth.contract(
-                address=Web3.to_checksum_address(args["contract_address"]),
-                abi=WOW_ABI
+                address=Web3.to_checksum_address(args["contract_address"]), abi=WOW_ABI
             )
 
             encoded_data = contract.encode_abi(
@@ -213,13 +210,15 @@ Important notes:
                     1 if has_graduated else 0,
                     min_eth,
                     0,
-                ]
+                ],
             )
 
-            tx_hash = wallet_provider.send_transaction({
-                "to": Web3.to_checksum_address(args["contract_address"]),
-                "data": encoded_data,
-            })
+            tx_hash = wallet_provider.send_transaction(
+                {
+                    "to": Web3.to_checksum_address(args["contract_address"]),
+                    "data": encoded_data,
+                }
+            )
 
             receipt = wallet_provider.wait_for_transaction_receipt(tx_hash)
             if receipt["status"] == 0:
@@ -231,10 +230,7 @@ Important notes:
 
     def supports_network(self, network: Network) -> bool:
         """Check if network is supported by WOW protocol."""
-        return (
-            network.protocol_family == "evm"
-            and network.chain_id in SUPPORTED_CHAINS
-        )
+        return network.protocol_family == "evm" and network.chain_id in SUPPORTED_CHAINS
 
 
 def wow_action_provider() -> WowActionProvider:

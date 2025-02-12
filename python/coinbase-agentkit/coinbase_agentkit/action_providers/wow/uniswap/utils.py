@@ -67,6 +67,7 @@ def create_price_info(wei_amount: Wei, eth_price_in_usd: float) -> PriceInfo:
 
     Returns:
         PriceInfo: A PriceInfo object containing the amount in ETH and USD
+
     """
     amount_in_eth = Web3.from_wei(wei_amount, "ether")
     usd = float(amount_in_eth) * eth_price_in_usd
@@ -82,6 +83,7 @@ def get_has_graduated(wallet_provider: EvmWalletProvider, token_address: str) ->
 
     Returns:
         bool: True if the token has graduated, False otherwise
+
     """
     market_type = wallet_provider.read_contract(
         contract_address=token_address,
@@ -101,6 +103,7 @@ def get_pool_info(wallet_provider: EvmWalletProvider, pool_address: str) -> Pool
 
     Returns:
         PoolInfo: A PoolInfo object containing the token0, balance0, token1, balance1, fee, liquidity, and sqrt_price_x96.
+
     """
     try:
         # Parallel execution of contract calls
@@ -176,6 +179,7 @@ def exact_input_single(
 
     Returns:
         int: Amount of tokens to receive (in Wei)
+
     """
     try:
         chain_id = wallet_provider.get_network().chain_id
@@ -186,13 +190,15 @@ def exact_input_single(
             contract_address=addresses[chain_id]["UniswapQuoter"],
             abi=UNISWAP_QUOTER_ABI,
             function_name="quoteExactInputSingle",
-            args=[{
-                "tokenIn": str(Web3.to_checksum_address(token_in)),
-                "tokenOut": str(Web3.to_checksum_address(token_out)),
-                "fee": fee,
-                "amountIn": amount_in,
-                "sqrtPriceLimitX96": 0,
-            }],
+            args=[
+                {
+                    "tokenIn": str(Web3.to_checksum_address(token_in)),
+                    "tokenOut": str(Web3.to_checksum_address(token_out)),
+                    "fee": fee,
+                    "amountIn": amount_in,
+                    "sqrtPriceLimitX96": 0,
+                }
+            ],
         )
         return amount
     except Exception as e:
@@ -201,7 +207,10 @@ def exact_input_single(
 
 
 def get_uniswap_quote(
-    wallet_provider: EvmWalletProvider, token_address: str, amount: int, quote_type: Literal["buy", "sell"]
+    wallet_provider: EvmWalletProvider,
+    token_address: str,
+    amount: int,
+    quote_type: Literal["buy", "sell"],
 ) -> Quote:
     """Get Uniswap quote for buying or selling tokens.
 
@@ -213,6 +222,7 @@ def get_uniswap_quote(
 
     Returns:
         Quote: A Quote object containing the amount in, amount out, balance, fee, and any error messages.
+
     """
     pool = None
     tokens = None
@@ -253,13 +263,15 @@ def get_uniswap_quote(
         )
 
         token_out, balance_out = (token1, balance1) if token_in == token0 else (token0, balance0)
-        
-        if isinstance(balance_out, (list, tuple)):
+
+        if isinstance(balance_out, list | tuple):
             balance_out = balance_out[0] if balance_out else 0
         balance_out = int(balance_out)
-        
+
         insufficient_liquidity = quote_type == "buy" and amount > balance_out
-        utilization = Wei(int(amount / balance_out)) if quote_type == "buy" and balance_out > 0 else Wei(0)
+        utilization = (
+            Wei(int(amount / balance_out)) if quote_type == "buy" and balance_out > 0 else Wei(0)
+        )
 
         quote_result = exact_input_single(wallet_provider, token_in, token_out, amount, fee)
 
@@ -284,8 +296,12 @@ def get_uniswap_quote(
     if tokens and balances:
         is_weth_token0 = tokens[0].lower() == addresses[chain_id]["WETH"].lower()
         balance_result = Balance(
-            erc20z=Wei(balances[1][0] if isinstance(balances[1], (list, tuple)) else balances[1]) if is_weth_token0 else Wei(balances[0][0] if isinstance(balances[0], (list, tuple)) else balances[0]),
-            weth=Wei(balances[0][0] if isinstance(balances[0], (list, tuple)) else balances[0]) if is_weth_token0 else Wei(balances[1][0] if isinstance(balances[1], (list, tuple)) else balances[1]),
+            erc20z=Wei(balances[1][0] if isinstance(balances[1], list | tuple) else balances[1])
+            if is_weth_token0
+            else Wei(balances[0][0] if isinstance(balances[0], list | tuple) else balances[0]),
+            weth=Wei(balances[0][0] if isinstance(balances[0], list | tuple) else balances[0])
+            if is_weth_token0
+            else Wei(balances[1][0] if isinstance(balances[1], list | tuple) else balances[1]),
         )
 
     return Quote(
@@ -297,10 +313,11 @@ def get_uniswap_quote(
     )
 
 
-def get_pool_address(token_address: str) -> str:
+def get_pool_address(wallet_provider: EvmWalletProvider, token_address: str) -> str:
     """Fetch the uniswap v3 pool address for a given token.
 
     Args:
+        wallet_provider: The wallet provider to use for contract calls
         token_address (str): The address of the token contract, such as `0x036CbD53842c5426634e7929541eC2318f3dCF7e`
 
     Returns:

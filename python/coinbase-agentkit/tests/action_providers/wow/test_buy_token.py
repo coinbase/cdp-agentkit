@@ -1,4 +1,5 @@
 """Tests for WOW buy token action."""
+
 from unittest.mock import patch
 
 import pytest
@@ -60,8 +61,14 @@ def test_buy_token_success():
         patch("web3.Web3.to_checksum_address", side_effect=lambda x: x),
         patch("coinbase_agentkit.action_providers.wow.wow_action_provider.Web3") as mock_web3,
         patch("coinbase_agentkit.wallet_providers.EvmWalletProvider") as mock_wallet,
-        patch("coinbase_agentkit.action_providers.wow.wow_action_provider.get_buy_quote", return_value=MOCK_TOKEN_QUOTE),
-        patch("coinbase_agentkit.action_providers.wow.wow_action_provider.get_has_graduated", return_value=False),
+        patch(
+            "coinbase_agentkit.action_providers.wow.wow_action_provider.get_buy_quote",
+            return_value=MOCK_TOKEN_QUOTE,
+        ),
+        patch(
+            "coinbase_agentkit.action_providers.wow.wow_action_provider.get_has_graduated",
+            return_value=False,
+        ),
     ):
         # Set up mocks
         mock_contract.return_value.encode_abi.return_value = "0xencoded"
@@ -107,11 +114,13 @@ def test_buy_token_success():
         )
 
         # Verify transaction parameters
-        mock_wallet.send_transaction.assert_called_once_with({
-            "to": MOCK_CONTRACT_ADDRESS,
-            "data": "0xencoded",
-            "value": int(MOCK_AMOUNT_ETH),
-        })
+        mock_wallet.send_transaction.assert_called_once_with(
+            {
+                "to": MOCK_CONTRACT_ADDRESS,
+                "data": "0xencoded",
+                "value": int(MOCK_AMOUNT_ETH),
+            }
+        )
 
         # Verify receipt wait
         mock_wallet.wait_for_transaction_receipt.assert_called_once_with(MOCK_TX_HASH)
@@ -124,8 +133,14 @@ def test_buy_token_graduated_pool():
         patch("web3.Web3.to_checksum_address", side_effect=lambda x: x),
         patch("coinbase_agentkit.action_providers.wow.wow_action_provider.Web3") as mock_web3,
         patch("coinbase_agentkit.wallet_providers.EvmWalletProvider") as mock_wallet,
-        patch("coinbase_agentkit.action_providers.wow.wow_action_provider.get_buy_quote", return_value=MOCK_TOKEN_QUOTE),
-        patch("coinbase_agentkit.action_providers.wow.wow_action_provider.get_has_graduated", return_value=True),
+        patch(
+            "coinbase_agentkit.action_providers.wow.wow_action_provider.get_buy_quote",
+            return_value=MOCK_TOKEN_QUOTE,
+        ),
+        patch(
+            "coinbase_agentkit.action_providers.wow.wow_action_provider.get_has_graduated",
+            return_value=True,
+        ),
     ):
         # Set up mocks
         mock_contract.return_value.encode_abi.return_value = "0xencoded"
@@ -165,11 +180,13 @@ def test_buy_token_graduated_pool():
         )
 
         # Verify transaction parameters
-        mock_wallet.send_transaction.assert_called_once_with({
-            "to": MOCK_CONTRACT_ADDRESS,
-            "data": "0xencoded",
-            "value": int(MOCK_AMOUNT_ETH),
-        })
+        mock_wallet.send_transaction.assert_called_once_with(
+            {
+                "to": MOCK_CONTRACT_ADDRESS,
+                "data": "0xencoded",
+                "value": int(MOCK_AMOUNT_ETH),
+            }
+        )
 
 
 def test_buy_token_error():
@@ -179,8 +196,14 @@ def test_buy_token_error():
         patch("web3.Web3.to_checksum_address", side_effect=lambda x: x),
         patch("coinbase_agentkit.action_providers.wow.wow_action_provider.Web3") as mock_web3,
         patch("coinbase_agentkit.wallet_providers.EvmWalletProvider") as mock_wallet,
-        patch("coinbase_agentkit.action_providers.wow.wow_action_provider.get_buy_quote", return_value=MOCK_TOKEN_QUOTE),
-        patch("coinbase_agentkit.action_providers.wow.wow_action_provider.get_has_graduated", return_value=False),
+        patch(
+            "coinbase_agentkit.action_providers.wow.wow_action_provider.get_buy_quote",
+            return_value=MOCK_TOKEN_QUOTE,
+        ),
+        patch(
+            "coinbase_agentkit.action_providers.wow.wow_action_provider.get_has_graduated",
+            return_value=False,
+        ),
     ):
         # Set up mocks
         mock_contract.return_value.encode_abi.return_value = "0xencoded"

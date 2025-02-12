@@ -1,4 +1,5 @@
 """Ethereum-specific validators."""
+
 from web3 import Web3
 
 
