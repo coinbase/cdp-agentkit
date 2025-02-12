@@ -17,18 +17,19 @@ ERC20_APPROVE_ABI = [
 
 def approve(wallet: EvmWalletProvider, token_address: str, spender_address: str, amount: int):
     """Approve a spender to spend tokens on behalf of the owner.
-    
+
     Args:
         wallet: The wallet provider to use for the transaction
         token_address: The address of the token contract to approve
         spender_address: The address of the spender to approve
         amount: The amount of tokens to approve in atomic units (wei)
-        
+
     Returns:
         The transaction receipt if successful, or an error message string if failed
-        
+
     Raises:
         Exception: If the approval transaction fails
+
     """
     try:
         contract = Web3().eth.contract(address=token_address, abi=ERC20_APPROVE_ABI)

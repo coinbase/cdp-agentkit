@@ -39,6 +39,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
         Raises:
             ImportError: If eth-account is not installed
             ValueError: If required configuration is missing or initialization fails
+
         """
         self.config = config
         self.account = config.account
@@ -62,6 +63,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
 
         Returns:
             The wallet's address as a hex string
+
         """
         return self.account.address
 
@@ -70,6 +72,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
 
         Returns:
             Network object containing protocol family, network ID, and chain ID
+
         """
         return self._network
 
@@ -78,6 +81,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
 
         Returns:
             The wallet's balance in wei as a Decimal
+
         """
         balance_wei = self.web3.eth.get_balance(self.account.address)
         return Decimal(str(balance_wei))
@@ -87,6 +91,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
 
         Returns:
             The string 'eth_account_wallet_provider'
+
         """
         return "eth-account"
 
@@ -98,6 +103,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
 
         Returns:
             The signature as a hex string
+
         """
         if isinstance(message, str):
             message = message.encode()
@@ -113,6 +119,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
 
         Returns:
             The signature as a hex string
+
         """
         signed = self.account.sign_typed_data(full_message=typed_data)
         return HexStr(signed.signature.hex())
@@ -125,6 +132,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
 
         Returns:
             The signed transaction object
+
         """
         if "chainId" not in transaction:
             transaction["chainId"] = self._network.chain_id
@@ -141,6 +149,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
 
         Returns:
             Tuple of (max_priority_fee_per_gas, max_fee_per_gas) in wei
+
         """
 
         def get_base_fee():
@@ -148,6 +157,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
 
             Returns:
                 The adjusted base fee in wei
+
             """
             latest_block = self.web3.eth.get_block("latest")
             base_fee = latest_block["baseFeePerGas"]
@@ -171,6 +181,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
 
         Raises:
             Exception: If transaction preparation or sending fails
+
         """
         transaction["from"] = self.account.address
         transaction["chainId"] = self._network.chain_id
@@ -203,6 +214,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
 
         Raises:
             TimeoutError: If transaction is not mined within timeout period
+
         """
         return self.web3.eth.wait_for_transaction_receipt(
             tx_hash, timeout=timeout, poll_latency=poll_latency
@@ -227,6 +239,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
 
         Returns:
             The result of the contract function call
+
         """
         contract = self.web3.eth.contract(address=contract_address, abi=abi)
         func = contract.functions[function_name]
@@ -246,6 +259,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
 
         Raises:
             Exception: If transfer fails
+
         """
         try:
             value_wei = Web3.to_wei(value, "ether")

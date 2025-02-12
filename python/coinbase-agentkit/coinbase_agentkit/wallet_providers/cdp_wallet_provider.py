@@ -51,6 +51,7 @@ class CdpWalletProvider(EvmWalletProvider):
         Raises:
             ImportError: If CDP SDK is not installed
             ValueError: If required configuration is missing or initialization fails
+
         """
         if not config:
             config = CdpWalletProviderConfig()
@@ -103,6 +104,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
         Returns:
             The wallet's address as a hex string
+
         """
         return self._address
 
@@ -114,6 +116,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
         Raises:
             Exception: If wallet is not initialized
+
         """
         if not self._wallet:
             raise Exception("Wallet not initialized")
@@ -126,6 +129,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
         Returns:
             The string 'cdp_wallet_provider'
+
         """
         return "cdp_wallet_provider"
 
@@ -134,6 +138,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
         Returns:
             Network object containing protocol family, network ID, and chain ID
+
         """
         return self._network
 
@@ -149,6 +154,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
         Raises:
             Exception: If transfer fails or wallet is not initialized
+
         """
         if not self._wallet:
             raise Exception("Wallet not initialized")
@@ -193,6 +199,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
         Raises:
             Exception: If the contract call fails or wallet is not initialized
+
         """
         contract = self._web3.eth.contract(address=contract_address, abi=abi)
         func = contract.functions[function_name]
@@ -211,6 +218,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
         Raises:
             Exception: If the wallet is not initialized or signing fails
+
         """
         if not self._wallet:
             raise Exception("Wallet not initialized")
@@ -231,6 +239,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
         Raises:
             Exception: If the wallet is not initialized or signing fails
+
         """
         if not self._wallet:
             raise Exception("Wallet not initialized")
@@ -252,6 +261,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
         Raises:
             Exception: If wallet is not initialized or signing fails
+
         """
         if not self._wallet:
             raise Exception("Wallet not initialized")
@@ -275,6 +285,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
         Raises:
             Exception: If transaction preparation or sending fails
+
         """
         self._prepare_transaction(transaction)
 
@@ -312,6 +323,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
         Raises:
             TimeoutError: If transaction is not mined within timeout period
+
         """
         return self._web3.eth.wait_for_transaction_receipt(
             tx_hash, timeout=timeout, poll_latency=poll_latency
@@ -328,6 +340,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
         Raises:
             Exception: If transaction preparation fails
+
         """
         if transaction["to"]:
             transaction["to"] = Web3.to_bytes(hexstr=transaction["to"])
@@ -367,6 +380,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
         Returns:
             Tuple of (max_priority_fee_per_gas, max_fee_per_gas) in wei
+
         """
 
         def get_base_fee():
@@ -389,6 +403,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
         Raises:
             Exception: If wallet is not initialized
+
         """
         if not self._wallet:
             raise Exception("Wallet not initialized")
@@ -415,6 +430,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
         Raises:
             Exception: If wallet is not initialized or deployment fails
+
         """
         if not self._wallet:
             raise Exception("Wallet not initialized")
@@ -442,6 +458,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
         Raises:
             Exception: If wallet is not initialized or deployment fails
+
         """
         if not self._wallet:
             raise Exception("Wallet not initialized")
@@ -468,6 +485,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
         Raises:
             Exception: If wallet is not initialized or deployment fails
+
         """
         if not self._wallet:
             raise Exception("Wallet not initialized")
@@ -494,6 +512,7 @@ class CdpWalletProvider(EvmWalletProvider):
 
         Raises:
             Exception: If trade fails or wallet is not initialized
+
         """
         if not self._wallet:
             raise Exception("Wallet not initialized")

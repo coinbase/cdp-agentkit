@@ -30,6 +30,7 @@ class AgentKit:
         Args:
             config: Configuration options for AgentKit. If not provided,
                    a default CDP wallet provider will be used.
+
         """
         if not config:
             config = AgentKitConfig()
@@ -50,6 +51,7 @@ class AgentKit:
 
         Raises:
             ValueError: If no wallet provider is configured
+
         """
         if not self.wallet_provider:
             raise ValueError("No wallet provider configured")

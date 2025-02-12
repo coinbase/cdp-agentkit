@@ -7,15 +7,16 @@ from pydantic_core import PydanticCustomError
 
 def wei_amount_validator(value: str) -> str:
     """Validate that amount is a valid wei value (positive whole number as string).
-    
+
     Args:
         value: The string value to validate, expected to be a positive whole number
-        
+
     Returns:
         str: The validated value if it passes all checks
-        
+
     Raises:
         PydanticCustomError: If the value is not a positive whole number string or is zero/negative
+
     """
     if not re.match(r"^[0-9]+$", value):
         raise PydanticCustomError(
