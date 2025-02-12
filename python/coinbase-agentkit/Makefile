@@ -12,7 +12,7 @@ lint:
 
 .PHONY: lint-fix
 lint-fix:
-	poetry run ruff check . --fix --unsafe-fixes
+	poetry run ruff check . --fix
 
 .PHONY: docs
 docs:
