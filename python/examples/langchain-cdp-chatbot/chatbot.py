@@ -53,9 +53,9 @@ def initialize_agent():
         cdp_config = CdpWalletProviderConfig(wallet_data=wallet_data)
         # cdp_config = CdpWalletProviderConfig(
         #     mnemonic_phrase=mnemonic_phrase,
-        #     chain_id=8453,
-        #     network_id="base-mainnet",
-        #     rpc_url="https://mainnet.base.org",
+        #     chain_id=84532,
+        #     network_id="base-sepolia",
+        #     rpc_url="https://sepolia.base.org",
         # )
 
     # Initialize ETH Wallet Provider
