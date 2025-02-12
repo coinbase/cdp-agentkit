@@ -61,7 +61,7 @@ Once you decide which folder to add your action to, go ahead and create a new fi
 
 ### Crafting a good description prompt
 
-The description prompt is used by the LLM to understand when and how to use the action. It's important to be as specific as possible in describing the inputs and outputs of the action and include examples. Take the Deploy NFT prompt for example:
+The description prompt is used by the LLM to understand when and how to use the action. It's important to be as specific as possible in describing the inputs and outputs of the action and include examples. Take the Mint NFT prompt for example:
 
 ```python
 @create_action(
@@ -142,7 +142,7 @@ def mint(self, wallet_provider: CdpWalletProvider, args: dict[str, Any]) -> str:
 
 Notice the return value contains useful information for the user, such as the transaction hash and link. It's important to include this information in the return value so that the user can easily see the result of the action.
 
-This class is then exported out of [python/coinbase-agentkit/coinbase_agentkit/__init__.py](https://github.com/coinbase/agentkit/blob/master/python/coinbase-agentkit/coinbase_agentkit/__init__.py) so that is is consumable by users of the `coinbase-agentkit` package.
+This class is then exported out of [python/coinbase-agentkit/coinbase_agentkit/\_\_init__.py](https://github.com/coinbase/agentkit/blob/master/python/coinbase-agentkit/coinbase_agentkit/__init__.py) so that is is consumable by users of the `coinbase-agentkit` package.
 
 ### Testing the action provider
 
@@ -190,13 +190,8 @@ A good way to test new actions locally is by using the chatbot example in `pytho
 The flow is:
 
 1. Make your change as described in the [Adding an Action Provider](#adding-an-action-provider) section
-2. Update the example's pyproject.toml to use your local package:
-```toml
-[tool.poetry.dependencies]
-coinbase-agentkit = { path = "../../python/coinbase-agentkit", develop = true }
-```
-3. In the example directory, run `poetry install && poetry run python chatbot.py`
-4. You can now interact with your new action via the chatbot!
+2. In the example directory, run `poetry install && poetry run python chatbot.py`
+3. You can now interact with your new action via the chatbot!
 
 ### Running Tests
 

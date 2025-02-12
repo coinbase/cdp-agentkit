@@ -9,7 +9,7 @@ from web3 import Web3
 from web3.middleware import SignAndSendRawMiddlewareBuilder
 from web3.types import BlockIdentifier, ChecksumAddress, HexStr, TxParams
 
-from ..network import NETWORK_ID_TO_CHAIN, NETWORK_ID_TO_CHAIN_ID, Network
+from ..network import CHAIN_ID_TO_NETWORK_ID, NETWORK_ID_TO_CHAIN, Network
 from .evm_wallet_provider import EvmWalletProvider
 
 
@@ -17,7 +17,7 @@ class EthAccountWalletProviderConfig(BaseModel):
     """Configuration for EthAccountWalletProvider."""
 
     account: LocalAccount
-    network_id: str
+    chain_id: str
 
     class Config:
         """Configuration for EthAccountWalletProvider."""
@@ -31,17 +31,20 @@ class EthAccountWalletProvider(EvmWalletProvider):
     def __init__(self, config: EthAccountWalletProviderConfig):
         """Initialize the wallet provider with an eth-account."""
         self.config = config
-        chain = NETWORK_ID_TO_CHAIN[config.network_id]
-        rpc_url = chain.rpc_urls["default"].http[0]
-        self.web3 = Web3(Web3.HTTPProvider(rpc_url))
         self.account = config.account
+
+        chain = NETWORK_ID_TO_CHAIN[config.chain_id]
+        rpc_url = chain.rpc_urls["default"].http[0]
+
+        self.web3 = Web3(Web3.HTTPProvider(rpc_url))
         self.web3.middleware_onion.inject(
             SignAndSendRawMiddlewareBuilder.build(self.account), layer=0
         )
+
         self._network = Network(
             protocol_family="evm",
-            chain_id=NETWORK_ID_TO_CHAIN_ID[self.config.network_id],
-            network_id=self.config.network_id,
+            chain_id=self.config.chain_id,
+            network_id=CHAIN_ID_TO_NETWORK_ID[self.config.chain_id],
         )
 
     def get_address(self) -> str:

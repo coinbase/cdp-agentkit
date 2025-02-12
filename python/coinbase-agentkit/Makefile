@@ -1,3 +1,7 @@
+.PHONY: install
+install:
+	poetry install
+
 .PHONY: format
 format:
 	poetry run ruff format .

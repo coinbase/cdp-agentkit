@@ -9,6 +9,7 @@ AgentKit is a framework for easily enabling AI agents to take actions onchain. I
 - [Usage](#usage)
   - [Create an AgentKit instance](#create-an-agentkit-instance)
   - [Create an AgentKit instance with a specified wallet provider](#create-an-agentkit-instance-with-a-specified-wallet-provider)
+  - [Create an AgentKit instance with an eth-account wallet provider](#create-an-agentkit-instance-with-an-eth-account-wallet-provider)
   - [Create an AgentKit instance with specified action providers](#create-an-agentkit-instance-with-specified-action-providers)
   - [Use with a framework extension (e.g., LangChain + OpenAI)](#use-with-a-framework-extension)
 - [Creating an Action Provider](#creating-an-action-provider)
@@ -59,6 +60,35 @@ wallet_provider = CdpWalletProvider(CdpWalletProviderConfig(
     api_key_private="CDP API KEY PRIVATE KEY",
     network_id="base-mainnet"
 ))
+
+agent_kit = AgentKit(AgentKitConfig(
+    wallet_provider=wallet_provider
+))
+```
+
+### Create an AgentKit instance with an eth-account wallet provider
+
+```python
+from coinbase_agentkit import (
+    AgentKit, 
+    AgentKitConfig, 
+    EthAccountWalletProvider, 
+    EthAccountWalletProviderConfig
+)
+
+# See here for creating a private key:
+# https://web3py.readthedocs.io/en/stable/web3.eth.account.html#creating-a-private-key
+private_key = os.environ.get("PRIVATE_KEY")
+assert private_key is not None, "You must set PRIVATE_KEY environment variable"
+assert private_key.startswith("0x"), "Private key must start with 0x hex prefix"
+
+wallet_provider = EthAccountWalletProvider(
+    config=EthAccountWalletProviderConfig(
+        private_key=private_key,
+        chain_id=84532,
+        rpc_url="https://sepolia.base.org",
+    )
+)
 
 agent_kit = AgentKit(AgentKitConfig(
     wallet_provider=wallet_provider
