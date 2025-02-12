@@ -51,6 +51,7 @@ class AgentKit:
 
         Raises:
             ValueError: If no wallet provider is configured
+
         """
         if not self.wallet_provider:
             raise ValueError("No wallet provider configured")
