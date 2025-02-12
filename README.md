@@ -117,7 +117,7 @@ cd agentkit/python/examples/cdp-langchain-chatbot
 # At this point, fill in your CDP API key name, private key, and OpenAI API key in the
 # .env.example file.
 # Then, rename the .env.example file to .env
-mv .env.example .env
+mv .env.local .env
 
 # Install dependencies
 poetry install
