@@ -8,8 +8,8 @@ from ..action_provider import ActionProvider
 from .schemas import (
     AccountDetailsSchema,
     AccountMentionsSchema,
-    PostTweetSchema,
     PostTweetReplySchema,
+    PostTweetSchema,
 )
 
 

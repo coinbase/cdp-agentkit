@@ -19,7 +19,9 @@ MOCK_EDIT_HISTORY_IDS = ["5678"]
 
 def test_post_tweet_reply_input_model_valid():
     """Test that PostTweetReplyInput accepts valid parameters."""
-    input_model = PostTweetReplySchema(**{"tweet_id": MOCK_TWEET_ID, "tweet_reply": MOCK_REPLY_TEXT})
+    input_model = PostTweetReplySchema(
+        **{"tweet_id": MOCK_TWEET_ID, "tweet_reply": MOCK_REPLY_TEXT}
+    )
     assert isinstance(input_model, PostTweetReplySchema)
     assert input_model.tweet_id == MOCK_TWEET_ID
     assert input_model.tweet_reply == MOCK_REPLY_TEXT
