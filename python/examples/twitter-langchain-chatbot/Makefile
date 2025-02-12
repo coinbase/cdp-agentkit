@@ -4,7 +4,10 @@ endif
 
 export
 
+.PHONY: install
+install:
+	poetry install --with dev
+
 .PHONY: run
 run:
-	poetry install && \
 	poetry run python chatbot.py

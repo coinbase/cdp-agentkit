@@ -40,7 +40,7 @@ poetry --version
 ## Run the Chatbot
 
 ```bash
-poetry install --with dev
+make install
 ```
 
 ### Env
