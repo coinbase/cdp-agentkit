@@ -13,18 +13,11 @@ from langgraph.prebuilt import create_react_agent
 from coinbase_agentkit import (
     AgentKit,
     AgentKitConfig,
-
     CdpWalletProvider,
     CdpWalletProviderConfig,
-    EthAccountWalletProvider,
-    EthAccountWalletProviderConfig,
 
-    cdp_api_action_provider,
-    cdp_wallet_action_provider,
-    erc20_action_provider,
-    pyth_action_provider,
     wallet_action_provider,
-    weth_action_provider,
+    twitter_action_provider,
 )
 from coinbase_agentkit_langchain import get_langchain_tools
 
@@ -54,12 +47,8 @@ def initialize_agent():
     agentkit = AgentKit(AgentKitConfig(
         wallet_provider=wallet_provider,
         action_providers=[
-            cdp_api_action_provider(),
-            cdp_wallet_action_provider(),
-            erc20_action_provider(),
-            pyth_action_provider(),
+            twitter_action_provider(),
             wallet_action_provider(),
-            weth_action_provider(),
         ]
     ))
 
@@ -73,7 +62,7 @@ def initialize_agent():
 
     # Store buffered conversation history in memory.
     memory = MemorySaver()
-    config = {"configurable": {"thread_id": "CDP Agentkit Chatbot Example!"}}
+    config = {"configurable": {"thread_id": "CDP Agentkit Twitter (X) Chatbot Example!"}}
 
     # Create ReAct Agent using the LLM and CDP Agentkit tools.
     return create_react_agent(
