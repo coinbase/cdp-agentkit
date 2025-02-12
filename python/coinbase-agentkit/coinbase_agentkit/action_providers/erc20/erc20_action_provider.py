@@ -105,7 +105,7 @@ class ERC20ActionProvider(ActionProvider):
         """Check if the ERC20 action provider supports the given network.
 
         Args:
-            _: The network to check.
+            network: The network to check.
 
         Returns:
             True if the ERC20 action provider supports the network, false otherwise.
