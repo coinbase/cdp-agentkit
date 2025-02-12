@@ -1,5 +1,9 @@
 from .action_decorator import create_action
 from .action_provider import Action, ActionProvider
+from .basename.basename_action_provider import (
+    BasenameActionProvider,
+    basename_action_provider,
+)
 from .cdp.cdp_api_action_provider import CdpApiActionProvider, cdp_api_action_provider
 from .cdp.cdp_wallet_action_provider import CdpWalletActionProvider, cdp_wallet_action_provider
 from .morpho.morpho_action_provider import MorphoActionProvider, morpho_action_provider
@@ -26,4 +30,6 @@ __all__ = [
     "wallet_action_provider",
     "WethActionProvider",
     "weth_action_provider",
+    "BasenameActionProvider",
+    "basename_action_provider",
 ]

@@ -3,6 +3,7 @@
 from .action_providers import (
     Action,
     ActionProvider,
+    basename_action_provider,
     cdp_api_action_provider,
     cdp_wallet_action_provider,
     create_action,
@@ -30,6 +31,7 @@ __all__ = [
     "Action",
     "ActionProvider",
     "create_action",
+    "basename_action_provider",
     "WalletProvider",
     "CdpWalletProvider",
     "CdpWalletProviderConfig",
