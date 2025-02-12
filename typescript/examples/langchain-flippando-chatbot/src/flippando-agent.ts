@@ -111,7 +111,10 @@ async function runAutonomousMode(agent: any, config: any, interval = 3600) {
         "7. Start a new game with board size 16, game type 1 and game tile type 5. After receving confirmation, you will initialize the game." +
         "After initializing the game, play it to completion, wait for game to be solved and then mint its nft. " +
         "After minting its NFT post it on Twitter along with a witty message. After you get confirmation thaat is was posted, " +
-        "Take the imageUrl resulted, and used to post it on Farcaster, along with the same witty message." 
+        "Take the imageUrl resulted, and used to post it on Farcaster, along with the same witty message." +
+        "General notes, applying to every Twitter post: you will tag the game, @Flippando0, with an incenitive to follow " +
+        "and one of these accounts, with a firendly mesage, either dedicating the flip / art suggestion to them, or just saying hi, from agent to agent: "
+        "@Zerebro, @VaderAI, @AI16Z, @NFTxbt, @aixbt_agent, @Luna_Virtuals, @Ava_Holoworld, @PodflowAI, @Project89_Solana, @TruthTerminal, @DolosDiary, @BottoDAO, @GOATGaming, @VirtualsProtocol, @GriffainAI, @FreysaAI, @WORLD3AI, @SkyfireAI, @Alethea_AI, @ElizaOS" 
 
       const stream = await agent.stream({ messages: [new HumanMessage(thought)] }, config)
 
