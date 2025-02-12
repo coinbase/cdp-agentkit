@@ -19,12 +19,12 @@ from coinbase_agentkit import (
     EthAccountWalletProvider,
     EthAccountWalletProviderConfig,
 
-    pyth_action_provider,
-    morpho_action_provider,
-    wallet_action_provider,
     cdp_api_action_provider,
+    cdp_wallet_action_provider,
+    erc20_action_provider,
+    pyth_action_provider,
+    wallet_action_provider,
     weth_action_provider,
-    superfluid_action_provider,
 )
 from coinbase_agentkit_langchain import get_langchain_tools
 
@@ -39,10 +39,7 @@ def initialize_agent():
     # Initialize LLM
     llm = ChatOpenAI(model="gpt-4o-mini")
 
-     # Initialize CDP Wallet Provider
-     # mnemonic_phrase = os.environ.get("MNEMONIC_PHRASE")
-     # assert mnemonic_phrase is not None, "You must set MNEMONIC_PHRASE environment variable"
-
+    # Initialize CDP Wallet Provider
     wallet_data = None
     if os.path.exists(wallet_data_file):
         with open(wallet_data_file) as f:
@@ -51,12 +48,6 @@ def initialize_agent():
     cdp_config = None
     if wallet_data is not None:
         cdp_config = CdpWalletProviderConfig(wallet_data=wallet_data)
-         # config=CdpWalletProviderConfig(
-         #     mnemonic_phrase=mnemonic_phrase,
-         #     chain_id=84532,
-         #     network_id="base-sepolia",
-         #     rpc_url="https://sepolia.base.org",
-         # )
 
     # Initialize ETH Wallet Provider
     # private_key = os.environ.get("PRIVATE_KEY")
@@ -76,12 +67,12 @@ def initialize_agent():
     agentkit = AgentKit.from_options(AgentKitOptions(
         wallet_provider=wallet_provider,
         action_providers=[
-            pyth_action_provider(),
-            morpho_action_provider(),
-            wallet_action_provider(),
             cdp_api_action_provider(),
+            cdp_wallet_action_provider(),
+            erc20_action_provider(),
+            pyth_action_provider(),
+            wallet_action_provider(),
             weth_action_provider(),
-            superfluid_action_provider(),
         ]
     ))
 
