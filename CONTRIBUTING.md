@@ -22,12 +22,11 @@ Here's a high-level overview of the repository structure:
 │       ├── langchain-farcaster-chatbot/
 │       └── langchain-twitter-chatbot/
 ├── python/
-│   ├── cdp-agentkit-core/
-│   ├── cdp-langchain/
-│   ├── twitter-langchain/
+│   ├── coinbase-agentkit/
+│   │── framework-extensions/
+│   │   └── langchain/
 │   └── examples/
-│       ├── cdp-langchain-chatbot/
-│       └── twitter-langchain-chatbot/
+│       └── langchain-cdp-chatbot/
 ```
 
 ## Language-Specific Guides
