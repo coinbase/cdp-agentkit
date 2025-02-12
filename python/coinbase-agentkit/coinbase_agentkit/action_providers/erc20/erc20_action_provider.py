@@ -10,7 +10,7 @@ from .constants import ERC20_ABI
 from .schemas import GetBalanceSchema, TransferSchema
 
 
-class ERC20ActionProvider(ActionProvider):
+class ERC20ActionProvider(ActionProvider[EvmWalletProvider]):
     """Action provider for ERC20 tokens."""
 
     def __init__(self) -> None:
