@@ -21,9 +21,8 @@ class TransferSchema(BaseModel):
     contract_address: str = Field(description="The contract address of the token to transfer")
     destination: str = Field(description="The destination to transfer the funds")
 
-    # @field_validator("amount")
-    # @classmethod
-    # def validate_wei_amount(cls, v: str) -> str:
-    #     """Validate wei amount."""
-    #     return wei_amount_validator(v)
-
+    @field_validator("amount")
+    @classmethod
+    def validate_wei_amount(cls, v: str) -> str:
+        """Validate wei amount."""
+        return wei_amount_validator(v)

@@ -3,11 +3,11 @@
 import pytest
 from web3 import Web3
 
+from coinbase_agentkit.action_providers.erc20.constants import ERC20_ABI
 from coinbase_agentkit.action_providers.erc20.erc20_action_provider import (
     erc20_action_provider,
 )
 from coinbase_agentkit.action_providers.erc20.schemas import GetBalanceSchema, TransferSchema
-from coinbase_agentkit.action_providers.erc20.constants import ERC20_ABI
 
 from .conftest import (
     MOCK_AMOUNT,
@@ -96,7 +96,6 @@ def test_transfer_success(mock_wallet):
 
     response = provider.transfer(mock_wallet, args)
 
-    # Create contract and encode data
     contract = Web3().eth.contract(address=MOCK_CONTRACT_ADDRESS, abi=ERC20_ABI)
     expected_data = contract.encode_abi("transfer", [MOCK_DESTINATION, int(MOCK_AMOUNT)])
 
@@ -124,7 +123,6 @@ def test_transfer_error(mock_wallet):
 
     response = provider.transfer(mock_wallet, args)
 
-    # Create contract and encode data
     contract = Web3().eth.contract(address=MOCK_CONTRACT_ADDRESS, abi=ERC20_ABI)
     expected_data = contract.encode_abi("transfer", [MOCK_DESTINATION, int(MOCK_AMOUNT)])
 
@@ -134,4 +132,4 @@ def test_transfer_error(mock_wallet):
             "data": expected_data,
         }
     )
-    assert f"Error transferring the asset: {error!s}" in response 
+    assert f"Error transferring the asset: {error!s}" in response

@@ -1,15 +1,11 @@
 """ERC20 action provider implementation."""
 
-from decimal import Decimal
-from typing import Any
-
 from web3 import Web3
 
 from ...network import Network
 from ...wallet_providers import EvmWalletProvider
 from ..action_decorator import create_action
 from ..action_provider import ActionProvider
-
 from .constants import ERC20_ABI
 from .schemas import GetBalanceSchema, TransferSchema
 
@@ -28,9 +24,7 @@ class ERC20ActionProvider(ActionProvider):
         """,
         schema=GetBalanceSchema,
     )
-    def get_balance(
-        self, wallet_provider: EvmWalletProvider, args: GetBalanceSchema
-    ) -> str:
+    def get_balance(self, wallet_provider: EvmWalletProvider, args: GetBalanceSchema) -> str:
         """Get the balance of an ERC20 token.
 
         Args:
@@ -39,6 +33,7 @@ class ERC20ActionProvider(ActionProvider):
 
         Returns:
             A message containing the balance.
+
         """
         try:
             validated_args = GetBalanceSchema(**args)
@@ -70,9 +65,7 @@ class ERC20ActionProvider(ActionProvider):
         """,
         schema=TransferSchema,
     )
-    def transfer(
-        self, wallet_provider: EvmWalletProvider, args: TransferSchema
-    ) -> str:
+    def transfer(self, wallet_provider: EvmWalletProvider, args: TransferSchema) -> str:
         """Transfer a specified amount of an ERC20 token to a destination onchain.
 
         Args:
@@ -81,12 +74,15 @@ class ERC20ActionProvider(ActionProvider):
 
         Returns:
             A message containing the transfer details.
+
         """
         try:
             validated_args = TransferSchema(**args)
 
             contract = Web3().eth.contract(address=validated_args.contract_address, abi=ERC20_ABI)
-            data = contract.encode_abi("transfer", [validated_args.destination, int(validated_args.amount)])
+            data = contract.encode_abi(
+                "transfer", [validated_args.destination, int(validated_args.amount)]
+            )
 
             tx_hash = wallet_provider.send_transaction(
                 {
@@ -113,6 +109,7 @@ class ERC20ActionProvider(ActionProvider):
 
         Returns:
             True if the ERC20 action provider supports the network, false otherwise.
+
         """
         return True
 
@@ -122,5 +119,6 @@ def erc20_action_provider() -> ERC20ActionProvider:
 
     Returns:
         A new ERC20 action provider instance.
+
     """
     return ERC20ActionProvider()

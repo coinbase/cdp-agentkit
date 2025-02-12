@@ -1,10 +1,10 @@
 """Test fixtures for ERC20 action provider tests."""
 
-import pytest
 from unittest.mock import Mock
 
-from coinbase_agentkit.wallet_providers.evm_wallet_provider import EvmWalletProvider
+import pytest
 
+from coinbase_agentkit.wallet_providers.evm_wallet_provider import EvmWalletProvider
 
 MOCK_AMOUNT = "1000000000000000000"  # 1 token in base units
 MOCK_CONTRACT_ADDRESS = "0x1234567890123456789012345678901234567890"
