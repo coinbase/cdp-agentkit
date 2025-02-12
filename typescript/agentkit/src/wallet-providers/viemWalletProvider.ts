@@ -11,9 +11,24 @@ import {
   ReadContractReturnType,
   parseEther,
 } from "viem";
-import { EvmWalletProvider, EvmWalletProviderGasConfig } from "./evmWalletProvider";
+import { EvmWalletProvider } from "./evmWalletProvider";
 import { Network } from "../network";
 import { CHAIN_ID_TO_NETWORK_ID } from "../network/network";
+
+/**
+ * Configuration for gas multipliers.
+ */
+export interface ViemWalletProviderGasConfig {
+  /**
+   * A internal multiplier on gas limit estimation.
+   */
+  gasLimitMultiplier?: number;
+
+  /**
+   * A internal multiplier on fee per gas estimation.
+   */
+  feePerGasMultiplier?: number;
+}
 
 /**
  * A wallet provider that uses the Viem library.
@@ -21,6 +36,8 @@ import { CHAIN_ID_TO_NETWORK_ID } from "../network/network";
 export class ViemWalletProvider extends EvmWalletProvider {
   #walletClient: ViemWalletClient;
   #publicClient: ViemPublicClient;
+  #gasLimitMultiplier: number;
+  #feePerGasMultiplier: number;
 
   /**
    * Constructs a new ViemWalletProvider.
@@ -28,19 +45,16 @@ export class ViemWalletProvider extends EvmWalletProvider {
    * @param walletClient - The wallet client.
    * @param gasConfig - Configuration for gas multipliers.
    */
-  constructor(walletClient: ViemWalletClient, gasConfig?: EvmWalletProviderGasConfig) {
-    const publicClient = createPublicClient({
-      chain: walletClient.chain,
-      transport: http(),
-    });
-
-    super({ gas: gasConfig, publicClient });
+  constructor(walletClient: ViemWalletClient, gasConfig?: ViemWalletProviderGasConfig) {
+    super();
 
     this.#walletClient = walletClient;
     this.#publicClient = createPublicClient({
       chain: walletClient.chain,
       transport: http(),
     });
+    this.#gasLimitMultiplier = Math.max(gasConfig?.gasLimitMultiplier ?? 1, 1);
+    this.#feePerGasMultiplier = Math.max(gasConfig?.feePerGasMultiplier ?? 1, 1);
   }
 
   /**
@@ -109,15 +123,17 @@ export class ViemWalletProvider extends EvmWalletProvider {
       throw new Error("Chain not found");
     }
 
-    const gas = await this.estimateGas({
+    const feeData = await this.#publicClient.estimateFeesPerGas();
+    const maxFeePerGas = BigInt(Math.round(Number(feeData.maxFeePerGas) * this.#feePerGasMultiplier))
+    const maxPriorityFeePerGas = BigInt(Math.round(Number(feeData.maxPriorityFeePerGas) * this.#feePerGasMultiplier))
+
+    const gasLimit = await this.#publicClient.estimateGas({
       account,
       to: transaction.to,
       value: transaction.value,
       data: transaction.data
     })
-
-    const { maxFeePerGas, maxPriorityFeePerGas } = await this.estimateFeesPerGas();
-
+    const gas = BigInt(Math.round(Number(gasLimit) * this.#gasLimitMultiplier));
 
     const txParams = {
       account: account,

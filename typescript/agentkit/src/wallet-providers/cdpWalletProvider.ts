@@ -12,7 +12,7 @@ import {
   Signature,
   PublicClient,
 } from "viem";
-import { EvmWalletProvider, EvmWalletProviderGasConfig } from "./evmWalletProvider";
+import { EvmWalletProvider } from "./evmWalletProvider";
 import { Network } from "../network";
 import {
   Coinbase,
@@ -70,7 +70,17 @@ export interface CdpWalletProviderConfig extends CdpProviderConfig {
   /**
    * Configuration for gas multipliers.
    */
-  gas?: EvmWalletProviderGasConfig;
+  gas?: {
+    /**
+     * A internal multiplier on gas limit estimation.
+     */
+    gasLimitMultiplier?: number;
+  
+    /**
+     * A internal multiplier on fee per gas estimation.
+     */
+    feePerGasMultiplier?: number;
+  }
 }
 
 /**
@@ -96,6 +106,8 @@ export class CdpWalletProvider extends EvmWalletProvider {
   #address?: string;
   #network?: Network;
   #publicClient: PublicClient;
+  #gasLimitMultiplier: number;
+  #feePerGasMultiplier: number;
 
   /**
    * Constructs a new CdpWalletProvider.
@@ -103,17 +115,17 @@ export class CdpWalletProvider extends EvmWalletProvider {
    * @param config - The configuration options for the CdpWalletProvider.
    */
   private constructor(config: CdpWalletProviderConfig) {
-    const publicClient = createPublicClient({
-      chain: NETWORK_ID_TO_VIEM_CHAIN[config.network!.networkId!],
-      transport: http(),
-    });
-
-    super({gas: config.gas, publicClient});
+    super();
 
     this.#cdpWallet = config.wallet;
     this.#address = config.address;
     this.#network = config.network;
-    this.#publicClient = publicClient;
+    this.#publicClient = createPublicClient({
+      chain: NETWORK_ID_TO_VIEM_CHAIN[config.network!.networkId!],
+      transport: http(),
+    });
+    this.#gasLimitMultiplier = Math.max(config.gas?.gasLimitMultiplier ?? 1, 1);
+    this.#feePerGasMultiplier = Math.max(config.gas?.feePerGasMultiplier ?? 1, 1);
   }
 
   /**
@@ -296,14 +308,17 @@ export class CdpWalletProvider extends EvmWalletProvider {
       address: this.#address! as `0x${string}`,
     });
 
-    const { maxFeePerGas, maxPriorityFeePerGas } = await this.estimateFeesPerGas();
+    const feeData = await this.#publicClient.estimateFeesPerGas();
+    const maxFeePerGas = BigInt(Math.round(Number(feeData.maxFeePerGas) * this.#feePerGasMultiplier))
+    const maxPriorityFeePerGas = BigInt(Math.round(Number(feeData.maxPriorityFeePerGas) * this.#feePerGasMultiplier))
 
-    const gas = await this.estimateGas({
+    const gasLimit = await this.#publicClient.estimateGas({
       account: this.#address! as `0x${string}`,
       to,
       value,
       data,
     });
+    const gas = BigInt(Math.round(Number(gasLimit) * this.#gasLimitMultiplier));
 
     const chainId = parseInt(this.#network!.chainId!, 10);
 
