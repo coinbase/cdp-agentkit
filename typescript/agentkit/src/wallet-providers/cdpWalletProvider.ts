@@ -75,12 +75,12 @@ export interface CdpWalletProviderConfig extends CdpProviderConfig {
      * A internal multiplier on gas limit estimation.
      */
     gasLimitMultiplier?: number;
-  
+
     /**
      * A internal multiplier on fee per gas estimation.
      */
     feePerGasMultiplier?: number;
-  }
+  };
 }
 
 /**
@@ -181,6 +181,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
       wallet,
       address,
       network,
+      gas: config.gas
     });
 
     return cdpWalletProvider;
@@ -309,8 +310,12 @@ export class CdpWalletProvider extends EvmWalletProvider {
     });
 
     const feeData = await this.#publicClient.estimateFeesPerGas();
-    const maxFeePerGas = BigInt(Math.round(Number(feeData.maxFeePerGas) * this.#feePerGasMultiplier))
-    const maxPriorityFeePerGas = BigInt(Math.round(Number(feeData.maxPriorityFeePerGas) * this.#feePerGasMultiplier))
+    const maxFeePerGas = BigInt(
+      Math.round(Number(feeData.maxFeePerGas) * this.#feePerGasMultiplier),
+    );
+    const maxPriorityFeePerGas = BigInt(
+      Math.round(Number(feeData.maxPriorityFeePerGas) * this.#feePerGasMultiplier),
+    );
 
     const gasLimit = await this.#publicClient.estimateGas({
       account: this.#address! as `0x${string}`,
@@ -512,7 +517,6 @@ export class CdpWalletProvider extends EvmWalletProvider {
     if (!this.#cdpWallet) {
       throw new Error("Wallet not initialized");
     }
-
     const transferResult = await this.#cdpWallet.createTransfer({
       amount: new Decimal(value),
       assetId: Coinbase.assets.Eth,

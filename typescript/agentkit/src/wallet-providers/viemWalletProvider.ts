@@ -124,15 +124,19 @@ export class ViemWalletProvider extends EvmWalletProvider {
     }
 
     const feeData = await this.#publicClient.estimateFeesPerGas();
-    const maxFeePerGas = BigInt(Math.round(Number(feeData.maxFeePerGas) * this.#feePerGasMultiplier))
-    const maxPriorityFeePerGas = BigInt(Math.round(Number(feeData.maxPriorityFeePerGas) * this.#feePerGasMultiplier))
+    const maxFeePerGas = BigInt(
+      Math.round(Number(feeData.maxFeePerGas) * this.#feePerGasMultiplier),
+    );
+    const maxPriorityFeePerGas = BigInt(
+      Math.round(Number(feeData.maxPriorityFeePerGas) * this.#feePerGasMultiplier),
+    );
 
     const gasLimit = await this.#publicClient.estimateGas({
       account,
       to: transaction.to,
       value: transaction.value,
-      data: transaction.data
-    })
+      data: transaction.data,
+    });
     const gas = BigInt(Math.round(Number(gasLimit) * this.#gasLimitMultiplier));
 
     const txParams = {

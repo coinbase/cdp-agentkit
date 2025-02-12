@@ -1,8 +1,8 @@
 // TODO: Improve type safety
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { TransactionRequest, ReadContractParameters, ReadContractReturnType } from "viem";
 import { WalletProvider } from "./walletProvider";
-import { TransactionRequest, ReadContractParameters, ReadContractReturnType, PublicClient, EstimateGasReturnType, EstimateGasParameters, Chain, EstimateFeesPerGasParameters, FeeValuesEIP1559 } from "viem";
 
 /**
  * EvmWalletProvider is the abstract base class for all EVM wallet providers.

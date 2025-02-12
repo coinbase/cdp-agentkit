@@ -89,8 +89,8 @@ async function initializeAgent() {
       networkId: process.env.NETWORK_ID || "base-sepolia",
       gas: {
         gasLimitMultiplier: 1.2,
-        feePerGasMultiplier: 1.1
-      }
+        feePerGasMultiplier: 1.1,
+      },
     };
     const walletProvider = await CdpWalletProvider.configureWithWallet(config);
 
