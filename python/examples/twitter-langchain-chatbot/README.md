@@ -47,6 +47,8 @@ poetry install --with dev
 
 Rename .env.local to .env and ensure the following var are set:
 
+- "CDP_API_KEY_NAME"
+- "CDP_API_KEY_PRIVATE_KEY"
 - "OPENAI_API_KEY"
 - "TWITTER_ACCESS_TOKEN"
 - "TWITTER_ACCESS_TOKEN_SECRET"

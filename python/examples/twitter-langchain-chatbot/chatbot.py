@@ -13,7 +13,6 @@ from langgraph.prebuilt import create_react_agent
 from coinbase_agentkit import (
     AgentKit,
     AgentKitOptions,
-
     CdpWalletProvider,
     CdpWalletProviderConfig,
 
@@ -42,19 +41,6 @@ def initialize_agent():
     cdp_config = None
     if wallet_data is not None:
         cdp_config = CdpWalletProviderConfig(wallet_data=wallet_data)
-
-    # Initialize ETH Wallet Provider
-    # private_key = os.environ.get("PRIVATE_KEY")
-    # assert private_key is not None, "You must set PRIVATE_KEY environment variable"
-    # assert private_key.startswith("0x"), "Private key must start with 0x hex prefix"
-
-    # wallet_provider = EthAccountWalletProvider(
-    #     config=EthAccountWalletProviderConfig(
-    #         private_key=private_key,
-    #         chain_id=84532,
-    #         rpc_url="https://sepolia.base.org",
-    #     )
-    # )
 
     wallet_provider = CdpWalletProvider(cdp_config)
 
