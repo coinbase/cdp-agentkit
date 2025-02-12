@@ -89,4 +89,4 @@ Here are some common issues you might run into when developing in our monorepo a
 
 | Issue | Resolution |
 | ----- | ---------- |
-| Python imports are not resolving in VSCode / Cursor | Try opening the package folder in a new window. For example, `cd python/cdp-agentkit-core` and then `code .` or `cursor .` |
+| Python imports are not resolving in VSCode / Cursor | Try opening the package folder in a new window. For example, `cd python/coinbase-agentkit` and then `code .` or `cursor .` |

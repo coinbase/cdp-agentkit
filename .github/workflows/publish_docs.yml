@@ -47,8 +47,8 @@ jobs:
         id: cached-poetry-dependencies-core
         uses: actions/cache@v3
         with:
-          path: ./python/cdp-agentkit-core/.venv
-          key: venv-agentkit-${{ runner.os }}-3.10-${{ hashFiles('python/cdp-agentkit-core/poetry.lock') }}
+          path: ./python/coinbase-agentkit/.venv
+          key: venv-agentkit-${{ runner.os }}-3.10-${{ hashFiles('python/coinbase-agentkit/poetry.lock') }}
 
       - name: Install dependencies for Coinbase AgentKit Python
         if: steps.cached-poetry-dependencies-core.outputs.cache-hit != 'true'

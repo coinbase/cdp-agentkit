@@ -4,14 +4,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy-pypi-cdp-agentkit-core:
+  deploy-pypi-coinbase-agentkit:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./python/cdp-agentkit-core
+        working-directory: ./python/coinbase-agentkit
     environment:
       name: pypi
-      url: https://pypi.org/p/cdp-agentkit-core
+      url: https://pypi.org/p/coinbase-agentkit
     permissions:
       contents: read
       id-token: write
@@ -41,4 +41,4 @@ jobs:
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         password: ${{ secrets.PYPI_API_TOKEN }}
-        packages-dir: python/cdp-agentkit-core/dist/
+        packages-dir: python/coinbase-agentkit/dist/
