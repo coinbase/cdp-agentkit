@@ -1,6 +1,5 @@
 """Tests for CDP API address reputation action."""
 
-
 from cdp.address_reputation import (
     AddressReputation,
     AddressReputationMetadata,
