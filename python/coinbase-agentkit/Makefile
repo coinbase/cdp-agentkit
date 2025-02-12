@@ -16,7 +16,7 @@ lint-fix:
 
 .PHONY: docs
 docs:
-	poetry run sphinx-apidoc -f -o ./docs ./cdp_agentkit_core
+	poetry run sphinx-apidoc -f -o ./docs ./coinbase_agentkit
 
 .PHONY: local-docs
 local-docs: docs

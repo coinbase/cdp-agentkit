@@ -12,7 +12,7 @@ lint-fix:
 
 .PHONY: docs
 docs:
-	poetry run sphinx-apidoc -f -o ./docs ./cdp_langchain
+	poetry run sphinx-apidoc -f -o ./docs ./coinbase_agentkit_langchain
 
 .PHONY: local-docs
 local-docs: docs
