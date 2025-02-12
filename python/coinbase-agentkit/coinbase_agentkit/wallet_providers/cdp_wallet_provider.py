@@ -19,7 +19,7 @@ from pydantic import BaseModel, Field
 from web3 import Web3
 from web3.types import BlockIdentifier, ChecksumAddress, HexStr, TxParams
 
-from ..network import Network
+from ..network import NETWORK_ID_TO_CHAIN, Network
 from .evm_wallet_provider import EvmWalletProvider
 
 
@@ -33,10 +33,8 @@ class CdpProviderConfig(BaseModel):
 class CdpWalletProviderConfig(CdpProviderConfig):
     """Configuration options for CDP wallet provider."""
 
-    chain_id: int | None = Field(None, description="The chain id")
     network_id: str | None = Field("base-sepolia", description="The network id")
     mnemonic_phrase: str | None = Field(None, description="The mnemonic phrase of the wallet")
-    rpc_url: str | None = Field(None, description="The RPC URL")
     wallet_data: str | None = Field(None, description="The data of the CDP Wallet as a JSON string")
 
 
@@ -66,17 +64,11 @@ class CdpWalletProvider(EvmWalletProvider):
                 Cdp.configure_from_json()
 
             network_id = config.network_id or os.getenv("NETWORK_ID", "base-sepolia")
-            chain_id = config.chain_id or os.getenv("CHAIN_ID", "84532")
-            rpc_url = config.rpc_url or os.getenv("RPC_URL", "https://sepolia.base.org")
+            chain = NETWORK_ID_TO_CHAIN[network_id]
+            rpc_url = chain.rpc_urls["default"].http[0]
 
             if not network_id:
                 raise ValueError("NETWORK_ID is required")
-
-            if not chain_id:
-                raise ValueError("CHAIN_ID is required")
-
-            if not rpc_url:
-                raise ValueError("RPC_URL is required")
 
             if config.wallet_data:
                 wallet_data = WalletData.from_dict(json.loads(config.wallet_data))
@@ -91,7 +83,7 @@ class CdpWalletProvider(EvmWalletProvider):
             self._network = Network(
                 protocol_family="evm",
                 network_id=network_id,
-                chain_id=chain_id,
+                chain_id=chain.id,
             )
             self._web3 = Web3(Web3.HTTPProvider(rpc_url))
 

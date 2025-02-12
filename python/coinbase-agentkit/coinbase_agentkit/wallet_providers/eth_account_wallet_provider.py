@@ -1,7 +1,7 @@
 from decimal import Decimal
 from typing import Any
 
-from eth_account import Account
+from eth_account.account import LocalAccount
 from eth_account.datastructures import SignedTransaction
 from eth_account.messages import encode_defunct
 from pydantic import BaseModel
@@ -9,28 +9,39 @@ from web3 import Web3
 from web3.middleware import SignAndSendRawMiddlewareBuilder
 from web3.types import BlockIdentifier, ChecksumAddress, HexStr, TxParams
 
-from ..network import Network
+from ..network import NETWORK_ID_TO_CHAIN, NETWORK_ID_TO_CHAIN_ID, Network
 from .evm_wallet_provider import EvmWalletProvider
 
 
 class EthAccountWalletProviderConfig(BaseModel):
     """Configuration for EthAccountWalletProvider."""
 
-    private_key: str
-    rpc_url: str
-    chain_id: int
+    account: LocalAccount
+    network_id: str
+
+    class Config:
+        """Configuration for EthAccountWalletProvider."""
+
+        arbitrary_types_allowed = True
 
 
 class EthAccountWalletProvider(EvmWalletProvider):
     """Implementation of EvmWalletProvider using eth-account and web3.py."""
 
     def __init__(self, config: EthAccountWalletProviderConfig):
-        """Initialize the wallet provider with a private key and RPC URL."""
+        """Initialize the wallet provider with an eth-account."""
         self.config = config
-        self.web3 = Web3(Web3.HTTPProvider(config.rpc_url))
-        self.account = Account.from_key(config.private_key)
+        chain = NETWORK_ID_TO_CHAIN[config.network_id]
+        rpc_url = chain.rpc_urls["default"].http[0]
+        self.web3 = Web3(Web3.HTTPProvider(rpc_url))
+        self.account = config.account
         self.web3.middleware_onion.inject(
             SignAndSendRawMiddlewareBuilder.build(self.account), layer=0
+        )
+        self._network = Network(
+            protocol_family="evm",
+            chain_id=NETWORK_ID_TO_CHAIN_ID[self.config.network_id],
+            network_id=self.config.network_id,
         )
 
     def get_address(self) -> str:
@@ -39,11 +50,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
 
     def get_network(self) -> Network:
         """Get the current network."""
-        return Network(
-            protocol_family="evm",
-            chain_id=self.config.chain_id,
-            network_id=str(self.web3.net.version),
-        )
+        return self._network
 
     def get_balance(self) -> Decimal:
         """Get the wallet balance in native currency."""
@@ -70,7 +77,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
     def sign_transaction(self, transaction: TxParams) -> SignedTransaction:
         """Sign an EVM transaction."""
         if "chainId" not in transaction:
-            transaction["chainId"] = self.config.chain_id
+            transaction["chainId"] = self._network.chain_id
         if "from" not in transaction:
             transaction["from"] = self.account.address
 
@@ -94,7 +101,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
     def send_transaction(self, transaction: TxParams) -> HexStr:
         """Send a signed transaction to the network."""
         transaction["from"] = self.account.address
-        transaction["chainId"] = self.config.chain_id
+        transaction["chainId"] = self._network.chain_id
 
         nonce = self.web3.eth.get_transaction_count(self.account.address)
         transaction["nonce"] = nonce
