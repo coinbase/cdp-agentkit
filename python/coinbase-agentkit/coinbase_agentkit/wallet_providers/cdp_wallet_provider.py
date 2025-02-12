@@ -242,7 +242,7 @@ class CdpWalletProvider(EvmWalletProvider):
             transaction["to"] = b""
 
         transaction["from"] = self._address
-        transaction["value"] = int(transaction["value"])
+        transaction["value"] = int(transaction.get("value", 0))
         transaction["type"] = 2
         transaction["chainId"] = self._network.chain_id
 

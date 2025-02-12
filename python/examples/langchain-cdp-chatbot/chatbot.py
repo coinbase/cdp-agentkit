@@ -24,6 +24,7 @@ from coinbase_agentkit import (
     wallet_action_provider,
     cdp_api_action_provider,
     weth_action_provider,
+    superfluid_action_provider,
 )
 from coinbase_agentkit_langchain import get_langchain_tools
 
@@ -80,6 +81,7 @@ def initialize_agent():
             wallet_action_provider(),
             cdp_api_action_provider(),
             weth_action_provider(),
+            superfluid_action_provider(),
         ]
     ))
 

@@ -10,6 +10,7 @@ from .action_providers import (
     erc20_action_provider,
     morpho_action_provider,
     pyth_action_provider,
+    superfluid_action_provider,
     twitter_action_provider,
     wallet_action_provider,
     weth_action_provider,
@@ -47,4 +48,5 @@ __all__ = [
     "twitter_action_provider",
     "wallet_action_provider",
     "weth_action_provider",
+    "superfluid_action_provider",
 ]

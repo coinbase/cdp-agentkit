@@ -67,10 +67,10 @@ Important notes:
                 "data": encoded_data,
             }
 
-            hash = wallet.send_transaction(params)
-            wallet.wait_for_transaction_receipt(hash)
+            tx_hash = wallet.send_transaction(params)
+            wallet.wait_for_transaction_receipt(tx_hash)
 
-            return f"Deposited {args['assets']} to Morpho Vault {args['vault_address']} with transaction hash: {hash}"
+            return f"Deposited {args['assets']} to Morpho Vault {args['vault_address']} with transaction hash: {tx_hash}"
 
         except Exception as e:
             return f"Error depositing to Morpho Vault: {e!s}"
@@ -105,10 +105,10 @@ This tool allows withdrawing assets from a Morpho Vault. It takes:
                 "data": encoded_data,
             }
 
-            hash = wallet.send_transaction(params)
-            wallet.wait_for_transaction_receipt(hash)
+            tx_hash = wallet.send_transaction(params)
+            wallet.wait_for_transaction_receipt(tx_hash)
 
-            return f"Withdrawn {args['assets']} from Morpho Vault {args['vault_address']} with transaction hash: {hash}"
+            return f"Withdrawn {args['assets']} from Morpho Vault {args['vault_address']} with transaction hash: {tx_hash}"
 
         except Exception as e:
             return f"Error withdrawing from Morpho Vault: {e!s}"
