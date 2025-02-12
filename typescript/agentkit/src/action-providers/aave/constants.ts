@@ -5,6 +5,27 @@ import { AaveV3Base } from "@bgd-labs/aave-address-book";
 export const SUPPORTED_NETWORKS = ["base-mainnet"] as const;
 export type SupportedNetwork = (typeof SUPPORTED_NETWORKS)[number];
 
+// ERC20 ABI for token interactions
+export const ERC20_ABI = [
+  {
+    type: "function",
+    name: "balanceOf",
+    inputs: [{ name: "account", type: "address" }],
+    outputs: [{ type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "approve",
+    inputs: [
+      { name: "spender", type: "address" },
+      { name: "amount", type: "uint256" },
+    ],
+    outputs: [{ type: "bool" }],
+    stateMutability: "nonpayable",
+  },
+] as const;
+
 export const AAVE_V3_ADDRESSES: Record<
   SupportedNetwork,
   {

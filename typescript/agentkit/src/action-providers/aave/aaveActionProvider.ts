@@ -6,7 +6,7 @@ import { ActionProvider } from "../actionProvider";
 import { CreateAction } from "../actionDecorator";
 import { Network } from "../../network";
 import { EvmWalletProvider } from "../../wallet-providers";
-import { AAVE_V3_ADDRESSES, SUPPORTED_ASSETS } from "./constants";
+import { AAVE_V3_ADDRESSES, SUPPORTED_ASSETS, ERC20_ABI } from "./constants";
 import { SupplySchema, WithdrawSchema } from "./schemas";
 import { approve } from "../../utils";
 import { ethers } from "ethers";
@@ -63,10 +63,17 @@ The tool will handle the approval and supply transaction.
         return `Error: Aave is only available on Base mainnet...`;
       }
 
-      const provider = (await wallet.getProvider()) as ExtendedProvider;
-      if (!provider) {
-        return "Error: Could not connect to network provider";
-      }
+      const provider = {
+        transport: { url: "https://mainnet.base.org" },
+        getBalance: async (address: string) => {
+          return wallet.readContract({
+            address: chainAddresses.ASSETS[asset],
+            abi: ERC20_ABI,
+            functionName: 'balanceOf',
+            args: [address]
+          }) as Promise<bigint>;
+        }
+      } as ExtendedProvider;
 
       const ethersProvider = new ethers.providers.JsonRpcProvider(provider.transport.url);
 
@@ -79,6 +86,13 @@ The tool will handle the approval and supply transaction.
       // Handle USDC supply
       if (asset.toUpperCase() === "USDC") {
         const atomicAmount = parseUnits(amount, SUPPORTED_ASSETS.USDC.decimals);
+
+        // Check USDC balance using Base mainnet USDC address
+        const usdcBalance = await provider.getBalance(wallet.getAddress() as `0x${string}`);
+
+        if (usdcBalance < atomicAmount) {
+          return `Error: Insufficient USDC balance. You have ${formatUnits(usdcBalance, SUPPORTED_ASSETS.USDC.decimals)} USDC but need ${amount} USDC`;
+        }
 
         try {
           // First approve USDC spending
@@ -208,7 +222,17 @@ The tool will handle the withdrawal transaction.
         return `Error withdrawing from Aave: Chain ${chain} is not supported`;
       }
 
-      const provider = (await wallet.getProvider()) as ExtendedProvider;
+      const provider = {
+        transport: { url: "https://mainnet.base.org" },
+        getBalance: async (address: string) => {
+          return wallet.readContract({
+            address: chainAddresses.ASSETS[asset],
+            abi: ERC20_ABI,
+            functionName: 'balanceOf',
+            args: [address]
+          }) as Promise<bigint>;
+        }
+      } as ExtendedProvider;
 
       const ethersProvider = new ethers.providers.JsonRpcProvider(provider.transport.url);
       const pool = new Pool(ethersProvider, {
