@@ -1,14 +1,14 @@
 from pydantic import BaseModel, ConfigDict
 
-from .action_providers import Action, ActionProvider
-from .wallet_providers import WalletProvider
+from .action_providers import Action, ActionProvider, wallet_action_provider
+from .wallet_providers import CdpWalletProvider, CdpWalletProviderConfig, WalletProvider
 
 
-class AgentKitOptions(BaseModel):
+class AgentKitConfig(BaseModel):
     """Configuration options for AgentKit."""
 
     cdp_api_key_name: str | None = None
-    cdp_api_key_private: str | None = None
+    cdp_api_key_private_key: str | None = None
     wallet_provider: WalletProvider | None = None
     action_providers: list[ActionProvider] | None = None
 
@@ -18,14 +18,17 @@ class AgentKitOptions(BaseModel):
 class AgentKit:
     """Main AgentKit class for managing wallet and action providers."""
 
-    def __init__(self, options: AgentKitOptions):
-        self.wallet_provider = options.wallet_provider
-        self.action_providers = options.action_providers or []
+    def __init__(self, config: AgentKitConfig | None = None):
+        if not config:
+            config = AgentKitConfig()
 
-    @classmethod
-    def from_options(cls, options: AgentKitOptions) -> "AgentKit":
-        """Create an AgentKit instance from options."""
-        return cls(options)
+        self.wallet_provider = config.wallet_provider or CdpWalletProvider(
+            CdpWalletProviderConfig(
+                api_key_name=config.cdp_api_key_name,
+                api_key_private_key=config.cdp_api_key_private_key,
+            )
+        )
+        self.action_providers = config.action_providers or [wallet_action_provider()]
 
     def get_actions(self) -> list[Action]:
         """Get all available actions."""
