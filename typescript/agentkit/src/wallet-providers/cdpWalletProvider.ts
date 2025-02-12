@@ -96,7 +96,6 @@ export class CdpWalletProvider extends EvmWalletProvider {
   #address?: string;
   #network?: Network;
   #publicClient: PublicClient;
-  #gasMultiplier: number;
 
   /**
    * Constructs a new CdpWalletProvider.
@@ -104,16 +103,17 @@ export class CdpWalletProvider extends EvmWalletProvider {
    * @param config - The configuration options for the CdpWalletProvider.
    */
   private constructor(config: CdpWalletProviderConfig) {
-    super();
+    const publicClient = createPublicClient({
+      chain: NETWORK_ID_TO_VIEM_CHAIN[config.network!.networkId!],
+      transport: http(),
+    });
+
+    super({gasMultiplier: config.gasMultiplier, publicClient});
 
     this.#cdpWallet = config.wallet;
     this.#address = config.address;
     this.#network = config.network;
-    this.#gasMultiplier = Math.min(config.gasMultiplier ?? 1, 1);
-    this.#publicClient = createPublicClient({
-      chain: NETWORK_ID_TO_VIEM_CHAIN[config.network!.networkId!],
-      transport: http(),
-    });
+    this.#publicClient = publicClient;
   }
 
   /**
@@ -296,18 +296,13 @@ export class CdpWalletProvider extends EvmWalletProvider {
       address: this.#address! as `0x${string}`,
     });
 
-    const feeData = await this.#publicClient!.estimateFeesPerGas();
+    const { maxFeePerGas, maxPriorityFeePerGas } = await this.#publicClient!.estimateFeesPerGas();
 
-    const maxFeePerGas = BigInt(Math.round(Number(feeData.maxFeePerGas) * this.#gasMultiplier));
-    const maxPriorityFeePerGas = BigInt(Math.round(Number(feeData.maxPriorityFeePerGas) * this.#gasMultiplier));
-
-    const gas = await this.#publicClient!.estimateGas({
+    const gas = await this.estimateGas({
       account: this.#address! as `0x${string}`,
       to,
       value,
       data,
-      maxFeePerGas,
-      maxPriorityFeePerGas,
     });
 
     const chainId = parseInt(this.#network!.chainId!, 10);

@@ -2,7 +2,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { WalletProvider } from "./walletProvider";
-import { TransactionRequest, ReadContractParameters, ReadContractReturnType } from "viem";
+import { TransactionRequest, ReadContractParameters, ReadContractReturnType, PublicClient, EstimateGasReturnType, EstimateGasParameters, Chain } from "viem";
+
+/**
+ * Configuration options for the EVM Providers.
+ */
+export interface EVMProviderConfig {
+  /**
+   * A RPC client.
+   */
+  publicClient: PublicClient;
+
+  /**
+   * A internal multiplier on gas estimation.
+   */
+  gasMultiplier?: number;
+}
 
 /**
  * EvmWalletProvider is the abstract base class for all EVM wallet providers.
@@ -10,6 +25,15 @@ import { TransactionRequest, ReadContractParameters, ReadContractReturnType } fr
  * @abstract
  */
 export abstract class EvmWalletProvider extends WalletProvider {
+  #publicClient: PublicClient;
+  #gasMultiplier: number;
+
+  constructor(config: EVMProviderConfig) {
+    super();
+    this.#gasMultiplier = Math.max(config.gasMultiplier ?? 1, 1);
+    this.#publicClient = config.publicClient;
+  }
+
   /**
    * Sign a message.
    *
@@ -57,4 +81,9 @@ export abstract class EvmWalletProvider extends WalletProvider {
    * @returns The response from the contract.
    */
   abstract readContract(params: ReadContractParameters): Promise<ReadContractReturnType>;
+
+  protected async estimateGas(args: EstimateGasParameters<Chain | undefined>): Promise<EstimateGasReturnType> {
+    const gasLimit = await this.#publicClient.estimateGas(args);
+    return BigInt(Math.round(Number(gasLimit) * this.#gasMultiplier))
+  }
 }
