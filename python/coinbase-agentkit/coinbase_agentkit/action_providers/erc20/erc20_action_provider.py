@@ -57,7 +57,7 @@ class ERC20ActionProvider(ActionProvider):
         It takes the following inputs:
         - amount: The amount to transfer
         - contractAddress: The contract address of the token to transfer
-        - destination: Where to send the funds (can be an onchain address, ENS 'example.eth', or Basename 'example.base.eth')
+        - destination: Where to send the tokens
 
         Important notes:
         - Ensure sufficient balance of the input asset before transferring
