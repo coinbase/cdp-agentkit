@@ -6,7 +6,7 @@ import pytest
 from pydantic_core import ValidationError
 
 from coinbase_agentkit.action_providers.wow.constants import WOW_ABI
-from coinbase_agentkit.action_providers.wow.schemas import WowSellTokenInput
+from coinbase_agentkit.action_providers.wow.schemas import WowSellTokenSchema
 from coinbase_agentkit.action_providers.wow.wow_action_provider import WowActionProvider
 
 MOCK_CONTRACT_ADDRESS = "0x1234567890123456789012345678901234567890"
@@ -20,7 +20,7 @@ MOCK_RECEIPT = {"status": 1, "transactionHash": MOCK_TX_HASH}
 
 def test_sell_token_input_model_valid():
     """Test that WowSellTokenInput accepts valid parameters."""
-    input_model = WowSellTokenInput(
+    input_model = WowSellTokenSchema(
         contract_address=MOCK_CONTRACT_ADDRESS,
         amount_tokens_in_wei=MOCK_AMOUNT_TOKENS,
     )
@@ -32,7 +32,7 @@ def test_sell_token_input_model_valid():
 def test_sell_token_input_model_invalid_address():
     """Test that WowSellTokenInput rejects invalid addresses."""
     with pytest.raises(ValidationError) as exc_info:
-        WowSellTokenInput(
+        WowSellTokenSchema(
             contract_address="0xinvalid",
             amount_tokens_in_wei=MOCK_AMOUNT_TOKENS,
         )
@@ -42,7 +42,7 @@ def test_sell_token_input_model_invalid_address():
 def test_sell_token_input_model_invalid_wei():
     """Test that WowSellTokenInput rejects invalid wei amounts."""
     with pytest.raises(ValidationError):
-        WowSellTokenInput(
+        WowSellTokenSchema(
             contract_address=MOCK_CONTRACT_ADDRESS,
             amount_tokens_in_wei="1.5",
         )
@@ -51,7 +51,7 @@ def test_sell_token_input_model_invalid_wei():
 def test_sell_token_input_model_missing_params():
     """Test that WowSellTokenInput raises error when params are missing."""
     with pytest.raises(ValidationError):
-        WowSellTokenInput()
+        WowSellTokenSchema()
 
 
 def test_sell_token_success():

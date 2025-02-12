@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
 
-class MorphoDepositInput(BaseModel):
+class MorphoDepositSchema(BaseModel):
     """Input schema for Morpho Vault deposit action."""
 
     assets: str = Field(..., description="The quantity of assets to deposit, in whole units")
@@ -15,7 +15,7 @@ class MorphoDepositInput(BaseModel):
     vault_address: str = Field(..., description="The address of the Morpho Vault to deposit to")
 
 
-class MorphoWithdrawInput(BaseModel):
+class MorphoWithdrawSchema(BaseModel):
     """Input schema for Morpho Vault withdraw action."""
 
     vault_address: str = Field(..., description="The address of the Morpho Vault to withdraw from")

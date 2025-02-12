@@ -6,7 +6,7 @@ from unittest.mock import patch
 import pytest
 import tweepy
 
-from coinbase_agentkit.action_providers.twitter.schemas import PostTweetReplyInput
+from coinbase_agentkit.action_providers.twitter.schemas import PostTweetReplySchema
 from coinbase_agentkit.action_providers.twitter.twitter_action_provider import (
     twitter_action_provider,
 )
@@ -19,8 +19,8 @@ MOCK_EDIT_HISTORY_IDS = ["5678"]
 
 def test_post_tweet_reply_input_model_valid():
     """Test that PostTweetReplyInput accepts valid parameters."""
-    input_model = PostTweetReplyInput(**{"tweet_id": MOCK_TWEET_ID, "tweet_reply": MOCK_REPLY_TEXT})
-    assert isinstance(input_model, PostTweetReplyInput)
+    input_model = PostTweetReplySchema(**{"tweet_id": MOCK_TWEET_ID, "tweet_reply": MOCK_REPLY_TEXT})
+    assert isinstance(input_model, PostTweetReplySchema)
     assert input_model.tweet_id == MOCK_TWEET_ID
     assert input_model.tweet_reply == MOCK_REPLY_TEXT
 
@@ -28,7 +28,7 @@ def test_post_tweet_reply_input_model_valid():
 def test_post_tweet_reply_input_model_invalid():
     """Test that PostTweetReplyInput rejects invalid parameters."""
     with pytest.raises(ValueError):
-        PostTweetReplyInput(**{})
+        PostTweetReplySchema(**{})
 
 
 @pytest.mark.usefixtures("mock_env")

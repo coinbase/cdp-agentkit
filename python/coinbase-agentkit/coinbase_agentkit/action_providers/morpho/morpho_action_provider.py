@@ -7,8 +7,8 @@ from coinbase_agentkit.action_providers.action_decorator import create_action
 from coinbase_agentkit.action_providers.action_provider import ActionProvider
 from coinbase_agentkit.action_providers.morpho.constants import METAMORPHO_ABI
 from coinbase_agentkit.action_providers.morpho.schemas import (
-    MorphoDepositInput,
-    MorphoWithdrawInput,
+    MorphoDepositSchema,
+    MorphoWithdrawSchema,
 )
 from coinbase_agentkit.action_providers.morpho.utils import approve
 from coinbase_agentkit.network import Network
@@ -39,7 +39,7 @@ It takes:
 Important notes:
 - Make sure to use the exact amount provided. Do not convert units for assets for this action.
 - Please use a token address (example 0x4200000000000000000000000000000000000006) for the token_address field. If you are unsure of the token address, please clarify what the requested token address is before continuing.""",
-        schema=MorphoDepositInput,
+        schema=MorphoDepositSchema,
     )
     def deposit(self, wallet: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Deposit assets into a Morpho Vault."""
@@ -83,7 +83,7 @@ This tool allows withdrawing assets from a Morpho Vault. It takes:
 - assets: The amount of assets to withdraw in atomic units
 - receiver: The address to receive the shares
 """,
-        schema=MorphoWithdrawInput,
+        schema=MorphoWithdrawSchema,
     )
     def withdraw(self, wallet: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Withdraw assets from a Morpho Vault."""

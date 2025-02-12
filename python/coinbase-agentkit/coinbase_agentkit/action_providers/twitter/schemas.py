@@ -3,25 +3,25 @@
 from pydantic import BaseModel, Field
 
 
-class AccountDetailsInput(BaseModel):
+class AccountDetailsSchema(BaseModel):
     """Input argument schema for Twitter account details action."""
 
     pass
 
 
-class AccountMentionsInput(BaseModel):
+class AccountMentionsSchema(BaseModel):
     """Input argument schema for Twitter account mentions action."""
 
     user_id: str = Field(..., description="The Twitter user ID to fetch mentions for")
 
 
-class PostTweetInput(BaseModel):
+class PostTweetSchema(BaseModel):
     """Input argument schema for posting a tweet."""
 
     tweet: str = Field(..., description="The text content of the tweet (max 280 characters)")
 
 
-class PostTweetReplyInput(BaseModel):
+class PostTweetReplySchema(BaseModel):
     """Input argument schema for posting a tweet reply."""
 
     tweet_reply: str = Field(

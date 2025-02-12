@@ -14,7 +14,7 @@ from .constants import (
     WOW_ABI,
     WOW_FACTORY_ABI,
 )
-from .schemas import WowBuyTokenInput, WowCreateTokenInput, WowSellTokenInput
+from .schemas import WowBuyTokenSchema, WowCreateTokenSchema, WowSellTokenSchema
 from .utils import (
     get_buy_quote,
     get_factory_address,
@@ -47,7 +47,7 @@ Important notes:
 - Make sure to use the exact amount provided, and if there's any doubt, check by getting more information before continuing with the action.
 - 1 wei = 0.000000000000000001 ETH
 - Minimum purchase amount is 100000000000000 wei (0.0000001 ETH)""",
-        schema=WowBuyTokenInput,
+        schema=WowBuyTokenSchema,
     )
     def buy_token(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Buy WOW tokens with ETH."""
@@ -110,7 +110,7 @@ Inputs:
 
 Important notes:
 - Uses a bonding curve - no upfront liquidity needed""",
-        schema=WowCreateTokenInput,
+        schema=WowCreateTokenSchema,
     )
     def create_token(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Create a new WOW token."""
@@ -172,7 +172,7 @@ Important notes:
 - Make sure to use the exact amount provided, and if there's any doubt, check by getting more information before continuing with the action.
 - 1 wei = 0.000000000000000001 ETH
 - Minimum purchase amount to account for slippage is 100000000000000 wei (0.0000001 ETH)""",
-        schema=WowSellTokenInput,
+        schema=WowSellTokenSchema,
     )
     def sell_token(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Sell WOW tokens for ETH."""

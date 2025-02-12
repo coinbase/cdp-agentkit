@@ -10,7 +10,7 @@ from ...wallet_providers import EvmWalletProvider
 from ...wallet_providers.cdp_wallet_provider import CdpProviderConfig
 from ..action_decorator import create_action
 from ..action_provider import ActionProvider
-from .schemas import AddressReputationInput, RequestFaucetFundsInput
+from .schemas import AddressReputationSchema, RequestFaucetFundsSchema
 
 BASE_SEPOLIA_NETWORK_ID = "base-sepolia"
 BASE_SEPOLIA_CHAIN_ID = 84532
@@ -48,11 +48,11 @@ This tool will request test tokens from the faucet for the default address in th
 If no asset ID is provided the faucet defaults to ETH. Faucet is only allowed on 'base-sepolia' and can only provide asset ID 'eth' or 'usdc'.
 You are not allowed to faucet with any other network or asset ID. If you are on another network, suggest that the user sends you some ETH
 from another wallet and provide the user with your wallet details.""",
-        schema=RequestFaucetFundsInput,
+        schema=RequestFaucetFundsSchema,
     )
     def request_faucet_funds(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Request test tokens from the faucet."""
-        validated_args = RequestFaucetFundsInput(**args)
+        validated_args = RequestFaucetFundsSchema(**args)
 
         try:
             network = wallet_provider.get_network()
@@ -86,12 +86,12 @@ Important notes:
 - This tool will not work on base-sepolia, you can default to using base-mainnet instead
 - The wallet's default address and its network may be used if not provided
 """,
-        schema=AddressReputationInput,
+        schema=AddressReputationSchema,
     )
     def address_reputation(self, args: dict[str, Any]) -> str:
         """Check the reputation of an Ethereum address on a given network."""
         try:
-            validated_args = AddressReputationInput(**args)
+            validated_args = AddressReputationSchema(**args)
 
             address = ExternalAddress(validated_args.network, validated_args.address)
 

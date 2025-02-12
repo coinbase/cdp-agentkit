@@ -6,7 +6,7 @@ from unittest.mock import patch
 import pytest
 import tweepy
 
-from coinbase_agentkit.action_providers.twitter.schemas import AccountMentionsInput
+from coinbase_agentkit.action_providers.twitter.schemas import AccountMentionsSchema
 from coinbase_agentkit.action_providers.twitter.twitter_action_provider import (
     twitter_action_provider,
 )
@@ -18,15 +18,15 @@ MOCK_TWEET_TEXT = "@testaccount Hello!"
 
 def test_account_mentions_input_model_valid():
     """Test that AccountMentionsInput accepts valid parameters."""
-    input_model = AccountMentionsInput(**{"user_id": MOCK_USER_ID})
-    assert isinstance(input_model, AccountMentionsInput)
+    input_model = AccountMentionsSchema(**{"user_id": MOCK_USER_ID})
+    assert isinstance(input_model, AccountMentionsSchema)
     assert input_model.user_id == MOCK_USER_ID
 
 
 def test_account_mentions_input_model_invalid():
     """Test that AccountMentionsInput rejects invalid parameters."""
     with pytest.raises(ValueError):
-        AccountMentionsInput(**{})
+        AccountMentionsSchema(**{})
 
 
 @pytest.mark.usefixtures("mock_env")

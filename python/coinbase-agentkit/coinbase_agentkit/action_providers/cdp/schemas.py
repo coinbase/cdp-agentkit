@@ -5,6 +5,13 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 
+class AddressReputationSchema(BaseModel):
+    """Input argument schema for checking address reputation."""
+
+    address: str = Field(..., description="The Ethereum address to check")
+    network: str = Field(..., description="The network to check the address on")
+
+
 class DeployContractSchema(BaseModel):
     """Input argument schema for deploy contract action."""
 
@@ -43,7 +50,7 @@ class DeployTokenSchema(BaseModel):
     )
 
 
-class RequestFaucetFundsInput(BaseModel):
+class RequestFaucetFundsSchema(BaseModel):
     """Input schema for requesting faucet funds."""
 
     asset_id: str | None = Field(
@@ -52,7 +59,7 @@ class RequestFaucetFundsInput(BaseModel):
     )
 
 
-class TradeInput(BaseModel):
+class TradeSchema(BaseModel):
     """Input argument schema for trade action."""
 
     value: str = Field(
@@ -67,10 +74,3 @@ class TradeInput(BaseModel):
         ...,
         description="The to asset ID to receive from the trade (e.g. `eth`, `0x036CbD53842c5426634e7929541eC2318f3dCF7e`)",
     )
-
-
-class AddressReputationInput(BaseModel):
-    """Input argument schema for checking address reputation."""
-
-    address: str = Field(..., description="The Ethereum address to check")
-    network: str = Field(..., description="The network to check the address on")

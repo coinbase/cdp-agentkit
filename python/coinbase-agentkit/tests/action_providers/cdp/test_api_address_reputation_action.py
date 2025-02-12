@@ -8,7 +8,7 @@ from cdp.address_reputation import (
 )
 
 from coinbase_agentkit.action_providers.cdp.cdp_api_action_provider import (
-    AddressReputationInput,
+    AddressReputationSchema,
     cdp_api_action_provider,
 )
 
@@ -20,7 +20,7 @@ from .conftest import (
 
 def test_address_reputation_input():
     """Test that AddressReputationInput accepts address and network parameters."""
-    input_model = AddressReputationInput(
+    input_model = AddressReputationSchema(
         address=MOCK_WALLET_ADDRESS, network=MOCK_MAINNET_NETWORK_ID
     )
     assert input_model.address == MOCK_WALLET_ADDRESS
