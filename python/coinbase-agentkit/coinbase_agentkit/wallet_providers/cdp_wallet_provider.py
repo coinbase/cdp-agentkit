@@ -5,6 +5,16 @@ import os
 from decimal import Decimal
 from typing import Any
 
+from cdp import (
+    Cdp,
+    ExternalAddress,
+    MnemonicSeedPhrase,
+    Wallet,
+    WalletData,
+    hash_message,
+    hash_typed_data_message,
+)
+from eth_account.typed_transactions import DynamicFeeTransaction
 from pydantic import BaseModel, Field
 from web3 import Web3
 from web3.types import BlockIdentifier, ChecksumAddress, HexStr, TxParams
@@ -44,8 +54,6 @@ class CdpWalletProvider(EvmWalletProvider):
             config = CdpWalletProviderConfig()
 
         try:
-            from cdp import Cdp, MnemonicSeedPhrase, Wallet, WalletData
-
             api_key_name = config.api_key_name or os.getenv("CDP_API_KEY_NAME")
             api_key_private_key = config.api_key_private_key or os.getenv("CDP_API_KEY_PRIVATE_KEY")
 
@@ -155,34 +163,131 @@ class CdpWalletProvider(EvmWalletProvider):
         block_identifier: BlockIdentifier = "latest",
     ) -> Any:
         """Read data from a smart contract."""
-        raise NotImplementedError
+        contract = self._web3.eth.contract(address=contract_address, abi=abi)
+        func = contract.functions[function_name]
+        if args is None:
+            args = []
+        return func(*args).call(block_identifier=block_identifier)
 
     def sign_message(self, message: str | bytes) -> HexStr:
         """Sign a message using the wallet's private key."""
-        raise NotImplementedError
+        if not self._wallet:
+            raise Exception("Wallet not initialized")
 
-    def sign_typed_data(
-        self, domain: dict[str, Any], types: dict[str, Any], data: dict[str, Any]
-    ) -> HexStr:
+        message_hash = hash_message(message)
+        payload_signature = self._wallet.sign_payload(message_hash)
+
+        return payload_signature.signature
+
+    def sign_typed_data(self, typed_data: dict[str, Any]) -> HexStr:
         """Sign typed data according to EIP-712 standard."""
-        raise NotImplementedError
+        if not self._wallet:
+            raise Exception("Wallet not initialized")
 
-    def sign_transaction(self, transaction: TxParams) -> Any:
+        typed_data_message_hash = hash_typed_data_message(typed_data)
+
+        payload_signature = self._wallet.sign_payload(typed_data_message_hash)
+
+        return payload_signature.signature
+
+    def sign_transaction(self, transaction: TxParams) -> HexStr:
         """Sign an EVM transaction."""
-        raise NotImplementedError
+        if not self._wallet:
+            raise Exception("Wallet not initialized")
+
+        dynamic_fee_tx = DynamicFeeTransaction.from_dict(transaction)
+
+        tx_hash_bytes = dynamic_fee_tx.hash()
+        tx_hash_hex = tx_hash_bytes.hex()
+
+        payload_signature = self._wallet.sign_payload(tx_hash_hex)
+        return payload_signature.signature
 
     def send_transaction(self, transaction: TxParams) -> HexStr:
         """Send a signed transaction to the network."""
-        raise NotImplementedError
+        self._prepare_transaction(transaction)
+
+        signature = self.sign_transaction(transaction)
+
+        transaction["r"] = int(signature[2:66], 16)
+        transaction["s"] = int(signature[66:130], 16)
+        transaction["v"] = int(signature[130:132], 16) - 27
+
+        signed_dynamic_fee_tx = DynamicFeeTransaction.from_dict(transaction)
+
+        signed_bytes = signed_dynamic_fee_tx.payload()
+
+        external_address = ExternalAddress(
+            self._wallet.network_id, self._wallet.default_address.address_id
+        )
+        broadcasted_transaction = external_address.broadcast_external_transaction(
+            "02" + signed_bytes.hex()
+        )
+
+        return broadcasted_transaction.transaction_hash
 
     def wait_for_transaction_receipt(
         self, tx_hash: HexStr, timeout: float = 120, poll_latency: float = 0.1
     ) -> dict[str, Any]:
         """Wait for transaction confirmation and return receipt."""
-        raise NotImplementedError
+        return self._web3.eth.wait_for_transaction_receipt(
+            tx_hash, timeout=timeout, poll_latency=poll_latency
+        )
 
-    def export_wallet(self) -> str:
-        """Export the wallet data."""
+    def _prepare_transaction(self, transaction: TxParams) -> TxParams:
+        """Prepare EIP-1559 transaction for signing."""
+        if transaction["to"]:
+            transaction["to"] = Web3.to_bytes(hexstr=transaction["to"])
+        else:
+            transaction["to"] = b""
+
+        transaction["from"] = self._address
+        transaction["value"] = int(transaction["value"])
+        transaction["type"] = 2
+        transaction["chainId"] = self._network.chain_id
+
+        nonce = self._web3.eth.get_transaction_count(self._address)
+        transaction["nonce"] = nonce
+
+        data_field = transaction.get("data", b"")
+        if isinstance(data_field, str) and data_field.startswith("0x"):
+            data_bytes = bytes.fromhex(data_field[2:])
+
+        transaction["data"] = data_bytes
+
+        max_priority_fee_per_gas, max_fee_per_gas = self._estimate_fees()
+        transaction["maxPriorityFeePerGas"] = max_priority_fee_per_gas
+        transaction["maxFeePerGas"] = max_fee_per_gas
+
+        gas = self._web3.eth.estimate_gas(transaction)
+        transaction["gas"] = gas
+
+        del transaction["from"]
+
+        return transaction
+
+    def _estimate_fees(self, multiplier=1.2):
+        """Estimate fees."""
+
+        def get_base_fee():
+            latest_block = self._web3.eth.get_block("latest")
+            base_fee = latest_block["baseFeePerGas"]
+            # Multiply by 1.2 to give some buffer
+            return int(base_fee * multiplier)
+
+        base_fee_per_gas = get_base_fee()
+        max_priority_fee_per_gas = Web3.to_wei(0.1, "gwei")
+        max_fee_per_gas = base_fee_per_gas + max_priority_fee_per_gas
+
+        return (max_priority_fee_per_gas, max_fee_per_gas)
+
+    def export_wallet(self) -> WalletData:
+        """Export the wallet.
+
+        Returns:
+            The wallet data.
+
+        """
         if not self._wallet:
             raise Exception("Wallet not initialized")
 
