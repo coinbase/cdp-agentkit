@@ -21,7 +21,7 @@ from coinbase_agentkit import (
 )
 from coinbase_agentkit_langchain import get_langchain_tools
 
-# Configure a file to persist the agent's CDP MPC Wallet Data.
+# Configure a file to persist the agent's CDP API Wallet Data.
 wallet_data_file = "wallet_data.txt"
 
 load_dotenv()
