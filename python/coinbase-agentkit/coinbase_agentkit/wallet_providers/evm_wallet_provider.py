@@ -30,6 +30,7 @@ class EvmWalletProvider(WalletProvider, ABC):
         """Send a signed transaction to the network."""
         pass
 
+    @abstractmethod
     def wait_for_transaction_receipt(
         self, tx_hash: HexStr, timeout: float = 120, poll_latency: float = 0.1
     ) -> dict[str, Any]:
