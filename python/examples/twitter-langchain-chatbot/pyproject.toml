@@ -11,9 +11,9 @@ python = "^3.10"
 python-dotenv = "^1.0.1"
 langchain-openai = "^0.2.4"
 langgraph = "^0.2.39"
+tweepy = "^4.15.0"
 coinbase-agentkit = { path = "../../../python/coinbase-agentkit", develop = true }
 coinbase-agentkit-langchain = { path = "../../../python/framework-extensions/langchain", develop = true }
-tweepy = "^4.15.0"
 
 [build-system]
 requires = ["poetry-core"]
