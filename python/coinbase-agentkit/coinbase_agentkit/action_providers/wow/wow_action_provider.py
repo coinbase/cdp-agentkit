@@ -142,8 +142,8 @@ Important notes:
             encoded_data = contract.encode_abi("deploy", deploy_args)
 
             tx = {
-                "to": HexStr(factory_address),
-                "data": HexStr(encoded_data),
+                "to": factory_address,
+                "data": encoded_data,
             }
 
             tx_hash = wallet_provider.send_transaction(tx)
