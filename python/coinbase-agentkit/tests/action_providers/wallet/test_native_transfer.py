@@ -4,7 +4,7 @@ import pytest
 from pydantic import ValidationError
 from web3.types import HexStr
 
-from coinbase_agentkit.action_providers.wallet.schemas import NativeTransferInput
+from coinbase_agentkit.action_providers.wallet.schemas import NativeTransferSchema
 
 from .conftest import MOCK_ADDRESS
 
@@ -16,11 +16,11 @@ INVALID_AMOUNT = "not-a-number"
 
 def test_native_transfer_schema_valid():
     """Test that NativeTransferInput accepts valid parameters."""
-    schema = NativeTransferInput(
+    schema = NativeTransferSchema(
         to=MOCK_ADDRESS,
         value=MOCK_ETH_AMOUNT,
     )
-    assert isinstance(schema, NativeTransferInput)
+    assert isinstance(schema, NativeTransferSchema)
     assert schema.to == MOCK_ADDRESS
     assert schema.value == MOCK_ETH_AMOUNT
 
@@ -30,7 +30,7 @@ def test_native_transfer_schema_invalid_value():
     with pytest.raises(
         ValidationError, match=r"Invalid decimal format. Must be a positive number."
     ):
-        NativeTransferInput(
+        NativeTransferSchema(
             to=MOCK_ADDRESS,
             value=INVALID_AMOUNT,
         )
@@ -38,13 +38,13 @@ def test_native_transfer_schema_invalid_value():
     with pytest.raises(
         ValidationError, match=r"Invalid decimal format. Must be a positive number."
     ):
-        NativeTransferInput(
+        NativeTransferSchema(
             to=MOCK_ADDRESS,
             value="-1.5",
         )
 
     with pytest.raises(ValidationError, match=r"Failed to parse decimal value"):
-        NativeTransferInput(
+        NativeTransferSchema(
             to=MOCK_ADDRESS,
             value="0",
         )

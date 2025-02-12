@@ -4,7 +4,7 @@ from ...network import Network
 from ...wallet_providers.wallet_provider import WalletProvider
 from ..action_decorator import create_action
 from ..action_provider import ActionProvider
-from .schemas import GetBalanceInput, GetWalletDetailsInput, NativeTransferInput
+from .schemas import GetBalanceSchema, GetWalletDetailsSchema, NativeTransferSchema
 
 
 class WalletActionProvider(ActionProvider[WalletProvider]):
@@ -22,10 +22,10 @@ class WalletActionProvider(ActionProvider[WalletProvider]):
     - Native token balance
     - Wallet provider name
     """,
-        schema=GetWalletDetailsInput,
+        schema=GetWalletDetailsSchema,
     )
     def get_wallet_details(
-        self, wallet_provider: WalletProvider, args: GetWalletDetailsInput
+        self, wallet_provider: WalletProvider, args: GetWalletDetailsSchema
     ) -> str:
         """Get details about the wallet."""
         try:
@@ -48,9 +48,9 @@ class WalletActionProvider(ActionProvider[WalletProvider]):
     @create_action(
         name="get_balance",
         description="This tool will get the native currency balance of the connected wallet.",
-        schema=GetBalanceInput,
+        schema=GetBalanceSchema,
     )
-    def get_balance(self, wallet_provider: WalletProvider, args: GetBalanceInput) -> str:
+    def get_balance(self, wallet_provider: WalletProvider, args: GetBalanceSchema) -> str:
         """Get native currency balance for the wallet."""
         try:
             balance = wallet_provider.get_balance()
@@ -73,12 +73,12 @@ Important notes:
 - Ensure sufficient balance of the input asset before transferring
 - Ensure there is sufficient balance for the transfer itself AND the gas cost of this transfer
 """,
-        schema=NativeTransferInput,
+        schema=NativeTransferSchema,
     )
     def native_transfer(self, wallet_provider: WalletProvider, args: dict[str, Any]) -> str:
         """Transfer native tokens to a destination address."""
         try:
-            validated_args = NativeTransferInput(**args)
+            validated_args = NativeTransferSchema(**args)
             tx_hash = wallet_provider.native_transfer(validated_args.to, validated_args.value)
             return f"Successfully transferred {validated_args.value} native tokens to {validated_args.to}.\nTransaction hash: {tx_hash}"
         except Exception as e:

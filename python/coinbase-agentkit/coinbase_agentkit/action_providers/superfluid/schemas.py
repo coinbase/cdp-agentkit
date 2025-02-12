@@ -3,7 +3,7 @@
 from pydantic import BaseModel, Field
 
 
-class CreateFlowInput(BaseModel):
+class CreateFlowSchema(BaseModel):
     """Input argument schema for creating a flow."""
 
     recipient: str = Field(..., description="The wallet address of the recipient")
@@ -11,14 +11,14 @@ class CreateFlowInput(BaseModel):
     flow_rate: str = Field(..., description="The flow rate of tokens in wei per second")
 
 
-class DeleteFlowInput(BaseModel):
+class DeleteFlowSchema(BaseModel):
     """Input argument schema for deleting a flow."""
 
     recipient: str = Field(..., description="The wallet address of the recipient")
     token_address: str = Field(..., description="The address of the token being flowed")
 
 
-class UpdateFlowInput(BaseModel):
+class UpdateFlowSchema(BaseModel):
     """Input argument schema for updating a flow."""
 
     recipient: str = Field(..., description="The wallet address of the recipient")

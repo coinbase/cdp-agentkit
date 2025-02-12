@@ -6,7 +6,7 @@ import pytest
 from pydantic import ValidationError
 
 from coinbase_agentkit.action_providers.weth.constants import MIN_WRAP_AMOUNT
-from coinbase_agentkit.action_providers.weth.schemas import WrapEthInput
+from coinbase_agentkit.action_providers.weth.schemas import WrapEthSchema
 from coinbase_agentkit.action_providers.weth.weth_action_provider import (
     WETH_ABI,
     WETH_ADDRESS,
@@ -24,9 +24,9 @@ MOCK_AMOUNT = str(MIN_WRAP_AMOUNT)
 
 def test_wrap_eth_input_model_valid():
     """Test that WrapEthSchema accepts valid parameters."""
-    input_model = WrapEthInput(amount_to_wrap=MOCK_AMOUNT)
+    input_model = WrapEthSchema(amount_to_wrap=MOCK_AMOUNT)
 
-    assert isinstance(input_model, WrapEthInput)
+    assert isinstance(input_model, WrapEthSchema)
     assert input_model.amount_to_wrap == MOCK_AMOUNT
 
 
@@ -41,7 +41,7 @@ def test_wrap_eth_input_model_invalid_format():
     ]
     for invalid_input in invalid_inputs:
         with pytest.raises(ValidationError) as exc_info:
-            WrapEthInput(amount_to_wrap=invalid_input)
+            WrapEthSchema(amount_to_wrap=invalid_input)
         assert "Amount must be a whole number as a string" in str(exc_info.value)
 
 
@@ -49,14 +49,14 @@ def test_wrap_eth_input_model_below_minimum():
     """Test that WrapEthSchema rejects amounts below minimum."""
     below_min = str(MIN_WRAP_AMOUNT - 1)
     with pytest.raises(ValidationError) as exc_info:
-        WrapEthInput(amount_to_wrap=below_min)
+        WrapEthSchema(amount_to_wrap=below_min)
     assert f"Amount must be at least {MIN_WRAP_AMOUNT} wei" in str(exc_info.value)
 
 
 def test_wrap_eth_input_model_missing_params():
     """Test that WrapEthSchema raises error when params are missing."""
     with pytest.raises(ValidationError):
-        WrapEthInput()
+        WrapEthSchema()
 
 
 def test_wrap_eth_success():

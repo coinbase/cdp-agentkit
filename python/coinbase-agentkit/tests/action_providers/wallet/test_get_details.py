@@ -1,4 +1,4 @@
-from coinbase_agentkit.action_providers.wallet.schemas import GetWalletDetailsInput
+from coinbase_agentkit.action_providers.wallet.schemas import GetWalletDetailsSchema
 from coinbase_agentkit.action_providers.wallet.wallet_action_provider import WalletActionProvider
 from coinbase_agentkit.network import Network
 
@@ -12,14 +12,14 @@ from .conftest import (
 
 def test_get_wallet_details_schema_valid():
     """Test that GetWalletDetailsSchema accepts valid parameters."""
-    schema = GetWalletDetailsInput()
-    assert isinstance(schema, GetWalletDetailsInput)
+    schema = GetWalletDetailsSchema()
+    assert isinstance(schema, GetWalletDetailsSchema)
 
 
 def test_get_wallet_details_success(wallet_action_provider, mock_wallet_provider):
     """Test successful get wallet details with valid parameters."""
     result = wallet_action_provider.get_wallet_details(
-        mock_wallet_provider, GetWalletDetailsInput()
+        mock_wallet_provider, GetWalletDetailsSchema()
     )
 
     expected_response = f"""Wallet Details:
@@ -41,7 +41,7 @@ def test_get_wallet_details_missing_network_ids(wallet_action_provider, mock_wal
     )
 
     result = wallet_action_provider.get_wallet_details(
-        mock_wallet_provider, GetWalletDetailsInput()
+        mock_wallet_provider, GetWalletDetailsSchema()
     )
 
     assert "Network ID: N/A" in result
@@ -54,7 +54,7 @@ def test_get_wallet_details_error(wallet_action_provider, mock_wallet_provider):
     mock_wallet_provider.get_balance.side_effect = Exception(error_message)
 
     result = wallet_action_provider.get_wallet_details(
-        mock_wallet_provider, GetWalletDetailsInput()
+        mock_wallet_provider, GetWalletDetailsSchema()
     )
     assert result == f"Error getting wallet details: {error_message}"
 

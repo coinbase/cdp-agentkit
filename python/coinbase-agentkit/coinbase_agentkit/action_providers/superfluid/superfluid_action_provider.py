@@ -7,7 +7,7 @@ from ...wallet_providers import EvmWalletProvider
 from ..action_decorator import create_action
 from ..action_provider import ActionProvider
 from .constants import CREATE_ABI, DELETE_ABI, SUPERFLUID_HOST_ADDRESS, UPDATE_ABI
-from .schemas import CreateFlowInput, DeleteFlowInput, UpdateFlowInput
+from .schemas import CreateFlowSchema, DeleteFlowSchema, UpdateFlowSchema
 
 
 class SuperfluidActionProvider(ActionProvider[EvmWalletProvider]):
@@ -29,7 +29,7 @@ Important notes:
 - The flowrate cannot have any decimal points, since the unit of measurement is wei per second.
 - Make sure to use the exact amount provided, and if there's any doubt, check by getting more information before continuing with the action.
 - 1 wei = 0.000000000000000001 ETH""",
-        schema=CreateFlowInput,
+        schema=CreateFlowSchema,
     )
     def create_flow(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Create a money flow using Superfluid."""
@@ -72,7 +72,7 @@ Important notes:
 - The flowrate cannot have any decimal points, since the unit of measurement is wei per second.
 - Make sure to use the exact amount provided, and if there's any doubt, check by getting more information before continuing with the action.
 - 1 wei = 0.000000000000000001 ETH""",
-        schema=UpdateFlowInput,
+        schema=UpdateFlowSchema,
     )
     def update_flow(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Update an existing money flow using Superfluid."""
@@ -110,7 +110,7 @@ This tool will delete an existing money flow to a token recipient using Superflu
 Inputs:
 - Wallet address that the tokens are being streamed to or being streamed from
 - Super token contract address""",
-        schema=DeleteFlowInput,
+        schema=DeleteFlowSchema,
     )
     def delete_flow(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Delete an existing money flow using Superfluid."""
