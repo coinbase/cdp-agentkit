@@ -1,4 +1,4 @@
-"""Analytics tracking for AgentKit."""
+"""Analytics module for tracking metrics in AgentKit."""
 
 from .send_analytics_event import RequiredEventData, send_analytics_event
 
