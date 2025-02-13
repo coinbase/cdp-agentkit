@@ -51,4 +51,4 @@ For a full example, see the [chatbot example](https://github.com/coinbase/agentk
 
 ## Contributing
 
-See [CONTRIBUTING.md](../../../CONTRIBUTING.md) for detailed setup instructions and contribution guidelines.
+See [CONTRIBUTING.md](https://github.com/coinbase/agentkit/blob/master/CONTRIBUTING.md) for detailed setup instructions and contribution guidelines.
