@@ -40,6 +40,7 @@ def send_analytics_event(event: RequiredEventData) -> None:
             "platform": "server",
             "project_name": "agentkit",
             "time_start": timestamp,
+            "agentkit_language": "python",
             **event,
         },
     }
