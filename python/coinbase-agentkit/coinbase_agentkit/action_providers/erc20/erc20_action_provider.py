@@ -1,5 +1,7 @@
 """ERC20 action provider."""
 
+from typing import Any
+
 from web3 import Web3
 
 from ...network import Network
@@ -24,12 +26,12 @@ class ERC20ActionProvider(ActionProvider[EvmWalletProvider]):
         """,
         schema=GetBalanceSchema,
     )
-    def get_balance(self, wallet_provider: EvmWalletProvider, args: GetBalanceSchema) -> str:
+    def get_balance(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Get the balance of an ERC20 token for the wallet's address.
 
         Args:
             wallet_provider (EvmWalletProvider): The wallet provider instance.
-            args (GetBalanceSchema): Input arguments for the action.
+            args (dict[str, Any]): Input arguments for the action.
 
         Returns:
             str: A message containing the action response or error details.
@@ -65,12 +67,12 @@ class ERC20ActionProvider(ActionProvider[EvmWalletProvider]):
         """,
         schema=TransferSchema,
     )
-    def transfer(self, wallet_provider: EvmWalletProvider, args: TransferSchema) -> str:
+    def transfer(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Transfer ERC20 tokens to a destination address.
 
         Args:
             wallet_provider (EvmWalletProvider): The wallet provider instance.
-            args (TransferSchema): Input arguments for the action.
+            args (dict[str, Any]): Input arguments for the action.
 
         Returns:
             str: A message containing the action response or error details.

@@ -26,14 +26,12 @@ class WalletActionProvider(ActionProvider[WalletProvider]):
     """,
         schema=GetWalletDetailsSchema,
     )
-    def get_wallet_details(
-        self, wallet_provider: WalletProvider, args: GetWalletDetailsSchema
-    ) -> str:
+    def get_wallet_details(self, wallet_provider: WalletProvider, args: dict[str, Any]) -> str:
         """Get details about the connected wallet.
 
         Args:
             wallet_provider (WalletProvider): The wallet provider to get details from.
-            args (GetWalletDetailsSchema): The input arguments.
+            args (dict[str, Any]): The input arguments.
 
         Returns:
             str: A formatted string containing wallet details and network information.
@@ -61,12 +59,12 @@ class WalletActionProvider(ActionProvider[WalletProvider]):
         description="This tool will get the native currency balance of the connected wallet.",
         schema=GetBalanceSchema,
     )
-    def get_balance(self, wallet_provider: WalletProvider, args: GetBalanceSchema) -> str:
+    def get_balance(self, wallet_provider: WalletProvider, args: dict[str, Any]) -> str:
         """Get the native currency balance for the connected wallet.
 
         Args:
             wallet_provider (WalletProvider): The wallet provider to get the balance from.
-            args (GetBalanceSchema): The input arguments.
+            args (dict[str, Any]): The input arguments.
 
         Returns:
             str: A message containing the wallet address and balance information.
