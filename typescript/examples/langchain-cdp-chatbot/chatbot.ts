@@ -87,10 +87,8 @@ async function initializeAgent() {
       apiKeyPrivateKey: process.env.CDP_API_KEY_PRIVATE_KEY?.replace(/\\n/g, "\n"),
       cdpWalletData: walletDataStr || undefined,
       networkId: process.env.NETWORK_ID || "base-sepolia",
-      gas: {
-        gasLimitMultiplier: 1.2,
-      },
     };
+
     const walletProvider = await CdpWalletProvider.configureWithWallet(config);
 
     // Initialize AgentKit
