@@ -36,24 +36,12 @@ Important notes:
     def create_flow(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Create a money flow using Superfluid.
 
-        This function creates a new money flow by calling the Superfluid Host contract's createFlow
-        function. It handles encoding the flow creation data and submitting/waiting for the transaction.
-
         Args:
-            wallet_provider (EvmWalletProvider): The wallet provider to create the flow from,
-                used to sign and send the transaction
-            args (dict[str, Any]): The input arguments containing:
-                - token_address (str): The address of the Super Token contract
-                - recipient (str): The recipient address to receive the flow
-                - flow_rate (str): The flow rate in wei per second
+            wallet_provider (EvmWalletProvider): The wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
 
         Returns:
-            str: A message containing either:
-                - The flow creation details and transaction hash if successful
-                - An error message if the flow creation fails
-
-        Raises:
-            Exception: If the flow creation transaction fails for any reason
+            str: A message containing the action response or error details.
 
         """
         try:
@@ -100,25 +88,12 @@ Important notes:
     def update_flow(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Update an existing money flow using Superfluid.
 
-        This function updates an existing money flow by calling the updateFlow function on the
-        Superfluid host contract. It handles encoding the update data and submitting/waiting
-        for the transaction.
-
         Args:
-            wallet_provider (EvmWalletProvider): The wallet provider to update the flow from,
-                used to sign and send the transaction
-            args (dict[str, Any]): The input arguments containing:
-                - token_address (str): The address of the Super Token contract
-                - recipient (str): The recipient address of the flow to update
-                - new_flow_rate (str): The new flow rate in wei per second
+            wallet_provider (EvmWalletProvider): The wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
 
         Returns:
-            str: A message containing either:
-                - The flow update details and transaction hash if successful
-                - An error message if the flow update fails
-
-        Raises:
-            Exception: If the flow update transaction fails for any reason
+            str: A message containing the action response or error details.
 
         """
         try:
@@ -160,24 +135,12 @@ Inputs:
     def delete_flow(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Delete an existing money flow using Superfluid.
 
-        This function deletes an existing Superfluid money flow between the wallet and a recipient
-        by calling the deleteFlow function on the Superfluid host contract. It handles encoding
-        the deletion data and submitting/waiting for the transaction.
-
         Args:
-            wallet_provider (EvmWalletProvider): The wallet provider to delete the flow from,
-                used to sign and send the transaction
-            args (dict[str, Any]): The input arguments containing:
-                - token_address (str): The address of the Super Token contract
-                - recipient (str): The recipient address of the flow to delete
+            wallet_provider (EvmWalletProvider): The wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
 
         Returns:
-            str: A message containing either:
-                - The flow deletion details and transaction hash if successful
-                - An error message if the flow deletion fails
-
-        Raises:
-            Exception: If the flow deletion transaction fails for any reason
+            str: A message containing the action response or error details.
 
         """
         try:
@@ -210,15 +173,20 @@ Inputs:
         """Check if network is supported by Superfluid actions.
 
         Args:
-            network: The network to check support for.
+            network (Network): The network to check support for.
 
         Returns:
-            bool: True if the network is supported, False otherwise.
+            bool: Whether the network is supported.
 
         """
         return network.protocol_family == "evm"
 
 
 def superfluid_action_provider() -> SuperfluidActionProvider:
-    """Create a new SuperfluidActionProvider instance."""
+    """Create a new Superfluid action provider.
+
+    Returns:
+        SuperfluidActionProvider: A new Superfluid action provider instance.
+
+    """
     return SuperfluidActionProvider()

@@ -51,20 +51,14 @@ from another wallet and provide the user with your wallet details.""",
         schema=RequestFaucetFundsSchema,
     )
     def request_faucet_funds(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
-        """Request test tokens from the faucet.
-
-        This function requests test tokens from the Base Sepolia faucet for the provided wallet address.
-        Only works on Base Sepolia network and only supports ETH and USDC tokens.
+        """Request test tokens from the Base Sepolia faucet.
 
         Args:
-            wallet_provider (EvmWalletProvider): The wallet provider to get the recipient address from
-            args (dict[str, Any]): Arguments containing optional asset_id to request
+            wallet_provider (EvmWalletProvider): The wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
 
         Returns:
-            str: Success message with transaction details or error message if request fails
-
-        Raises:
-            Exception: If faucet request fails for any reason
+            str: A message containing the action response or error details.
 
         """
         validated_args = RequestFaucetFundsSchema(**args)
@@ -104,23 +98,13 @@ Important notes:
         schema=AddressReputationSchema,
     )
     def address_reputation(self, args: dict[str, Any]) -> str:
-        """Check the reputation of an Ethereum address on a given network.
-
-        This function checks the reputation score of an Ethereum address on the specified network
-        using CDP's reputation service.
+        """Check the reputation of an Ethereum address.
 
         Args:
-            args (dict[str, Any]): Arguments containing:
-                - network (str): The network to check reputation on (e.g. "base-mainnet")
-                - address (str): The Ethereum address to check
+            args (dict[str, Any]): Input arguments for the action.
 
         Returns:
-            str: A string containing either:
-                - The address and its reputation score if successful
-                - An error message if the check fails
-
-        Raises:
-            Exception: If reputation check fails for any reason
+            str: A message containing the action response or error details.
 
         """
         try:
@@ -135,10 +119,26 @@ Important notes:
             return f"Error checking address reputation: {e!s}"
 
     def supports_network(self, network: Network) -> bool:
-        """Network support will vary action to action."""
+        """Check if the network is supported by this action provider.
+
+        Args:
+            network (Network): The network to check support for.
+
+        Returns:
+            bool: Whether the network is supported.
+
+        """
         return True
 
 
 def cdp_api_action_provider(config: CdpProviderConfig | None = None) -> CdpApiActionProvider:
-    """Create a new CdpApiActionProvider instance."""
+    """Create a new CDP API action provider.
+
+    Args:
+        config (CdpProviderConfig | None): Configuration for the CDP API provider.
+
+    Returns:
+        CdpApiActionProvider: A new CDP API action provider instance.
+
+    """
     return CdpApiActionProvider(config=config)

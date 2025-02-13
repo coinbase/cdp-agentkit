@@ -37,19 +37,11 @@ class PythActionProvider(ActionProvider[WalletProvider]):
     def fetch_price_feed_id(self, args: dict[str, Any]) -> str:
         """Fetch the price feed ID for a given token symbol from Pyth.
 
-        This function queries the Pyth API to get the price feed ID for a specific token symbol.
-        It filters the results to find an exact match for the token symbol.
-
         Args:
-            args (dict[str, Any]): Arguments containing:
-                - token_symbol (str): The token symbol to fetch the price feed ID for (e.g. "BTC", "ETH")
+            args (dict[str, Any]): Input arguments for the action.
 
         Returns:
-            str: The Pyth price feed ID for the given token symbol
-
-        Raises:
-            ValueError: If no price feed is found for the given token symbol
-            requests.exceptions.RequestException: If the API request fails
+            str: A message containing the action response or error details.
 
         """
         token_symbol = args["token_symbol"]
@@ -82,24 +74,13 @@ Important notes:
         schema=FetchPriceSchema,
     )
     def fetch_price(self, args: dict[str, Any]) -> str:
-        """Fetch price from Pyth for the given Pyth price feed.
-
-        This function fetches the latest price data from Pyth for a specific price feed ID.
-        It handles parsing the response, adjusting for decimal places based on the exponent,
-        and formatting the price as a string.
+        """Fetch price from Pyth for the given price feed ID.
 
         Args:
-            args (dict[str, Any]): Arguments containing:
-                - price_feed_id (str): The Pyth price feed ID to fetch price for
+            args (dict[str, Any]): Input arguments for the action.
 
         Returns:
-            str: A string containing either:
-                - The formatted price if successful (e.g. "1234.56")
-                - An error message if the price fetch fails
-
-        Raises:
-            ValueError: If no price data is found for the given feed ID
-            Exception: If the API request fails or price parsing fails
+            str: A message containing the action response or error details.
 
         """
         try:
@@ -136,5 +117,10 @@ Important notes:
 
 
 def pyth_action_provider() -> PythActionProvider:
-    """Create a new PythActionProvider instance."""
+    """Create a new Pyth action provider.
+
+    Returns:
+        PythActionProvider: A new Pyth action provider instance.
+
+    """
     return PythActionProvider()
