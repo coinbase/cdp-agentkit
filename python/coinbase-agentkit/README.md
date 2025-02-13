@@ -17,6 +17,11 @@ AgentKit is a framework for easily enabling AI agents to take actions onchain. I
   - [Adding an Action Provider to your AgentKit instance](#adding-an-action-provider-to-your-agentkit-instance)
 - [Wallet Providers](#wallet-providers)
   - [CdpWalletProvider](#cdpwalletprovider)
+    - [Network Configuration](#network-configuration)
+    - [Configuring from an existing CDP API Wallet](#configuring-from-an-existing-cdp-api-wallet)
+    - [Configuring from a mnemonic phrase](#configuring-from-a-mnemonic-phrase)
+    - [Exporting a wallet](#exporting-a-wallet)
+    - [Importing a wallet from WalletData JSON string](#importing-a-wallet-from-walletdata-json-string)
   - [EthAccountWalletProvider](#ethaccountwalletprovider)
 - [Contributing](#contributing)
 
@@ -202,19 +207,108 @@ EVM:
 
 ### CdpWalletProvider
 
-For detailed usage of the CdpWalletProvider, see the [CDP API Wallet documentation](https://docs.cdp.coinbase.com/wallet-api/docs/welcome).
+The `CdpWalletProvider` is a wallet provider that uses the Coinbase Developer Platform (CDP) [API Wallet](https://docs.cdp.coinbase.com/wallet-api/docs/welcome).
+
+#### Network Configuration
+
+The `CdpWalletProvider` can be configured to use a specific network by passing the `network_id` parameter to the `CdpWalletProviderConfig`. The `network_id` is the ID of the network you want to use. You can find a list of [supported networks on the CDP API docs](https://docs.cdp.coinbase.com/cdp-apis/docs/networks).
+
+```python
+from coinbase_agentkit import CdpWalletProvider, CdpWalletProviderConfig
+
+wallet_provider = CdpWalletProvider(CdpWalletProviderConfig(
+    api_key_name="CDP API KEY NAME",
+    api_key_private="CDP API KEY PRIVATE KEY",
+    network_id="base-mainnet",
+))
+```
+
+#### Configuring from an existing CDP API Wallet
+
+If you already have a CDP API Wallet, you can configure the `CdpWalletProvider` by passing the `wallet` parameter to the `configureWithWallet` method.
+
+```python
+from coinbase_agentkit import CdpWalletProvider, CdpWalletProviderConfig
+from cdp import Wallet
+
+wallet_provider = CdpWalletProvider(CdpWalletProviderConfig(
+    wallet=wallet,
+    api_key_name="CDP API KEY NAME",
+    api_key_private="CDP API KEY PRIVATE KEY",
+))
+```
+
+#### Configuring from a mnemonic phrase
+
+The `CdpWalletProvider` can be configured from a mnemonic phrase by passing the `mnemonic_phrase` parameter to the `CdpWalletProviderConfig`.
+
+```python
+from coinbase_agentkit import CdpWalletProvider, CdpWalletProviderConfig
+
+wallet_provider = CdpWalletProvider(CdpWalletProviderConfig(
+    mnemonic_phrase="MNEMONIC PHRASE",
+))
+```
+
+#### Exporting a wallet
+
+The `CdpWalletProvider` can export a wallet by calling the `export_wallet` method.
+
+```python
+from coinbase_agentkit import CdpWalletProvider
+
+wallet_provider = CdpWalletProvider(CdpWalletProviderConfig(
+    mnemonic_phrase="MNEMONIC PHRASE",
+))
+
+wallet_data = wallet_provider.export_wallet()
+```
+
+#### Importing a wallet from `WalletData` JSON string
+
+The `CdpWalletProvider` can import a wallet from a `WalletData` JSON string by passing the `cdp_wallet_data` parameter to the `CdpWalletProviderConfig`.
+
+```python
+from coinbase_agentkit import CdpWalletProvider, CdpWalletProviderConfig
+
+wallet_provider = CdpWalletProvider(CdpWalletProviderConfig(
+    wallet_data="WALLET DATA JSON STRING",
+    api_key_name="CDP API KEY NAME",
+    api_key_private="CDP API KEY PRIVATE KEY",
+))
+```
 
 ### EthAccountWalletProvider
 
 Example usage with a private key:
 
 ```python
-from coinbase_agentkit import EthAccountWalletProvider, EthAccountWalletProviderConfig
+from eth_account import Account
 
-wallet_provider = EthAccountWalletProvider(EthAccountWalletProviderConfig(
-    private_key="YOUR_PRIVATE_KEY",
-    rpc_url="YOUR_RPC_URL",
-    chain_id=8453
+from coinbase_agentkit import (
+    AgentKit, 
+    AgentKitConfig, 
+    EthAccountWalletProvider, 
+    EthAccountWalletProviderConfig
+)
+
+# See here for creating a private key:
+# https://web3py.readthedocs.io/en/stable/web3.eth.account.html#creating-a-private-key
+private_key = os.environ.get("PRIVATE_KEY")
+assert private_key is not None, "You must set PRIVATE_KEY environment variable"
+assert private_key.startswith("0x"), "Private key must start with 0x hex prefix"
+
+account = Account.from_key(private_key)
+
+wallet_provider = EthAccountWalletProvider(
+    config=EthAccountWalletProviderConfig(
+        account=account,
+        chain_id=84532,
+    )
+)
+
+agent_kit = AgentKit(AgentKitConfig(
+    wallet_provider=wallet_provider
 ))
 ```
 
