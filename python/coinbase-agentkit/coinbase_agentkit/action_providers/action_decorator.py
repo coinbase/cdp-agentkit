@@ -57,7 +57,7 @@ def create_action(name: str, description: str, schema: type[BaseModel] | None = 
                 name="agent_action_invocation",
                 action="invoke_action",
                 component="agent_action",
-                action_name=name,
+                action_name=prefixed_name,
                 class_name=class_name,
                 method_name=method_name,
                 **wallet_metadata,
