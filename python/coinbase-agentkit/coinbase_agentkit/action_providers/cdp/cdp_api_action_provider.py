@@ -1,4 +1,4 @@
-"""CDP API action provider for interacting with CDP API."""
+"""CDP API action provider."""
 
 import os
 from typing import Any
@@ -51,7 +51,16 @@ from another wallet and provide the user with your wallet details.""",
         schema=RequestFaucetFundsSchema,
     )
     def request_faucet_funds(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
-        """Request test tokens from the faucet."""
+        """Request test tokens from the Base Sepolia faucet.
+
+        Args:
+            wallet_provider (EvmWalletProvider): The wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
+
+        Returns:
+            str: A message containing the action response or error details.
+
+        """
         validated_args = RequestFaucetFundsSchema(**args)
 
         try:
@@ -89,7 +98,15 @@ Important notes:
         schema=AddressReputationSchema,
     )
     def address_reputation(self, args: dict[str, Any]) -> str:
-        """Check the reputation of an Ethereum address on a given network."""
+        """Check the reputation of an Ethereum address.
+
+        Args:
+            args (dict[str, Any]): Input arguments for the action.
+
+        Returns:
+            str: A message containing the action response or error details.
+
+        """
         try:
             validated_args = AddressReputationSchema(**args)
 
@@ -102,10 +119,26 @@ Important notes:
             return f"Error checking address reputation: {e!s}"
 
     def supports_network(self, network: Network) -> bool:
-        """Network support will vary action to action."""
+        """Check if the network is supported by this action provider.
+
+        Args:
+            network (Network): The network to check support for.
+
+        Returns:
+            bool: Whether the network is supported.
+
+        """
         return True
 
 
 def cdp_api_action_provider(config: CdpProviderConfig | None = None) -> CdpApiActionProvider:
-    """Create a new CdpApiActionProvider instance."""
+    """Create a new CDP API action provider.
+
+    Args:
+        config (CdpProviderConfig | None): Configuration for the CDP API provider.
+
+    Returns:
+        CdpApiActionProvider: A new CDP API action provider instance.
+
+    """
     return CdpApiActionProvider(config=config)

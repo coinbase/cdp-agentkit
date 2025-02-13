@@ -36,17 +36,14 @@ Important notes:
         schema=WrapEthSchema,
     )
     def wrap_eth(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
-        """Wrap ETH to WETH.
+        """Wrap ETH to WETH by calling the deposit function on the WETH contract.
 
         Args:
-            wallet_provider (EvmWalletProvider): The wallet provider to use for the action.
-            args (dict): The input arguments for the action containing amount_to_wrap.
+            wallet_provider (EvmWalletProvider): The wallet provider to wrap ETH from.
+            args (dict[str, Any]): Arguments containing amount_to_wrap in wei.
 
         Returns:
-            str: A message containing the transaction hash.
-
-        Raises:
-            ValidationError: If the input arguments are invalid.
+            str: A message containing the wrap details or error message.
 
         """
         try:
@@ -66,10 +63,23 @@ Important notes:
             return f"Error wrapping ETH: {e}"
 
     def supports_network(self, network: Network) -> bool:
-        """Check if network is supported by WETH actions."""
+        """Check if network is supported by WETH actions.
+
+        Args:
+            network (Network): The network to check support for.
+
+        Returns:
+            bool: True if the network is supported, False otherwise.
+
+        """
         return network.chain_id in SUPPORTED_CHAINS
 
 
 def weth_action_provider() -> WethActionProvider:
-    """Create a new WethActionProvider instance."""
+    """Create a new WethActionProvider instance.
+
+    Returns:
+        WethActionProvider: A new instance of the WETH action provider.
+
+    """
     return WethActionProvider()

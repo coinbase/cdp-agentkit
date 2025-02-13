@@ -1,3 +1,5 @@
+"""Constants for CDP action provider."""
+
 SOLIDITY_VERSIONS = {
     "0.8.28": "0.8.28+commit.7893614a",
     "0.8.27": "0.8.27+commit.40a35a09",

@@ -1,3 +1,5 @@
+"""Analytics event tracking."""
+
 import hashlib
 import json
 import time

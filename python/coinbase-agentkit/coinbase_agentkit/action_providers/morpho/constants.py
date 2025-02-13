@@ -1,3 +1,5 @@
+"""Constants for Morpho action provider."""
+
 METAMORPHO_ABI = [
     {
         "inputs": [

@@ -1,3 +1,5 @@
+"""Uniswap constants for WOW action provider."""
+
 UNISWAP_QUOTER_ABI = [
     {
         "inputs": [

@@ -1,4 +1,4 @@
-"""ERC721 action provider for NFT interactions."""
+"""ERC721 action provider."""
 
 from typing import Any
 
@@ -30,14 +30,14 @@ Do not use the contract address as the destination address. If you are unsure of
         schema=MintSchema,
     )
     def mint(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
-        """Mint an NFT (ERC-721) to a specified destination address onchain.
+        """Mint an NFT (ERC-721) to a specified destination address.
 
         Args:
-            wallet_provider: The wallet provider to mint the NFT from.
-            args: The input arguments for the action.
+            wallet_provider (EvmWalletProvider): The wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
 
         Returns:
-            A message containing the NFT mint details.
+            str: A message containing the action response or error details.
 
         """
         try:
@@ -78,11 +78,11 @@ Important notes:
         """Transfer an NFT (ERC721 token) to a destination address.
 
         Args:
-            wallet_provider: The wallet provider to transfer the NFT from.
-            args: The input arguments for the action.
+            wallet_provider (EvmWalletProvider): The wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
 
         Returns:
-            A message containing the transfer details.
+            str: A message containing the action response or error details.
 
         """
         try:
@@ -127,12 +127,24 @@ It takes the following inputs:
     def get_balance(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Get the NFT balance for a given address and contract.
 
+        This function queries an ERC721 NFT contract to get the token balance for a specific address.
+        It uses the standard ERC721 balanceOf function which returns the number of tokens owned by
+        the given address for that NFT collection.
+
         Args:
-            wallet_provider: The wallet provider to check the balance with.
-            args: The input arguments for the action.
+            wallet_provider (EvmWalletProvider): The wallet provider to use for making the contract call
+            args (dict[str, Any]): The input arguments containing:
+                - contract_address (str): The address of the ERC721 NFT contract to query
+                - address (str, optional): The address to check NFT balance for. If not provided,
+                    uses the wallet's default address
 
         Returns:
-            A message containing the NFT balance details.
+            str: A message containing either:
+                - The NFT balance details if successful
+                - An error message if the balance check fails
+
+        Raises:
+            Exception: If the contract call fails for any reason
 
         """
         try:

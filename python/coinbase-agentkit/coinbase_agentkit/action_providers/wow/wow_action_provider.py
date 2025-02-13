@@ -1,4 +1,4 @@
-"""WOW action provider implementation."""
+"""WOW action provider."""
 
 import math
 from typing import Any
@@ -50,7 +50,16 @@ Important notes:
         schema=WowBuyTokenSchema,
     )
     def buy_token(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
-        """Buy WOW tokens with ETH."""
+        """Buy WOW tokens with ETH.
+
+        Args:
+            wallet_provider (EvmWalletProvider): The wallet provider to buy tokens from.
+            args (dict[str, Any]): Input arguments containing contract_address and amount_eth_in_wei.
+
+        Returns:
+            str: A message containing the purchase details or error message.
+
+        """
         try:
             token_quote = get_buy_quote(
                 wallet_provider, args["contract_address"], args["amount_eth_in_wei"]
@@ -115,7 +124,16 @@ Important notes:
         schema=WowCreateTokenSchema,
     )
     def create_token(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
-        """Create a new WOW token."""
+        """Create a new WOW token using the factory contract.
+
+        Args:
+            wallet_provider (EvmWalletProvider): Provider for wallet operations.
+            args (dict[str, Any]): Input arguments containing name, symbol, and optional token_uri.
+
+        Returns:
+            str: A message containing the creation details or error message.
+
+        """
         try:
             factory_address = get_factory_address(wallet_provider.get_network().chain_id)
 
@@ -179,7 +197,16 @@ Important notes:
         schema=WowSellTokenSchema,
     )
     def sell_token(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
-        """Sell WOW tokens for ETH."""
+        """Sell WOW tokens for ETH.
+
+        Args:
+            wallet_provider (EvmWalletProvider): The wallet provider to sell tokens from.
+            args (dict[str, Any]): Input arguments containing contract_address and amount_tokens_in_wei.
+
+        Returns:
+            str: A message containing the sell details or error message.
+
+        """
         try:
             eth_quote = get_sell_quote(
                 wallet_provider, args["contract_address"], args["amount_tokens_in_wei"]
@@ -228,7 +255,15 @@ Important notes:
             return f"Error selling Zora Wow ERC20 memecoin: {e!s}"
 
     def supports_network(self, network: Network) -> bool:
-        """Check if network is supported by WOW protocol."""
+        """Check if network is supported by WOW protocol.
+
+        Args:
+            network (Network): The network to check support for.
+
+        Returns:
+            bool: True if network is supported, False otherwise.
+
+        """
         return network.protocol_family == "evm" and network.chain_id in SUPPORTED_CHAINS
 
 

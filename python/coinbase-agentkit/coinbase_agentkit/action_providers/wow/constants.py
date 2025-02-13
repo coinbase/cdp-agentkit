@@ -1,3 +1,5 @@
+"""Constants for WOW action provider."""
+
 WOW_FACTORY_ABI = [
     {
         "type": "constructor",

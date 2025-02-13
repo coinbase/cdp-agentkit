@@ -1,4 +1,4 @@
-"""CDP wallet action provider."""
+"""CDP Wallet action provider."""
 
 from typing import Any
 
@@ -42,7 +42,16 @@ as strings, boolean values as true/false. For arrays/tuples, encode based on con
         schema=DeployContractSchema,
     )
     def deploy_contract(self, wallet_provider: CdpWalletProvider, args: dict[str, Any]) -> str:
-        """Deploy a smart contract."""
+        """Deploy an arbitrary smart contract.
+
+        Args:
+            wallet_provider (CdpWalletProvider): The CDP wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
+
+        Returns:
+            str: A message containing the action response or error details.
+
+        """
         try:
             solidity_version = SOLIDITY_VERSIONS[args["solidity_version"]]
 
@@ -67,7 +76,16 @@ and the base URI for the token metadata as inputs.
         schema=DeployNftSchema,
     )
     def deploy_nft(self, wallet_provider: CdpWalletProvider, args: dict[str, Any]) -> str:
-        """Deploy an NFT collection."""
+        """Deploy an NFT (ERC-721) smart contract.
+
+        Args:
+            wallet_provider (CdpWalletProvider): The CDP wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
+
+        Returns:
+            str: A message containing the action response or error details.
+
+        """
         try:
             nft_contract = wallet_provider.deploy_nft(
                 name=args["name"], symbol=args["symbol"], base_uri=args["base_uri"]
@@ -87,7 +105,16 @@ address as the owner and initial token holder.
         schema=DeployTokenSchema,
     )
     def deploy_token(self, wallet_provider: CdpWalletProvider, args: dict[str, Any]) -> str:
-        """Deploy an ERC20 token."""
+        """Deploy an ERC20 token smart contract.
+
+        Args:
+            wallet_provider (CdpWalletProvider): The CDP wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
+
+        Returns:
+            str: A message containing the action response or error details.
+
+        """
         try:
             token_contract = wallet_provider.deploy_token(
                 name=args["name"], symbol=args["symbol"], total_supply=args["total_supply"]
@@ -111,14 +138,14 @@ Important notes:
         schema=TradeSchema,
     )
     def trade(self, wallet_provider: CdpWalletProvider, args: dict[str, Any]) -> str:
-        """Trade a specified amount of a from asset to a to asset for the wallet.
+        """Trade assets using the CDP wallet provider.
 
         Args:
-            wallet_provider: The wallet provider to trade the asset from.
-            args: The input arguments for the action.
+            wallet_provider (CdpWalletProvider): The CDP wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
 
         Returns:
-            A message containing the trade details.
+            str: A message containing the action response or error details.
 
         """
         validated_args = TradeSchema(**args)
@@ -150,5 +177,13 @@ Important notes:
 
 
 def cdp_wallet_action_provider(config: CdpProviderConfig | None = None) -> CdpWalletActionProvider:
-    """Create a new CDP wallet action provider."""
+    """Create a new CDP wallet action provider.
+
+    Args:
+        config (CdpProviderConfig | None): Configuration for the CDP wallet provider.
+
+    Returns:
+        CdpWalletActionProvider: A new CDP wallet action provider instance.
+
+    """
     return CdpWalletActionProvider(config)

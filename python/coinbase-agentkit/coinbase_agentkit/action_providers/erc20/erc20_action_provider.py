@@ -1,4 +1,6 @@
-"""ERC20 action provider implementation."""
+"""ERC20 action provider."""
+
+from typing import Any
 
 from web3 import Web3
 
@@ -24,15 +26,15 @@ class ERC20ActionProvider(ActionProvider[EvmWalletProvider]):
         """,
         schema=GetBalanceSchema,
     )
-    def get_balance(self, wallet_provider: EvmWalletProvider, args: GetBalanceSchema) -> str:
-        """Get the balance of an ERC20 token.
+    def get_balance(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
+        """Get the balance of an ERC20 token for the wallet's address.
 
         Args:
-            wallet_provider: The wallet provider to get the balance from.
-            args: The input arguments for the action.
+            wallet_provider (EvmWalletProvider): The wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
 
         Returns:
-            A message containing the balance.
+            str: A message containing the action response or error details.
 
         """
         try:
@@ -65,15 +67,15 @@ class ERC20ActionProvider(ActionProvider[EvmWalletProvider]):
         """,
         schema=TransferSchema,
     )
-    def transfer(self, wallet_provider: EvmWalletProvider, args: TransferSchema) -> str:
-        """Transfer a specified amount of an ERC20 token to a destination onchain.
+    def transfer(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
+        """Transfer ERC20 tokens to a destination address.
 
         Args:
-            wallet_provider: The wallet provider to transfer the asset from.
-            args: The input arguments for the action.
+            wallet_provider (EvmWalletProvider): The wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
 
         Returns:
-            A message containing the transfer details.
+            str: A message containing the action response or error details.
 
         """
         try:
@@ -102,13 +104,13 @@ class ERC20ActionProvider(ActionProvider[EvmWalletProvider]):
             return f"Error transferring the asset: {e!s}"
 
     def supports_network(self, network: Network) -> bool:
-        """Check if the ERC20 action provider supports the given network.
+        """Check if the network is supported by this action provider.
 
         Args:
-            network: The network to check.
+            network (Network): The network to check support for.
 
         Returns:
-            True if the ERC20 action provider supports the network, false otherwise.
+            bool: Whether the network is supported.
 
         """
         return network.protocol_family == "evm"

@@ -1,4 +1,4 @@
-"""Schema definitions for Superfluid action provider."""
+"""Schemas for Superfluid action provider."""
 
 from pydantic import BaseModel, Field
 

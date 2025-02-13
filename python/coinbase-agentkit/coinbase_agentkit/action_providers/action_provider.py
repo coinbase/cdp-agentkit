@@ -1,3 +1,5 @@
+"""Base class for action providers."""
+
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from typing import Generic, TypeVar

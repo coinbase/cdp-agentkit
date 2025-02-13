@@ -1,3 +1,5 @@
+"""Base class for wallet providers."""
+
 from abc import ABC, ABCMeta, abstractmethod
 from decimal import Decimal
 

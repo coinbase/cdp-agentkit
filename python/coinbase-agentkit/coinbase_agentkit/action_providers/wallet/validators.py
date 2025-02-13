@@ -1,4 +1,4 @@
-"""Validators for wallet action inputs."""
+"""Validators for Wallet action provider schemas."""
 
 import re
 from decimal import Decimal

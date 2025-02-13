@@ -1,4 +1,4 @@
-"""ERC721 action provider for NFT interactions."""
+"""Basename action provider for Base domain name registration."""
 
 from typing import Any
 
@@ -38,9 +38,17 @@ Basename fails, you should prompt to try again with a more unique name.
         schema=RegisterBasenameSchema,
     )
     def register_basename(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
-        """Register a Basename for the agent."""
+        """Register a Basename for the agent.
+
+        Args:
+            wallet_provider (EvmWalletProvider): The wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
+
+        Returns:
+            str: A message containing the action response or error details.
+
+        """
         try:
-            # Get the checksum address
             address = Web3.to_checksum_address(wallet_provider.get_address())
             is_mainnet = wallet_provider.get_network().network_id == "base-mainnet"
 
@@ -48,7 +56,6 @@ Basename fails, you should prompt to try again with a more unique name.
             if not args["basename"].endswith(suffix):
                 args["basename"] += suffix
 
-            # Get checksum addresses for contracts
             l2_resolver_address = Web3.to_checksum_address(
                 L2_RESOLVER_ADDRESS_MAINNET if is_mainnet else L2_RESOLVER_ADDRESS_TESTNET
             )
@@ -93,13 +100,13 @@ Basename fails, you should prompt to try again with a more unique name.
             return f"Error registering basename: {e!s}"
 
     def supports_network(self, network: Network) -> bool:
-        """Check if the Basename action provider supports the given network.
+        """Check if the network is supported by the Basename action provider.
 
         Args:
-            network: The network to check.
+            network (Network): The network to check support for.
 
         Returns:
-            True if the Basename action provider supports the network, false otherwise.
+            bool: Whether the network is supported.
 
         """
         return network.protocol_family == "evm" and network.network_id in [
@@ -109,10 +116,10 @@ Basename fails, you should prompt to try again with a more unique name.
 
 
 def basename_action_provider() -> BasenameActionProvider:
-    """Create an instance of the Basename action provider.
+    """Create a new Basename action provider.
 
     Returns:
-        An instance of the Basename action provider.
+        BasenameActionProvider: A new Basename action provider instance.
 
     """
     return BasenameActionProvider()

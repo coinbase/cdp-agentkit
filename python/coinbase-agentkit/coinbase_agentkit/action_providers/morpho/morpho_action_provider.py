@@ -1,3 +1,5 @@
+"""Morpho action provider."""
+
 from decimal import Decimal
 from typing import Any
 
@@ -42,7 +44,16 @@ Important notes:
         schema=MorphoDepositSchema,
     )
     def deposit(self, wallet: EvmWalletProvider, args: dict[str, Any]) -> str:
-        """Deposit assets into a Morpho Vault."""
+        """Deposit assets into a Morpho Vault.
+
+        Args:
+            wallet (EvmWalletProvider): The wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
+
+        Returns:
+            str: A message containing the action response or error details.
+
+        """
         assets = Decimal(args["assets"])
 
         if assets <= Decimal("0.0"):
@@ -86,7 +97,16 @@ This tool allows withdrawing assets from a Morpho Vault. It takes:
         schema=MorphoWithdrawSchema,
     )
     def withdraw(self, wallet: EvmWalletProvider, args: dict[str, Any]) -> str:
-        """Withdraw assets from a Morpho Vault."""
+        """Withdraw assets from a Morpho Vault.
+
+        Args:
+            wallet (EvmWalletProvider): The wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
+
+        Returns:
+            str: A message containing the action response or error details.
+
+        """
         assets = Decimal(args["assets"])
 
         if assets <= Decimal("0.0"):
@@ -114,10 +134,23 @@ This tool allows withdrawing assets from a Morpho Vault. It takes:
             return f"Error withdrawing from Morpho Vault: {e!s}"
 
     def supports_network(self, network: Network) -> bool:
-        """Check if network is supported by Morpho."""
+        """Check if the network is supported by this action provider.
+
+        Args:
+            network (Network): The network to check support for.
+
+        Returns:
+            bool: Whether the network is supported.
+
+        """
         return network.protocol_family == "evm" and network.network_id in SUPPORTED_NETWORKS
 
 
 def morpho_action_provider() -> MorphoActionProvider:
-    """Create a new MorphoActionProvider instance."""
+    """Create a new Morpho action provider.
+
+    Returns:
+        MorphoActionProvider: A new Morpho action provider instance.
+
+    """
     return MorphoActionProvider()

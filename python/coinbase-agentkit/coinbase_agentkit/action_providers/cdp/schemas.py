@@ -1,4 +1,4 @@
-"""Schemas for CDP API actions."""
+"""Schemas for CDP action providers."""
 
 from typing import Any
 

@@ -1,3 +1,5 @@
+"""AgentKit - The framework for enabling AI agents to take actions onchain."""
+
 from pydantic import BaseModel, ConfigDict
 
 from .action_providers import Action, ActionProvider, wallet_action_provider
@@ -16,9 +18,20 @@ class AgentKitConfig(BaseModel):
 
 
 class AgentKit:
-    """Main AgentKit class for managing wallet and action providers."""
+    """Main AgentKit class for managing wallet and action providers.
+
+    Provides a unified interface for interacting with wallets and executing
+    actions across different protocols and networks.
+    """
 
     def __init__(self, config: AgentKitConfig | None = None):
+        """Initialize AgentKit with the given configuration.
+
+        Args:
+            config (AgentKitConfig | None): Configuration options for AgentKit. If not provided,
+                                          a default CDP wallet provider will be used.
+
+        """
         if not config:
             config = AgentKitConfig()
 
@@ -31,7 +44,15 @@ class AgentKit:
         self.action_providers = config.action_providers or [wallet_action_provider()]
 
     def get_actions(self) -> list[Action]:
-        """Get all available actions."""
+        """Get all available actions for the current wallet and network.
+
+        Returns:
+            list[Action]: List of available actions from all providers
+
+        Raises:
+            ValueError: If no wallet provider is configured
+
+        """
         if not self.wallet_provider:
             raise ValueError("No wallet provider configured")
 

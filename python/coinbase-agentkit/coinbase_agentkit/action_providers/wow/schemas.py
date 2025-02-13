@@ -1,4 +1,4 @@
-"""Input schemas for WOW action provider."""
+"""Schemas for WOW action provider."""
 
 from pydantic import BaseModel, Field, field_validator
 

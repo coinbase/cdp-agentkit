@@ -1,3 +1,5 @@
+"""Superfluid action provider."""
+
 from typing import Any
 
 from web3 import Web3
@@ -32,7 +34,16 @@ Important notes:
         schema=CreateFlowSchema,
     )
     def create_flow(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
-        """Create a money flow using Superfluid."""
+        """Create a money flow using Superfluid.
+
+        Args:
+            wallet_provider (EvmWalletProvider): The wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
+
+        Returns:
+            str: A message containing the action response or error details.
+
+        """
         try:
             superfluid_host_contract = Web3().eth.contract(
                 address=SUPERFLUID_HOST_ADDRESS, abi=CREATE_ABI
@@ -75,7 +86,16 @@ Important notes:
         schema=UpdateFlowSchema,
     )
     def update_flow(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
-        """Update an existing money flow using Superfluid."""
+        """Update an existing money flow using Superfluid.
+
+        Args:
+            wallet_provider (EvmWalletProvider): The wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
+
+        Returns:
+            str: A message containing the action response or error details.
+
+        """
         try:
             superfluid_host_contract = Web3().eth.contract(
                 address=SUPERFLUID_HOST_ADDRESS, abi=UPDATE_ABI
@@ -113,7 +133,16 @@ Inputs:
         schema=DeleteFlowSchema,
     )
     def delete_flow(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
-        """Delete an existing money flow using Superfluid."""
+        """Delete an existing money flow using Superfluid.
+
+        Args:
+            wallet_provider (EvmWalletProvider): The wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
+
+        Returns:
+            str: A message containing the action response or error details.
+
+        """
         try:
             superfluid_host_contract = Web3().eth.contract(
                 address=SUPERFLUID_HOST_ADDRESS, abi=DELETE_ABI
@@ -144,15 +173,20 @@ Inputs:
         """Check if network is supported by Superfluid actions.
 
         Args:
-            network: The network to check support for.
+            network (Network): The network to check support for.
 
         Returns:
-            bool: True if the network is supported, False otherwise.
+            bool: Whether the network is supported.
 
         """
         return network.protocol_family == "evm"
 
 
 def superfluid_action_provider() -> SuperfluidActionProvider:
-    """Create a new SuperfluidActionProvider instance."""
+    """Create a new Superfluid action provider.
+
+    Returns:
+        SuperfluidActionProvider: A new Superfluid action provider instance.
+
+    """
     return SuperfluidActionProvider()

@@ -1,4 +1,4 @@
-"""ERC721 action provider package."""
+"""ERC721 action provider for NFT interactions."""
 
 from .erc721_action_provider import Erc721ActionProvider, erc721_action_provider
 

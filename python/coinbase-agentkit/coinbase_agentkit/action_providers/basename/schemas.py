@@ -1,3 +1,5 @@
+"""Schemas for Basename action provider."""
+
 from pydantic import BaseModel, Field
 
 

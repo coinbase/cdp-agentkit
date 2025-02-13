@@ -1,3 +1,5 @@
+"""Twitter action provider."""
+
 import os
 from json import dumps
 from typing import Any
@@ -74,7 +76,15 @@ A failure response will return a message with a Twitter API request error:
         schema=AccountDetailsSchema,
     )
     def account_details(self, args: dict[str, Any]) -> str:
-        """Get the authenticated Twitter (X) user account details using the Tweepy client."""
+        """Get the authenticated Twitter user account details.
+
+        Args:
+            args (dict[str, Any]): Empty dictionary, no arguments needed.
+
+        Returns:
+            str: A message containing the action response or error details.
+
+        """
         AccountDetailsSchema(**args)
 
         import tweepy
@@ -101,7 +111,15 @@ A failure response will return a message with the Twitter API request error:
         schema=AccountMentionsSchema,
     )
     def account_mentions(self, args: dict[str, Any]) -> str:
-        """Get mentions for a specified Twitter user."""
+        """Get mentions for a specified Twitter user.
+
+        Args:
+            args (dict[str, Any]): Arguments containing user_id to get mentions for.
+
+        Returns:
+            str: A message containing the action response or error details.
+
+        """
         validated_args = AccountMentionsSchema(**args)
 
         import tweepy
@@ -125,7 +143,15 @@ A failure response will return a message with the Twitter API request error:
         schema=PostTweetSchema,
     )
     def post_tweet(self, args: dict[str, Any]) -> str:
-        """Post a tweet on Twitter."""
+        """Post a tweet on Twitter.
+
+        Args:
+            args (dict[str, Any]): Arguments containing tweet text to post.
+
+        Returns:
+            str: A message containing the action response or error details.
+
+        """
         validated_args = PostTweetSchema(**args)
 
         import tweepy
@@ -149,7 +175,15 @@ A failure response will return a message with the Twitter API request error:
         schema=PostTweetReplySchema,
     )
     def post_tweet_reply(self, args: dict[str, Any]) -> str:
-        """Post a reply to a tweet on Twitter."""
+        """Post a reply to a tweet on Twitter.
+
+        Args:
+            args (dict[str, Any]): Arguments containing tweet_reply text and tweet_id to reply to.
+
+        Returns:
+            str: A message containing the action response or error details.
+
+        """
         validated_args = PostTweetReplySchema(**args)
 
         import tweepy
@@ -165,7 +199,9 @@ A failure response will return a message with the Twitter API request error:
     def supports_network(self, network: Network) -> bool:
         """Check if network is supported by Twitter actions.
 
-        Twitter actions don't depend on blockchain networks, so always return True.
+        Returns:
+            bool: Always True as Twitter actions don't depend on blockchain networks.
+
         """
         return True
 

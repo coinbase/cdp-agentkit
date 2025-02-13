@@ -1,3 +1,5 @@
+"""Pyth action provider."""
+
 from typing import Any
 
 import requests
@@ -33,7 +35,15 @@ class PythActionProvider(ActionProvider[WalletProvider]):
         schema=FetchPriceFeedIdSchema,
     )
     def fetch_price_feed_id(self, args: dict[str, Any]) -> str:
-        """Fetch the price feed ID for a given token symbol from Pyth."""
+        """Fetch the price feed ID for a given token symbol from Pyth.
+
+        Args:
+            args (dict[str, Any]): Input arguments for the action.
+
+        Returns:
+            str: A message containing the action response or error details.
+
+        """
         token_symbol = args["token_symbol"]
         url = f"https://hermes.pyth.network/v2/price_feeds?query={token_symbol}&asset_type=crypto"
         response = requests.get(url)
@@ -64,7 +74,15 @@ Important notes:
         schema=FetchPriceSchema,
     )
     def fetch_price(self, args: dict[str, Any]) -> str:
-        """Fetch price from Pyth for the given Pyth price feed."""
+        """Fetch price from Pyth for the given price feed ID.
+
+        Args:
+            args (dict[str, Any]): Input arguments for the action.
+
+        Returns:
+            str: A message containing the action response or error details.
+
+        """
         try:
             price_feed_id = args["price_feed_id"]
             url = f"https://hermes.pyth.network/v2/updates/price/latest?ids[]={price_feed_id}"
@@ -99,5 +117,10 @@ Important notes:
 
 
 def pyth_action_provider() -> PythActionProvider:
-    """Create a new PythActionProvider instance."""
+    """Create a new Pyth action provider.
+
+    Returns:
+        PythActionProvider: A new Pyth action provider instance.
+
+    """
     return PythActionProvider()

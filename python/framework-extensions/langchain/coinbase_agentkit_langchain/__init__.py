@@ -1,4 +1,4 @@
-"""Coinbase AgentKit Langchain integration package."""
+"""LangChain extension for AgentKit."""
 
 from .langchain_tools import get_langchain_tools
 

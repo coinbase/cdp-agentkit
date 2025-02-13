@@ -1,4 +1,4 @@
-"""Schema definitions for Twitter action provider."""
+"""Schemas for Twitter action provider."""
 
 from pydantic import BaseModel, Field
 

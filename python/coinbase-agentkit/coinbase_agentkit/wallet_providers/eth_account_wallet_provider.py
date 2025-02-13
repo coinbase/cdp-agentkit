@@ -1,3 +1,5 @@
+"""Eth account wallet provider."""
+
 from decimal import Decimal
 from typing import Any
 
@@ -26,10 +28,15 @@ class EthAccountWalletProviderConfig(BaseModel):
 
 
 class EthAccountWalletProvider(EvmWalletProvider):
-    """Implementation of EvmWalletProvider using eth-account and web3.py."""
+    """A wallet provider that uses eth-account and web3.py for EVM chain interactions."""
 
     def __init__(self, config: EthAccountWalletProviderConfig):
-        """Initialize the wallet provider with an eth-account."""
+        """Initialize the wallet provider with an eth-account.
+
+        Args:
+            config (EthAccountWalletProviderConfig): Configuration options including account and network ID.
+
+        """
         self.config = config
         self.account = config.account
 
@@ -48,24 +55,52 @@ class EthAccountWalletProvider(EvmWalletProvider):
         )
 
     def get_address(self) -> str:
-        """Get the wallet address."""
+        """Get the wallet address.
+
+        Returns:
+            str: The wallet's address as a hex string.
+
+        """
         return self.account.address
 
     def get_network(self) -> Network:
-        """Get the current network."""
+        """Get the current network.
+
+        Returns:
+            Network: Network object containing protocol family, network ID, and chain ID.
+
+        """
         return self._network
 
     def get_balance(self) -> Decimal:
-        """Get the wallet balance in native currency."""
+        """Get the wallet balance in native currency.
+
+        Returns:
+            Decimal: The wallet's balance in wei as a Decimal
+
+        """
         balance_wei = self.web3.eth.get_balance(self.account.address)
         return Decimal(str(balance_wei))
 
     def get_name(self) -> str:
-        """Get the name of the wallet provider."""
+        """Get the name of the wallet provider.
+
+        Returns:
+            str: The string 'eth_account_wallet_provider'
+
+        """
         return "eth-account"
 
     def sign_message(self, message: str | bytes) -> HexStr:
-        """Sign a message using the wallet's private key."""
+        """Sign a message using the wallet's private key.
+
+        Args:
+            message (str | bytes): The message to sign, either as a string or bytes
+
+        Returns:
+            HexStr: The signature as a hex string
+
+        """
         if isinstance(message, str):
             message = message.encode()
         message_obj = encode_defunct(message)
@@ -73,12 +108,28 @@ class EthAccountWalletProvider(EvmWalletProvider):
         return HexStr(signed.signature.hex())
 
     def sign_typed_data(self, typed_data: dict[str, Any]) -> HexStr:
-        """Sign typed data according to EIP-712 standard."""
+        """Sign typed data according to EIP-712 standard.
+
+        Args:
+            typed_data (dict[str, Any]): The typed data to sign following EIP-712 format
+
+        Returns:
+            HexStr: The signature as a hex string
+
+        """
         signed = self.account.sign_typed_data(full_message=typed_data)
         return HexStr(signed.signature.hex())
 
     def sign_transaction(self, transaction: TxParams) -> SignedTransaction:
-        """Sign an EVM transaction."""
+        """Sign an EVM transaction.
+
+        Args:
+            transaction (TxParams): Transaction parameters including to, value, and data.
+
+        Returns:
+            SignedTransaction: The signed transaction object
+
+        """
         if "chainId" not in transaction:
             transaction["chainId"] = self._network.chain_id
         if "from" not in transaction:
@@ -87,9 +138,23 @@ class EthAccountWalletProvider(EvmWalletProvider):
         return self.account.sign_transaction(transaction)
 
     def estimate_fees(self, multiplier=1.2):
-        """Estimate fees."""
+        """Estimate gas fees for a transaction.
+
+        Args:
+            multiplier (float): Buffer multiplier for base fee, defaults to 1.2
+
+        Returns:
+            tuple[int, int]: Tuple of (max_priority_fee_per_gas, max_fee_per_gas) in wei
+
+        """
 
         def get_base_fee():
+            """Get the base fee from the latest block and apply the multiplier.
+
+            Returns:
+                int: The adjusted base fee in wei
+
+            """
             latest_block = self.web3.eth.get_block("latest")
             base_fee = latest_block["baseFeePerGas"]
             # Multiply by 1.2 to give some buffer
@@ -102,7 +167,18 @@ class EthAccountWalletProvider(EvmWalletProvider):
         return (max_priority_fee_per_gas, max_fee_per_gas)
 
     def send_transaction(self, transaction: TxParams) -> HexStr:
-        """Send a signed transaction to the network."""
+        """Send a signed transaction to the network.
+
+        Args:
+            transaction (TxParams): Transaction parameters including to, value, and data
+
+        Returns:
+            HexStr: The transaction hash as a hex string
+
+        Raises:
+            Exception: If transaction preparation or sending fails
+
+        """
         transaction["from"] = self.account.address
         transaction["chainId"] = self._network.chain_id
 
@@ -122,7 +198,20 @@ class EthAccountWalletProvider(EvmWalletProvider):
     def wait_for_transaction_receipt(
         self, tx_hash: HexStr, timeout: float = 120, poll_latency: float = 0.1
     ) -> dict[str, Any]:
-        """Wait for transaction confirmation and return receipt."""
+        """Wait for transaction confirmation and return receipt.
+
+        Args:
+            tx_hash (HexStr): The transaction hash to wait for
+            timeout (float): Maximum time to wait in seconds, defaults to 120
+            poll_latency (float): Time between polling attempts in seconds, defaults to 0.1
+
+        Returns:
+            dict[str, Any]: The transaction receipt as a dictionary
+
+        Raises:
+            TimeoutError: If transaction is not mined within timeout period
+
+        """
         return self.web3.eth.wait_for_transaction_receipt(
             tx_hash, timeout=timeout, poll_latency=poll_latency
         )
@@ -135,7 +224,19 @@ class EthAccountWalletProvider(EvmWalletProvider):
         args: list[Any] | None = None,
         block_identifier: BlockIdentifier = "latest",
     ) -> Any:
-        """Read data from a smart contract."""
+        """Read data from a smart contract.
+
+        Args:
+            contract_address (ChecksumAddress): The address of the contract to read from
+            abi (list[dict[str, Any]]): The ABI of the contract
+            function_name (str): The name of the function to call
+            args (list[Any] | None): Arguments to pass to the function call, defaults to empty list
+            block_identifier (BlockIdentifier): The block number to read from, defaults to 'latest'
+
+        Returns:
+            Any: The result of the contract function call
+
+        """
         contract = self.web3.eth.contract(address=contract_address, abi=abi)
         func = contract.functions[function_name]
         if args is None:
@@ -146,11 +247,14 @@ class EthAccountWalletProvider(EvmWalletProvider):
         """Transfer the native asset of the network.
 
         Args:
-            to: The destination address
-            value: The amount to transfer in whole units (e.g. '1.5' for 1.5 ETH)
+            to (str): The destination address to receive the transfer
+            value (Decimal): The amount to transfer in whole units (e.g. 1.5 for 1.5 ETH)
 
         Returns:
-            The transaction hash as a string
+            str: The transaction hash as a string
+
+        Raises:
+            Exception: If transfer fails
 
         """
         try:

@@ -1,3 +1,5 @@
+"""Wallet action provider for basic wallet operations."""
+
 from typing import Any
 
 from ...network import Network
@@ -24,10 +26,17 @@ class WalletActionProvider(ActionProvider[WalletProvider]):
     """,
         schema=GetWalletDetailsSchema,
     )
-    def get_wallet_details(
-        self, wallet_provider: WalletProvider, args: GetWalletDetailsSchema
-    ) -> str:
-        """Get details about the wallet."""
+    def get_wallet_details(self, wallet_provider: WalletProvider, args: dict[str, Any]) -> str:
+        """Get details about the connected wallet.
+
+        Args:
+            wallet_provider (WalletProvider): The wallet provider to get details from.
+            args (dict[str, Any]): The input arguments.
+
+        Returns:
+            str: A formatted string containing wallet details and network information.
+
+        """
         try:
             wallet_address = wallet_provider.get_address()
             network = wallet_provider.get_network()
@@ -50,8 +59,17 @@ class WalletActionProvider(ActionProvider[WalletProvider]):
         description="This tool will get the native currency balance of the connected wallet.",
         schema=GetBalanceSchema,
     )
-    def get_balance(self, wallet_provider: WalletProvider, args: GetBalanceSchema) -> str:
-        """Get native currency balance for the wallet."""
+    def get_balance(self, wallet_provider: WalletProvider, args: dict[str, Any]) -> str:
+        """Get the native currency balance for the connected wallet.
+
+        Args:
+            wallet_provider (WalletProvider): The wallet provider to get the balance from.
+            args (dict[str, Any]): The input arguments.
+
+        Returns:
+            str: A message containing the wallet address and balance information.
+
+        """
         try:
             balance = wallet_provider.get_balance()
             wallet_address = wallet_provider.get_address()
@@ -76,7 +94,16 @@ Important notes:
         schema=NativeTransferSchema,
     )
     def native_transfer(self, wallet_provider: WalletProvider, args: dict[str, Any]) -> str:
-        """Transfer native tokens to a destination address."""
+        """Transfer native tokens from the connected wallet to a destination address.
+
+        Args:
+            wallet_provider (WalletProvider): The wallet provider to transfer tokens from.
+            args (dict[str, Any]): Arguments containing destination address and transfer amount.
+
+        Returns:
+            str: A message containing the transfer details and transaction hash.
+
+        """
         try:
             validated_args = NativeTransferSchema(**args)
             tx_hash = wallet_provider.native_transfer(validated_args.to, validated_args.value)
@@ -85,10 +112,23 @@ Important notes:
             return f"Error transferring native tokens: {e}"
 
     def supports_network(self, network: Network) -> bool:
-        """Check if network is supported by wallet actions."""
+        """Check if network is supported by wallet actions.
+
+        Args:
+            network (Network): The network to check support for.
+
+        Returns:
+            bool: True if the network is supported.
+
+        """
         return True
 
 
 def wallet_action_provider() -> WalletActionProvider:
-    """Create a new WalletActionProvider instance."""
+    """Create a new WalletActionProvider instance.
+
+    Returns:
+        WalletActionProvider: A new wallet action provider instance.
+
+    """
     return WalletActionProvider()
