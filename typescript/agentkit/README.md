@@ -469,6 +469,24 @@ const walletProvider = await CdpWalletProvider.configureWithWallet({
 });
 ```
 
+#### Configuring gas parameters
+
+The `CdpWalletProvider` also exposes parameters for effecting the gas calculations.
+
+```typescript
+import { CdpWalletProvider } from "@coinbase/agentkit";
+
+const walletProvider = await CdpWalletProvider.configureWithWallet({
+    cdpWalletData: "WALLET DATA JSON STRING",
+    apiKeyName: "CDP API KEY NAME",
+    apiKeyPrivate: "CDP API KEY PRIVATE KEY",
+    gas: {
+        gasLimitMultiplier: 2.0,  // Adjusts gas limit estimation
+        feePerGasMultiplier: 2.0, // Adjusts max fee per gas
+    }
+});
+```
+
 ### ViemWalletProvider
 
 The `ViemWalletProvider` is a wallet provider that uses the [Viem library](https://viem.sh/docs/getting-started). It is useful for interacting with any EVM-compatible chain.
@@ -491,6 +509,33 @@ const client = createWalletClient({
 });
 
 const walletProvider = new ViemWalletProvider(client);
+```
+
+#### Configuring gas parameters
+
+The `ViemWalletProvider` also exposes parameters for effecting the gas calculations.
+
+```typescript
+import { ViemWalletProvider } from "@coinbase/agentkit";
+import { privateKeyToAccount } from "viem/accounts";
+import { baseSepolia } from "viem/chains";
+import { http } from "viem/transports";
+import { createWalletClient } from "viem";
+
+const account = privateKeyToAccount(
+  "0x4c0883a69102937d6231471b5dbb6208ffd70c02a813d7f2da1c54f2e3be9f38",
+);
+
+const client = createWalletClient({
+  account,
+  chain: baseSepolia,
+  transport: http(),
+});
+
+const walletProvider = new ViemWalletProvider(client, {
+    gasLimitMultiplier: 2.0,  // Adjusts gas limit estimation
+    feePerGasMultiplier: 2.0, // Adjusts max fee per gas
+});
 ```
 
 ## Contributing
