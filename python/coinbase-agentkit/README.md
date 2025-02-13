@@ -22,6 +22,7 @@ AgentKit is a framework for easily enabling AI agents to take actions onchain. I
     - [Configuring from a mnemonic phrase](#configuring-from-a-mnemonic-phrase)
     - [Exporting a wallet](#exporting-a-wallet)
     - [Importing a wallet from WalletData JSON string](#importing-a-wallet-from-walletdata-json-string)
+    - [Configuring gas parameters](#configuring-cdpwalletprovider-gas-parameters)
   - [EthAccountWalletProvider](#ethaccountwalletprovider)
 - [Contributing](#contributing)
 
@@ -280,7 +281,7 @@ wallet_provider = CdpWalletProvider(CdpWalletProviderConfig(
 ))
 ```
 
-#### Configuring `CdpWalletProvider` Gas Parameters
+#### Configuring `CdpWalletProvider` gas parameters
 
 The `CdpWalletProvider` also exposes parameters for effecting the gas calculations.
 
