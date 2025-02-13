@@ -10,7 +10,7 @@ from web3.types import BlockIdentifier, ChecksumAddress, HexStr, TxParams
 from .wallet_provider import WalletProvider
 
 
-class EvmWalletProviderGasConfig(BaseModel):
+class EvmGasConfig(BaseModel):
     """Configuration for gas multipliers."""
 
     gas_limit_multiplier: float | None = Field(None, description="An internal multiplier on gas limit estimation")
