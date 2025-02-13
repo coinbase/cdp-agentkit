@@ -19,7 +19,7 @@ class EthAccountWalletProviderConfig(BaseModel):
     """Configuration for EthAccountWalletProvider."""
 
     account: LocalAccount
-    chain_id: int
+    chain_id: str
 
     class Config:
         """Configuration for EthAccountWalletProvider."""
