@@ -20,7 +20,7 @@ from web3 import Web3
 from web3.types import BlockIdentifier, ChecksumAddress, HexStr, TxParams
 
 from ..network import NETWORK_ID_TO_CHAIN, Network
-from .evm_wallet_provider import EvmWalletProvider, EvmGasConfig
+from .evm_wallet_provider import EvmGasConfig, EvmWalletProvider
 
 
 class CdpProviderConfig(BaseModel):

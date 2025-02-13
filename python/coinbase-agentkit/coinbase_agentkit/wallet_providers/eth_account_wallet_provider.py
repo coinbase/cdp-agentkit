@@ -12,7 +12,7 @@ from web3.middleware import SignAndSendRawMiddlewareBuilder
 from web3.types import BlockIdentifier, ChecksumAddress, HexStr, TxParams
 
 from ..network import CHAIN_ID_TO_NETWORK_ID, NETWORK_ID_TO_CHAIN, Network
-from .evm_wallet_provider import EvmWalletProvider, EvmGasConfig
+from .evm_wallet_provider import EvmGasConfig, EvmWalletProvider
 
 
 class EthAccountWalletProviderConfig(BaseModel):
