@@ -23,6 +23,7 @@ from .conftest import (
     MOCK_NFT_SYMBOL,
     MOCK_SOLIDITY_INPUT_JSON,
     MOCK_SOLIDITY_VERSION,
+    MOCK_TESTNET_NETWORK_ID,
     MOCK_TO_AMOUNT,
     MOCK_TO_ASSET_ID,
     MOCK_TOKEN_SUPPLY,
@@ -76,6 +77,7 @@ def test_deploy_nft(mock_wallet, mock_contract_result):
     """Test NFT deployment."""
     provider = cdp_wallet_action_provider()
 
+    mock_wallet.get_network.return_value.network_id = MOCK_TESTNET_NETWORK_ID
     mock_wallet.deploy_nft.return_value.wait.return_value = mock_contract_result
 
     args = {
@@ -92,6 +94,7 @@ def test_deploy_nft(mock_wallet, mock_contract_result):
         base_uri=MOCK_NFT_BASE_URI,
     )
     assert f"Deployed NFT Collection {MOCK_NFT_NAME}" in result
+    assert f"on network {MOCK_TESTNET_NETWORK_ID}" in result
     assert f"to address {MOCK_CONTRACT_ADDRESS}" in result
     assert f"Transaction hash for the deployment: {MOCK_TX_HASH}" in result
     assert f"Transaction link for the deployment: {MOCK_EXPLORER_URL}/{MOCK_TX_HASH}" in result

@@ -75,7 +75,7 @@ and the base URI for the token metadata as inputs.
         except Exception as e:
             return f"Error deploying NFT {e!s}"
 
-        return f"Deployed NFT Collection {args['name']} to address {nft_contract.contract_address} on network {wallet_provider.network_id}.\nTransaction hash for the deployment: {nft_contract.transaction.transaction_hash}\nTransaction link for the deployment: {nft_contract.transaction.transaction_link}"
+        return f"Deployed NFT Collection {args['name']} to address {nft_contract.contract_address} on network {wallet_provider.get_network().network_id}.\nTransaction hash for the deployment: {nft_contract.transaction.transaction_hash}\nTransaction link for the deployment: {nft_contract.transaction.transaction_link}"
 
     @create_action(
         name="deploy_token",
