@@ -29,6 +29,26 @@ class WalletActionProvider(ActionProvider[WalletProvider]):
     def get_wallet_details(
         self, wallet_provider: WalletProvider, args: GetWalletDetailsSchema
     ) -> str:
+        """Get details about the connected wallet.
+
+        This function retrieves various details about the connected wallet including its address,
+        network information, native token balance, and provider name.
+
+        Args:
+            wallet_provider (WalletProvider): The wallet provider to get details from
+            args (GetWalletDetailsSchema): The input arguments (unused in this function)
+
+        Returns:
+            str: A formatted string containing:
+                - Wallet provider name
+                - Wallet address
+                - Network details (protocol family, network ID, chain ID)
+                - Native token balance
+
+        Raises:
+            Exception: If retrieving any wallet details fails
+
+        """
         """Get details about the wallet."""
         try:
             wallet_address = wallet_provider.get_address()
@@ -53,7 +73,23 @@ class WalletActionProvider(ActionProvider[WalletProvider]):
         schema=GetBalanceSchema,
     )
     def get_balance(self, wallet_provider: WalletProvider, args: GetBalanceSchema) -> str:
-        """Get native currency balance for the wallet."""
+        """Get the native currency balance for the connected wallet.
+
+        This function retrieves the native token balance and address of the connected wallet.
+
+        Args:
+            wallet_provider (WalletProvider): The wallet provider to get the balance from
+            args (GetBalanceSchema): The input arguments (unused in this function)
+
+        Returns:
+            str: A message containing either:
+                - The wallet address and its native token balance if successful
+                - An error message if retrieving the balance fails
+
+        Raises:
+            Exception: If retrieving the wallet balance fails for any reason
+
+        """
         try:
             balance = wallet_provider.get_balance()
             wallet_address = wallet_provider.get_address()
@@ -78,7 +114,27 @@ Important notes:
         schema=NativeTransferSchema,
     )
     def native_transfer(self, wallet_provider: WalletProvider, args: dict[str, Any]) -> str:
-        """Transfer native tokens to a destination address."""
+        """Transfer native tokens from the connected wallet to a destination address.
+
+        This function transfers native tokens from the connected wallet to a specified
+        destination address by calling the wallet provider's native_transfer method.
+
+        Args:
+            wallet_provider (WalletProvider): The wallet provider to transfer tokens from,
+                used to sign and send the transaction
+            args (dict[str, Any]): Arguments containing:
+                - to (str): The destination address to receive the tokens
+                - value (str): The amount of tokens to transfer in whole units
+
+        Returns:
+            str: A message containing either:
+                - The transfer details and transaction hash if successful
+                - An error message if the transfer fails
+
+        Raises:
+            Exception: If the transfer transaction fails for any reason
+
+        """
         try:
             validated_args = NativeTransferSchema(**args)
             tx_hash = wallet_provider.native_transfer(validated_args.to, validated_args.value)

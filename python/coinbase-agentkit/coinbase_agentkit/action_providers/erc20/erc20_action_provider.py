@@ -25,14 +25,23 @@ class ERC20ActionProvider(ActionProvider[EvmWalletProvider]):
         schema=GetBalanceSchema,
     )
     def get_balance(self, wallet_provider: EvmWalletProvider, args: GetBalanceSchema) -> str:
-        """Get the balance of an ERC20 token.
+        """Get the balance of an ERC20 token for the wallet's address.
+
+        This function queries the ERC20 token contract to get the token balance
+        for the wallet's address. It uses the standard ERC20 balanceOf function.
 
         Args:
-            wallet_provider: The wallet provider to get the balance from.
-            args: The input arguments for the action.
+            wallet_provider (EvmWalletProvider): The wallet provider to get the address from and make the contract call
+            args (GetBalanceSchema): The input arguments containing:
+                - contract_address (str): The address of the ERC20 token contract to query
 
         Returns:
-            A message containing the balance.
+            str: A message containing either:
+                - The token balance if successful
+                - An error message if the balance check fails
+
+        Raises:
+            Exception: If the contract call fails for any reason
 
         """
         try:
@@ -68,12 +77,25 @@ class ERC20ActionProvider(ActionProvider[EvmWalletProvider]):
     def transfer(self, wallet_provider: EvmWalletProvider, args: TransferSchema) -> str:
         """Transfer a specified amount of an ERC20 token to a destination onchain.
 
+        This function transfers ERC20 tokens from the wallet to another address by calling
+        the token contract's transfer function. It handles encoding the transfer data and
+        submitting/waiting for the transaction.
+
         Args:
-            wallet_provider: The wallet provider to transfer the asset from.
-            args: The input arguments for the action.
+            wallet_provider (EvmWalletProvider): The wallet provider to transfer the asset from,
+                used to sign and send the transaction
+            args (TransferSchema): The input arguments containing:
+                - amount (int): The amount of tokens to transfer
+                - contract_address (str): The address of the ERC20 token contract
+                - destination (str): The recipient address to receive the tokens
 
         Returns:
-            A message containing the transfer details.
+            str: A message containing either:
+                - The transfer details and transaction hash if successful
+                - An error message if the transfer fails
+
+        Raises:
+            Exception: If the transfer transaction fails for any reason
 
         """
         try:

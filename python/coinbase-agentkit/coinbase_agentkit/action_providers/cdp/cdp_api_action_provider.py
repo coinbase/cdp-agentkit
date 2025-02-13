@@ -51,7 +51,22 @@ from another wallet and provide the user with your wallet details.""",
         schema=RequestFaucetFundsSchema,
     )
     def request_faucet_funds(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
-        """Request test tokens from the faucet."""
+        """Request test tokens from the faucet.
+
+        This function requests test tokens from the Base Sepolia faucet for the provided wallet address.
+        Only works on Base Sepolia network and only supports ETH and USDC tokens.
+
+        Args:
+            wallet_provider (EvmWalletProvider): The wallet provider to get the recipient address from
+            args (dict[str, Any]): Arguments containing optional asset_id to request
+
+        Returns:
+            str: Success message with transaction details or error message if request fails
+
+        Raises:
+            Exception: If faucet request fails for any reason
+
+        """
         validated_args = RequestFaucetFundsSchema(**args)
 
         try:
@@ -89,7 +104,25 @@ Important notes:
         schema=AddressReputationSchema,
     )
     def address_reputation(self, args: dict[str, Any]) -> str:
-        """Check the reputation of an Ethereum address on a given network."""
+        """Check the reputation of an Ethereum address on a given network.
+
+        This function checks the reputation score of an Ethereum address on the specified network
+        using CDP's reputation service.
+
+        Args:
+            args (dict[str, Any]): Arguments containing:
+                - network (str): The network to check reputation on (e.g. "base-mainnet")
+                - address (str): The Ethereum address to check
+
+        Returns:
+            str: A string containing either:
+                - The address and its reputation score if successful
+                - An error message if the check fails
+
+        Raises:
+            Exception: If reputation check fails for any reason
+
+        """
         try:
             validated_args = AddressReputationSchema(**args)
 

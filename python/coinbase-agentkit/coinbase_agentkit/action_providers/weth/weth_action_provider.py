@@ -36,17 +36,26 @@ Important notes:
         schema=WrapEthSchema,
     )
     def wrap_eth(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
-        """Wrap ETH to WETH.
+        """Wrap ETH to WETH by calling the deposit function on the WETH contract.
+
+        This function wraps native ETH into WETH (Wrapped ETH) tokens by calling the deposit function
+        on the WETH smart contract. It handles encoding the deposit call data and submitting/waiting
+        for the transaction.
 
         Args:
-            wallet_provider (EvmWalletProvider): The wallet provider to use for the action.
-            args (dict): The input arguments for the action containing amount_to_wrap.
+            wallet_provider (EvmWalletProvider): The wallet provider to wrap ETH from,
+                used to sign and send the transaction
+            args (dict[str, Any]): Arguments containing:
+                - amount_to_wrap (str): The amount of ETH to wrap in wei
 
         Returns:
-            str: A message containing the transaction hash.
+            str: A message containing either:
+                - The wrap details and transaction hash if successful
+                - An error message if the wrap fails
 
         Raises:
-            ValidationError: If the input arguments are invalid.
+            ValidationError: If the input arguments are invalid
+            Exception: If the wrap transaction fails for any reason
 
         """
         try:

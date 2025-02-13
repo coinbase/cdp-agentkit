@@ -32,12 +32,24 @@ Do not use the contract address as the destination address. If you are unsure of
     def mint(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Mint an NFT (ERC-721) to a specified destination address onchain.
 
+        This function mints a new NFT token by calling the mint function on the specified
+        ERC721 contract. It handles encoding the mint data and submitting/waiting for
+        the transaction.
+
         Args:
-            wallet_provider: The wallet provider to mint the NFT from.
-            args: The input arguments for the action.
+            wallet_provider (EvmWalletProvider): The wallet provider to mint the NFT from,
+                used to sign and send the transaction
+            args (dict[str, Any]): The input arguments containing:
+                - contract_address (str): The address of the ERC721 contract to mint from
+                - destination (str): The recipient address that will receive the minted NFT
 
         Returns:
-            A message containing the NFT mint details.
+            str: A message containing either:
+                - The mint details if successful
+                - An error message if the mint fails
+
+        Raises:
+            Exception: If the mint transaction fails for any reason
 
         """
         try:
@@ -77,12 +89,27 @@ Important notes:
     def transfer(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Transfer an NFT (ERC721 token) to a destination address.
 
+        This function transfers an NFT from the wallet (or specified from_address) to another address
+        by calling the NFT contract's transferFrom function. It handles encoding the transfer data and
+        submitting/waiting for the transaction.
+
         Args:
-            wallet_provider: The wallet provider to transfer the NFT from.
-            args: The input arguments for the action.
+            wallet_provider (EvmWalletProvider): The wallet provider to transfer the NFT from,
+                used to sign and send the transaction
+            args (dict[str, Any]): The input arguments containing:
+                - contract_address (str): The address of the ERC721 contract
+                - token_id (str): The ID of the NFT to transfer
+                - destination (str): The recipient address to receive the NFT
+                - from_address (str, optional): The address to transfer from. If not provided,
+                    defaults to the wallet's default address
 
         Returns:
-            A message containing the transfer details.
+            str: A message containing either:
+                - The transfer details if successful
+                - An error message if the transfer fails
+
+        Raises:
+            Exception: If the transfer transaction fails for any reason
 
         """
         try:
@@ -127,12 +154,24 @@ It takes the following inputs:
     def get_balance(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Get the NFT balance for a given address and contract.
 
+        This function queries an ERC721 NFT contract to get the token balance for a specific address.
+        It uses the standard ERC721 balanceOf function which returns the number of tokens owned by
+        the given address for that NFT collection.
+
         Args:
-            wallet_provider: The wallet provider to check the balance with.
-            args: The input arguments for the action.
+            wallet_provider (EvmWalletProvider): The wallet provider to use for making the contract call
+            args (dict[str, Any]): The input arguments containing:
+                - contract_address (str): The address of the ERC721 NFT contract to query
+                - address (str, optional): The address to check NFT balance for. If not provided,
+                    uses the wallet's default address
 
         Returns:
-            A message containing the NFT balance details.
+            str: A message containing either:
+                - The NFT balance details if successful
+                - An error message if the balance check fails
+
+        Raises:
+            Exception: If the contract call fails for any reason
 
         """
         try:

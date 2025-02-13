@@ -42,7 +42,27 @@ as strings, boolean values as true/false. For arrays/tuples, encode based on con
         schema=DeployContractSchema,
     )
     def deploy_contract(self, wallet_provider: CdpWalletProvider, args: dict[str, Any]) -> str:
-        """Deploy a smart contract."""
+        """Deploy a smart contract using the CDP wallet provider.
+
+        This function deploys a Solidity smart contract using the provided wallet and contract details.
+        It handles compilation and deployment of the contract, including constructor arguments if specified.
+
+        Args:
+            wallet_provider (CdpWalletProvider): The CDP wallet provider to use for deployment
+            args (dict[str, Any]): Arguments containing:
+                - solidity_version (str): Version of Solidity compiler to use
+                - solidity_input_json (str): JSON string containing contract source code and compiler settings
+                - contract_name (str): Name of the contract to deploy
+                - constructor_args (dict[str, Any], optional): Constructor arguments for the contract
+
+        Returns:
+            str: A success message with the deployed contract address and transaction link if successful,
+                 or an error message if deployment fails
+
+        Raises:
+            Exception: If contract deployment fails for any reason
+
+        """
         try:
             solidity_version = SOLIDITY_VERSIONS[args["solidity_version"]]
 
@@ -67,7 +87,26 @@ and the base URI for the token metadata as inputs.
         schema=DeployNftSchema,
     )
     def deploy_nft(self, wallet_provider: CdpWalletProvider, args: dict[str, Any]) -> str:
-        """Deploy an NFT collection."""
+        """Deploy an NFT (ERC-721) smart contract using the CDP wallet provider.
+
+        This function deploys a new NFT collection with the specified name, symbol and base URI
+        for token metadata. The contract follows the ERC-721 standard.
+
+        Args:
+            wallet_provider (CdpWalletProvider): The CDP wallet provider to use for deployment
+            args (dict[str, Any]): Arguments containing:
+                - name (str): Name of the NFT collection
+                - symbol (str): Symbol/ticker for the NFT collection
+                - base_uri (str): Base URI for the token metadata
+
+        Returns:
+            str: A success message with the deployed contract address, transaction hash and link if successful,
+                 or an error message if deployment fails
+
+        Raises:
+            Exception: If NFT contract deployment fails for any reason
+
+        """
         try:
             nft_contract = wallet_provider.deploy_nft(
                 name=args["name"], symbol=args["symbol"], base_uri=args["base_uri"]
@@ -87,7 +126,26 @@ address as the owner and initial token holder.
         schema=DeployTokenSchema,
     )
     def deploy_token(self, wallet_provider: CdpWalletProvider, args: dict[str, Any]) -> str:
-        """Deploy an ERC20 token."""
+        """Deploy an ERC20 token smart contract using the CDP wallet provider.
+
+        This function deploys a new ERC20 token contract with the specified name, symbol and total supply.
+        The wallet's default address will be set as the owner and receive the initial token supply.
+
+        Args:
+            wallet_provider (CdpWalletProvider): The CDP wallet provider to use for deployment
+            args (dict[str, Any]): Arguments containing:
+                - name (str): Name of the token
+                - symbol (str): Symbol/ticker for the token
+                - total_supply (int): Total supply of tokens to mint initially
+
+        Returns:
+            str: A success message with the deployed contract address, transaction hash and link if successful,
+                 or an error message if deployment fails
+
+        Raises:
+            Exception: If token contract deployment fails for any reason
+
+        """
         try:
             token_contract = wallet_provider.deploy_token(
                 name=args["name"], symbol=args["symbol"], total_supply=args["total_supply"]
@@ -113,12 +171,23 @@ Important notes:
     def trade(self, wallet_provider: CdpWalletProvider, args: dict[str, Any]) -> str:
         """Trade a specified amount of a from asset to a to asset for the wallet.
 
+        This function executes a trade between two assets using the CDP wallet provider.
+        The trade will only work on mainnet networks, not on test networks like Sepolia.
+
         Args:
-            wallet_provider: The wallet provider to trade the asset from.
-            args: The input arguments for the action.
+            wallet_provider (CdpWalletProvider): The CDP wallet provider to execute the trade with
+            args (dict[str, Any]): Arguments containing:
+                - value (Decimal): The amount of the from_asset to trade
+                - from_asset_id (str): The asset ID to trade from (e.g. "eth")
+                - to_asset_id (str): The asset ID to trade to (e.g. "usdc")
 
         Returns:
-            A message containing the trade details.
+            str: A success message with the trade details and transaction link if successful,
+                 or an error message if the trade fails
+
+        Raises:
+            Exception: If trade execution fails for any reason
+            ValidationError: If the input arguments are invalid
 
         """
         validated_args = TradeSchema(**args)

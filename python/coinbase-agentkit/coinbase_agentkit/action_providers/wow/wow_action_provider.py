@@ -50,7 +50,28 @@ Important notes:
         schema=WowBuyTokenSchema,
     )
     def buy_token(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
-        """Buy WOW tokens with ETH."""
+        """Buy WOW tokens with ETH by calling the buy function on the WOW contract.
+
+        This function buys WOW tokens with ETH by calling the buy function on the WOW smart contract.
+        It handles getting the buy quote, checking graduation status, encoding the buy call data,
+        and submitting/waiting for the transaction.
+
+        Args:
+            wallet_provider (EvmWalletProvider): The wallet provider to buy tokens from,
+                used to sign and send the transaction
+            args (dict[str, Any]): Arguments containing:
+                - contract_address (str): The address of the WOW token contract
+                - amount_eth_in_wei (str): The amount of ETH to spend in wei
+
+        Returns:
+            str: A message containing either:
+                - The purchase details and transaction hash if successful
+                - An error message if the purchase fails
+
+        Raises:
+            Exception: If the purchase transaction fails for any reason
+
+        """
         try:
             token_quote = get_buy_quote(
                 wallet_provider, args["contract_address"], args["amount_eth_in_wei"]
@@ -115,7 +136,22 @@ Important notes:
         schema=WowCreateTokenSchema,
     )
     def create_token(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
-        """Create a new WOW token."""
+        """Create a new WOW token using the WOW factory contract.
+
+        Args:
+            wallet_provider (EvmWalletProvider): Provider for wallet operations and network access
+            args (dict[str, Any]): Arguments containing:
+                - name (str): Name of the token to create
+                - symbol (str): Symbol for the token
+                - token_uri (str, optional): URI containing token metadata. Uses default if not provided
+
+        Returns:
+            str: Success message with transaction details or error message if creation fails
+
+        Raises:
+            Exception: If there are any errors during token creation process
+
+        """
         try:
             factory_address = get_factory_address(wallet_provider.get_network().chain_id)
 
@@ -179,7 +215,28 @@ Important notes:
         schema=WowSellTokenSchema,
     )
     def sell_token(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
-        """Sell WOW tokens for ETH."""
+        """Sell WOW tokens for ETH using the WOW protocol.
+
+        This function sells WOW tokens for ETH by calling the sell function on the WOW token contract.
+        It handles getting the sell quote, checking graduation status, encoding the sell data, and
+        submitting/waiting for the transaction.
+
+        Args:
+            wallet_provider (EvmWalletProvider): The wallet provider to sell tokens from,
+                used to sign and send the transaction
+            args (dict[str, Any]): Arguments containing:
+                - contract_address (str): The address of the WOW token contract
+                - amount_tokens_in_wei (str): The amount of tokens to sell in wei
+
+        Returns:
+            str: A message containing either:
+                - The sell details and transaction hash if successful
+                - An error message if the sell fails
+
+        Raises:
+            Exception: If the sell transaction fails for any reason
+
+        """
         try:
             eth_quote = get_sell_quote(
                 wallet_provider, args["contract_address"], args["amount_tokens_in_wei"]
