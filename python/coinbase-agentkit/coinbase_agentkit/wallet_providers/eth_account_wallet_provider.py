@@ -59,6 +59,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
 
         Returns:
             str: The wallet's address as a hex string.
+
         """
         return self.account.address
 
@@ -67,6 +68,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
 
         Returns:
             Network: Network object containing protocol family, network ID, and chain ID.
+
         """
         return self._network
 
