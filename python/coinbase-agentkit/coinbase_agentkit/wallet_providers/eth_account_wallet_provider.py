@@ -19,7 +19,7 @@ class EthAccountWalletProviderConfig(BaseModel):
     """Configuration for EthAccountWalletProvider."""
 
     account: LocalAccount
-    chain_id: str
+    chain_id: int
     gas: EvmGasConfig | None = Field(None, description="Gas configuration settings")
 
     class Config:
