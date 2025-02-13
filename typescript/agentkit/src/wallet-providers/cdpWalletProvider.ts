@@ -72,12 +72,12 @@ export interface CdpWalletProviderConfig extends CdpProviderConfig {
    */
   gas?: {
     /**
-     * A internal multiplier on gas limit estimation.
+     * An internal multiplier on gas limit estimation.
      */
     gasLimitMultiplier?: number;
 
     /**
-     * A internal multiplier on fee per gas estimation.
+     * An internal multiplier on fee per gas estimation.
      */
     feePerGasMultiplier?: number;
   };
