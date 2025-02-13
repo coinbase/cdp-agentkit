@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Added gas configuration parameters (`gas_limit_multiplier`, `fee_per_gas_multiplier`) to `CdpWalletProvider`.
+- Added gas configuration parameters (`gas_limit_multiplier`, `fee_per_gas_multiplier`) to `CdpWalletProvider` and `EthAccountWalletProvider`.
 
 ## [0.1.1] - 2025-02-13
 
