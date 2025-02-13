@@ -24,8 +24,8 @@ AgentKit is a framework for easily enabling AI agents to take actions onchain. I
     - [Importing a wallet from WalletData JSON string](#importing-a-wallet-from-walletdata-json-string)
     - [Configuring gas parameters](#configuring-cdpwalletprovider-gas-parameters)
   - [EthAccountWalletProvider](#ethaccountwalletprovider)
+    - [Configuring gas parameters](#configuring-ethaccountwalletprovider-gas-parameters)
 - [Contributing](#contributing)
-
 ## Getting Started
 
 *Prerequisites*:
@@ -327,6 +327,42 @@ wallet_provider = EthAccountWalletProvider(
     config=EthAccountWalletProviderConfig(
         account=account,
         chain_id="84532",
+    )
+)
+
+agent_kit = AgentKit(AgentKitConfig(
+    wallet_provider=wallet_provider
+))
+```
+
+#### Configuring `EthAccountWalletProvider` gas parameters
+
+The `EthAccountWalletProvider` also exposes parameters for effecting the gas calculations.
+
+```python
+from eth_account import Account
+
+from coinbase_agentkit import (
+    AgentKit, 
+    AgentKitConfig, 
+    EthAccountWalletProvider, 
+    EthAccountWalletProviderConfig
+)
+
+private_key = os.environ.get("PRIVATE_KEY")
+assert private_key is not None, "You must set PRIVATE_KEY environment variable"
+assert private_key.startswith("0x"), "Private key must start with 0x hex prefix"
+
+account = Account.from_key(private_key)
+
+wallet_provider = EthAccountWalletProvider(
+    config=EthAccountWalletProviderConfig(
+        account=account,
+        chain_id=84532,
+        gas={
+            "gas_limit_multiplier": 2,
+            "fee_per_gas_multiplier": 2
+        }
     )
 )
 
