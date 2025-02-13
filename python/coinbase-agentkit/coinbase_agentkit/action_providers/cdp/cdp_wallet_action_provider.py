@@ -42,25 +42,14 @@ as strings, boolean values as true/false. For arrays/tuples, encode based on con
         schema=DeployContractSchema,
     )
     def deploy_contract(self, wallet_provider: CdpWalletProvider, args: dict[str, Any]) -> str:
-        """Deploy a smart contract using the CDP wallet provider.
-
-        This function deploys a Solidity smart contract using the provided wallet and contract details.
-        It handles compilation and deployment of the contract, including constructor arguments if specified.
+        """Deploy an arbitrary smart contract.
 
         Args:
-            wallet_provider (CdpWalletProvider): The CDP wallet provider to use for deployment
-            args (dict[str, Any]): Arguments containing:
-                - solidity_version (str): Version of Solidity compiler to use
-                - solidity_input_json (str): JSON string containing contract source code and compiler settings
-                - contract_name (str): Name of the contract to deploy
-                - constructor_args (dict[str, Any], optional): Constructor arguments for the contract
+            wallet_provider (CdpWalletProvider): The CDP wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
 
         Returns:
-            str: A success message with the deployed contract address and transaction link if successful,
-                 or an error message if deployment fails
-
-        Raises:
-            Exception: If contract deployment fails for any reason
+            str: A message containing the action response or error details.
 
         """
         try:
