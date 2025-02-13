@@ -131,7 +131,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
 
         """
         if "chainId" not in transaction:
-            transaction["chainId"] = self._network.chain_id
+            transaction["chainId"] = int(self._network.chain_id)
         if "from" not in transaction:
             transaction["from"] = self.account.address
 
@@ -180,7 +180,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
 
         """
         transaction["from"] = self.account.address
-        transaction["chainId"] = self._network.chain_id
+        transaction["chainId"] = int(self._network.chain_id)
 
         nonce = self.web3.eth.get_transaction_count(self.account.address)
         transaction["nonce"] = nonce
