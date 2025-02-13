@@ -24,7 +24,9 @@ AgentKit is a framework for easily enabling AI agents to take actions onchain. I
     - [Configuring from a mnemonic phrase](#configuring-from-a-mnemonic-phrase)
     - [Exporting a wallet](#exporting-a-wallet)
     - [Importing a wallet from WalletData JSON string](#importing-a-wallet-from-walletdata-json-string)
+    - [Configuring gas parameters](#configuring-gas-parameters)
   - [ViemWalletProvider](#viemwalletprovider)
+    - [Configuring gas parameters](#configuring-gas-parameters)
 - [Contributing](#contributing)
 
 ## Getting Started
@@ -487,6 +489,9 @@ const walletProvider = await CdpWalletProvider.configureWithWallet({
 });
 ```
 
+**Note**: Gas parameters only impact the `walletProvider.sendTransaction` behavior. Actions that do not rely on direct transaction calls, such as `request_faucet_funds`, `deploy_token`, `deploy_contract`, and `native_transfer`, remain unaffected.
+
+
 ### ViemWalletProvider
 
 The `ViemWalletProvider` is a wallet provider that uses the [Viem library](https://viem.sh/docs/getting-started). It is useful for interacting with any EVM-compatible chain.
@@ -537,6 +542,9 @@ const walletProvider = new ViemWalletProvider(client, {
     feePerGasMultiplier: 2.0, // Adjusts max fee per gas
 });
 ```
+
+**Note**: Gas parameters only impact the `walletProvider.sendTransaction` behavior. Actions that do not rely on direct transaction calls, such as `request_faucet_funds`, `deploy_token`, `deploy_contract`, and `native_transfer`, remain unaffected.
+
 
 ## Contributing
 
