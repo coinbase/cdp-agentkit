@@ -49,7 +49,6 @@ class CdpWalletProvider(EvmWalletProvider):
                    will attempt to configure from environment variables.
 
         Raises:
-            ImportError: If CDP SDK is not installed
             ValueError: If required configuration is missing or initialization fails
 
         """
@@ -254,7 +253,7 @@ class CdpWalletProvider(EvmWalletProvider):
         """Sign an EVM transaction.
 
         Args:
-            transaction (TxParams): Transaction parameters including to, value, gas, etc.
+            transaction (TxParams): Transaction parameters including to, value, and data
 
         Returns:
             HexStr: The transaction signature as a hex string
@@ -278,7 +277,7 @@ class CdpWalletProvider(EvmWalletProvider):
         """Send a signed transaction to the network.
 
         Args:
-            transaction (TxParams): Transaction parameters including to, value, gas, etc.
+            transaction (TxParams): Transaction parameters including to, value, and data
 
         Returns:
             HexStr: The transaction hash as a hex string
@@ -396,7 +395,7 @@ class CdpWalletProvider(EvmWalletProvider):
         return (max_priority_fee_per_gas, max_fee_per_gas)
 
     def export_wallet(self) -> WalletData:
-        """Export the wallet data for persistence, backup, or transfer.
+        """Export the wallet data for persistence.
 
         Returns:
             WalletData: The wallet data object containing all necessary information

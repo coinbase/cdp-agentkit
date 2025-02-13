@@ -34,11 +34,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
         """Initialize the wallet provider with an eth-account.
 
         Args:
-            config (EthAccountWalletProviderConfig): Configuration options including private key and RPC URL
-
-        Raises:
-            ImportError: If eth-account is not installed
-            ValueError: If required configuration is missing or initialization fails
+            config (EthAccountWalletProviderConfig): Configuration options including account and network ID.
 
         """
         self.config = config
@@ -62,8 +58,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
         """Get the wallet address.
 
         Returns:
-            str: The wallet's address as a hex string
-
+            str: The wallet's address as a hex string.
         """
         return self.account.address
 
@@ -71,8 +66,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
         """Get the current network.
 
         Returns:
-            Network: Network object containing protocol family, network ID, and chain ID
-
+            Network: Network object containing protocol family, network ID, and chain ID.
         """
         return self._network
 
@@ -128,7 +122,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
         """Sign an EVM transaction.
 
         Args:
-            transaction (TxParams): Transaction parameters including to, value, gas, etc.
+            transaction (TxParams): Transaction parameters including to, value, and data.
 
         Returns:
             SignedTransaction: The signed transaction object
@@ -174,7 +168,7 @@ class EthAccountWalletProvider(EvmWalletProvider):
         """Send a signed transaction to the network.
 
         Args:
-            transaction (TxParams): Transaction parameters including to, value, gas, etc.
+            transaction (TxParams): Transaction parameters including to, value, and data
 
         Returns:
             HexStr: The transaction hash as a hex string
