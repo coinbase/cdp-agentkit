@@ -16,8 +16,6 @@ from coinbase_agentkit import (
 
     CdpWalletProvider,
     CdpWalletProviderConfig,
-    EthAccountWalletProvider,
-    EthAccountWalletProviderConfig,
 
     cdp_api_action_provider,
     cdp_wallet_action_provider,

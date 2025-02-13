@@ -61,7 +61,7 @@ Once you decide which folder to add your action to, go ahead and create a new fi
 
 ### Crafting a good description prompt
 
-The description prompt is used by the LLM to understand when and how to use the action. It's important to be as specific as possible in describing the inputs and outputs of the action and include examples. Take the Deploy NFT prompt for example:
+The description prompt is used by the LLM to understand when and how to use the action. It's important to be as specific as possible in describing the inputs and outputs of the action and include examples. Take the Mint NFT prompt for example:
 
 ```python
 @create_action(
@@ -142,7 +142,7 @@ def mint(self, wallet_provider: CdpWalletProvider, args: dict[str, Any]) -> str:
 
 Notice the return value contains useful information for the user, such as the transaction hash and link. It's important to include this information in the return value so that the user can easily see the result of the action.
 
-This class is then exported out of [python/coinbase-agentkit/coinbase_agentkit/__init__.py](https://github.com/coinbase/agentkit/blob/master/python/coinbase-agentkit/coinbase_agentkit/__init__.py) so that is is consumable by users of the `coinbase-agentkit` package.
+This class is then exported out of [python/coinbase-agentkit/coinbase_agentkit/\_\_init__.py](https://github.com/coinbase/agentkit/blob/master/python/coinbase-agentkit/coinbase_agentkit/__init__.py) so that is is consumable by users of the `coinbase-agentkit` package.
 
 ### Testing the action provider
 
