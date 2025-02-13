@@ -53,7 +53,7 @@ export class ViemWalletProvider extends EvmWalletProvider {
       chain: walletClient.chain,
       transport: http(),
     });
-    this.#gasLimitMultiplier = Math.max(gasConfig?.gasLimitMultiplier ?? 1, 1);
+    this.#gasLimitMultiplier = Math.max(gasConfig?.gasLimitMultiplier ?? 1.2, 1);
     this.#feePerGasMultiplier = Math.max(gasConfig?.feePerGasMultiplier ?? 1, 1);
   }
 

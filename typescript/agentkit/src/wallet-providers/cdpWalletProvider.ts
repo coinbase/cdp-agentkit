@@ -124,7 +124,7 @@ export class CdpWalletProvider extends EvmWalletProvider {
       chain: NETWORK_ID_TO_VIEM_CHAIN[config.network!.networkId!],
       transport: http(),
     });
-    this.#gasLimitMultiplier = Math.max(config.gas?.gasLimitMultiplier ?? 1, 1);
+    this.#gasLimitMultiplier = Math.max(config.gas?.gasLimitMultiplier ?? 1.2, 1);
     this.#feePerGasMultiplier = Math.max(config.gas?.feePerGasMultiplier ?? 1, 1);
   }
 
