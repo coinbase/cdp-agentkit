@@ -5,11 +5,12 @@ description = "Coinbase AgentKit LangChain extension"
 authors = ["John Peterson <john.peterson@coinbase.com>"]
 readme = "README.md"
 license = "Apache-2.0"
-keywords = ["coinbase", "sdk", "crypto", "cdp", "agentkit", "ai", "agent"]
+keywords = ["coinbase", "sdk", "crypto", "cdp", "langchain", "agentkit", "ai", "agent"]
 packages = [{ include = "coinbase_agentkit_langchain" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+coinbase-agentkit = { path = "../../../python/coinbase-agentkit", develop = true }
 langchain = "^0.3.4"
 python-dotenv = "^1.0.1"
 

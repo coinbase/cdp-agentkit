@@ -1,17 +1,17 @@
-name: Release Twitter LangChain to PyPI
+name: Release Coinbase AgentKit to PyPI
 
 on:
   workflow_dispatch:
 
 jobs:
-  deploy-pypi-twitter-langchain:
+  deploy-pypi-coinbase-agentkit:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./python/twitter-langchain
+        working-directory: ./python/coinbase-agentkit
     environment:
       name: pypi
-      url: https://pypi.org/p/twitter-langchain
+      url: https://pypi.org/p/coinbase-agentkit
     permissions:
       contents: read
       id-token: write
@@ -41,4 +41,4 @@ jobs:
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         password: ${{ secrets.PYPI_API_TOKEN }}
-        packages-dir: python/twitter-langchain/dist/
+        packages-dir: python/coinbase-agentkit/dist/

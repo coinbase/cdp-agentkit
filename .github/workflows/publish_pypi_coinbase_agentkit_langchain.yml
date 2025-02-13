@@ -1,17 +1,17 @@
-name: Release CDP LangChain to PyPI
+name: Release Coinbase AgentKit LangChain to PyPI
 
 on:
   workflow_dispatch:
 
 jobs:
-  deploy-pypi-cdp-langchain:
+  deploy-pypi-coinbase-agentkit-langchain:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./python/cdp-langchain
+        working-directory: ./python/framework-extensions/langchain
     environment:
       name: pypi
-      url: https://pypi.org/p/cdp-langchain
+      url: https://pypi.org/p/coinbase-agentkit-langchain
     permissions:
       contents: read
       id-token: write
@@ -41,4 +41,4 @@ jobs:
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         password: ${{ secrets.PYPI_API_TOKEN }}
-        packages-dir: python/cdp-langchain/dist/
+        packages-dir: python/framework-extensions/langchain/dist/
