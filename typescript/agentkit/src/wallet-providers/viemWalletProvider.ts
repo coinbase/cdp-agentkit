@@ -1,24 +1,33 @@
-// TODO: Improve type safety
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import {
   WalletClient as ViemWalletClient,
   createPublicClient,
   http,
   TransactionRequest,
   PublicClient as ViemPublicClient,
-  ReadContractParameters,
-  ReadContractReturnType,
   parseEther,
+  Address,
+  Hex,
+  SignTypedDataParameters,
+  TransactionReceipt,
 } from "viem";
 import { EvmWalletProvider } from "./evmWalletProvider";
-import { Network } from "../network";
-import { CHAIN_ID_TO_NETWORK_ID } from "../network/network";
+import { EvmNetwork } from "../network";
+import { CHAIN_ID, CHAIN_ID_TO_NETWORK_ID } from "../network/network";
 
 /**
  * A wallet provider that uses the Viem library.
  */
 export class ViemWalletProvider extends EvmWalletProvider {
+  /**
+   * Reads a contract.
+   *
+   * @param params - The parameters to read the contract.
+   * @returns The response from the contract.
+   *
+   * @description Since the readContract is a complex generic function, it is much simpler to just copy the function signature and assign it in the constructor.
+   */
+  readContract: ViemPublicClient["readContract"];
+
   #walletClient: ViemWalletClient;
   #publicClient: ViemPublicClient;
 
@@ -34,6 +43,8 @@ export class ViemWalletProvider extends EvmWalletProvider {
       chain: walletClient.chain,
       transport: http(),
     });
+
+    this.readContract = this.#publicClient.readContract;
   }
 
   /**
@@ -42,7 +53,7 @@ export class ViemWalletProvider extends EvmWalletProvider {
    * @param message - The message to sign.
    * @returns The signed message.
    */
-  async signMessage(message: string): Promise<`0x${string}`> {
+  async signMessage(message: string): Promise<Hex> {
     const account = this.#walletClient.account;
     if (!account) {
       throw new Error("Account not found");
@@ -57,7 +68,7 @@ export class ViemWalletProvider extends EvmWalletProvider {
    * @param typedData - The typed data object to sign.
    * @returns The signed typed data object.
    */
-  async signTypedData(typedData: any): Promise<`0x${string}`> {
+  async signTypedData(typedData: Omit<SignTypedDataParameters, "account">): Promise<Hex> {
     return this.#walletClient.signTypedData({
       account: this.#walletClient.account!,
       domain: typedData.domain!,
@@ -73,7 +84,7 @@ export class ViemWalletProvider extends EvmWalletProvider {
    * @param transaction - The transaction to sign.
    * @returns The signed transaction.
    */
-  async signTransaction(transaction: TransactionRequest): Promise<`0x${string}`> {
+  async signTransaction(transaction: TransactionRequest): Promise<Hex> {
     const txParams = {
       account: this.#walletClient.account!,
       to: transaction.to,
@@ -91,7 +102,7 @@ export class ViemWalletProvider extends EvmWalletProvider {
    * @param transaction - The transaction to send.
    * @returns The hash of the transaction.
    */
-  async sendTransaction(transaction: TransactionRequest): Promise<`0x${string}`> {
+  async sendTransaction(transaction: TransactionRequest): Promise<Hex> {
     const account = this.#walletClient.account;
     if (!account) {
       throw new Error("Account not found");
@@ -118,8 +129,14 @@ export class ViemWalletProvider extends EvmWalletProvider {
    *
    * @returns The address of the wallet.
    */
-  getAddress(): string {
-    return this.#walletClient.account?.address ?? "";
+  getAddress(): Address {
+    const address = this.#walletClient.account?.address;
+
+    if (!address) {
+      throw new Error("Address not initialized");
+    }
+
+    return address;
   }
 
   /**
@@ -127,10 +144,10 @@ export class ViemWalletProvider extends EvmWalletProvider {
    *
    * @returns The network of the wallet.
    */
-  getNetwork(): Network {
+  getNetwork(): EvmNetwork {
     return {
       protocolFamily: "evm" as const,
-      chainId: String(this.#walletClient.chain!.id!),
+      chainId: this.#walletClient.chain!.id! as CHAIN_ID,
       networkId: CHAIN_ID_TO_NETWORK_ID[this.#walletClient.chain!.id!],
     };
   }
@@ -150,12 +167,9 @@ export class ViemWalletProvider extends EvmWalletProvider {
    * @returns The balance of the wallet.
    */
   async getBalance(): Promise<bigint> {
-    const account = this.#walletClient.account;
-    if (!account) {
-      throw new Error("Account not found");
-    }
+    const address = this.getAddress();
 
-    return this.#publicClient.getBalance({ address: account.address });
+    return this.#publicClient.getBalance({ address });
   }
 
   /**
@@ -164,18 +178,8 @@ export class ViemWalletProvider extends EvmWalletProvider {
    * @param txHash - The hash of the transaction to wait for.
    * @returns The transaction receipt.
    */
-  async waitForTransactionReceipt(txHash: `0x${string}`): Promise<any> {
-    return await this.#publicClient.waitForTransactionReceipt({ hash: txHash });
-  }
-
-  /**
-   * Reads a contract.
-   *
-   * @param params - The parameters to read the contract.
-   * @returns The response from the contract.
-   */
-  async readContract(params: ReadContractParameters): Promise<ReadContractReturnType> {
-    return this.#publicClient.readContract(params);
+  async waitForTransactionReceipt(txHash: Hex): Promise<TransactionReceipt> {
+    return this.#publicClient.waitForTransactionReceipt({ hash: txHash });
   }
 
   /**
@@ -185,7 +189,7 @@ export class ViemWalletProvider extends EvmWalletProvider {
    * @param value - The amount to transfer in whole units (e.g. ETH)
    * @returns The transaction hash.
    */
-  async nativeTransfer(to: `0x${string}`, value: string): Promise<`0x${string}`> {
+  async nativeTransfer(to: Address, value: string): Promise<Hex> {
     const atomicAmount = parseEther(value);
 
     const tx = await this.sendTransaction({

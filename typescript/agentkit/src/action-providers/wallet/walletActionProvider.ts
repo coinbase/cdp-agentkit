@@ -56,8 +56,8 @@ export class WalletActionProvider extends ActionProvider {
 - Address: ${address}
 - Network: 
   * Protocol Family: ${network.protocolFamily}
-  * Network ID: ${network.networkId || "N/A"}
-  * Chain ID: ${network.chainId || "N/A"}
+  * Network ID: ${"networkId" in network ? network.networkId : "N/A"}
+  * Chain ID: ${"chainId" in network ? network.chainId : "N/A"}
 - ETH Balance: ${ethBalance.toFixed(6)} ETH
 - Native Balance: ${balance.toString()} WEI`;
     } catch (error) {

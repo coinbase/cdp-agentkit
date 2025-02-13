@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { SolidityVersions } from "./constants";
+import { isAddress } from "viem";
 
 /**
  * Input schema for address reputation check.
@@ -8,7 +9,7 @@ export const AddressReputationSchema = z
   .object({
     address: z
       .string()
-      .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
+      .refine(val => isAddress(val, { strict: false }), "Invalid Ethereum address format")
       .describe("The Ethereum address to check"),
     network: z.string().describe("The network to check the address on"),
   })

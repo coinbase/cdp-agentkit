@@ -1,3 +1,4 @@
+import { isAddress } from "viem";
 import { z } from "zod";
 
 /**
@@ -11,17 +12,17 @@ export const DepositSchema = z
       .describe("The quantity of assets to deposit, in whole units"),
     receiver: z
       .string()
-      .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
+      .refine(val => isAddress(val, { strict: false }), "Invalid Ethereum address format")
       .describe(
         "The address that will own the position on the vault which will receive the shares",
       ),
     tokenAddress: z
       .string()
-      .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
+      .refine(val => isAddress(val, { strict: false }), "Invalid Ethereum address format")
       .describe("The address of the assets token to approve for deposit"),
     vaultAddress: z
       .string()
-      .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
+      .refine(val => isAddress(val, { strict: false }), "Invalid Ethereum address format")
       .describe("The address of the Morpho Vault to deposit to"),
   })
   .describe("Input schema for Morpho Vault deposit action");
@@ -33,7 +34,7 @@ export const WithdrawSchema = z
   .object({
     vaultAddress: z
       .string()
-      .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
+      .refine(val => isAddress(val, { strict: false }), "Invalid Ethereum address format")
       .describe("The address of the Morpho Vault to withdraw from"),
     assets: z
       .string()
@@ -41,7 +42,7 @@ export const WithdrawSchema = z
       .describe("The amount of assets to withdraw in atomic units e.g. 1"),
     receiver: z
       .string()
-      .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address format")
+      .refine(val => isAddress(val, { strict: false }), "Invalid Ethereum address format")
       .describe("The address to receive the shares"),
   })
   .strip()

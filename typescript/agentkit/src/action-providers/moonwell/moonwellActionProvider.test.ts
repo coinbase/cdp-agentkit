@@ -10,7 +10,7 @@ import {
   MTOKENS_UNDERLYING_DECIMALS,
 } from "./constants";
 import { MintSchema, RedeemSchema } from "./schemas";
-import { Network } from "../../network";
+import { Network, NETWORK_ID_TO_CHAIN_ID } from "../../network";
 
 const MOCK_MTOKEN_ADDRESS = "0x73902f619CEB9B31FD8EFecf435CbDf89E369Ba6";
 const MOCK_ATOMIC_ASSETS = "1000000000000000000";
@@ -199,12 +199,13 @@ describe("Moonwell Action Provider", () => {
         mTokenAddress: MOCK_MTOKEN_ADDRESS,
         assets: MOCK_WHOLE_ASSETS,
         tokenAddress: MOCK_TOKEN_ADDRESS,
-      };
+      } as const;
 
       mockWallet.getNetwork.mockReturnValue({
         protocolFamily: "evm",
         networkId: "base-mainnet",
-      } as Network);
+        chainId: NETWORK_ID_TO_CHAIN_ID["base-mainnet"],
+      });
 
       const atomicAssets = parseEther(MOCK_WHOLE_ASSETS);
 
@@ -238,12 +239,13 @@ describe("Moonwell Action Provider", () => {
         mTokenAddress: "0x2F39a349A79492a70E152760ce7123A1933eCf28", // Sepolia WETH mToken
         assets: MOCK_WHOLE_ASSETS,
         tokenAddress: MOCK_TOKEN_ADDRESS,
-      };
+      } as const;
 
       mockWallet.getNetwork.mockReturnValue({
         protocolFamily: "evm",
         networkId: "base-sepolia",
-      } as Network);
+        chainId: NETWORK_ID_TO_CHAIN_ID["base-sepolia"],
+      });
 
       const atomicAssets = parseEther(MOCK_WHOLE_ASSETS);
 
@@ -277,7 +279,7 @@ describe("Moonwell Action Provider", () => {
         mTokenAddress: MOCK_MTOKEN_ADDRESS,
         assets: "0.0",
         tokenAddress: MOCK_TOKEN_ADDRESS,
-      };
+      } as const;
 
       const response = await actionProvider.mint(mockWallet, args);
 
@@ -291,12 +293,13 @@ describe("Moonwell Action Provider", () => {
         mTokenAddress: invalidMTokenAddress,
         assets: MOCK_WHOLE_ASSETS,
         tokenAddress: MOCK_TOKEN_ADDRESS,
-      };
+      } as const;
 
       mockWallet.getNetwork.mockReturnValue({
         protocolFamily: "evm",
         networkId: "base-mainnet",
-      } as Network);
+        chainId: NETWORK_ID_TO_CHAIN_ID["base-mainnet"],
+      });
 
       const response = await actionProvider.mint(mockWallet, args);
 
@@ -310,12 +313,13 @@ describe("Moonwell Action Provider", () => {
         mTokenAddress: invalidMTokenAddress,
         assets: MOCK_WHOLE_ASSETS,
         tokenAddress: MOCK_TOKEN_ADDRESS,
-      };
+      } as const;
 
       mockWallet.getNetwork.mockReturnValue({
         protocolFamily: "evm",
         networkId: "base-sepolia",
-      } as Network);
+        chainId: NETWORK_ID_TO_CHAIN_ID["base-sepolia"],
+      });
 
       const response = await actionProvider.mint(mockWallet, args);
 
@@ -328,7 +332,7 @@ describe("Moonwell Action Provider", () => {
         mTokenAddress: MOCK_MTOKEN_ADDRESS,
         assets: MOCK_WHOLE_ASSETS,
         tokenAddress: MOCK_TOKEN_ADDRESS,
-      };
+      } as const;
 
       mockApprove.mockResolvedValue("Error: Approval failed");
 
@@ -346,7 +350,7 @@ describe("Moonwell Action Provider", () => {
         mTokenAddress: MOCK_MTOKEN_ADDRESS,
         assets: MOCK_WHOLE_ASSETS,
         tokenAddress: MOCK_TOKEN_ADDRESS,
-      };
+      } as const;
 
       const error = new Error("Failed to deposit");
       mockWallet.sendTransaction.mockRejectedValue(error);
@@ -378,12 +382,13 @@ describe("Moonwell Action Provider", () => {
           mTokenAddress: WETH_MTOKEN,
           assets: MOCK_WHOLE_ASSETS,
           tokenAddress: MOCK_TOKEN_ADDRESS,
-        };
+        } as const;
 
         mockWallet.getNetwork.mockReturnValue({
           protocolFamily: "evm",
           networkId: "base-mainnet",
-        } as Network);
+          chainId: NETWORK_ID_TO_CHAIN_ID["base-mainnet"],
+        });
 
         const atomicAssets = parseEther(MOCK_WHOLE_ASSETS);
 
@@ -419,12 +424,13 @@ describe("Moonwell Action Provider", () => {
           mTokenAddress: "0x2F39a349A79492a70E152760ce7123A1933eCf28", // Sepolia WETH mToken
           assets: MOCK_WHOLE_ASSETS,
           tokenAddress: MOCK_TOKEN_ADDRESS,
-        };
+        } as const;
 
         mockWallet.getNetwork.mockReturnValue({
           protocolFamily: "evm",
           networkId: "base-sepolia",
-        } as Network);
+          chainId: NETWORK_ID_TO_CHAIN_ID["base-sepolia"],
+        });
 
         const atomicAssets = parseEther(MOCK_WHOLE_ASSETS);
 
@@ -459,12 +465,13 @@ describe("Moonwell Action Provider", () => {
           mTokenAddress: WETH_MTOKEN,
           assets: MOCK_WHOLE_ASSETS,
           tokenAddress: MOCK_TOKEN_ADDRESS,
-        };
+        } as const;
 
         mockWallet.getNetwork.mockReturnValue({
           protocolFamily: "evm",
           networkId: "base-mainnet",
-        } as Network);
+          chainId: NETWORK_ID_TO_CHAIN_ID["base-mainnet"],
+        });
 
         const error = new Error("Failed to deposit ETH");
         mockWallet.sendTransaction.mockRejectedValue(error);
@@ -484,7 +491,7 @@ describe("Moonwell Action Provider", () => {
       const args = {
         mTokenAddress: MOCK_MTOKEN_ADDRESS,
         assets: "1.0",
-      };
+      } as const;
 
       const decimals = MTOKENS_UNDERLYING_DECIMALS[MOONWELL_BASE_ADDRESSES[args.mTokenAddress]];
       const atomicAssets = parseUnits(args.assets, decimals);
@@ -513,7 +520,7 @@ describe("Moonwell Action Provider", () => {
       const args = {
         mTokenAddress: MOCK_MTOKEN_ADDRESS,
         assets: "0",
-      };
+      } as const;
 
       const response = await actionProvider.redeem(mockWallet, args);
 
@@ -526,7 +533,7 @@ describe("Moonwell Action Provider", () => {
       const args = {
         mTokenAddress: invalidMTokenAddress,
         assets: MOCK_ATOMIC_ASSETS,
-      };
+      } as const;
 
       const response = await actionProvider.redeem(mockWallet, args);
 
@@ -538,7 +545,7 @@ describe("Moonwell Action Provider", () => {
       const args = {
         mTokenAddress: MOCK_MTOKEN_ADDRESS,
         assets: MOCK_ATOMIC_ASSETS,
-      };
+      } as const;
 
       const error = new Error("Failed to redeem");
       mockWallet.sendTransaction.mockRejectedValue(error);
@@ -556,6 +563,7 @@ describe("Moonwell Action Provider", () => {
       const result = actionProvider.supportsNetwork({
         protocolFamily: "evm",
         networkId: "base-mainnet",
+        chainId: NETWORK_ID_TO_CHAIN_ID["base-mainnet"],
       });
       expect(result).toBe(true);
     });
@@ -564,6 +572,7 @@ describe("Moonwell Action Provider", () => {
       const result = actionProvider.supportsNetwork({
         protocolFamily: "evm",
         networkId: "base-sepolia",
+        chainId: NETWORK_ID_TO_CHAIN_ID["base-sepolia"],
       });
       expect(result).toBe(true);
     });
@@ -571,7 +580,8 @@ describe("Moonwell Action Provider", () => {
     it("should return false for other EVM networks", () => {
       const result = actionProvider.supportsNetwork({
         protocolFamily: "evm",
-        networkId: "ethereum",
+        networkId: "ethereum-mainnet",
+        chainId: NETWORK_ID_TO_CHAIN_ID["ethereum-mainnet"],
       });
       expect(result).toBe(false);
     });
@@ -579,7 +589,7 @@ describe("Moonwell Action Provider", () => {
     it("should return false for non-EVM networks", () => {
       const result = actionProvider.supportsNetwork({
         protocolFamily: "bitcoin",
-        networkId: "base-mainnet",
+        networkId: "mainnet",
       });
       expect(result).toBe(false);
     });

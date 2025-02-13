@@ -22,7 +22,7 @@ type RequiredEventData = {
    * The timestamp of the event. If not provided, the current time will be used.
    */
   timestamp?: number;
-} & Record<string, string | undefined>;
+} & Record<string, string | number | undefined>;
 
 /**
  * Sends an analytics event to the default endpoint

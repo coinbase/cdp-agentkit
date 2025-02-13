@@ -1,6 +1,7 @@
 import { TwitterApi, TwitterApiv2 } from "twitter-api-v2";
 import { TwitterActionProvider } from "./twitterActionProvider";
 import { TweetUserMentionTimelineV2Paginator } from "twitter-api-v2";
+import { NETWORK_ID_TO_CHAIN_ID } from "../../network";
 
 const MOCK_CONFIG = {
   apiKey: "test-api-key",
@@ -219,8 +220,16 @@ describe("TwitterActionProvider", () => {
 
   describe("Network Support", () => {
     it("should always return true for network support", () => {
-      expect(provider.supportsNetwork({ protocolFamily: "evm", networkId: "1" })).toBe(true);
-      expect(provider.supportsNetwork({ protocolFamily: "solana", networkId: "2" })).toBe(true);
+      expect(
+        provider.supportsNetwork({
+          protocolFamily: "evm",
+          networkId: "ethereum-mainnet",
+          chainId: NETWORK_ID_TO_CHAIN_ID["ethereum-mainnet"],
+        }),
+      ).toBe(true);
+      expect(provider.supportsNetwork({ protocolFamily: "solana", networkId: "mainnet" })).toBe(
+        true,
+      );
     });
   });
 });

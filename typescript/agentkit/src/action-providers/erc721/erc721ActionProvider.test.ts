@@ -2,6 +2,7 @@ import { encodeFunctionData } from "viem";
 import { erc721ActionProvider } from "./erc721ActionProvider";
 import { ERC721_ABI } from "./constants";
 import { EvmWalletProvider } from "../../wallet-providers";
+import { NETWORK_ID_TO_CHAIN_ID } from "../../network";
 
 describe("ERC721 Action Provider", () => {
   const MOCK_ADDRESS = "0xe6b2af36b3bb8d47206a129ff11d5a2de2a63c83";
@@ -22,8 +23,23 @@ describe("ERC721 Action Provider", () => {
       call: jest.fn(),
     } as unknown as jest.Mocked<EvmWalletProvider>;
 
-    mockWallet.sendTransaction.mockResolvedValue("0xmockhash" as `0x${string}`);
-    mockWallet.waitForTransactionReceipt.mockResolvedValue({});
+    mockWallet.sendTransaction.mockResolvedValue("0xmockhash" as const);
+    mockWallet.waitForTransactionReceipt.mockResolvedValue({
+      blockHash: "0x",
+      blockNumber: 0n,
+      contractAddress: "0x",
+      cumulativeGasUsed: 0n,
+      effectiveGasPrice: 0n,
+      from: "0x",
+      gasUsed: 0n,
+      logs: [],
+      logsBloom: "0x",
+      status: "success",
+      to: "0x",
+      transactionHash: "0x",
+      transactionIndex: 0,
+      type: "eip1559",
+    });
   });
 
   describe("mint", () => {
@@ -154,14 +170,18 @@ describe("ERC721 Action Provider", () => {
 
   describe("supportsNetwork", () => {
     it("should return true for EVM networks", () => {
-      const result = actionProvider.supportsNetwork({ protocolFamily: "evm", networkId: "any" });
+      const result = actionProvider.supportsNetwork({
+        protocolFamily: "evm",
+        networkId: "ethereum-mainnet",
+        chainId: NETWORK_ID_TO_CHAIN_ID["ethereum-mainnet"],
+      });
       expect(result).toBe(true);
     });
 
     it("should return false for non-EVM networks", () => {
       const result = actionProvider.supportsNetwork({
         protocolFamily: "bitcoin",
-        networkId: "any",
+        networkId: "mainnet",
       });
       expect(result).toBe(false);
     });

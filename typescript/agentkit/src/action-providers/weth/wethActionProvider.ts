@@ -74,7 +74,8 @@ Important notes:
    * @returns True if the Weth action provider supports the network, false otherwise.
    */
   supportsNetwork = (network: Network) =>
-    network.networkId === "base-mainnet" || network.networkId === "base-sepolia";
+    network.protocolFamily === "evm" &&
+    (network.networkId === "base-mainnet" || network.networkId === "base-sepolia");
 }
 
 export const wethActionProvider = () => new WethActionProvider();
