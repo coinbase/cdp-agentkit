@@ -153,7 +153,7 @@ class MyActionSchema(BaseModel):
 ```python
 from coinbase_agentkit import ActionProvider, WalletProvider, Network, create_action
 
-class MyActionProvider(ActionProvider[TWalletProvider]):
+class MyActionProvider(ActionProvider[WalletProvider]):
     def __init__(self):
         super().__init__("my-action-provider", [])
 
@@ -177,7 +177,9 @@ def my_action_provider():
 Actions that need access to a wallet provider can include it as their first parameter:
 
 ```python
-class MyActionProvider(ActionProvider[TWalletProvider]):
+from coinbase_agentkit import ActionProvider, WalletProvider, create_action
+
+class MyActionProvider(ActionProvider[WalletProvider]):
     @create_action(
         name="my-action",
         description="My action description",
