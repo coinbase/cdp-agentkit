@@ -153,7 +153,7 @@ class MyActionSchema(BaseModel):
 ```python
 from coinbase_agentkit import ActionProvider, WalletProvider, Network, create_action
 
-class MyActionProvider(ActionProvider[TWalletProvider]):
+class MyActionProvider(ActionProvider[WalletProvider]):
     def __init__(self):
         super().__init__("my-action-provider", [])
 
@@ -177,7 +177,9 @@ def my_action_provider():
 Actions that need access to a wallet provider can include it as their first parameter:
 
 ```python
-class MyActionProvider(ActionProvider[TWalletProvider]):
+from coinbase_agentkit import ActionProvider, WalletProvider, create_action
+
+class MyActionProvider(ActionProvider[WalletProvider]):
     @create_action(
         name="my-action",
         description="My action description",
@@ -202,8 +204,8 @@ agent_kit = AgentKit(AgentKitConfig(
 AgentKit supports the following wallet providers:
 
 EVM:
-- [CdpWalletProvider](./coinbase_agentkit/wallet_providers/cdp_wallet_provider.py) - Uses the Coinbase Developer Platform (CDP) API Wallet
-- [EthAccountWalletProvider](./coinbase_agentkit/wallet_providers/eth_account_wallet_provider.py) - Uses a local private key for any EVM-compatible chain
+- [CdpWalletProvider](https://github.com/coinbase/agentkit/blob/master/python/coinbase_agentkit/wallet_providers/cdp_wallet_provider.py) - Uses the Coinbase Developer Platform (CDP) API Wallet
+- [EthAccountWalletProvider](https://github.com/coinbase/agentkit/blob/master/python/coinbase_agentkit/wallet_providers/eth_account_wallet_provider.py) - Uses a local private key for any EVM-compatible chain
 
 ### CdpWalletProvider
 
@@ -314,4 +316,4 @@ agent_kit = AgentKit(AgentKitConfig(
 
 ## Contributing
 
-See [CONTRIBUTING.md](../../CONTRIBUTING.md) for more information.
+See [CONTRIBUTING.md](https://github.com/coinbase/agentkit/blob/master/CONTRIBUTING.md) for more information.
