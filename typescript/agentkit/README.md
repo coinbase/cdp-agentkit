@@ -398,6 +398,7 @@ Wallet providers give an agent access to a wallet. AgentKit currently supports t
 EVM:
 - [CdpWalletProvider](./src/wallet-providers/cdpWalletProvider.ts)
 - [ViemWalletProvider](./src/wallet-providers/viemWalletProvider.ts)
+- [PrivyWalletProvider](./src/wallet-providers/privyWalletProvider.ts)
 
 ### CdpWalletProvider
 
@@ -541,6 +542,42 @@ const walletProvider = new ViemWalletProvider(client, {
     gasLimitMultiplier: 2.0,  // Adjusts gas limit estimation
     feePerGasMultiplier: 2.0, // Adjusts max fee per gas
 });
+```
+
+### PrivyWalletProvider
+
+The `PrivyWalletProvider` is a wallet provider that uses [Privy Server Wallets](https://docs.privy.io/guide/server-wallets/). This implementation extends the `ViemWalletProvider`.
+
+```typescript
+import { PrivyWalletProvider } from "@coinbase/agentkit";
+
+// Configure Wallet Provider
+const config = {
+    appId: "PRIVY_APP_ID",
+    appSecret: "PRIVY_APP_SECRET",
+    networkId: "base-sepolia",
+    walletId: "PRIVY_WALLET_ID", // optional, otherwise a new wallet will be created
+    ...(PRIVY_WALLET_AUTHORIZATION_KEY && {
+        authorizationKey: PRIVY_WALLET_AUTHORIZATION_KEY, // optional, if using authorization keys
+    }),
+};
+
+const walletProvider = await PrivyWalletProvider.configureWithWallet(config);
+```
+
+#### Exporting Privy Wallet information
+
+The `PrivyWalletProvider` can export wallet information by calling the `exportWallet` method. 
+
+```typescript
+const walletData = await walletProvider.exportWallet();
+
+// walletData will be in the following format:
+{
+    walletId: string;
+    authorizationKey: string | undefined;
+    networkId: string;
+}
 ```
 
 
