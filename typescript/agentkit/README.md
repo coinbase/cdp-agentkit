@@ -489,7 +489,7 @@ const walletProvider = await CdpWalletProvider.configureWithWallet({
 });
 ```
 
-**Note**: Gas parameters only impact the `walletProvider.sendTransaction` behavior. Actions that do not rely on direct transaction calls, such as `request_faucet_funds`, `deploy_token`, `deploy_contract`, and `native_transfer`, remain unaffected.
+**Note**: Gas parameters only impact the `walletProvider.sendTransaction` behavior. Actions that do not rely on direct transaction calls, such as `deploy_token`, `deploy_contract`, and `native_transfer`, remain unaffected.
 
 
 ### ViemWalletProvider
@@ -542,8 +542,6 @@ const walletProvider = new ViemWalletProvider(client, {
     feePerGasMultiplier: 2.0, // Adjusts max fee per gas
 });
 ```
-
-**Note**: Gas parameters only impact the `walletProvider.sendTransaction` behavior. Actions that do not rely on direct transaction calls, such as `request_faucet_funds`, `deploy_token`, `deploy_contract`, and `native_transfer`, remain unaffected.
 
 
 ## Contributing
