@@ -14,6 +14,7 @@ import {
 import { EvmWalletProvider } from "./evmWalletProvider";
 import { Network } from "../network";
 import { CHAIN_ID_TO_NETWORK_ID } from "../network/network";
+import { applyGasMultiplier } from "../utils";
 
 /**
  * Configuration for gas multipliers.
@@ -124,11 +125,10 @@ export class ViemWalletProvider extends EvmWalletProvider {
     }
 
     const feeData = await this.#publicClient.estimateFeesPerGas();
-    const maxFeePerGas = BigInt(
-      Math.round(Number(feeData.maxFeePerGas) * this.#feePerGasMultiplier),
-    );
-    const maxPriorityFeePerGas = BigInt(
-      Math.round(Number(feeData.maxPriorityFeePerGas) * this.#feePerGasMultiplier),
+    const maxFeePerGas = applyGasMultiplier(feeData.maxFeePerGas, this.#feePerGasMultiplier);
+    const maxPriorityFeePerGas = applyGasMultiplier(
+      feeData.maxPriorityFeePerGas,
+      this.#feePerGasMultiplier,
     );
 
     const gasLimit = await this.#publicClient.estimateGas({

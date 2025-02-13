@@ -27,6 +27,7 @@ import {
   hashMessage,
 } from "@coinbase/coinbase-sdk";
 import { NETWORK_ID_TO_CHAIN_ID, NETWORK_ID_TO_VIEM_CHAIN } from "../network/network";
+import { applyGasMultiplier } from "../utils";
 
 /**
  * Configuration options for the CDP Providers.
@@ -310,11 +311,10 @@ export class CdpWalletProvider extends EvmWalletProvider {
     });
 
     const feeData = await this.#publicClient.estimateFeesPerGas();
-    const maxFeePerGas = BigInt(
-      Math.round(Number(feeData.maxFeePerGas) * this.#feePerGasMultiplier),
-    );
-    const maxPriorityFeePerGas = BigInt(
-      Math.round(Number(feeData.maxPriorityFeePerGas) * this.#feePerGasMultiplier),
+    const maxFeePerGas = applyGasMultiplier(feeData.maxFeePerGas, this.#feePerGasMultiplier);
+    const maxPriorityFeePerGas = applyGasMultiplier(
+      feeData.maxPriorityFeePerGas,
+      this.#feePerGasMultiplier,
     );
 
     const gasLimit = await this.#publicClient.estimateGas({
