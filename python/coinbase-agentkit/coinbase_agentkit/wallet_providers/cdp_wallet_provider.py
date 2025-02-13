@@ -20,7 +20,7 @@ from web3 import Web3
 from web3.types import BlockIdentifier, ChecksumAddress, HexStr, TxParams
 
 from ..network import NETWORK_ID_TO_CHAIN, Network
-from .evm_wallet_provider import EvmWalletProvider
+from .evm_wallet_provider import EvmWalletProvider, EvmWalletProviderGasConfig
 
 
 class CdpProviderConfig(BaseModel):
@@ -36,14 +36,7 @@ class CdpWalletProviderConfig(CdpProviderConfig):
     network_id: str | None = Field("base-sepolia", description="The network id")
     mnemonic_phrase: str | None = Field(None, description="The mnemonic phrase of the wallet")
     wallet_data: str | None = Field(None, description="The data of the CDP Wallet as a JSON string")
-
-    class GasConfig(BaseModel):
-        """Configuration for gas multipliers."""
-
-        gas_limit_multiplier: float | None = Field(None, description="An internal multiplier on gas limit estimation")
-        fee_per_gas_multiplier: float | None = Field(None, description="An internal multiplier on fee per gas estimation")
-
-    gas: GasConfig | None = Field(None, description="Gas configuration settings")
+    gas: EvmWalletProviderGasConfig | None = Field(None, description="Gas configuration settings")
 
 
 class CdpWalletProvider(EvmWalletProvider):
