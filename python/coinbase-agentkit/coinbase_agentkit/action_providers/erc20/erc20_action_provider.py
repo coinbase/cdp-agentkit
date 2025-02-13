@@ -27,21 +27,12 @@ class ERC20ActionProvider(ActionProvider[EvmWalletProvider]):
     def get_balance(self, wallet_provider: EvmWalletProvider, args: GetBalanceSchema) -> str:
         """Get the balance of an ERC20 token for the wallet's address.
 
-        This function queries the ERC20 token contract to get the token balance
-        for the wallet's address. It uses the standard ERC20 balanceOf function.
-
         Args:
-            wallet_provider (EvmWalletProvider): The wallet provider to get the address from and make the contract call
-            args (GetBalanceSchema): The input arguments containing:
-                - contract_address (str): The address of the ERC20 token contract to query
+            wallet_provider (EvmWalletProvider): The wallet provider instance.
+            args (GetBalanceSchema): Input arguments for the action.
 
         Returns:
-            str: A message containing either:
-                - The token balance if successful
-                - An error message if the balance check fails
-
-        Raises:
-            Exception: If the contract call fails for any reason
+            str: A message containing the action response or error details.
 
         """
         try:
@@ -75,27 +66,14 @@ class ERC20ActionProvider(ActionProvider[EvmWalletProvider]):
         schema=TransferSchema,
     )
     def transfer(self, wallet_provider: EvmWalletProvider, args: TransferSchema) -> str:
-        """Transfer a specified amount of an ERC20 token to a destination onchain.
-
-        This function transfers ERC20 tokens from the wallet to another address by calling
-        the token contract's transfer function. It handles encoding the transfer data and
-        submitting/waiting for the transaction.
+        """Transfer ERC20 tokens to a destination address.
 
         Args:
-            wallet_provider (EvmWalletProvider): The wallet provider to transfer the asset from,
-                used to sign and send the transaction
-            args (TransferSchema): The input arguments containing:
-                - amount (int): The amount of tokens to transfer
-                - contract_address (str): The address of the ERC20 token contract
-                - destination (str): The recipient address to receive the tokens
+            wallet_provider (EvmWalletProvider): The wallet provider instance.
+            args (TransferSchema): Input arguments for the action.
 
         Returns:
-            str: A message containing either:
-                - The transfer details and transaction hash if successful
-                - An error message if the transfer fails
-
-        Raises:
-            Exception: If the transfer transaction fails for any reason
+            str: A message containing the action response or error details.
 
         """
         try:
@@ -124,13 +102,13 @@ class ERC20ActionProvider(ActionProvider[EvmWalletProvider]):
             return f"Error transferring the asset: {e!s}"
 
     def supports_network(self, network: Network) -> bool:
-        """Check if the ERC20 action provider supports the given network.
+        """Check if the network is supported by this action provider.
 
         Args:
-            network: The network to check.
+            network (Network): The network to check support for.
 
         Returns:
-            True if the ERC20 action provider supports the network, false otherwise.
+            bool: Whether the network is supported.
 
         """
         return network.protocol_family == "evm"

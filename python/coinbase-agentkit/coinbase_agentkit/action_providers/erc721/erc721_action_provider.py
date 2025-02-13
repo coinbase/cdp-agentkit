@@ -30,26 +30,14 @@ Do not use the contract address as the destination address. If you are unsure of
         schema=MintSchema,
     )
     def mint(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
-        """Mint an NFT (ERC-721) to a specified destination address onchain.
-
-        This function mints a new NFT token by calling the mint function on the specified
-        ERC721 contract. It handles encoding the mint data and submitting/waiting for
-        the transaction.
+        """Mint an NFT (ERC-721) to a specified destination address.
 
         Args:
-            wallet_provider (EvmWalletProvider): The wallet provider to mint the NFT from,
-                used to sign and send the transaction
-            args (dict[str, Any]): The input arguments containing:
-                - contract_address (str): The address of the ERC721 contract to mint from
-                - destination (str): The recipient address that will receive the minted NFT
+            wallet_provider (EvmWalletProvider): The wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
 
         Returns:
-            str: A message containing either:
-                - The mint details if successful
-                - An error message if the mint fails
-
-        Raises:
-            Exception: If the mint transaction fails for any reason
+            str: A message containing the action response or error details.
 
         """
         try:
@@ -89,27 +77,12 @@ Important notes:
     def transfer(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Transfer an NFT (ERC721 token) to a destination address.
 
-        This function transfers an NFT from the wallet (or specified from_address) to another address
-        by calling the NFT contract's transferFrom function. It handles encoding the transfer data and
-        submitting/waiting for the transaction.
-
         Args:
-            wallet_provider (EvmWalletProvider): The wallet provider to transfer the NFT from,
-                used to sign and send the transaction
-            args (dict[str, Any]): The input arguments containing:
-                - contract_address (str): The address of the ERC721 contract
-                - token_id (str): The ID of the NFT to transfer
-                - destination (str): The recipient address to receive the NFT
-                - from_address (str, optional): The address to transfer from. If not provided,
-                    defaults to the wallet's default address
+            wallet_provider (EvmWalletProvider): The wallet provider instance.
+            args (dict[str, Any]): Input arguments for the action.
 
         Returns:
-            str: A message containing either:
-                - The transfer details if successful
-                - An error message if the transfer fails
-
-        Raises:
-            Exception: If the transfer transaction fails for any reason
+            str: A message containing the action response or error details.
 
         """
         try:

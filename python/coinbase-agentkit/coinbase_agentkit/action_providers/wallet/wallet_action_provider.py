@@ -31,25 +31,14 @@ class WalletActionProvider(ActionProvider[WalletProvider]):
     ) -> str:
         """Get details about the connected wallet.
 
-        This function retrieves various details about the connected wallet including its address,
-        network information, native token balance, and provider name.
-
         Args:
-            wallet_provider (WalletProvider): The wallet provider to get details from
-            args (GetWalletDetailsSchema): The input arguments (unused in this function)
+            wallet_provider (WalletProvider): The wallet provider to get details from.
+            args (GetWalletDetailsSchema): The input arguments.
 
         Returns:
-            str: A formatted string containing:
-                - Wallet provider name
-                - Wallet address
-                - Network details (protocol family, network ID, chain ID)
-                - Native token balance
-
-        Raises:
-            Exception: If retrieving any wallet details fails
+            str: A formatted string containing wallet details and network information.
 
         """
-        """Get details about the wallet."""
         try:
             wallet_address = wallet_provider.get_address()
             network = wallet_provider.get_network()
@@ -75,19 +64,12 @@ class WalletActionProvider(ActionProvider[WalletProvider]):
     def get_balance(self, wallet_provider: WalletProvider, args: GetBalanceSchema) -> str:
         """Get the native currency balance for the connected wallet.
 
-        This function retrieves the native token balance and address of the connected wallet.
-
         Args:
-            wallet_provider (WalletProvider): The wallet provider to get the balance from
-            args (GetBalanceSchema): The input arguments (unused in this function)
+            wallet_provider (WalletProvider): The wallet provider to get the balance from.
+            args (GetBalanceSchema): The input arguments.
 
         Returns:
-            str: A message containing either:
-                - The wallet address and its native token balance if successful
-                - An error message if retrieving the balance fails
-
-        Raises:
-            Exception: If retrieving the wallet balance fails for any reason
+            str: A message containing the wallet address and balance information.
 
         """
         try:
@@ -116,23 +98,12 @@ Important notes:
     def native_transfer(self, wallet_provider: WalletProvider, args: dict[str, Any]) -> str:
         """Transfer native tokens from the connected wallet to a destination address.
 
-        This function transfers native tokens from the connected wallet to a specified
-        destination address by calling the wallet provider's native_transfer method.
-
         Args:
-            wallet_provider (WalletProvider): The wallet provider to transfer tokens from,
-                used to sign and send the transaction
-            args (dict[str, Any]): Arguments containing:
-                - to (str): The destination address to receive the tokens
-                - value (str): The amount of tokens to transfer in whole units
+            wallet_provider (WalletProvider): The wallet provider to transfer tokens from.
+            args (dict[str, Any]): Arguments containing destination address and transfer amount.
 
         Returns:
-            str: A message containing either:
-                - The transfer details and transaction hash if successful
-                - An error message if the transfer fails
-
-        Raises:
-            Exception: If the transfer transaction fails for any reason
+            str: A message containing the transfer details and transaction hash.
 
         """
         try:
@@ -143,10 +114,23 @@ Important notes:
             return f"Error transferring native tokens: {e}"
 
     def supports_network(self, network: Network) -> bool:
-        """Check if network is supported by wallet actions."""
+        """Check if network is supported by wallet actions.
+
+        Args:
+            network (Network): The network to check support for.
+
+        Returns:
+            bool: True if the network is supported.
+
+        """
         return True
 
 
 def wallet_action_provider() -> WalletActionProvider:
-    """Create a new WalletActionProvider instance."""
+    """Create a new WalletActionProvider instance.
+
+    Returns:
+        WalletActionProvider: A new wallet action provider instance.
+
+    """
     return WalletActionProvider()

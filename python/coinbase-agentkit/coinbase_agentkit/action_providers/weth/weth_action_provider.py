@@ -38,24 +38,12 @@ Important notes:
     def wrap_eth(self, wallet_provider: EvmWalletProvider, args: dict[str, Any]) -> str:
         """Wrap ETH to WETH by calling the deposit function on the WETH contract.
 
-        This function wraps native ETH into WETH (Wrapped ETH) tokens by calling the deposit function
-        on the WETH smart contract. It handles encoding the deposit call data and submitting/waiting
-        for the transaction.
-
         Args:
-            wallet_provider (EvmWalletProvider): The wallet provider to wrap ETH from,
-                used to sign and send the transaction
-            args (dict[str, Any]): Arguments containing:
-                - amount_to_wrap (str): The amount of ETH to wrap in wei
+            wallet_provider (EvmWalletProvider): The wallet provider to wrap ETH from.
+            args (dict[str, Any]): Arguments containing amount_to_wrap in wei.
 
         Returns:
-            str: A message containing either:
-                - The wrap details and transaction hash if successful
-                - An error message if the wrap fails
-
-        Raises:
-            ValidationError: If the input arguments are invalid
-            Exception: If the wrap transaction fails for any reason
+            str: A message containing the wrap details or error message.
 
         """
         try:
@@ -75,10 +63,23 @@ Important notes:
             return f"Error wrapping ETH: {e}"
 
     def supports_network(self, network: Network) -> bool:
-        """Check if network is supported by WETH actions."""
+        """Check if network is supported by WETH actions.
+
+        Args:
+            network (Network): The network to check support for.
+
+        Returns:
+            bool: True if the network is supported, False otherwise.
+
+        """
         return network.chain_id in SUPPORTED_CHAINS
 
 
 def weth_action_provider() -> WethActionProvider:
-    """Create a new WethActionProvider instance."""
+    """Create a new WethActionProvider instance.
+
+    Returns:
+        WethActionProvider: A new instance of the WETH action provider.
+
+    """
     return WethActionProvider()

@@ -76,22 +76,13 @@ A failure response will return a message with a Twitter API request error:
         schema=AccountDetailsSchema,
     )
     def account_details(self, args: dict[str, Any]) -> str:
-        """Get the authenticated Twitter (X) user account details using the Tweepy client.
-
-        This function retrieves details about the currently authenticated Twitter user by calling
-        the Twitter API's get_me endpoint. It adds a URL to the user's profile and returns the
-        full API response.
+        """Get the authenticated Twitter user account details.
 
         Args:
-            args (dict[str, Any]): Empty dictionary, no arguments needed for this endpoint
+            args (dict[str, Any]): Empty dictionary, no arguments needed.
 
         Returns:
-            str: A message containing either:
-                - The user account details as a JSON string if successful
-                - An error message if the API call fails
-
-        Raises:
-            tweepy.errors.TweepyException: If the Twitter API request fails for any reason
+            str: A message containing the action response or error details.
 
         """
         AccountDetailsSchema(**args)
@@ -120,22 +111,13 @@ A failure response will return a message with the Twitter API request error:
         schema=AccountMentionsSchema,
     )
     def account_mentions(self, args: dict[str, Any]) -> str:
-        """Get mentions for a specified Twitter user using the Twitter API.
-
-        This function retrieves mentions for a Twitter user by calling the Twitter API's
-        get_users_mentions endpoint with the provided user ID.
+        """Get mentions for a specified Twitter user.
 
         Args:
-            args (dict[str, Any]): Arguments containing:
-                - user_id (str): The Twitter user ID to get mentions for
+            args (dict[str, Any]): Arguments containing user_id to get mentions for.
 
         Returns:
-            str: A message containing either:
-                - The mentions data as a JSON string if successful
-                - An error message if the API call fails
-
-        Raises:
-            tweepy.errors.TweepyException: If the Twitter API request fails for any reason
+            str: A message containing the action response or error details.
 
         """
         validated_args = AccountMentionsSchema(**args)
@@ -161,22 +143,13 @@ A failure response will return a message with the Twitter API request error:
         schema=PostTweetSchema,
     )
     def post_tweet(self, args: dict[str, Any]) -> str:
-        """Post a tweet on Twitter using the Twitter API.
-
-        This function posts a new tweet by calling the Twitter API's create_tweet endpoint
-        with the provided tweet text.
+        """Post a tweet on Twitter.
 
         Args:
-            args (dict[str, Any]): Arguments containing:
-                - tweet (str): The text content of the tweet to post
+            args (dict[str, Any]): Arguments containing tweet text to post.
 
         Returns:
-            str: A message containing either:
-                - The tweet creation response as a JSON string if successful
-                - An error message if the API call fails
-
-        Raises:
-            tweepy.errors.TweepyException: If the Twitter API request fails for any reason
+            str: A message containing the action response or error details.
 
         """
         validated_args = PostTweetSchema(**args)
@@ -202,23 +175,13 @@ A failure response will return a message with the Twitter API request error:
         schema=PostTweetReplySchema,
     )
     def post_tweet_reply(self, args: dict[str, Any]) -> str:
-        """Post a reply to a tweet on Twitter using the Twitter API.
-
-        This function posts a reply tweet by calling the Twitter API's create_tweet endpoint
-        with the provided tweet text and the ID of the tweet to reply to.
+        """Post a reply to a tweet on Twitter.
 
         Args:
-            args (dict[str, Any]): Arguments containing:
-                - tweet_reply (str): The text content of the reply tweet
-                - tweet_id (str): The ID of the tweet to reply to
+            args (dict[str, Any]): Arguments containing tweet_reply text and tweet_id to reply to.
 
         Returns:
-            str: A message containing either:
-                - The tweet creation response as a JSON string if successful
-                - An error message if the API call fails
-
-        Raises:
-            tweepy.errors.TweepyException: If the Twitter API request fails for any reason
+            str: A message containing the action response or error details.
 
         """
         validated_args = PostTweetReplySchema(**args)
@@ -236,7 +199,9 @@ A failure response will return a message with the Twitter API request error:
     def supports_network(self, network: Network) -> bool:
         """Check if network is supported by Twitter actions.
 
-        Twitter actions don't depend on blockchain networks, so always return True.
+        Returns:
+            bool: Always True as Twitter actions don't depend on blockchain networks.
+
         """
         return True
 
