@@ -193,19 +193,7 @@ The flow is:
 2. In the example directory, run `poetry install && poetry run python chatbot.py`
 3. You can now interact with your new action via the chatbot!
 
-[tool.poetry.dependencies]
-python = "^3.10"
-- cdp-langchain = "^0.0.11"
-+ cdp-langchain = { path: "../../cdp-langchain", develop: true }
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-```
-3. In `python/examples/cdp-langchain-chatbot`, run `python chatbot.py`
-4. You can now interact with your new action via the chatbot!
-
-### Running Unit Tests
+### Running Tests
 
 From the package you are working in, you can run:
 

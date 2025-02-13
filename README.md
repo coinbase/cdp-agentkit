@@ -16,6 +16,7 @@
     Every agent deserves a wallet.
   </p>
 
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/coinbase-agentkit?style=flat-square)](https://pypistats.org/packages/coinbase-agentkit)
 [![npm downloads](https://img.shields.io/npm/dm/@coinbase/agentkit?style=flat-square)](https://www.npmjs.com/package/@coinbase/agentkit)
 [![GitHub star chart](https://img.shields.io/github/stars/coinbase/agentkit?style=flat-square)](https://star-history.com/#coinbase/agentkit)
 [![Open Issues](https://img.shields.io/github/issues-raw/coinbase/agentkit?style=flat-square)](https://github.com/coinbase/agentkit/issues)
@@ -174,7 +175,7 @@ agentkit/
 - [AgentKit Documentation](https://docs.cdp.coinbase.com/agentkit/docs/welcome)
 - Python API References
   - [AgentKit](https://coinbase.github.io/agentkit/coinbase-agentkit/python/index.html)
-  - [AgentKit Langchain Extension](https://coinbase.github.io/agentkit/coinbase-agentkit-langchain/python/index.html)
+  - [AgentKit Langchain Extension](https://coinbase.github.io/agentkit/framework-extensions/langchain/python/index.html)
 - Node.js API References
   - [AgentKit](https://coinbase.github.io/agentkit/agentkit/typescript/index.html)
   - [AgentKit Langchain Extension](https://coinbase.github.io/agentkit/agentkit-langchain/typescript/index.html)
