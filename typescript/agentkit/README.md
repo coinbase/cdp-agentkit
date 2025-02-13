@@ -24,9 +24,9 @@ AgentKit is a framework for easily enabling AI agents to take actions onchain. I
     - [Configuring from a mnemonic phrase](#configuring-from-a-mnemonic-phrase)
     - [Exporting a wallet](#exporting-a-wallet)
     - [Importing a wallet from WalletData JSON string](#importing-a-wallet-from-walletdata-json-string)
-    - [Configuring gas parameters](#configuring-gas-parameters)
+    - [Configuring gas parameters](#configuring-cdpwalletprovider-gas-parameters)
   - [ViemWalletProvider](#viemwalletprovider)
-    - [Configuring gas parameters](#configuring-gas-parameters)
+    - [Configuring gas parameters](#configuring-viemwalletprovider-gas-parameters)
 - [Contributing](#contributing)
 
 ## Getting Started
@@ -471,7 +471,7 @@ const walletProvider = await CdpWalletProvider.configureWithWallet({
 });
 ```
 
-#### Configuring gas parameters
+#### Configuring CdpWalletProvider gas parameters
 
 The `CdpWalletProvider` also exposes parameters for effecting the gas calculations.
 
@@ -516,7 +516,7 @@ const client = createWalletClient({
 const walletProvider = new ViemWalletProvider(client);
 ```
 
-#### Configuring gas parameters
+#### Configuring ViemWalletProvider gas parameters
 
 The `ViemWalletProvider` also exposes parameters for effecting the gas calculations.
 
