@@ -88,10 +88,17 @@ export class PrivyWalletProvider extends ViemWalletProvider {
         );
       }
 
+      if (config.authorizationKeyId && !config.authorizationPrivateKey) {
+        throw new Error(
+          "authorizationPrivateKey is required when creating a new wallet with an authorizationKeyId. " +
+            "If you don't have it, you can create a new one in your Privy Dashboard, or delete the authorization key.",
+        );
+      }
+
       try {
         const wallet = await privy.walletApi.create({
           chainType: "ethereum",
-          authorizationKeyIds: [config.authorizationKeyId],
+          authorizationKeyIds: config.authorizationKeyId ? [config.authorizationKeyId] : undefined,
         });
         walletId = wallet.id;
         address = wallet.address as `0x${string}`;
