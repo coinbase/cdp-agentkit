@@ -1,19 +1,15 @@
-import {
-  AgentKit,
-  SolanaKeypairWalletProvider
-} from "@coinbase/agentkit";
+import { AgentKit, SolanaKeypairWalletProvider, walletActionProvider } from "@coinbase/agentkit";
 import { getLangChainTools } from "@coinbase/agentkit-langchain";
 import { HumanMessage } from "@langchain/core/messages";
 import { MemorySaver } from "@langchain/langgraph";
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import { ChatOpenAI } from "@langchain/openai";
-import * as dotenv from "dotenv";
-import * as readline from "readline";
 import { Keypair } from "@solana/web3.js";
 import bs58 from "bs58";
+import * as dotenv from "dotenv";
+import * as readline from "readline";
 
 dotenv.config();
-
 
 /**
  * Validates that required environment variables are set
@@ -60,24 +56,25 @@ async function initializeAgent() {
     });
 
     // Configure Solana Keypair Wallet Provider
-    const rpcUrl = process.env.SOLANA_RPC_URL!
-    let solanaPrivateKey = process.env.SOLANA_PRIVATE_KEY as string
+    const rpcUrl = process.env.SOLANA_RPC_URL!;
+    let solanaPrivateKey = process.env.SOLANA_PRIVATE_KEY as string;
 
     if (!solanaPrivateKey) {
-      console.log(`No Solana account detected. Generating a wallet...`)
+      console.log(`No Solana account detected. Generating a wallet...`);
       const keypair = Keypair.generate();
       solanaPrivateKey = bs58.encode(keypair.secretKey);
-      console.log(`Created Solana wallet: ${keypair.publicKey.toBase58()}`)
-      console.log(`Store the private key in your .env for future reuse: ${solanaPrivateKey}`)
+      console.log(`Created Solana wallet: ${keypair.publicKey.toBase58()}`);
+      console.log(`Store the private key in your .env for future reuse: ${solanaPrivateKey}`);
     }
 
-    const walletProvider = await SolanaKeypairWalletProvider.fromRpcUrl(rpcUrl, solanaPrivateKey)
+    const walletProvider = await SolanaKeypairWalletProvider.fromRpcUrl(rpcUrl, solanaPrivateKey);
 
     // Initialize AgentKit
     const agentkit = await AgentKit.from({
       walletProvider,
       actionProviders: [
         // TODO: Add Solana tooling
+        walletActionProvider(),
       ],
     });
 
