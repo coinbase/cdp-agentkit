@@ -82,21 +82,32 @@ export class PrivyWalletProvider extends ViemWalletProvider {
     let address: `0x${string}`;
 
     if (!config.walletId) {
-      if (!config.authorizationPrivateKey) {
-        throw new Error("authorizationPrivateKey is required when creating a new wallet");
-      }
-      if (!config.authorizationKeyId) {
+      if (config.authorizationPrivateKey && !config.authorizationKeyId) {
         throw new Error(
           "authorizationKeyId is required when creating a new wallet with an authorization key, this can be found in your Privy Dashboard",
         );
       }
 
-      const wallet = await privy.walletApi.create({
-        chainType: "ethereum",
-        authorizationKeyIds: [config.authorizationKeyId],
-      });
-      walletId = wallet.id;
-      address = wallet.address as `0x${string}`;
+      try {
+        const wallet = await privy.walletApi.create({
+          chainType: "ethereum",
+          authorizationKeyIds: [config.authorizationKeyId],
+        });
+        walletId = wallet.id;
+        address = wallet.address as `0x${string}`;
+      } catch (error) {
+        console.error(error);
+        if (
+          error instanceof Error &&
+          error.message.includes("Missing `privy-authorization-signature` header")
+        ) {
+          // Providing a more informative error message, see context: https://github.com/coinbase/agentkit/pull/242#discussion_r1956428617
+          throw new Error(
+            "Privy error: you have an authorization key on your account which can create and modify wallets, please delete this key or pass it to the PrivyWalletProvider to create a new wallet",
+          );
+        }
+        throw new Error("Failed to create wallet");
+      }
     } else {
       walletId = config.walletId;
       const wallet = await privy.walletApi.getWallet({ id: walletId });

@@ -573,7 +573,7 @@ Privy offers the option to use authorization keys to secure your server wallets.
 
 You can manage authorization keys from your [Privy dashboard](https://dashboard.privy.io/account) or programmatically [using the API](https://docs.privy.io/guide/server-wallets/authorization/signatures).
 
-When using authorization keys, you must provide the `authorizationPrivateKey` and `authorizationKeyId` parameters to the `configureWithWallet` method.
+When using authorization keys, you must provide the `authorizationPrivateKey` and `authorizationKeyId` parameters to the `configureWithWallet` method if you are creating a new wallet. Please note that when creating a key, if you enable "Create and modify wallets", you will be required to use that key when creating new wallets via the PrivyWalletProvider.
 
 #### Exporting Privy Wallet information
 
