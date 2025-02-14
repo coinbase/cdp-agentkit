@@ -8,6 +8,7 @@
 
 - Added `svmWalletProvider` abstract class for interacting with Solana.
 - Added `solanaKeypairWalletProvider` to concretely implement `svmWalletProvider` with a local keypair.
+- Added `splActionProvider` with transfer action.
 - Added gas configuration parameters (`gasLimitMultiplier`, `feePerGasMultiplier`) to `CdpWalletProvider` and `ViemWalletProvider`.
 - Added `privyWalletProvider` to use a Privy server wallet for agent actions.
 

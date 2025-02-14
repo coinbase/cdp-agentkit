@@ -11,6 +11,7 @@ import {
   ComputeBudgetProgram,
   clusterApiUrl,
   RpcResponseAndContext,
+  SignatureResult,
   SignatureStatus,
   SignatureStatusConfig,
 } from "@solana/web3.js";
@@ -155,6 +156,24 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
   }
 
   /**
+   * Get the connection instance
+   *
+   * @returns The Solana connection instance
+   */
+  getConnection(): Connection {
+    return this.#connection;
+  }
+
+  /**
+   * Get the public key of the wallet
+   *
+   * @returns The wallet's public key
+   */
+  getPublicKey(): PublicKey {
+    return this.#keypair.publicKey;
+  }
+
+  /**
    * Get the address of the wallet
    *
    * @returns The base58 encoded address of the wallet
@@ -187,17 +206,19 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
    * Send a transaction
    *
    * @param transaction - The transaction to send
-   * @returns The transaction signature
+   * @returns The signature
    */
   async sendTransaction(transaction: VersionedTransaction): Promise<string> {
-    return this.#connection.sendTransaction(transaction);
+    const signature = await this.#connection.sendTransaction(transaction);
+    await this.waitForSignatureReceipt(signature);
+    return signature;
   }
 
   /**
    * Sign and send a transaction
    *
    * @param transaction - The transaction to sign and send
-   * @returns The transaction signature
+   * @returns The signature
    */
   async signAndSendTransaction(transaction: VersionedTransaction): Promise<string> {
     const signedTransaction = await this.signTransaction(transaction);
@@ -207,15 +228,30 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
   /**
    * Get the status of a transaction
    *
-   * @param signature - The transaction signature
-   * @param options - The options for the transaction status
-   * @returns The transaction status
+   * @param signature - The signature
+   * @param options - The options for the status
+   * @returns The status
    */
   async getSignatureStatus(
     signature: string,
     options?: SignatureStatusConfig,
   ): Promise<RpcResponseAndContext<SignatureStatus | null>> {
     return this.#connection.getSignatureStatus(signature, options);
+  }
+
+  /**
+   * Wait for signature receipt
+   *
+   * @param signature - The signature
+   * @returns The confirmation response
+   */
+  async waitForSignatureReceipt(signature: string): Promise<RpcResponseAndContext<SignatureResult>> {
+    const { blockhash, lastValidBlockHeight } = await this.#connection.getLatestBlockhash();
+    return this.#connection.confirmTransaction({
+      signature: signature,
+      lastValidBlockHeight,
+      blockhash,
+    });
   }
 
   /**
@@ -240,16 +276,26 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
    * Transfer SOL from the wallet to another address
    *
    * @param to - The base58 encoded address to transfer the SOL to
-   * @param value - The amount of SOL to transfer
-   * @returns The transaction hash
+   * @param value - The amount of SOL to transfer (as a decimal string, e.g. "0.0001")
+   * @returns The signature
    */
   async nativeTransfer(to: string, value: string): Promise<string> {
-    const toPubkey = new PublicKey(to);
-    const lamports = BigInt(LAMPORTS_PER_SOL) * BigInt(value);
+    const initialBalance = await this.getBalance();
+    const solAmount = parseFloat(value);
+    const lamports = BigInt(Math.floor(solAmount * LAMPORTS_PER_SOL));
 
+    // Check if we have enough balance (including estimated fees)
+    if (initialBalance < lamports + BigInt(5000)) {
+      throw new Error(
+        `Insufficient balance. Have ${Number(initialBalance) / LAMPORTS_PER_SOL} SOL, need ${
+          solAmount + 0.000005
+        } SOL (including fees)`,
+      );
+    }
+
+    const toPubkey = new PublicKey(to);
     const instructions = [
       ComputeBudgetProgram.setComputeUnitPrice({
-        // TODO: Make this configurable
         microLamports: 10000,
       }),
       ComputeBudgetProgram.setComputeUnitLimit({
@@ -261,6 +307,7 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
         lamports: lamports,
       }),
     ];
+
     const tx = new VersionedTransaction(
       MessageV0.compile({
         payerKey: this.#keypair.publicKey,
@@ -269,7 +316,20 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
       }),
     );
 
-    const txHash = await this.#connection.sendTransaction(tx);
-    return txHash;
+    tx.sign([this.#keypair]);
+
+    const signature = await this.#connection.sendTransaction(tx);
+    await this.waitForSignatureReceipt(signature);
+    return signature;
+  }
+
+  /**
+   * Request SOL tokens from the Solana faucet. This method only works on devnet and testnet networks.
+   *
+   * @param lamports - The amount of lamports (1 SOL = 1,000,000,000 lamports) to request from the faucet
+   * @returns A Promise that resolves to the signature of the airdrop
+   */
+  async requestAirdrop(lamports: number): Promise<string> {
+    return await this.#connection.requestAirdrop(this.#keypair.publicKey, lamports);
   }
 }

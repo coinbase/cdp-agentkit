@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 import {
   AgentKit,
   SOLANA_NETWORK_ID,
   SolanaKeypairWalletProvider,
   walletActionProvider,
 } from "@coinbase/agentkit";
+=======
+import { AgentKit, SOLANA_NETWORK_ID, SolanaKeypairWalletProvider, splActionProvider, walletActionProvider } from "@coinbase/agentkit";
+>>>>>>> 3651d4a (fixes, refinements, feedback)
 import { getLangChainTools } from "@coinbase/agentkit-langchain";
 import { HumanMessage } from "@langchain/core/messages";
 import { MemorySaver } from "@langchain/langgraph";
@@ -89,7 +93,7 @@ async function initializeAgent() {
     const agentkit = await AgentKit.from({
       walletProvider,
       actionProviders: [
-        // TODO: Add Solana tooling
+        splActionProvider(),
         walletActionProvider(),
       ],
     });
