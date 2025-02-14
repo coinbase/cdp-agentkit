@@ -72,9 +72,8 @@ async function initializeAgent() {
       appSecret: process.env.PRIVY_APP_SECRET as string,
       networkId: process.env.NETWORK_ID || "base-sepolia",
       walletId: process.env.PRIVY_WALLET_ID as string,
-      ...(process.env.PRIVY_WALLET_AUTHORIZATION_PRIVATE_KEY && {
-        authorizationKey: process.env.PRIVY_WALLET_AUTHORIZATION_PRIVATE_KEY,
-      }),
+      authorizationPrivateKey: process.env.PRIVY_WALLET_AUTHORIZATION_PRIVATE_KEY,
+      authorizationKeyId: process.env.PRIVY_WALLET_AUTHORIZATION_KEY_ID,
     };
 
     const walletProvider = await PrivyWalletProvider.configureWithWallet(config);
