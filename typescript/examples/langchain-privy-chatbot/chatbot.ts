@@ -45,9 +45,9 @@ function validateEnvironment(): void {
     process.exit(1);
   }
 
-  // Warn about optional NETWORK_ID
-  if (!process.env.NETWORK_ID) {
-    console.warn("Warning: NETWORK_ID not set, defaulting to base-sepolia testnet");
+  // Warn about optional CHAIN_ID
+  if (!process.env.CHAIN_ID) {
+    console.warn("Warning: CHAIN_ID not set, defaulting to base-sepolia testnet");
   }
 }
 
@@ -70,11 +70,19 @@ async function initializeAgent() {
     const config = {
       appId: process.env.PRIVY_APP_ID as string,
       appSecret: process.env.PRIVY_APP_SECRET as string,
-      networkId: process.env.NETWORK_ID || "base-sepolia",
+      chainId: process.env.CHAIN_ID || "84532",
       walletId: process.env.PRIVY_WALLET_ID as string,
       authorizationPrivateKey: process.env.PRIVY_WALLET_AUTHORIZATION_PRIVATE_KEY,
       authorizationKeyId: process.env.PRIVY_WALLET_AUTHORIZATION_KEY_ID,
     };
+
+    // Try to load saved wallet data
+    if (fs.existsSync(WALLET_DATA_FILE)) {
+      const savedWallet = JSON.parse(fs.readFileSync(WALLET_DATA_FILE, "utf8"));
+      config.walletId = savedWallet.walletId;
+      config.authorizationPrivateKey = savedWallet.authorizationPrivateKey;
+      config.chainId = savedWallet.chainId;
+    }
 
     const walletProvider = await PrivyWalletProvider.configureWithWallet(config);
 

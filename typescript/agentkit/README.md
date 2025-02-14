@@ -555,7 +555,7 @@ import { PrivyWalletProvider } from "@coinbase/agentkit";
 const config = {
     appId: "PRIVY_APP_ID",
     appSecret: "PRIVY_APP_SECRET",
-    networkId: "base-sepolia",
+    chainId: "84532", // base-sepolia
     walletId: "PRIVY_WALLET_ID", // optional, otherwise a new wallet will be created
     authorizationPrivateKey: PRIVY_WALLET_AUTHORIZATION_PRIVATE_KEY, // optional, required if your account is using authorization keys
     authorizationKeyId: PRIVY_WALLET_AUTHORIZATION_KEY_ID, // optional, only required to create a new wallet if walletId is not provided
@@ -566,9 +566,11 @@ const walletProvider = await PrivyWalletProvider.configureWithWallet(config);
 
 #### Authorization Keys
 
-Privy offers the option to use authorization keys to secure your server wallets. When using authorization keys, you must provide the `authorizationPrivateKey` and `authorizationKeyId` parameters to the `configureWithWallet` method.
+Privy offers the option to use authorization keys to secure your server wallets.
 
 You can manage authorization keys from your [Privy dashboard](https://dashboard.privy.io/account) or programmatically [using the API](https://docs.privy.io/guide/server-wallets/authorization/signatures).
+
+When using authorization keys, you must provide the `authorizationPrivateKey` and `authorizationKeyId` parameters to the `configureWithWallet` method.
 
 #### Exporting Privy Wallet information
 
@@ -581,7 +583,7 @@ const walletData = await walletProvider.exportWallet();
 {
     walletId: string;
     authorizationKey: string | undefined;
-    networkId: string;
+    chainId: string | undefined;
 }
 ```
 

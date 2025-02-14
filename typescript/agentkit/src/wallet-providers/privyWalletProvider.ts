@@ -2,20 +2,7 @@ import { PrivyClient } from "@privy-io/server-auth";
 import { createViemAccount } from "@privy-io/server-auth/viem";
 import { ViemWalletProvider } from "./viemWalletProvider";
 import { createWalletClient, http, WalletClient } from "viem";
-
-import * as chains from "viem/chains";
-
-/**
- * Get a chain from the viem chains object
- *
- * @param id - The chain ID
- * @returns The chain
- */
-function getChain(id: number) {
-  const chainList = Object.values(chains);
-  return chainList.find(chain => chain.id === id);
-}
-
+import { getChain } from "../network/network";
 /**
  * Configuration options for the Privy wallet provider.
  *
@@ -28,13 +15,19 @@ interface PrivyWalletConfig {
   appSecret: string;
   /** The ID of the wallet to use, if not provided a new wallet will be created */
   walletId?: string;
-  /** Optional network ID to connect to */
-  chainId?: number;
+  /** Optional chain ID to connect to */
+  chainId?: string;
   /** Optional authorization key for the wallet API */
   authorizationPrivateKey?: string;
   /** Optional authorization key ID for creating new wallets */
   authorizationKeyId?: string;
 }
+
+type PrivyWalletExport = {
+  walletId: string;
+  authorizationPrivateKey: string | undefined;
+  chainId: string | undefined;
+};
 
 /**
  * A wallet provider that uses Privy's server wallet API.
@@ -72,7 +65,7 @@ export class PrivyWalletProvider extends ViemWalletProvider {
    *   appId: "your-app-id",
    *   appSecret: "your-app-secret",
    *   walletId: "wallet-id",
-   *   networkId: 84532
+   *   chainId: "84532"
    * });
    * ```
    */
@@ -119,14 +112,11 @@ export class PrivyWalletProvider extends ViemWalletProvider {
       privy,
     });
 
-    const network = {
-      protocolFamily: "evm" as const,
-      chainId: config.chainId || 84532,
-    };
+    const chainId = config.chainId || "84532";
 
-    const chain = getChain(network.chainId);
+    const chain = getChain(chainId);
     if (!chain) {
-      throw new Error(`Chain with ID ${network.chainId} not found`);
+      throw new Error(`Chain with ID ${chainId} not found`);
     }
 
     const walletClient = createWalletClient({
@@ -151,15 +141,11 @@ export class PrivyWalletProvider extends ViemWalletProvider {
    *
    * @returns The wallet data
    */
-  exportWallet(): {
-    walletId: string;
-    authorizationPrivateKey: string | undefined;
-    networkId?: string;
-  } {
+  exportWallet(): PrivyWalletExport {
     return {
       walletId: this.#walletId,
       authorizationPrivateKey: this.#authorizationPrivateKey,
-      networkId: this.getNetwork().networkId,
+      chainId: this.getNetwork().chainId,
     };
   }
 }
