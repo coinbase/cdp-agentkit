@@ -1,4 +1,9 @@
-import { AgentKit, SOLANA_NETWORK_ID, SolanaKeypairWalletProvider, walletActionProvider } from "@coinbase/agentkit";
+import {
+  AgentKit,
+  SOLANA_NETWORK_ID,
+  SolanaKeypairWalletProvider,
+  walletActionProvider,
+} from "@coinbase/agentkit";
 import { getLangChainTools } from "@coinbase/agentkit-langchain";
 import { HumanMessage } from "@langchain/core/messages";
 import { MemorySaver } from "@langchain/langgraph";
@@ -37,10 +42,12 @@ function validateEnvironment(): void {
     process.exit(1);
   }
 
-    // Warn about optional SOLANA_RPC_URL & NETWORK_ID
-    if (!process.env.SOLANA_RPC_URL && !process.env.NETWORK_ID) {
-      console.warn("Warning: SOLANA_RPC_URL and NETWORK_ID both are unset, defaulting to solana-devnet");
-    }
+  // Warn about optional SOLANA_RPC_URL & NETWORK_ID
+  if (!process.env.SOLANA_RPC_URL && !process.env.NETWORK_ID) {
+    console.warn(
+      "Warning: SOLANA_RPC_URL and NETWORK_ID both are unset, defaulting to solana-devnet",
+    );
+  }
 }
 
 // Add this right after imports and before any other code
@@ -68,14 +75,13 @@ async function initializeAgent() {
       console.log(`Store the private key in your .env for future reuse: ${solanaPrivateKey}`);
     }
 
-
     // Configure Solana Keypair Wallet Provider
     const rpcUrl = process.env.SOLANA_RPC_URL;
     let walletProvider: SolanaKeypairWalletProvider;
     if (rpcUrl) {
-      walletProvider = await SolanaKeypairWalletProvider.fromRpcUrl(rpcUrl, solanaPrivateKey)
+      walletProvider = await SolanaKeypairWalletProvider.fromRpcUrl(rpcUrl, solanaPrivateKey);
     } else {
-      const network = (process.env.NETWORK_ID ?? 'solana-devnet') as SOLANA_NETWORK_ID;
+      const network = (process.env.NETWORK_ID ?? "solana-devnet") as SOLANA_NETWORK_ID;
       walletProvider = await SolanaKeypairWalletProvider.fromNetwork(network, solanaPrivateKey);
     }
 
