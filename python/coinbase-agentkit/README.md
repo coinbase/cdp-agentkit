@@ -306,6 +306,7 @@ wallet_provider = CdpWalletProvider(CdpWalletProviderConfig(
 Example usage with a private key:
 
 ```python
+import os
 from eth_account import Account
 
 from coinbase_agentkit import (
@@ -340,6 +341,7 @@ agent_kit = AgentKit(AgentKitConfig(
 The `EthAccountWalletProvider` also exposes parameters for effecting the gas calculations.
 
 ```python
+import os
 from eth_account import Account
 
 from coinbase_agentkit import (
