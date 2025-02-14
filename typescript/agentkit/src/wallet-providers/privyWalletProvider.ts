@@ -72,7 +72,7 @@ export class PrivyWalletProvider extends ViemWalletProvider {
    *   appId: "your-app-id",
    *   appSecret: "your-app-secret",
    *   walletId: "wallet-id",
-   *   networkId: "base-sepolia"
+   *   networkId: 84532
    * });
    * ```
    */

@@ -41,6 +41,8 @@ npm install
   - PRIVY_WALLET_AUTHORIZATION_PRIVATE_KEY=[optional, only if you are using authorization keys for your server wallets]
   - PRIVY_WALLET_AUTHORIZATION_KEY_ID=[optional, only if walletId is not provided in order to create a new wallet, this can be found in your Privy Dashboard]
 
+You can manage authorization keys from your [Privy dashboard](https://dashboard.privy.io/account) or programmatically [using the API](https://docs.privy.io/guide/server-wallets/authorization/signatures).
+
 ```bash
 npm start
 ```
