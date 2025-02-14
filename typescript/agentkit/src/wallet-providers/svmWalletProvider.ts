@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { WalletProvider } from "./walletProvider";
-import { VersionedTransaction } from "@solana/web3.js";
+import {
+  RpcResponseAndContext,
+  SignatureStatus,
+  SignatureStatusConfig,
+  VersionedTransaction,
+} from "@solana/web3.js";
 
 /**
  * SvmWalletProvider is the abstract base class for all Solana wallet providers (non browsers).
@@ -21,15 +26,26 @@ export abstract class SvmWalletProvider extends WalletProvider {
    * Send a transaction.
    *
    * @param transaction - The transaction to send.
-   * @returns The transaction hash.
+   * @returns The transaction signature.
    */
   abstract sendTransaction(transaction: VersionedTransaction): Promise<string>;
 
   /**
-   * Wait for a transaction receipt.
+   * Sign and send a transaction.
    *
-   * @param txHash - The transaction hash.
-   * @returns The transaction receipt.
+   * @param transaction - The transaction to sign and send.
+   * @returns The transaction signature.
    */
-  abstract waitForTransactionReceipt(txHash: string): Promise<any>;
+  abstract signAndSendTransaction(transaction: VersionedTransaction): Promise<string>;
+
+  /**
+   * Get the status of a transaction.
+   *
+   * @param signature - The transaction signature.
+   * @returns The transaction status.
+   */
+  abstract getSignatureStatus(
+    signature: string,
+    options?: SignatureStatusConfig,
+  ): Promise<RpcResponseAndContext<SignatureStatus | null>>;
 }

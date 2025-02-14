@@ -10,6 +10,9 @@ import {
   MessageV0,
   ComputeBudgetProgram,
   clusterApiUrl,
+  RpcResponseAndContext,
+  SignatureStatus,
+  SignatureStatusConfig,
 } from "@solana/web3.js";
 import bs58 from "bs58";
 import {
@@ -184,21 +187,35 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
    * Send a transaction
    *
    * @param transaction - The transaction to send
-   * @returns The transaction hash
+   * @returns The transaction signature
    */
-  sendTransaction(transaction: VersionedTransaction): Promise<string> {
+  async sendTransaction(transaction: VersionedTransaction): Promise<string> {
     return this.#connection.sendTransaction(transaction);
   }
 
   /**
-   * Wait for a transaction receipt
+   * Sign and send a transaction
    *
-   * @param txHash - The transaction hash
-   * @returns The transaction receipt
+   * @param transaction - The transaction to sign and send
+   * @returns The transaction signature
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  waitForTransactionReceipt(txHash: string): Promise<any> {
-    return this.#connection.confirmTransaction(txHash);
+  async signAndSendTransaction(transaction: VersionedTransaction): Promise<string> {
+    const signedTransaction = await this.signTransaction(transaction);
+    return this.sendTransaction(signedTransaction);
+  }
+
+  /**
+   * Get the status of a transaction
+   *
+   * @param signature - The transaction signature
+   * @param options - The options for the transaction status
+   * @returns The transaction status
+   */
+  async getSignatureStatus(
+    signature: string,
+    options?: SignatureStatusConfig,
+  ): Promise<RpcResponseAndContext<SignatureStatus | null>> {
+    return this.#connection.getSignatureStatus(signature, options);
   }
 
   /**
