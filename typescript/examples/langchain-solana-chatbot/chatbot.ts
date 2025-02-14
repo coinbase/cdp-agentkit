@@ -1,4 +1,4 @@
-import { AgentKit, SolanaKeypairWalletProvider, walletActionProvider } from "@coinbase/agentkit";
+import { AgentKit, SOLANA_NETWORK_ID, SolanaKeypairWalletProvider, walletActionProvider } from "@coinbase/agentkit";
 import { getLangChainTools } from "@coinbase/agentkit-langchain";
 import { HumanMessage } from "@langchain/core/messages";
 import { MemorySaver } from "@langchain/langgraph";
@@ -56,7 +56,7 @@ async function initializeAgent() {
     });
 
     // Configure Solana Keypair Wallet Provider
-    const rpcUrl = process.env.SOLANA_RPC_URL!;
+    const network = process.env.SOLANA_NETWORK! as SOLANA_NETWORK_ID;
     let solanaPrivateKey = process.env.SOLANA_PRIVATE_KEY as string;
 
     if (!solanaPrivateKey) {
@@ -67,7 +67,7 @@ async function initializeAgent() {
       console.log(`Store the private key in your .env for future reuse: ${solanaPrivateKey}`);
     }
 
-    const walletProvider = await SolanaKeypairWalletProvider.fromRpcUrl(rpcUrl, solanaPrivateKey);
+    const walletProvider = await SolanaKeypairWalletProvider.fromNetwork(network, solanaPrivateKey);
 
     // Initialize AgentKit
     const agentkit = await AgentKit.from({
@@ -91,9 +91,9 @@ async function initializeAgent() {
       tools,
       checkpointSaver: memory,
       messageModifier: `
-        You are a helpful agent that can interact onchain using the Coinbase Developer Platform AgentKit. You are 
+        You are a helpful agent that can interact onchain on Solana using the Coinbase Developer Platform AgentKit. You are 
         empowered to interact onchain using your tools. If you ever need funds, you can request them from the 
-        faucet if you are on network ID 'base-sepolia'. If not, you can provide your wallet details and request 
+        faucet if you are on network ID 'solana-devnet'. If not, you can provide your wallet details and request 
         funds from the user. Before executing your first action, get the wallet details to see what network 
         you're on. If there is a 5XX (internal) HTTP error code, ask the user to try again later. If someone 
         asks you to do something you can't do with your currently available tools, you must say so, and 
