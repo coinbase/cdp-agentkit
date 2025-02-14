@@ -114,8 +114,7 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
         throw new Error(`${networkId} is not a valid SVM networkId`);
     }
     const rpcUrl = this.urlForCluster(genesisHash);
-    const connection = new Connection(rpcUrl);
-    return await this.fromConnection(connection, keypair);
+    return await this.fromRpcUrl(rpcUrl, keypair);
   }
 
   /**
