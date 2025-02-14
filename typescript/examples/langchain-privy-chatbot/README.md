@@ -2,7 +2,7 @@
 
 This example demonstrates an agent setup as a self-aware terminal style chatbot with a [Privy server wallet](https://docs.privy.io/guide/server-wallets/).
 
-Privy wallets are embedded wallets - learn more at https://docs.privy.io/guide/server-wallets/. The Agentkit integration assumes you have a Privy server wallet ID which you want to use for your agent - creation and management of Privy wallets can be done via the Privy dashboard or API.
+Privy's server wallets enable you to securely provision and manage cross-chain wallets via a flexible API - learn more at https://docs.privy.io/guide/server-wallets/. The Agentkit integration assumes you have a Privy server wallet ID which you want to use for your agent - creation and management of Privy wallets can be done via the Privy dashboard or API.
 
 ## Ask the chatbot to engage in the Web3 ecosystem!
 
@@ -38,7 +38,8 @@ npm install
   - PRIVY_APP_ID=
   - PRIVY_APP_SECRET=
   - PRIVY_WALLET_ID=[optional, otherwise a new wallet will be created]
-  - PRIVY_WALLET_AUTHORIZATION_KEY=[optional, only if you are using authorization keys for your server wallets]
+  - PRIVY_WALLET_AUTHORIZATION_PRIVATE_KEY=[optional, only if you are using authorization keys for your server wallets]
+  - PRIVY_WALLET_AUTHORIZATION_KEY_ID=[optional, only if walletId is not provided in order to create a new wallet, this can be found in your Privy Dashboard]
 
 ```bash
 npm start

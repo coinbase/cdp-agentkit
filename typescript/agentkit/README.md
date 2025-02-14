@@ -557,9 +557,8 @@ const config = {
     appSecret: "PRIVY_APP_SECRET",
     networkId: "base-sepolia",
     walletId: "PRIVY_WALLET_ID", // optional, otherwise a new wallet will be created
-    ...(PRIVY_WALLET_AUTHORIZATION_KEY && {
-        authorizationKey: PRIVY_WALLET_AUTHORIZATION_KEY, // optional, if using authorization keys
-    }),
+    authorizationPrivateKey: PRIVY_WALLET_AUTHORIZATION_PRIVATE_KEY, // optional, if using authorization keys for existing wallets, or creating new wallets
+    authorizationKeyId: PRIVY_WALLET_AUTHORIZATION_KEY_ID, // optional, only required if walletId is not provided
 };
 
 const walletProvider = await PrivyWalletProvider.configureWithWallet(config);
