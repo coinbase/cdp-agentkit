@@ -15,9 +15,13 @@ import bs58 from "bs58";
 import {
   SOLANA_CLUSTER,
   SOLANA_DEVNET_GENESIS_BLOCK_HASH,
+  SOLANA_DEVNET_NETWORK_ID,
   SOLANA_MAINNET_GENESIS_BLOCK_HASH,
+  SOLANA_MAINNET_NETWORK_ID,
+  SOLANA_NETWORK_ID,
   SOLANA_NETWORKS,
   SOLANA_TESTNET_GENESIS_BLOCK_HASH,
+  SOLANA_TESTNET_NETWORK_ID,
 } from "../network/svm";
 
 /**
@@ -82,6 +86,36 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
     } else {
       throw new Error(`Unknown cluster: ${cluster}`);
     }
+  }
+
+  /**
+   * Create a new SolanaKeypairWalletProvider from an SVM networkId and a keypair
+   *
+   * @param networkId - The SVM networkId
+   * @param keypair - Either a Uint8Array or a base58 encoded string representing a 32-byte secret key
+   * @returns The new SolanaKeypairWalletProvider
+   */
+  static async fromNetwork<T extends SolanaKeypairWalletProvider>(
+    networkId: SOLANA_NETWORK_ID,
+    keypair: Uint8Array | string,
+  ): Promise<T> {
+    let genesisHash: SOLANA_CLUSTER;
+    switch(networkId) {
+      case SOLANA_MAINNET_NETWORK_ID:
+        genesisHash = SOLANA_MAINNET_GENESIS_BLOCK_HASH;
+        break;
+      case SOLANA_DEVNET_NETWORK_ID:
+        genesisHash = SOLANA_DEVNET_GENESIS_BLOCK_HASH;
+        break;
+      case SOLANA_TESTNET_NETWORK_ID:
+        genesisHash = SOLANA_TESTNET_GENESIS_BLOCK_HASH;
+        break;
+      default:
+        throw new Error(`${networkId} is not a valid SVM networkId`);
+    }
+    const rpcUrl = this.urlForCluster(genesisHash);
+    const connection = new Connection(rpcUrl);
+    return await this.fromConnection(connection, keypair);
   }
 
   /**
