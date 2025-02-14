@@ -358,7 +358,7 @@ account = Account.from_key(private_key)
 wallet_provider = EthAccountWalletProvider(
     config=EthAccountWalletProviderConfig(
         account=account,
-        chain_id=84532,
+        chain_id="84532",
         gas={
             "gas_limit_multiplier": 2,
             "fee_per_gas_multiplier": 2
