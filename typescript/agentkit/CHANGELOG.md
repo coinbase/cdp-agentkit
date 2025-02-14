@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+-- Added `fromNetwork` to `solanaKeypairWalletProvider`
+
 ### Added
 
 - Added `svmWalletProvider` abstract class for interacting with Solana.
