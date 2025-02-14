@@ -77,6 +77,7 @@ async function initializeAgent() {
     const agentkit = await AgentKit.from({
       walletProvider,
       actionProviders: [
+        // TODO: Add Solana tooling
       ],
     });
 
