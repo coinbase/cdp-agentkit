@@ -27,6 +27,9 @@ AgentKit is a framework for easily enabling AI agents to take actions onchain. I
     - [Configuring gas parameters](#configuring-cdpwalletprovider-gas-parameters)
   - [ViemWalletProvider](#viemwalletprovider)
     - [Configuring gas parameters](#configuring-viemwalletprovider-gas-parameters)
+  - [PrivyWalletProvider](#privywalletprovider)
+    - [Authorization Keys](#authorization-keys)
+    - [Exporting Privy Wallet information](#exporting-privy-wallet-information)
 - [Contributing](#contributing)
 
 ## Getting Started
