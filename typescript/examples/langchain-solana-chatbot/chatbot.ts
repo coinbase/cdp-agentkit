@@ -101,7 +101,6 @@ async function initializeAgent() {
     const agentConfig = { configurable: { thread_id: "Solana AgentKit Chatbot Example!" } };
 
     // Create React Agent using the LLM and Solana AgentKit tools
-    // TODO: Update prompt for Solana use case
     const agent = createReactAgent({
       llm,
       tools,
