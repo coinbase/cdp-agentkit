@@ -100,7 +100,7 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
     keypair: Uint8Array | string,
   ): Promise<T> {
     let genesisHash: SOLANA_CLUSTER;
-    switch(networkId) {
+    switch (networkId) {
       case SOLANA_MAINNET_NETWORK_ID:
         genesisHash = SOLANA_MAINNET_GENESIS_BLOCK_HASH;
         break;
