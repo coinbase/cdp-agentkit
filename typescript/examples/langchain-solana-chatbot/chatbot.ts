@@ -21,7 +21,7 @@ function validateEnvironment(): void {
   const missingVars: string[] = [];
 
   // Check required variables
-  const requiredVars = ["OPENAI_API_KEY", "SOLANA_RPC_URL"];
+  const requiredVars = ["OPENAI_API_KEY"];
   requiredVars.forEach(varName => {
     if (!process.env[varName]) {
       missingVars.push(varName);
@@ -37,7 +37,10 @@ function validateEnvironment(): void {
     process.exit(1);
   }
 
-  // TODO: Removed NETWORK_ID checks as SolanaKeypairWalletProvider takes raw RPC url rather than a network_id
+    // Warn about optional NETWORK_ID
+    if (!process.env.NETWORK_ID) {
+      console.warn("Warning: NETWORK_ID not set, defaulting to solana-devnet");
+    }
 }
 
 // Add this right after imports and before any other code
@@ -56,7 +59,7 @@ async function initializeAgent() {
     });
 
     // Configure Solana Keypair Wallet Provider
-    const network = process.env.SOLANA_NETWORK! as SOLANA_NETWORK_ID;
+    const network = (process.env.NETWORK_ID ?? 'solana-devnet') as SOLANA_NETWORK_ID;
     let solanaPrivateKey = process.env.SOLANA_PRIVATE_KEY as string;
 
     if (!solanaPrivateKey) {
