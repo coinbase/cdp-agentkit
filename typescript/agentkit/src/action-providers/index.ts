@@ -3,6 +3,7 @@ export * from "./actionProvider";
 
 export * from "./pyth";
 export * from "./cdp";
+export * from "./compound";
 export * from "./weth";
 export * from "./erc20";
 export * from "./erc721";
