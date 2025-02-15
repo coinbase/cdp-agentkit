@@ -17,7 +17,7 @@ AgentKit is a framework for easily enabling AI agents to take actions onchain. I
   - [Adding Actions to your Action Provider](#adding-actions-to-your-action-provider)
   - [Adding Actions to your Action Provider that use a Wallet Provider](#adding-actions-to-your-action-provider-that-use-a-wallet-provider)
   - [Adding an Action Provider to your AgentKit instance](#adding-an-action-provider-to-your-agentkit-instance)
-- [Wallet Providers](#wallet-providers)
+- [EVM Wallet Providers](#evm-wallet-providers)
   - [CdpWalletProvider](#cdpwalletprovider)
     - [Network Configuration](#network-configuration)
     - [Configuring from an existing CDP API Wallet](#configuring-from-an-existing-cdp-api-wallet)
@@ -30,6 +30,7 @@ AgentKit is a framework for easily enabling AI agents to take actions onchain. I
   - [PrivyWalletProvider](#privywalletprovider)
     - [Authorization Keys](#authorization-keys)
     - [Exporting Privy Wallet information](#exporting-privy-wallet-information)
+- [SVM Wallet Providers](#evm-wallet-providers)
   - [SolanaKeypairWalletProvider](#solanakeypairwalletprovider)
     - [Network Configuration](#solana-network-configuration)
     - [RPC URL Configuration](#rpc-url-configuration)
@@ -397,7 +398,7 @@ const agentKit = new AgentKit({
 });
 ```
 
-## Wallet Providers
+## EVM Wallet Providers
 
 Wallet providers give an agent access to a wallet. AgentKit currently supports the following wallet providers:
 
@@ -593,6 +594,7 @@ const walletData = await walletProvider.exportWallet();
 }
 ```
 
+## SVM Wallet Providers
 
 SVM:
 - [SolanaKeypairWalletProvider](./src/wallet-providers//solanaKeypairWalletProvider.ts)
