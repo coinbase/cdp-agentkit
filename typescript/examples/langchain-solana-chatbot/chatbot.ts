@@ -4,6 +4,8 @@ import {
   SolanaKeypairWalletProvider,
   splActionProvider,
   walletActionProvider,
+  PrivySolanaWalletProvider,
+  SvmWalletProvider,
 } from "@coinbase/agentkit";
 import { getLangChainTools } from "@coinbase/agentkit-langchain";
 import { HumanMessage } from "@langchain/core/messages";
@@ -66,24 +68,46 @@ async function initializeAgent() {
       model: "gpt-4o-mini",
     });
 
-    // Configure Solana Keypair Wallet Provider
-    let solanaPrivateKey = process.env.SOLANA_PRIVATE_KEY as string;
-    if (!solanaPrivateKey) {
-      console.log(`No Solana account detected. Generating a wallet...`);
-      const keypair = Keypair.generate();
-      solanaPrivateKey = bs58.encode(keypair.secretKey);
-      console.log(`Created Solana wallet: ${keypair.publicKey.toBase58()}`);
-      console.log(`Store the private key in your .env for future reuse: ${solanaPrivateKey}`);
-    }
+    const appId = process.env.PRIVY_APP_ID as string;
+    const appSecret = process.env.PRIVY_APP_SECRET as string;
 
-    // Configure Solana Keypair Wallet Provider
     const rpcUrl = process.env.SOLANA_RPC_URL;
-    let walletProvider: SolanaKeypairWalletProvider;
-    if (rpcUrl) {
-      walletProvider = await SolanaKeypairWalletProvider.fromRpcUrl(rpcUrl, solanaPrivateKey);
+
+    let walletProvider: SvmWalletProvider;
+
+    if (appId && appSecret) {
+      const config = {
+        appId,
+        appSecret,
+        walletId: process.env.PRIVY_WALLET_ID as string,
+        authorizationPrivateKey: process.env.PRIVY_WALLET_AUTHORIZATION_PRIVATE_KEY,
+        authorizationKeyId: process.env.PRIVY_WALLET_AUTHORIZATION_KEY_ID,
+      };
+
+      if (rpcUrl) {
+        walletProvider = await PrivySolanaWalletProvider.fromRpcUrl(rpcUrl, config);
+      } else {
+        const network = (process.env.NETWORK_ID ?? "solana-devnet") as SOLANA_NETWORK_ID;
+        walletProvider = await PrivySolanaWalletProvider.fromNetwork(network, config);
+      }
     } else {
-      const network = (process.env.NETWORK_ID ?? "solana-devnet") as SOLANA_NETWORK_ID;
-      walletProvider = await SolanaKeypairWalletProvider.fromNetwork(network, solanaPrivateKey);
+      // Configure Solana Keypair Wallet Provider
+      let solanaPrivateKey = process.env.SOLANA_PRIVATE_KEY as string;
+      if (!solanaPrivateKey) {
+        console.log(`No Solana account detected. Generating a wallet...`);
+        const keypair = Keypair.generate();
+        solanaPrivateKey = bs58.encode(keypair.secretKey);
+        console.log(`Created Solana wallet: ${keypair.publicKey.toBase58()}`);
+        console.log(`Store the private key in your .env for future reuse: ${solanaPrivateKey}`);
+      }
+
+      // Configure Solana Keypair Wallet Provider
+      if (rpcUrl) {
+        walletProvider = await SolanaKeypairWalletProvider.fromRpcUrl(rpcUrl, solanaPrivateKey);
+      } else {
+        const network = (process.env.NETWORK_ID ?? "solana-devnet") as SOLANA_NETWORK_ID;
+        walletProvider = await SolanaKeypairWalletProvider.fromNetwork(network, solanaPrivateKey);
+      }
     }
 
     // Initialize AgentKit

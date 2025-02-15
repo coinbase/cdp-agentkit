@@ -1,26 +1,12 @@
-import { PrivyClient } from "@privy-io/server-auth";
 import { createViemAccount } from "@privy-io/server-auth/viem";
 import { ViemWalletProvider } from "./viemWalletProvider";
-import { createWalletClient, http, WalletClient } from "viem";
+import { createWalletClient, Hex, http, WalletClient } from "viem";
 import { getChain } from "../network/network";
-/**
- * Configuration options for the Privy wallet provider.
- *
- * @interface
- */
-interface PrivyWalletConfig {
-  /** The Privy application ID */
-  appId: string;
-  /** The Privy application secret */
-  appSecret: string;
-  /** The ID of the wallet to use, if not provided a new wallet will be created */
-  walletId?: string;
+import { createPrivyWallet, PrivyWalletConfig as PrivyWalletConfigBase } from "./privyShared";
+
+interface PrivyWalletConfig extends PrivyWalletConfigBase {
   /** Optional chain ID to connect to */
   chainId?: string;
-  /** Optional authorization key for the wallet API */
-  authorizationPrivateKey?: string;
-  /** Optional authorization key ID for creating new wallets */
-  authorizationKeyId?: string;
 }
 
 type PrivyWalletExport = {
@@ -69,64 +55,17 @@ export class PrivyWalletProvider extends ViemWalletProvider {
    * });
    * ```
    */
-  public static async configureWithWallet(config: PrivyWalletConfig): Promise<PrivyWalletProvider> {
-    const privy = new PrivyClient(config.appId, config.appSecret, {
-      walletApi: config.authorizationPrivateKey
-        ? {
-            authorizationPrivateKey: config.authorizationPrivateKey,
-          }
-        : undefined,
+  public static async configureWithWallet(
+    config: Omit<PrivyWalletConfig, "chainType">,
+  ): Promise<PrivyWalletProvider> {
+    const { wallet, privy } = await createPrivyWallet({
+      ...config,
+      chainType: "ethereum",
     });
 
-    let walletId: string;
-    let address: `0x${string}`;
-
-    if (!config.walletId) {
-      if (config.authorizationPrivateKey && !config.authorizationKeyId) {
-        throw new Error(
-          "authorizationKeyId is required when creating a new wallet with an authorization key, this can be found in your Privy Dashboard",
-        );
-      }
-
-      if (config.authorizationKeyId && !config.authorizationPrivateKey) {
-        throw new Error(
-          "authorizationPrivateKey is required when creating a new wallet with an authorizationKeyId. " +
-            "If you don't have it, you can create a new one in your Privy Dashboard, or delete the authorization key.",
-        );
-      }
-
-      try {
-        const wallet = await privy.walletApi.create({
-          chainType: "ethereum",
-          authorizationKeyIds: config.authorizationKeyId ? [config.authorizationKeyId] : undefined,
-        });
-        walletId = wallet.id;
-        address = wallet.address as `0x${string}`;
-      } catch (error) {
-        console.error(error);
-        if (
-          error instanceof Error &&
-          error.message.includes("Missing `privy-authorization-signature` header")
-        ) {
-          // Providing a more informative error message, see context: https://github.com/coinbase/agentkit/pull/242#discussion_r1956428617
-          throw new Error(
-            "Privy error: you have an authorization key on your account which can create and modify wallets, please delete this key or pass it to the PrivyWalletProvider to create a new wallet",
-          );
-        }
-        throw new Error("Failed to create wallet");
-      }
-    } else {
-      walletId = config.walletId;
-      const wallet = await privy.walletApi.getWallet({ id: walletId });
-      if (!wallet) {
-        throw new Error(`Wallet with ID ${walletId} not found`);
-      }
-      address = wallet.address as `0x${string}`;
-    }
-
     const account = await createViemAccount({
-      walletId,
-      address,
+      walletId: wallet.id,
+      address: wallet.address as Hex,
       privy,
     });
 
@@ -142,7 +81,11 @@ export class PrivyWalletProvider extends ViemWalletProvider {
       chain,
       transport: http(),
     });
-    return new PrivyWalletProvider(walletClient, { ...config, walletId });
+    return new PrivyWalletProvider(walletClient, {
+      ...config,
+      walletId: wallet.id,
+      chainType: "ethereum",
+    });
   }
 
   /**
