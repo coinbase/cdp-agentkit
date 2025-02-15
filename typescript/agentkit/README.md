@@ -30,7 +30,7 @@ AgentKit is a framework for easily enabling AI agents to take actions onchain. I
   - [PrivyWalletProvider](#privywalletprovider)
     - [Authorization Keys](#authorization-keys)
     - [Exporting Privy Wallet information](#exporting-privy-wallet-information)
-- [SVM Wallet Providers](#evm-wallet-providers)
+- [SVM Wallet Providers](#svm-wallet-providers)
   - [SolanaKeypairWalletProvider](#solanakeypairwalletprovider)
     - [Network Configuration](#solana-network-configuration)
     - [RPC URL Configuration](#rpc-url-configuration)
@@ -403,9 +403,9 @@ const agentKit = new AgentKit({
 Wallet providers give an agent access to a wallet. AgentKit currently supports the following wallet providers:
 
 EVM:
-- [CdpWalletProvider](./src/wallet-providers/cdpWalletProvider.ts)
-- [ViemWalletProvider](./src/wallet-providers/viemWalletProvider.ts)
-- [PrivyWalletProvider](./src/wallet-providers/privyWalletProvider.ts)
+- [CdpWalletProvider](https://github.com/coinbase/agentkit/blob/main/typescript/agentkit/src/wallet-providers/cdpWalletProvider.ts)
+- [ViemWalletProvider](https://github.com/coinbase/agentkit/blob/main/typescript/agentkit/src/wallet-providers/viemWalletProvider.ts)
+- [PrivyWalletProvider](https://github.com/coinbase/agentkit/blob/main/typescript/agentkit/src/wallet-providers/privyWalletProvider.ts)
 
 ### CdpWalletProvider
 
@@ -597,7 +597,7 @@ const walletData = await walletProvider.exportWallet();
 ## SVM Wallet Providers
 
 SVM:
-- [SolanaKeypairWalletProvider](./src/wallet-providers//solanaKeypairWalletProvider.ts)
+- [SolanaKeypairWalletProvider](https://github.com/coinbase/agentkit/blob/main/typescript/agentkit/src/wallet-providers/solanaKeypairWalletProvider.ts)
 
 ### SolanaKeypairWalletProvider
 
