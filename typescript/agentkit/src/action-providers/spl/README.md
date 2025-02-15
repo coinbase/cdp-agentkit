@@ -18,7 +18,7 @@ spl/
 - `transfer`: Transfer SPL tokens from the connected wallet to another address
   - Handles automatic creation of Associated Token Accounts (ATAs) for recipients
   - Validates token balances before transfer
-  - Returns transaction hash and confirmation
+  - Returns transaction signature
 
 ## Adding New Actions
 
