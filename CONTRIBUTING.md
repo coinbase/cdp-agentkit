@@ -21,6 +21,8 @@ agentkit/
 │   └── examples/
 │       ├── langchain-cdp-chatbot/
 │       ├── langchain-farcaster-chatbot/
+│       └── langchain-privy-chatbot/
+│       └── langchain-solana-chatbot/
 │       └── langchain-twitter-chatbot/
 ├── python/
 │   ├── coinbase-agentkit/
@@ -28,9 +30,6 @@ agentkit/
 │   │   └── langchain/
 │   └── examples/
 │       ├── langchain-cdp-chatbot/
-│       └── langchain-farcaster-chatbot/
-│       └── langchain-privy-chatbot/
-│       └── langchain-solana-chatbot/
 │       └── langchain-twitter-chatbot/
 ```
 
