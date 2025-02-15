@@ -607,6 +607,11 @@ The `SolanaKeypairWalletProvider` is a wallet provider that uses the API [Solana
 
 The `SolanaKeypairWalletProvider` can be configured to use a specific network by passing the `networkId` parameter to the `fromNetwork` method. The `networkId` is the ID of the Solana network you want to use. Valid values are `solana-mainnet`, `solana-devnet` and `solana-testnet`.
 
+The default RPC endpoints for each network are as follows:
+- `solana-mainnet`: `https://api.mainnet-beta.solana.com`
+- `solana-devnet`: `https://api.devnet.solana.com`
+- `solana-testnet`: `https://api.testnet.solana.com`
+
 ```typescript
 import { SOLANA_NETWORK_ID, SolanaKeypairWalletProvider } from "@coinbase/agentkit";
 
