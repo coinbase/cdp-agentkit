@@ -7,7 +7,7 @@ This directory contains the SPL action provider implementation, which provides a
 ```
 spl/
 ├── splActionProvider.ts    # Main provider with SPL token transfer functionality
-├── schemas.ts              # SPL token transfer schema
+├── schemas.ts              # SPL token action schemas
 ├── index.ts                # Main exports
 └── README.md
 ```
