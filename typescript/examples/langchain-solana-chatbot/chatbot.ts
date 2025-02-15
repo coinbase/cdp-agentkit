@@ -89,10 +89,7 @@ async function initializeAgent() {
     // Initialize AgentKit
     const agentkit = await AgentKit.from({
       walletProvider,
-      actionProviders: [
-        splActionProvider(),
-        walletActionProvider(),
-      ],
+      actionProviders: [splActionProvider(), walletActionProvider()],
     });
 
     const tools = await getLangChainTools(agentkit);

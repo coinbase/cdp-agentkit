@@ -7,12 +7,10 @@ import { Network } from "../../network";
 
 import { NativeTransferSchema, GetWalletDetailsSchema } from "./schemas";
 
-const PROTOCOL_FAMILY_TO_NATIVE_CURRENCY_SYMBOL: Record<string, string> = {
-  evm: "WEI",
-  svm: "LAMPORTS",
-};
-
-const PROTOCOL_FAMILY_TO_TERMINOLOGY: Record<string, { unit: string; displayUnit: string; type: string; verb: string }> = {
+const PROTOCOL_FAMILY_TO_TERMINOLOGY: Record<
+  string,
+  { unit: string; displayUnit: string; type: string; verb: string }
+> = {
   evm: { unit: "WEI", displayUnit: "ETH", type: "Transaction hash", verb: "transaction" },
   svm: { unit: "LAMPORTS", displayUnit: "SOL", type: "Signature", verb: "transfer" },
 };
@@ -57,7 +55,8 @@ export class WalletActionProvider extends ActionProvider {
       const network = walletProvider.getNetwork();
       const balance = await walletProvider.getBalance();
       const name = walletProvider.getName();
-      const terminology = PROTOCOL_FAMILY_TO_TERMINOLOGY[network.protocolFamily] || DEFAULT_TERMINOLOGY;
+      const terminology =
+        PROTOCOL_FAMILY_TO_TERMINOLOGY[network.protocolFamily] || DEFAULT_TERMINOLOGY;
 
       return [
         "Wallet Details:",

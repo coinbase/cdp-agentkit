@@ -245,7 +245,9 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
    * @param signature - The signature
    * @returns The confirmation response
    */
-  async waitForSignatureReceipt(signature: string): Promise<RpcResponseAndContext<SignatureResult>> {
+  async waitForSignatureReceipt(
+    signature: string,
+  ): Promise<RpcResponseAndContext<SignatureResult>> {
     const { blockhash, lastValidBlockHeight } = await this.#connection.getLatestBlockhash();
     return this.#connection.confirmTransaction({
       signature: signature,
