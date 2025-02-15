@@ -144,7 +144,6 @@ describe("SplActionProvider", () => {
       recipient: RECIPIENT_ADDRESS,
       mintAddress: MINT_ADDRESS,
       amount: 100,
-      createAtaIfMissing: true,
     };
 
     const mockTokenAccount = {
@@ -274,27 +273,6 @@ describe("SplActionProvider", () => {
       const { createAssociatedTokenAccountInstruction } = jest.requireMock("@solana/spl-token");
       expect(createAssociatedTokenAccountInstruction).toHaveBeenCalled();
       expect(result).toContain(`Successfully transferred ${transferArgs.amount} tokens`);
-    });
-
-    /**
-     * Test that error is thrown when ATA is missing and createAtaIfMissing is false
-     */
-    it("should throw error when ATA missing and createAtaIfMissing is false", async () => {
-      mockGetAccount
-        .mockResolvedValueOnce(mockTokenAccount)
-        .mockRejectedValueOnce(new Error("Account does not exist"));
-
-      const result = await actionProvider.transfer(mockWallet, {
-        ...transferArgs,
-        createAtaIfMissing: false,
-      });
-
-      expect(result).toBe(
-        `Error transferring SPL tokens: Error: Associated Token Account does not exist for recipient ${RECIPIENT_ADDRESS} and creation was not requested`,
-      );
-
-      const { createAssociatedTokenAccountInstruction } = jest.requireMock("@solana/spl-token");
-      expect(createAssociatedTokenAccountInstruction).not.toHaveBeenCalled();
     });
   });
 });

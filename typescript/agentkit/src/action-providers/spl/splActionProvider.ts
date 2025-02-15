@@ -78,11 +78,6 @@ export class SplActionProvider extends ActionProvider<SvmWalletProvider> {
       try {
         await getAccount(connection, destinationAta);
       } catch {
-        if (!args.createAtaIfMissing) {
-          throw new Error(
-            `Associated Token Account does not exist for recipient ${args.recipient} and creation was not requested`,
-          );
-        }
         instructions.push(
           createAssociatedTokenAccountInstruction(fromPubkey, destinationAta, toPubkey, mintPubkey),
         );
