@@ -2,10 +2,13 @@
 
 import { WalletProvider } from "./walletProvider";
 import {
+  Connection,
+  PublicKey,
   RpcResponseAndContext,
   SignatureStatus,
   SignatureStatusConfig,
   VersionedTransaction,
+  SignatureResult,
 } from "@solana/web3.js";
 
 /**
@@ -14,6 +17,20 @@ import {
  * @abstract
  */
 export abstract class SvmWalletProvider extends WalletProvider {
+  /**
+   * Get the connection instance.
+   *
+   * @returns The Solana connection instance.
+   */
+  abstract getConnection(): Connection;
+
+  /**
+   * Get the public key of the wallet.
+   *
+   * @returns The wallet's public key.
+   */
+  abstract getPublicKey(): PublicKey;
+
   /**
    * Sign a transaction.
    *
@@ -26,7 +43,7 @@ export abstract class SvmWalletProvider extends WalletProvider {
    * Send a transaction.
    *
    * @param transaction - The transaction to send.
-   * @returns The transaction signature.
+   * @returns The signature.
    */
   abstract sendTransaction(transaction: VersionedTransaction): Promise<string>;
 
@@ -34,18 +51,28 @@ export abstract class SvmWalletProvider extends WalletProvider {
    * Sign and send a transaction.
    *
    * @param transaction - The transaction to sign and send.
-   * @returns The transaction signature.
+   * @returns The signature.
    */
   abstract signAndSendTransaction(transaction: VersionedTransaction): Promise<string>;
 
   /**
    * Get the status of a transaction.
    *
-   * @param signature - The transaction signature.
-   * @returns The transaction status.
+   * @param signature - The signature.
+   * @returns The status.
    */
   abstract getSignatureStatus(
     signature: string,
     options?: SignatureStatusConfig,
   ): Promise<RpcResponseAndContext<SignatureStatus | null>>;
+
+  /**
+   * Wait for signature receipt.
+   *
+   * @param signature - The signature
+   * @returns The confirmation response
+   */
+  abstract waitForSignatureResult(
+    signature: string,
+  ): Promise<RpcResponseAndContext<SignatureResult>>;
 }

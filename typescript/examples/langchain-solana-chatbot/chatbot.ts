@@ -2,6 +2,7 @@ import {
   AgentKit,
   SOLANA_NETWORK_ID,
   SolanaKeypairWalletProvider,
+  splActionProvider,
   walletActionProvider,
 } from "@coinbase/agentkit";
 import { getLangChainTools } from "@coinbase/agentkit-langchain";
@@ -88,10 +89,7 @@ async function initializeAgent() {
     // Initialize AgentKit
     const agentkit = await AgentKit.from({
       walletProvider,
-      actionProviders: [
-        // TODO: Add Solana tooling
-        walletActionProvider(),
-      ],
+      actionProviders: [splActionProvider(), walletActionProvider()],
     });
 
     const tools = await getLangChainTools(agentkit);
