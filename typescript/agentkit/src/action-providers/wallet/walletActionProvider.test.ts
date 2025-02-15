@@ -37,7 +37,7 @@ describe("Wallet Action Provider", () => {
   });
 
   describe("getWalletDetails", () => {
-    it("should show ETH balance for EVM networks", async () => {
+    it("should show WEI balance for EVM networks", async () => {
       mockWallet.getNetwork.mockReturnValue(MOCK_EVM_NETWORK);
       mockWallet.getBalance.mockResolvedValue(MOCK_ETH_BALANCE);
 
@@ -57,7 +57,7 @@ describe("Wallet Action Provider", () => {
       expect(response).toBe(expectedResponse);
     });
 
-    it("should show SOL balance for Solana networks", async () => {
+    it("should show LAMPORTS balance for Solana networks", async () => {
       mockWallet.getNetwork.mockReturnValue(MOCK_SOLANA_NETWORK);
       mockWallet.getBalance.mockResolvedValue(MOCK_SOL_BALANCE);
 
@@ -155,7 +155,7 @@ describe("Wallet Action Provider", () => {
 
       expect(mockWallet.nativeTransfer).toHaveBeenCalledWith(MOCK_DESTINATION, MOCK_AMOUNT);
       expect(response).toBe(
-        `Transferred ${MOCK_AMOUNT} WEI to ${MOCK_DESTINATION}\nTransaction hash: ${MOCK_TRANSACTION_HASH}`,
+        `Transferred ${MOCK_AMOUNT} ETH to ${MOCK_DESTINATION}\nTransaction hash: ${MOCK_TRANSACTION_HASH}`,
       );
     });
 
@@ -171,7 +171,7 @@ describe("Wallet Action Provider", () => {
 
       expect(mockWallet.nativeTransfer).toHaveBeenCalledWith(MOCK_DESTINATION, MOCK_AMOUNT);
       expect(response).toBe(
-        `Transferred ${MOCK_AMOUNT} LAMPORTS to ${MOCK_DESTINATION}\nSignature: ${MOCK_SIGNATURE}`,
+        `Transferred ${MOCK_AMOUNT} SOL to ${MOCK_DESTINATION}\nSignature: ${MOCK_SIGNATURE}`,
       );
     });
 

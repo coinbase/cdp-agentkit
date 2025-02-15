@@ -12,12 +12,12 @@ const PROTOCOL_FAMILY_TO_NATIVE_CURRENCY_SYMBOL: Record<string, string> = {
   svm: "LAMPORTS",
 };
 
-const PROTOCOL_FAMILY_TO_TERMINOLOGY: Record<string, { unit: string; type: string; verb: string }> = {
-  evm: { unit: "WEI", type: "Transaction hash", verb: "transaction" },
-  svm: { unit: "LAMPORTS", type: "Signature", verb: "transfer" },
+const PROTOCOL_FAMILY_TO_TERMINOLOGY: Record<string, { unit: string; displayUnit: string; type: string; verb: string }> = {
+  evm: { unit: "WEI", displayUnit: "ETH", type: "Transaction hash", verb: "transaction" },
+  svm: { unit: "LAMPORTS", displayUnit: "SOL", type: "Signature", verb: "transfer" },
 };
 
-const DEFAULT_TERMINOLOGY = { unit: "", type: "Hash", verb: "transfer" };
+const DEFAULT_TERMINOLOGY = { unit: "", displayUnit: "", type: "Hash", verb: "transfer" };
 
 /**
  * WalletActionProvider provides actions for getting basic wallet information.
@@ -57,7 +57,7 @@ export class WalletActionProvider extends ActionProvider {
       const network = walletProvider.getNetwork();
       const balance = await walletProvider.getBalance();
       const name = walletProvider.getName();
-      const symbol = PROTOCOL_FAMILY_TO_NATIVE_CURRENCY_SYMBOL[network.protocolFamily] || "";
+      const terminology = PROTOCOL_FAMILY_TO_TERMINOLOGY[network.protocolFamily] || DEFAULT_TERMINOLOGY;
 
       return [
         "Wallet Details:",
@@ -67,7 +67,7 @@ export class WalletActionProvider extends ActionProvider {
         `  * Protocol Family: ${network.protocolFamily}`,
         `  * Network ID: ${network.networkId || "N/A"}`,
         `  * Chain ID: ${network.chainId || "N/A"}`,
-        `- Native Balance: ${balance.toString()} ${symbol}`,
+        `- Native Balance: ${balance.toString()} ${terminology.unit}`,
       ].join("\n");
     } catch (error) {
       return `Error getting wallet details: ${error}`;
@@ -110,7 +110,7 @@ Important notes:
 
       const result = await walletProvider.nativeTransfer(args.to, args.value);
       return [
-        `Transferred ${args.value} ${terminology.unit} to ${args.to}`,
+        `Transferred ${args.value} ${terminology.displayUnit} to ${args.to}`,
         `${terminology.type}: ${result}`,
       ].join("\n");
     } catch (error) {

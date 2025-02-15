@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
   "name": "@coinbase/solana-langchain-chatbot-example",
-=======
-  "name": "@coinbase/cdp-langchain-solana-chatbot-example",
->>>>>>> 3651d4a (fixes, refinements, feedback)
   "description": "CDP Agentkit Node.js SDK Chatbot Example",
   "version": "1.0.0",
   "author": "Coinbase Inc.",
