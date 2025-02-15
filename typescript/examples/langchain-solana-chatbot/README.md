@@ -32,9 +32,25 @@ You'll need the following API keys:
 
 Once you have them, rename the `.env-local` file to `.env` and make sure you set the API keys to their corresponding environment variables:
 
-- "SOLANA_PRIVATE_KEY"
-- "SOLANA_RPC_URL"
-- "OPENAI_API_KEY"
+- "OPENAI_API_KEY" **(required)**
+- "SOLANA_PRIVATE_KEY" *(optional)*
+- "SOLANA_RPC_URL" *(optional)*
+- "NETWORK_ID" *(optional)*
+
+#### Network Selection
+
+The supported networks are `solana-mainnet`, `solana-devnet`, and `solana-testnet`.
+
+Network selection follows this priority:
+1. **Explicit RPC URL** – If `SOLANA_RPC_URL` is set in your `.env`, this RPC URL is used, and the network is inferred from it.
+2. **Network ID** – If `SOLANA_RPC_URL` is not set but `NETWORK_ID` is, the network is determined by `NETWORK_ID`, and a default RPC URL is assigned accordingly.
+3. **Fallback** – If neither variable is set, the default network is `solana-devnet` with a default RPC URL.
+
+#### Keypair Selection
+
+The keypair is determined by the `SOLANA_PRIVATE_KEY` in your `.env``.
+
+If no keypair is provided, a new one will be generated, and the private key will be displayed in the console. To reuse it in future runs, save the displayed key to `SOLANA_PRIVATE_KEY` in your `.env`.
 
 ## Running the example
 
