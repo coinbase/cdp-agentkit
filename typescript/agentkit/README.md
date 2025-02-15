@@ -591,6 +591,39 @@ const walletData = await walletProvider.exportWallet();
 ```
 
 
+SVM:
+- [SolanaKeypairWalletProvider](./src/wallet-providers//solanaKeypairWalletProvider.ts)
+
+### SolanaKeypairWalletProvider
+
+The `SolanaKeypairWalletProvider` is a wallet provider that uses the @solana/web3.js [Solana web3.js](https://solana-labs.github.io/solana-web3.js/).
+
+#### Network Configuration
+
+The `SolanaKeypairWalletProvider` can be configured to use a specific network by passing the `networkId` parameter to the `fromNetwork` method. The `networkId` is the ID of the Solana network you want to use. Valid values are `solana-mainnet`, `solana-devnet` and `solana-testnet`.
+
+```typescript
+import { SOLANA_NETWORK_ID, SolanaKeypairWalletProvider } from "@coinbase/agentkit";
+
+// Configure Solana Keypair Wallet Provider
+const privateKey = process.env.SOLANA_PRIVATE_KEY;
+const network = process.env.NETWORK_ID as SOLANA_NETWORK_ID;
+const walletProvider = await SolanaKeypairWalletProvider.fromNetwork(network, privateKey);
+```
+
+#### RPC Configuration
+
+The `SolanaKeypairWalletProvider` can be configured to use a specific RPC url by passing the `rpcUrl` parameter to the `fromRpcUrl` method. The `rpcUrl` will determine the network you are using.
+
+```typescript
+import { SOLANA_NETWORK_ID, SolanaKeypairWalletProvider } from "@coinbase/agentkit";
+
+// Configure Solana Keypair Wallet Provider
+const privateKey = process.env.SOLANA_PRIVATE_KEY;
+const rpcUrl = process.env.SOLANA_RPC_URL;
+const walletProvider = await SolanaKeypairWalletProvider.fromRpcUrl(network, privateKey);
+```
+
 ## Contributing
 
 See [CONTRIBUTING.md](../../CONTRIBUTING.md) for more information.
