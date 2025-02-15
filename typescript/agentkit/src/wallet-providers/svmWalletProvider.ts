@@ -72,7 +72,7 @@ export abstract class SvmWalletProvider extends WalletProvider {
    * @param signature - The signature
    * @returns The confirmation response
    */
-  abstract waitForSignatureReceipt(
+  abstract waitForSignatureResult(
     signature: string,
   ): Promise<RpcResponseAndContext<SignatureResult>>;
 }

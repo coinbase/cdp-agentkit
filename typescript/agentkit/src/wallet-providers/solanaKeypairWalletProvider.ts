@@ -210,7 +210,7 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
    */
   async sendTransaction(transaction: VersionedTransaction): Promise<string> {
     const signature = await this.#connection.sendTransaction(transaction);
-    await this.waitForSignatureReceipt(signature);
+    await this.waitForSignatureResult(signature);
     return signature;
   }
 
@@ -245,9 +245,7 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
    * @param signature - The signature
    * @returns The confirmation response
    */
-  async waitForSignatureReceipt(
-    signature: string,
-  ): Promise<RpcResponseAndContext<SignatureResult>> {
+  async waitForSignatureResult(signature: string): Promise<RpcResponseAndContext<SignatureResult>> {
     const { blockhash, lastValidBlockHeight } = await this.#connection.getLatestBlockhash();
     return this.#connection.confirmTransaction({
       signature: signature,
@@ -321,7 +319,7 @@ export class SolanaKeypairWalletProvider extends SvmWalletProvider {
     tx.sign([this.#keypair]);
 
     const signature = await this.#connection.sendTransaction(tx);
-    await this.waitForSignatureReceipt(signature);
+    await this.waitForSignatureResult(signature);
     return signature;
   }
 

@@ -92,7 +92,7 @@ describe("SplActionProvider", () => {
       getConnection: jest.fn().mockReturnValue(mockConnection),
       getPublicKey: jest.fn().mockReturnValue(new PublicKey("11111111111111111111111111111111")),
       signAndSendTransaction: jest.fn().mockResolvedValue(MOCK_SIGNATURE),
-      waitForSignatureReceipt: jest.fn().mockResolvedValue(mockSignatureReceipt),
+      waitForSignatureResult: jest.fn().mockResolvedValue(mockSignatureReceipt),
       getAddress: jest.fn().mockReturnValue("11111111111111111111111111111111"),
       getNetwork: jest.fn().mockReturnValue({ protocolFamily: "svm", networkId: "mainnet" }),
       getName: jest.fn().mockReturnValue("mock-wallet"),
@@ -144,6 +144,7 @@ describe("SplActionProvider", () => {
       recipient: RECIPIENT_ADDRESS,
       mintAddress: MINT_ADDRESS,
       amount: 100,
+      createAtaIfMissing: true,
     };
 
     const mockTokenAccount = {
@@ -170,7 +171,7 @@ describe("SplActionProvider", () => {
       mockWallet.getPublicKey.mockReturnValue(new PublicKey(SENDER_ADDRESS));
       mockWallet.getAddress.mockReturnValue(SENDER_ADDRESS);
       mockWallet.signAndSendTransaction.mockResolvedValue(MOCK_SIGNATURE);
-      mockWallet.waitForSignatureReceipt.mockResolvedValue(mockSignatureReceipt);
+      mockWallet.waitForSignatureResult.mockResolvedValue(mockSignatureReceipt);
     });
 
     /**
@@ -204,7 +205,7 @@ describe("SplActionProvider", () => {
       );
       expect(mockGetAccount).toHaveBeenCalled();
       expect(mockWallet.signAndSendTransaction).toHaveBeenCalled();
-      expect(mockWallet.waitForSignatureReceipt).toHaveBeenCalledWith(MOCK_SIGNATURE);
+      expect(mockWallet.waitForSignatureResult).toHaveBeenCalledWith(MOCK_SIGNATURE);
 
       expect(result).toContain(`Successfully transferred ${transferArgs.amount} tokens`);
       expect(result).toContain(`to ${transferArgs.recipient}`);
@@ -257,6 +258,43 @@ describe("SplActionProvider", () => {
 
       const result = await actionProvider.transfer(mockWallet, transferArgs);
       expect(result).toBe("Error transferring SPL tokens: Error: Regular error message");
+    });
+
+    /**
+     * Test that ATA is created by default when missing
+     */
+    it("should create ATA by default when missing", async () => {
+      mockGetAccount
+        .mockResolvedValueOnce(mockTokenAccount)
+        .mockRejectedValueOnce(new Error("Account does not exist"))
+        .mockResolvedValue(mockTokenAccount);
+
+      const result = await actionProvider.transfer(mockWallet, transferArgs);
+
+      const { createAssociatedTokenAccountInstruction } = jest.requireMock("@solana/spl-token");
+      expect(createAssociatedTokenAccountInstruction).toHaveBeenCalled();
+      expect(result).toContain(`Successfully transferred ${transferArgs.amount} tokens`);
+    });
+
+    /**
+     * Test that error is thrown when ATA is missing and createAtaIfMissing is false
+     */
+    it("should throw error when ATA missing and createAtaIfMissing is false", async () => {
+      mockGetAccount
+        .mockResolvedValueOnce(mockTokenAccount)
+        .mockRejectedValueOnce(new Error("Account does not exist"));
+
+      const result = await actionProvider.transfer(mockWallet, {
+        ...transferArgs,
+        createAtaIfMissing: false,
+      });
+
+      expect(result).toBe(
+        `Error transferring SPL tokens: Error: Associated Token Account does not exist for recipient ${RECIPIENT_ADDRESS} and creation was not requested`,
+      );
+
+      const { createAssociatedTokenAccountInstruction } = jest.requireMock("@solana/spl-token");
+      expect(createAssociatedTokenAccountInstruction).not.toHaveBeenCalled();
     });
   });
 });
