@@ -1,6 +1,6 @@
 # SPL Action Provider
 
-This directory contains the SPL action provider implementation, which provides SPL token transfer functionality.
+This directory contains the SPL action provider implementation, which provides actions to interact with SPL Token programs.
 
 ## Directory Structure
 
