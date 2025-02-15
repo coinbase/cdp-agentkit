@@ -30,6 +30,9 @@ AgentKit is a framework for easily enabling AI agents to take actions onchain. I
   - [PrivyWalletProvider](#privywalletprovider)
     - [Authorization Keys](#authorization-keys)
     - [Exporting Privy Wallet information](#exporting-privy-wallet-information)
+  - [SolanaKeypairWalletProvider](#solanakeypairwalletprovider)
+    - [Network Configuration](#solana-network-configuration)
+    - [RPC URL Configuration](#rpc-url-configuration)
 - [Contributing](#contributing)
 
 ## Getting Started
@@ -567,7 +570,7 @@ const config = {
 const walletProvider = await PrivyWalletProvider.configureWithWallet(config);
 ```
 
-#### Authorization Keys
+#### Authorization Keys
 
 Privy offers the option to use authorization keys to secure your server wallets.
 
@@ -596,9 +599,9 @@ SVM:
 
 ### SolanaKeypairWalletProvider
 
-The `SolanaKeypairWalletProvider` is a wallet provider that uses the @solana/web3.js [Solana web3.js](https://solana-labs.github.io/solana-web3.js/).
+The `SolanaKeypairWalletProvider` is a wallet provider that uses the API [Solana web3.js](https://solana-labs.github.io/solana-web3.js/).
 
-#### Network Configuration
+#### Solana Network Configuration
 
 The `SolanaKeypairWalletProvider` can be configured to use a specific network by passing the `networkId` parameter to the `fromNetwork` method. The `networkId` is the ID of the Solana network you want to use. Valid values are `solana-mainnet`, `solana-devnet` and `solana-testnet`.
 
@@ -611,7 +614,7 @@ const network = process.env.NETWORK_ID as SOLANA_NETWORK_ID;
 const walletProvider = await SolanaKeypairWalletProvider.fromNetwork(network, privateKey);
 ```
 
-#### RPC Configuration
+#### RPC URL Configuration
 
 The `SolanaKeypairWalletProvider` can be configured to use a specific RPC url by passing the `rpcUrl` parameter to the `fromRpcUrl` method. The `rpcUrl` will determine the network you are using.
 
