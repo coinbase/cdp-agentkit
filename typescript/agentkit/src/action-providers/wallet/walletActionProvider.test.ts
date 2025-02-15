@@ -4,8 +4,8 @@ import { NativeTransferSchema } from "./schemas";
 
 describe("Wallet Action Provider", () => {
   const MOCK_ADDRESS = "0xe6b2af36b3bb8d47206a129ff11d5a2de2a63c83";
-  const MOCK_ETH_BALANCE = 1000000000000000000n; // 1 ETH in wei
-  const MOCK_SOL_BALANCE = 1000000000n; // 1 SOL in lamports
+  const MOCK_ETH_BALANCE = 1000000000000000000n;
+  const MOCK_SOL_BALANCE = 1000000000n;
   const MOCK_EVM_NETWORK = {
     protocolFamily: "evm",
     networkId: "base-sepolia",
@@ -20,8 +20,8 @@ describe("Wallet Action Provider", () => {
     networkId: "testnet",
   };
   const MOCK_PROVIDER_NAME = "TestWallet";
-  const MOCK_TRANSACTION_HASH = "0xghijkl987654321"; // EVM transaction hash
-  const MOCK_SIGNATURE = "mock-signature"; // Solana signature
+  const MOCK_TRANSACTION_HASH = "0xghijkl987654321";
+  const MOCK_SIGNATURE = "mock-signature";
 
   let mockWallet: jest.Mocked<WalletProvider>;
   const actionProvider = walletActionProvider();
